@@ -45,15 +45,21 @@ func (o *Object) AddComponent(component Component) {
 		o.components = append(o.components, info)
 		return nil
 	})
-	if info.Awake != nil {
-		info.Awake.Awake(o)
-	}
 }
 
 func (o *Object) RemoveComponents(component Component) {
-	info := newComponentInfo(component)
 	o.WithLock(func() error {
-		o.components = append(o.components, info)
+		index:=-1
+		for i,v:=range o.components{
+			if v.Component == component{
+				index=i
+				v.Destroy.Destroy()
+				break
+			}
+		}
+		if index!=-1{
+			o.components = append(o.components[:index],o.components[index+1:]...)
+		}
 		return nil
 	})
 }
