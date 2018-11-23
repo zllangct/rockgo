@@ -6,7 +6,6 @@ type componentInfo struct {
 	Type      reflect.Type // The components type, cached
 	Component Component    // The component instance
 	Active    int          // Number of frames this component has been active for
-	Awake     Awake        // Awake interface for component, if any
 	Start     Start        // Start interface for component, if any
 	Update    Update       // Update interface for component, if any
 	Destroy   Destroy
@@ -18,9 +17,6 @@ func newComponentInfo(cmp Component) *componentInfo {
 		Type: cmp.Type(),
 		Component: cmp,
 		Active : 0}
-	if rtn.Type.Implements(reflect.TypeOf((*Awake)(nil)).Elem()) {
-		rtn.Awake = rtn.Component.(Awake)
-	}
 	if rtn.Type.Implements(reflect.TypeOf((*Start)(nil)).Elem()) {
 		rtn.Start = rtn.Component.(Start)
 	}
