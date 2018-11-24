@@ -13,7 +13,7 @@ func TestGetComponents(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
 		obj := Component.NewObject("Object 1")
 		obj.AddComponent(&FakeComponent{Id: "1"})
-
+		obj.AddComponent(&FakeComponent{Id: "1"})
 		ci, err := iter.Collect(obj.GetComponents(reflect.TypeOf((*FakeComponent)(nil))))
 		T.Assert(err == nil)
 		T.Assert(len(ci) == 1)

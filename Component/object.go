@@ -39,21 +39,27 @@ func NewObject(names ...string) *Object {
 }
 
 // Add a behaviour to a node
-func (o *Object) AddComponent(component Component) {
+func (o *Object) AddComponent(component Component) *Object {
 	info := newComponentInfo(component)
 	o.WithLock(func() error {
+		if info.Uniqual != nil && info.Uniqual.IsUnique() {
+			if o.HasComponent(component) {
+				return errors.Fail(ErrUniqueComponent{}, nil, "This componet is unique,the object already has a same component")
+			}
+		}
 		o.components = append(o.components, info)
 		return nil
 	})
+	return o
 }
 
-func (o *Object) RemoveComponents(component Component) {
+// remove the first component finded
+func (o *Object) RemoveComponent(component Component) {
 	o.WithLock(func() error {
 		index:=-1
 		for i,v:=range o.components{
 			if v.Component == component{
 				index=i
-				v.Destroy.Destroy()
 				break
 			}
 		}
@@ -63,7 +69,21 @@ func (o *Object) RemoveComponents(component Component) {
 		return nil
 	})
 }
-
+//remove all components
+func (o *Object) RemoveComponentsByType(t reflect.Type) {
+	o.WithLock(func() error {
+		for i:=0;i<len(o.components) ; i++ {
+			A:
+			if o.components[i].Type == t{
+				o.components = append(o.components[:i],o.components[i+1:]...)
+				if i < len(o.components){
+					goto A
+				}
+			}
+		}
+		return nil
+	})
+}
 // Add a child object
 func (o *Object) AddObject(object *Object) error {
 	object.Move(nil)
@@ -113,6 +133,11 @@ func (o *Object) RemoveObject(object *Object) error {
 			o.children = append(o.children[:offset], o.children[offset+1:]...)
 		}
 		object.WithLock(func() error {
+			for _, cpt := range object.components {
+				if cpt.Destroy != nil {
+					cpt.Destroy.Destroy()
+				}
+			}
 			object.parent = nil
 			object.runtime = nil
 			return nil
@@ -256,6 +281,15 @@ func (o *Object) Find(component interface{}, query ...string) error {
 
 	reflect.ValueOf(component).Elem().Set(reflect.ValueOf(cmp))
 	return nil
+}
+
+func (o *Object) HasComponent(component interface{}) bool {
+	componentType := reflect.TypeOf(component).Elem()
+	_, err := o.GetComponents(componentType).Next()
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 func (o *Object) Runtime() *Runtime {

@@ -17,3 +17,6 @@ type ErrBadObject struct{}
 
 // ErrNotSupported is raised when trying to perform an invalid operation that is not supported.
 type ErrNotSupported struct{}
+
+// ErrNotSupported is raised when add a existed component.
+type ErrUniqueComponent struct{}

@@ -3,7 +3,10 @@ package threadpool_test
 import (
 	"github.com/zllangct/RockGO/3RD/assert"
 	"github.com/zllangct/RockGO/3RD/threadpool"
+	"strconv"
+	"sync"
 	"testing"
+	"time"
 )
 
 func TestRun(T *testing.T) {
@@ -33,7 +36,64 @@ func TestBusy(T *testing.T) {
 		T.Assert(value == 3)
 	})
 }
+type Hello struct {
 
+}
+
+func (this *Hello)Hello(str string)  {
+	sum:=0
+	for i:=0;i<10000 ;i++  {
+		sum=sum+i
+	}
+	//println("sum:",sum,str)
+}
+func TestTTT(T *testing.T) {
+
+
+	tasklist:=make([]*Hello,10000)
+	for i := 0; i<10000;i++  {
+		tasklist=append(tasklist, &Hello{})
+	}
+
+	//====================== pool
+	pool := threadpool.New()
+	pool.MaxThreads = 50
+
+	t1:=time.Now()
+	wg1:=sync.WaitGroup{}
+	for i := 0; i<10000;i++  {
+		wg1.Add(1)
+		pool.Run(func(){
+			tasklist[i].Hello(strconv.Itoa(1))
+			wg1.Done()
+		})
+
+	}
+
+	wg1.Done()
+	elapsed1:=time.Since(t1)
+	println("pool:",elapsed1)
+
+	//========================== traditional
+
+	t2:=time.Now()
+	wg:=sync.WaitGroup{}
+	wg.Add(10000)
+	for j:=0;j<50 ; j++ {
+		go func() {
+			for i := 0; i<200;i++  {
+				tasklist[i].Hello(strconv.Itoa(2))
+				wg.Done()
+			}
+
+		}()
+	}
+	wg.Wait()
+	elapsed2:=time.Since(t2)
+	println("traditional:",elapsed2)
+
+
+}
 func TestRunAndWait(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
 		pool := threadpool.New()

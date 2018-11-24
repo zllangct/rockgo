@@ -9,7 +9,8 @@ type componentInfo struct {
 	Start     Start        // Start interface for component, if any
 	Update    Update       // Update interface for component, if any
 	Destroy   Destroy
-	Persist   Persist      // Persist interface for component, if any
+	Persist   Persist // Persist interface for component, if any
+	Uniqual   Unique  // Is it unique
 }
 
 func newComponentInfo(cmp Component) *componentInfo {
@@ -28,6 +29,9 @@ func newComponentInfo(cmp Component) *componentInfo {
 	}
 	if rtn.Type.Implements(reflect.TypeOf((*Destroy)(nil)).Elem()) {
 		rtn.Destroy = rtn.Component.(Destroy)
+	}
+	if rtn.Type.Implements(reflect.TypeOf((*Unique)(nil)).Elem()) {
+		rtn.Uniqual = rtn.Component.(Unique)
 	}
 	return rtn
 }

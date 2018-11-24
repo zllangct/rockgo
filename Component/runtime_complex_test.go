@@ -5,13 +5,16 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"strconv"
+	"sync"
 	"testing"
+	"time"
 
-	"strings"
-	"io/ioutil"
 	"github.com/zllangct/RockGO/3RD/assert"
 	"github.com/zllangct/RockGO/3RD/iter"
 	"github.com/zllangct/RockGO/Component"
+	"io/ioutil"
+	"strings"
 )
 
 // Add remove child adds a new child every second.
@@ -76,6 +79,73 @@ func (c *DumpState) Update(context *Component.Context) {
 	}
 }
 
+type Hello struct {
+
+}
+
+func (this *Hello) Type() reflect.Type {
+	return reflect.TypeOf(this)
+}
+
+func (this *Hello)Start(context *Component.Context)  {
+	this.Hello("my name is zhaolei.")
+
+}
+
+func (this *Hello)Hello(str string)  {
+	sum:=0
+	for i:=0;i<10000 ;i++  {
+		sum=sum+i
+	}
+	//println("sum:",sum,str)
+}
+
+func (this *Hello)Update(context *Component.Context) {
+	this.Hello(strconv.Itoa(1))
+}
+func TestLargeObjects(T *testing.T){
+	//====================== Component
+	runtime := Component.NewRuntime(Component.Config{
+		ThreadPoolSize: 50,
+	})
+
+	root:=Component.NewObject("root")
+	runtime.Root().AddObject(root)
+	for i := 0; i<1000;i++  {
+		o1:= Component.NewObject(strconv.Itoa(i))
+		o1.AddComponent(&Hello{})
+		root.AddObject(o1)
+	}
+
+	t1:=time.Now()
+	for i := 0; i<1000;i++  {
+		runtime.Update(float32(i))
+	}
+	elapsed1:=time.Since(t1)
+	println("component:",elapsed1)
+
+	//========================== traditional
+	tasklist:=make([]*Hello,1000)
+	for i := 0; i<1000;i++  {
+		tasklist=append(tasklist, &Hello{})
+	}
+	t2:=time.Now()
+	wg:=sync.WaitGroup{}
+
+	for j:=0;j<50 ; j++ {
+		wg.Add(1)
+		go func() {
+			for i := 0; i<20;i++  {
+				tasklist[i].Hello(strconv.Itoa(i))
+			}
+			wg.Done()
+		}()
+	}
+	wg.Wait()
+	elapsed2:=time.Since(t2)
+	println("traditional:",elapsed2)
+}
+
 func TestComplexSerialization(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
 		logger := log.New(os.Stdout, "Runtime: ", log.Ldate|log.Ltime|log.Lshortfile)
@@ -97,6 +167,9 @@ func TestComplexSerialization(T *testing.T) {
 		w3 := Component.NewObject("Worker 3")
 		w4 := Component.NewObject("Worker 4")
 
+		o3 := Component.NewObject("Container Tree")
+		//o4 := Component.NewObject("Container Four")
+
 		o1.AddObject(w1)
 		o1.AddObject(w2)
 
@@ -105,11 +178,15 @@ func TestComplexSerialization(T *testing.T) {
 
 		o1.AddObject(o2)
 
+		w4.AddObject(o3)
+		o3.AddObject(w4)
+
+
 		w1.AddComponent(&AddRemoveChild{})
 		w2.AddComponent(&AddRemoveChild{})
 		w3.AddComponent(&AddRemoveChild{})
 		w4.AddComponent(&AddRemoveChild{})
-
+		o3.AddComponent(&Hello{})
 		runtime.Root().AddObject(o1)
 
 		runtime.Update(0.1)

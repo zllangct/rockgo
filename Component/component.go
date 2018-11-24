@@ -12,6 +12,10 @@ type Component interface {
 	Type() reflect.Type
 }
 
+type Unique interface {
+	IsUnique() bool
+}
+
 type Persist interface {
 	Serialize() (interface{}, error)
 	Deserialize(data interface{}) error
