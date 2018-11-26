@@ -1,63 +1,45 @@
 package Config
 
 import (
-	"github.com/zllangct/RockGO/Component"
-	"reflect"
-	"io/ioutil"
 	"encoding/json"
+	"github.com/zllangct/RockGO/Component"
+	"io/ioutil"
 )
 
 type ConfigComponent struct {
-	Config
-	ClusterConf
-	obj          *Component.Object //父对象
-	CustomConfig map[string]string
-	ActorConfig  *ClusterConf
-	close        chan bool         //关闭信号
+	Component.Base
+	CommonConfigPath string
+	CustomConfigPath string
+	CusterConfigPath string
+	CommonConfig     map[string]string
+	CustomConfig     map[string]string
+	CusterConfig     map[string]string
 }
 
-func (this *ConfigComponent) Type() reflect.Type {
-	return reflect.TypeOf(this)
+func (this *ConfigComponent)IsUnique() bool {
+	return true
 }
 
-func (this *ConfigComponent) Awake(parent *Component.Object) {
-	this.obj = parent
+func (this *ConfigComponent) Awake() {
+	this.CommonConfigPath = "./config/CommonConfig.json"
+	this.CustomConfigPath = "./config/CustomConfig.json"
+	this.CusterConfigPath = "./config/CusterConfig.json"
 }
 
-func (this *ConfigComponent) LoadConfig(path string) error {
+func (this *ConfigComponent) LoadConfig(path string, cfg map[string]string) error {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return err
 	}
-	err = json.Unmarshal(data, this.Config)
+	err = json.Unmarshal(data, cfg)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (this *ConfigComponent) LoadCustomConfig(path string) error {
-	data, err := ioutil.ReadFile(path)
-	if err != nil {
-		return err
-	}
-	err = json.Unmarshal(data, this.CustomConfig)
-	if err != nil {
-		return err
-	}
-	return nil
+func (this *ConfigComponent) ReloadConfig() {
+	this.LoadConfig(this.CommonConfigPath, this.CommonConfig)
+	this.LoadConfig(this.CustomConfigPath, this.CustomConfig)
+	this.LoadConfig(this.CusterConfigPath, this.CusterConfig)
 }
-
-func (this *ConfigComponent) LoadActorConfig(path string) error {
-	data, err := ioutil.ReadFile(path)
-	if err != nil {
-		panic(err)
-	}
-	err = json.Unmarshal(data, this.ActorConfig)
-	if err != nil {
-		panic(err)
-	}
-	this.Master.Path = path
-	return  nil
-}
-

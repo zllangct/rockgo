@@ -23,7 +23,7 @@ func main() {
     
 二、框架目录介绍
 
-1、cluster：分布式集群中节点定义，RPC的实现。
+1、clusterOld：分布式集群中节点定义，RPC的实现。
 
 2、cluterserver：分布式中心服务器和节点服务器的实现
 
@@ -45,7 +45,7 @@ func main() {
 
 11、telnetcmd：telnet命名模块
 
-12、timer：计时器
+12、timer_v1：计时器
 
 13、utils：工具函数
 

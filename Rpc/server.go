@@ -137,14 +137,16 @@ import (
 	"reflect"
 	"strings"
 	"sync"
+	"time"
 	"unicode"
 	"unicode/utf8"
 )
 
 const (
 	// Defaults used by HandleHTTP
-	DefaultRPCPath   = "/_goRPC_"
-	DefaultDebugPath = "/debug/rpc"
+	DefaultRPCPath       = "/_goRPC_"
+	DefaultDebugPath     = "/debugMode/rpc"
+	InnerResponseContent = 1
 )
 
 // Precompute the reflect type for error. Can't use error directly
@@ -172,7 +174,8 @@ type service struct {
 type Request struct {
 	ServiceMethod string   // format: "Service.Method"
 	Seq           uint64   // sequence number chosen by client
-	next          *Request // for free list in Server
+	Type          int
+	next          *Request // for free list in ServerNode
 }
 
 // Response is a header written before every RPC return. It is used internally
@@ -182,24 +185,39 @@ type Response struct {
 	ServiceMethod string    // echoes that of the Request
 	Seq           uint64    // echoes that of the request
 	Error         string    // error, if any.
-	next          *Response // for free list in Server
+	next          *Response // for free list in ServerNode
 }
 
-// Server represents an RPC Server.
+// ServerNode represents an RPC ServerNode.
 type Server struct {
 	serviceMap sync.Map   // map[string]*service
 	reqLock    sync.Mutex // protects freeReq
 	freeReq    *Request
 	respLock   sync.Mutex // protects freeResp
 	freeResp   *Response
+	debugMode  bool
+	timeout    time.Duration
 }
 
-// NewServer returns a new Server.
+type heartBeatReuslt struct {
+	Result int
+}
+type InnerResponse struct {
+}
+
+func (this *InnerResponse) HeartBeat(result *heartBeatReuslt) error {
+	result = &heartBeatReuslt{Result: InnerResponseContent}
+	return nil
+}
+
+// NewServer returns a new ServerNode.
 func NewServer() *Server {
-	return &Server{}
+	s := &Server{}
+	s.Register(new(InnerResponse))
+	return s
 }
 
-// DefaultServer is the default instance of *Server.
+// DefaultServer is the default instance of *ServerNode.
 var DefaultServer = NewServer()
 
 // Is this an exported - upper case - name?
@@ -308,21 +326,29 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 			}
 			continue
 		}
-		// Second arg must be a pointer.
-		replyType := mtype.In(2)
-		if replyType.Kind() != reflect.Ptr {
-			if reportErr {
-				log.Printf("rpc.Register: reply type of method %q is not a pointer: %q\n", mname, replyType)
+		numin:=mtype.NumIn()
+
+		var replyType reflect.Type
+		if numin > 1{
+			// Second arg must be a pointer.
+			replyType = mtype.In(2)
+			if replyType.Kind() != reflect.Ptr {
+				if reportErr {
+					log.Printf("rpc.Register: reply type of method %q is not a pointer: %q\n", mname, replyType)
+				}
+				continue
 			}
-			continue
-		}
-		// Reply type must be exported.
-		if !isExportedOrBuiltinType(replyType) {
-			if reportErr {
-				log.Printf("rpc.Register: reply type of method %q is not exported: %q\n", mname, replyType)
+			// Reply type must be exported.
+			if !isExportedOrBuiltinType(replyType) {
+				if reportErr {
+					log.Printf("rpc.Register: reply type of method %q is not exported: %q\n", mname, replyType)
+				}
+				continue
 			}
-			continue
+		}else{
+			replyType = nil
 		}
+
 		// Method needs one out.
 		if mtype.NumOut() != 1 {
 			if reportErr {
@@ -357,9 +383,15 @@ func (server *Server) sendResponse(sending *sync.Mutex, req *Request, reply inte
 	}
 	resp.Seq = req.Seq
 	sending.Lock()
-	err := codec.WriteResponse(resp, reply)
-	if debugLog && err != nil {
-		log.Println("rpc: writing response:", err)
+	if req.Type != RPC_CALL_TYPE_NORMAL {
+		if reply == nil{
+			resp.Error = "service method has no reply"
+			reply = invalidRequest
+		}
+		err := codec.WriteResponse(resp, reply)
+		if debugLog && err != nil {
+			log.Println("rpc: writing response:", err)
+		}
 	}
 	sending.Unlock()
 	server.freeResponse(resp)
@@ -381,23 +413,34 @@ func (s *service) call(server *Server, sending *sync.Mutex, wg *sync.WaitGroup, 
 	mtype.Unlock()
 	function := mtype.method.Func
 	// Invoke the method, providing a new value for the reply.
-	returnValues := function.Call([]reflect.Value{s.rcvr, argv, replyv})
+	args:=[]reflect.Value{s.rcvr, argv}
+	if mtype.ReplyType != nil {
+		args= append(args, replyv)
+	}
+	returnValues := function.Call(args)
 	// The return value for the method is an error.
 	errInter := returnValues[0].Interface()
 	errmsg := ""
 	if errInter != nil {
 		errmsg = errInter.(error).Error()
 	}
-	server.sendResponse(sending, req, replyv.Interface(), codec, errmsg)
+	var reqi interface{}
+	if mtype.ReplyType== nil{
+		reqi = nil
+	}else{
+		reqi = replyv.Interface()
+	}
+	server.sendResponse(sending, req, reqi, codec, errmsg)
 	server.freeRequest(req)
 }
 
 type gobServerCodec struct {
-	rwc    io.ReadWriteCloser
-	dec    *gob.Decoder
-	enc    *gob.Encoder
-	encBuf *bufio.Writer
-	closed bool
+	rwc        net.Conn
+	dec        *gob.Decoder
+	enc        *gob.Encoder
+	encBuf     *bufio.Writer
+	iocallback func()
+	closed     bool
 }
 
 func (c *gobServerCodec) ReadRequestHeader(r *Request) error {
@@ -407,7 +450,9 @@ func (c *gobServerCodec) ReadRequestHeader(r *Request) error {
 func (c *gobServerCodec) ReadRequestBody(body interface{}) error {
 	return c.dec.Decode(body)
 }
-
+func (c *gobServerCodec) IOCallback(){
+	c.iocallback()
+}
 func (c *gobServerCodec) WriteResponse(r *Response, body interface{}) (err error) {
 	if err = c.enc.Encode(r); err != nil {
 		if c.encBuf.Flush() == nil {
@@ -445,14 +490,19 @@ func (c *gobServerCodec) Close() error {
 // ServeConn uses the gob wire format (see package gob) on the
 // connection. To use an alternate codec, use ServeCodec.
 // See NewClient's comment for information about concurrent access.
-func (server *Server) ServeConn(conn io.ReadWriteCloser) {
+func (server *Server) ServeConn(conn net.Conn) {
 	buf := bufio.NewWriter(conn)
+	callback:= func() {
+		server.UpdateConnTimeout(conn)
+	}
 	srv := &gobServerCodec{
 		rwc:    conn,
 		dec:    gob.NewDecoder(conn),
 		enc:    gob.NewEncoder(buf),
 		encBuf: buf,
+		iocallback:callback,
 	}
+	server.UpdateConnTimeout(conn)
 	server.ServeCodec(srv)
 }
 
@@ -477,6 +527,7 @@ func (server *Server) ServeCodec(codec ServerCodec) {
 			}
 			continue
 		}
+		codec.IOCallback()
 		wg.Add(1)
 		go service.call(server, sending, wg, mtype, req, argv, replyv, codec)
 	}
@@ -502,6 +553,7 @@ func (server *Server) ServeRequest(codec ServerCodec) error {
 		}
 		return err
 	}
+
 	service.call(server, sending, nil, mtype, req, argv, replyv, codec)
 	return nil
 }
@@ -573,13 +625,15 @@ func (server *Server) readRequest(codec ServerCodec) (service *service, mtype *m
 		argv = argv.Elem()
 	}
 
-	replyv = reflect.New(mtype.ReplyType.Elem())
+	if mtype.ReplyType!=nil{
+		replyv = reflect.New(mtype.ReplyType.Elem())
 
-	switch mtype.ReplyType.Elem().Kind() {
-	case reflect.Map:
-		replyv.Elem().Set(reflect.MakeMap(mtype.ReplyType.Elem()))
-	case reflect.Slice:
-		replyv.Elem().Set(reflect.MakeSlice(mtype.ReplyType.Elem(), 0, 0))
+		switch mtype.ReplyType.Elem().Kind() {
+		case reflect.Map:
+			replyv.Elem().Set(reflect.MakeMap(mtype.ReplyType.Elem()))
+		case reflect.Slice:
+			replyv.Elem().Set(reflect.MakeSlice(mtype.ReplyType.Elem(), 0, 0))
+		}
 	}
 	return
 }
@@ -596,7 +650,6 @@ func (server *Server) readRequestHeader(codec ServerCodec) (svc *service, mtype 
 		err = errors.New("rpc: server cannot decode request: " + err.Error())
 		return
 	}
-
 	// We read the header successfully. If we see an error now,
 	// we can still recover and move on to the next request.
 	keepReading = true
@@ -637,6 +690,13 @@ func (server *Server) Accept(lis net.Listener) {
 		go server.ServeConn(conn)
 	}
 }
+func (server *Server) UpdateConnTimeout(conn net.Conn) {
+	if !server.debugMode {
+		if server.timeout != 0 {
+			conn.SetDeadline(time.Now().Add(server.timeout))
+		}
+	}
+}
 
 // Register publishes the receiver's methods in the DefaultServer.
 func Register(rcvr interface{}) error { return DefaultServer.Register(rcvr) }
@@ -659,7 +719,7 @@ type ServerCodec interface {
 	ReadRequestHeader(*Request) error
 	ReadRequestBody(interface{}) error
 	WriteResponse(*Response, interface{}) error
-
+	IOCallback()
 	// Close can be called multiple times and must be idempotent.
 	Close() error
 }
@@ -670,7 +730,7 @@ type ServerCodec interface {
 // ServeConn uses the gob wire format (see package gob) on the
 // connection. To use an alternate codec, use ServeCodec.
 // See NewClient's comment for information about concurrent access.
-func ServeConn(conn io.ReadWriteCloser) {
+func ServeConn(conn net.Conn) {
 	DefaultServer.ServeConn(conn)
 }
 

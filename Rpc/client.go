@@ -8,13 +8,20 @@ import (
 	"bufio"
 	"encoding/gob"
 	"errors"
+	"github.com/zllangct/RockGO/timer"
 	"io"
 	"log"
 	"net"
 	"net/http"
 	"sync"
+	"time"
 )
 
+const (
+	RPC_CALL_TYPE_NONE = iota
+	RPC_CALL_TYPE_NORMAL
+	RPC_CALL_TYPE_WITHOUTREPLY
+)
 // ServerError represents an error that has been returned from
 // the remote side of the RPC connection.
 type ServerError string
@@ -24,7 +31,7 @@ func (e ServerError) Error() string {
 }
 
 var ErrShutdown = errors.New("connection is shut down")
-
+var ErrTimeout  = errors.New("rpc timeout")
 // Call represents an active RPC.
 type Call struct {
 	ServiceMethod string      // The name of the service and method to call.
@@ -32,6 +39,7 @@ type Call struct {
 	Reply         interface{} // The reply from the function (*struct).
 	Error         error       // After completion, the error status.
 	Done          chan *Call  // Strobes when call is complete.
+	Type          int
 }
 
 // Client represents an RPC Client.
@@ -49,6 +57,9 @@ type Client struct {
 	pending  map[uint64]*Call
 	closing  bool // user has called Close
 	shutdown bool // server has told us to stop
+	heartInterval time.Duration
+	timeout  time.Duration
+	debugMode    bool
 }
 
 // A ClientCodec implements writing of RPC requests and
@@ -88,6 +99,7 @@ func (client *Client) send(call *Call) {
 	// Encode and send the request.
 	client.request.Seq = seq
 	client.request.ServiceMethod = call.ServiceMethod
+	client.request.Type=call.Type
 	err := client.codec.WriteRequest(&client.request, call.Args)
 	if err != nil {
 		client.mutex.Lock()
@@ -100,7 +112,27 @@ func (client *Client) send(call *Call) {
 		}
 	}
 }
+func (client *Client) sendWithoutReply(call *Call) {
+	client.reqMutex.Lock()
+	defer client.reqMutex.Unlock()
 
+	// Register this call.
+	if client.shutdown || client.closing {
+		call.Error = ErrShutdown
+		call.done()
+		return
+	}
+	// Encode and send the request.
+	client.request.ServiceMethod = call.ServiceMethod
+	client.request.Type=call.Type
+	err := client.codec.WriteRequest(&client.request, call.Args)
+	if err != nil {
+		if call != nil {
+			call.Error = err
+			call.done()
+		}
+	}
+}
 func (client *Client) input() {
 	var err error
 	var response Response
@@ -132,7 +164,7 @@ func (client *Client) input() {
 			// any subsequent requests will get the ReadResponseBody
 			// error if there is one.
 			call.Error = ServerError(response.Error)
-			err = client.codec.ReadResponseBody(nil)
+			err = client.codec.ReadResponseBody(invalidRequest)
 			if err != nil {
 				err = errors.New("reading error body: " + err.Error())
 			}
@@ -179,6 +211,32 @@ func (call *Call) done() {
 			log.Println("rpc: discarding Call reply due to insufficient Done chan capacity")
 		}
 	}
+}
+
+func (client *Client) StartHeartBeat()  {
+	go func() {
+		if !client.debugMode {
+			pingCount:=0
+			res:=&heartBeatReuslt{}
+			tc:=time.NewTicker(client.heartInterval)
+			for {
+				res.Result=0
+				<-tc.C
+				if client.closing || client.shutdown{
+					return
+				}
+				err:= client.Call("InnerResponse.StartHeartBeat",nil,res)
+				if err!=nil || res.Result!=1{
+					pingCount++
+					if pingCount > 3{
+						client.Close()
+					}
+				}else{
+					pingCount=0
+				}
+			}
+		}
+	}()
 }
 
 // NewClient returns a new Client to handle requests to the
@@ -276,8 +334,11 @@ func Dial(network, address string) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewClient(conn), nil
+	c:=NewClient(conn)
+	c.StartHeartBeat()
+	return c, nil
 }
+
 
 // Close calls the underlying codec's Close method. If the connection is already
 // shutting down, ErrShutdown is returned.
@@ -313,12 +374,30 @@ func (client *Client) Go(serviceMethod string, args interface{}, reply interface
 		}
 	}
 	call.Done = done
-	client.send(call)
+	if reply==nil{
+		call.Type=RPC_CALL_TYPE_WITHOUTREPLY
+		client.sendWithoutReply(call)
+	}else{
+		call.Type=RPC_CALL_TYPE_NORMAL
+		client.send(call)
+	}
 	return call
 }
 
 // Call invokes the named function, waits for it to complete, and returns its error status.
 func (client *Client) Call(serviceMethod string, args interface{}, reply interface{}) error {
-	call := <-client.Go(serviceMethod, args, reply, make(chan *Call, 1)).Done
+	call := client.Go(serviceMethod, args, reply, make(chan *Call, 1))
+	select {
+	case <-timer.After(client.timeout):
+		call.Error=ErrTimeout
+		return ErrTimeout
+	case <-call.Done:
+		return call.Error
+	}
+}
+
+// Call invokes the named function, waits for it to complete, and returns its error status.
+func (client *Client) CallWithoutReply(serviceMethod string, args interface{}) error {
+	call := <-client.Go(serviceMethod, args, nil, make(chan *Call, 1)).Done
 	return call.Error
 }

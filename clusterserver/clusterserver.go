@@ -2,7 +2,7 @@ package clusterserver
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO/cluster"
+	"github.com/zllangct/RockGO/clusterOld"
 	"github.com/zllangct/RockGO/Network"
 	"github.com/zllangct/RockGO/fserver"
 	"github.com/zllangct/RockGO/RockInterface"
@@ -20,14 +20,14 @@ import (
 
 type ClusterServer struct {
 	Name           string
-	RemoteNodesMgr *cluster.ChildMgr //子节点有
-	ChildsMgr      *cluster.ChildMgr //root节点有
+	RemoteNodesMgr *clusterOld.ChildMgr //子节点有
+	ChildsMgr      *clusterOld.ChildMgr //root节点有
 	MasterObj      *Network.TcpClient
 	httpServerMux  *http.ServeMux
 	NetServer      RockInterface.Iserver
 	RootServer     RockInterface.Iserver
 	TelnetServer   RockInterface.Iserver
-	Cconf          *cluster.ClusterConf
+	Cconf          *clusterOld.ClusterConf
 	modules        map[string][]interface{} //所有模块统一管理
 	sync.RWMutex
 }
@@ -54,7 +54,7 @@ func DoCCConnectionLost(fconn RockInterface.Iclient) {
 
 //reconnected to master
 func ReConnectMasterCB(fconn RockInterface.Iclient) {
-	rpc := cluster.NewChild(utils.GlobalObject.Name, GlobalClusterServer.MasterObj)
+	rpc := clusterOld.NewChild(utils.GlobalObject.Name, GlobalClusterServer.MasterObj)
 	response, err := rpc.CallChildForResult("TakeProxy", utils.GlobalObject.Name)
 	if err == nil {
 		roots, ok := response.Result["roots"]
@@ -70,16 +70,16 @@ func ReConnectMasterCB(fconn RockInterface.Iclient) {
 
 func NewClusterServer(name, path string) *ClusterServer {
 	logger.SetPrefix(fmt.Sprintf("[%s]", strings.ToUpper(name)))
-	cconf, err := cluster.NewClusterConf(path)
+	cconf, err := clusterOld.NewClusterConf(path)
 	if err != nil {
-		panic("cluster conf error!!!")
+		panic("clusterOld conf error!!!")
 	}
 
 	GlobalClusterServer = &ClusterServer{
 		Name:           name,
 		Cconf:          cconf,
-		RemoteNodesMgr: cluster.NewChildMgr(),
-		ChildsMgr:      cluster.NewChildMgr(),
+		RemoteNodesMgr: clusterOld.NewChildMgr(),
+		ChildsMgr:      clusterOld.NewChildMgr(),
 		modules:        make(map[string][]interface{}, 0),
 		httpServerMux:  http.NewServeMux(),
 	}
@@ -92,7 +92,7 @@ func NewClusterServer(name, path string) *ClusterServer {
 	utils.GlobalObject.Name = name
 	utils.GlobalObject.OnClusterClosed = DoCSConnectionLost
 	utils.GlobalObject.OnClusterCClosed = DoCCConnectionLost
-	utils.GlobalObject.RpcCProtoc = cluster.NewRpcClientProtocol()
+	utils.GlobalObject.RpcCProtoc = clusterOld.NewRpcClientProtocol()
 
 	if utils.GlobalObject.PoolSize > 0 {
 		//init rpc worker ConnPool
@@ -103,7 +103,7 @@ func NewClusterServer(name, path string) *ClusterServer {
 
 	}
 	if serverconf.RootPort > 0 {
-		utils.GlobalObject.RpcSProtoc = cluster.NewRpcServerProtocol()
+		utils.GlobalObject.RpcSProtoc = clusterOld.NewRpcServerProtocol()
 	}
 
 	if serverconf.Log != "" {
@@ -114,9 +114,9 @@ func NewClusterServer(name, path string) *ClusterServer {
 	//telnet debug tool
 	if serverconf.DebugPort > 0{
 		if serverconf.Host != ""{
-			GlobalClusterServer.TelnetServer = fserver.NewTcpServer("telnet_server", "tcp4", serverconf.Host, serverconf.DebugPort, 100, cluster.NewTelnetProtocol())
+			GlobalClusterServer.TelnetServer = fserver.NewTcpServer("telnet_server", "tcp4", serverconf.Host, serverconf.DebugPort, 100, clusterOld.NewTelnetProtocol())
 		}else{
-			GlobalClusterServer.TelnetServer = fserver.NewTcpServer("telnet_server", "tcp4", "127.0.0.1", serverconf.DebugPort, 100, cluster.NewTelnetProtocol())
+			GlobalClusterServer.TelnetServer = fserver.NewTcpServer("telnet_server", "tcp4", "127.0.0.1", serverconf.DebugPort, 100, clusterOld.NewTelnetProtocol())
 		}
 	}
 	return GlobalClusterServer
@@ -231,14 +231,14 @@ func (this *ClusterServer) StartClusterServer() {
 	if this.TelnetServer != nil{
 		this.TelnetServer.Stop()
 	}
-	logger.Info("xingo cluster stoped.")
+	logger.Info("xingo clusterOld stoped.")
 }
 
 func (this *ClusterServer) WaitSignal() {
 	signal.Notify(utils.GlobalObject.ProcessSignalChan, os.Kill, syscall.SIGHUP, syscall.SIGTERM, syscall.SIGINT)
 	sig := <-utils.GlobalObject.ProcessSignalChan
 	//尝试主动通知master checkalive
-	rpc := cluster.NewChild(utils.GlobalObject.Name, this.MasterObj)
+	rpc := clusterOld.NewChild(utils.GlobalObject.Name, this.MasterObj)
 	rpc.CallChildNotForResult("ChildOffLine", utils.GlobalObject.Name)
 	logger.Info(fmt.Sprintf("server exit. signal: [%s]", sig))
 }
@@ -251,7 +251,7 @@ func (this *ClusterServer) ConnectToMaster() {
 	//设置目标类型为:1:不需要连接池
 	this.MasterObj.SetProperty("TargetType",1)
 
-	rpc := cluster.NewChild(utils.GlobalObject.Name, this.MasterObj)
+	rpc := clusterOld.NewChild(utils.GlobalObject.Name, this.MasterObj)
 	response, err := rpc.CallChildForResult("TakeProxy", utils.GlobalObject.Name)
 	if err == nil {
 		roots, ok := response.Result["roots"]
@@ -270,7 +270,7 @@ func (this *ClusterServer) ConnectToMaster() {
 	} else {
 		panic(fmt.Sprintf("connected to master error: %s", err))
 	}
-	logger.Info("xingo cluster start success.")
+	logger.Info("xingo clusterOld start success.")
 }
 
 func (this *ClusterServer) ConnectToRemote(rname string) {
@@ -354,7 +354,7 @@ func (this *ClusterServer) RemoveRemote(name string) {
 	this.RemoteNodesMgr.RemoveChild(name)
 }
 
-func (this *ClusterServer) GetRemote(name string) (*cluster.Child, error) {
+func (this *ClusterServer) GetRemote(name string) (*clusterOld.Child, error) {
 	this.RLock()
 	defer this.RUnlock()
 

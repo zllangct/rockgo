@@ -1,7 +1,7 @@
 package sys_rpc
 
 import (
-	"github.com/zllangct/RockGO/cluster"
+	"github.com/zllangct/RockGO/clusterOld"
 
 	"github.com/zllangct/RockGO/clusterserver"
 	"github.com/zllangct/RockGO/logger"
@@ -14,7 +14,7 @@ type RootRpc struct {
 /*
 子节点连上来的通知
 */
-func (this *RootRpc) TakeProxy(request *cluster.RpcRequest) {
+func (this *RootRpc) TakeProxy(request *clusterOld.RpcRequest) {
 	name := request.Rpcdata.Args[0].(string)
 	logger.Info("child node " + name + " connected to " + utils.GlobalObject.Name)
 	request.Fconn.SetProperty("child",name)
@@ -33,7 +33,7 @@ func (this *RootRpc) TakeProxy(request *cluster.RpcRequest) {
 /*
 添加工作conn ConnPool
 */
-func (this *RootRpc)AddChildConnPool(request *cluster.RpcRequest)  {
+func (this *RootRpc)AddChildConnPool(request *clusterOld.RpcRequest)  {
 	if !utils.GlobalObject.MultiConnMode{
 		return
 	}

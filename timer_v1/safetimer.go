@@ -1,4 +1,4 @@
-package timer
+package timer_v1
 
 import (
 	"github.com/zllangct/RockGO/logger"
@@ -96,7 +96,7 @@ func (this *SafeTimerScheduel) CancelTimer(timerId uint32) {
 }
 
 func (this *SafeTimerScheduel) StartScheduelLoop() {
-	logger.Info("xingo safe timer scheduelloop runing.")
+	logger.Info("xingo safe timer_v1 scheduelloop runing.")
 	for {
 		triggerList := this.hashwheel.GetTriggerWithIn(ERRORMAX)
 		//trigger

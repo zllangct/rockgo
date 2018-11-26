@@ -25,7 +25,7 @@ type AddRemoveChild struct {
 	elapsed float32
 }
 
-func (c *AddRemoveChild) New() Component.Component {
+func (c *AddRemoveChild) New() Component.IComponent {
 	return &AddRemoveChild{}
 }
 
@@ -38,7 +38,7 @@ func (c *AddRemoveChild) Attach(parent *Component.Object) {
 }
 
 func (c *AddRemoveChild) Update(context *Component.Context) {
-	context.Logger.Printf("Update: %s", c.parent.Name())
+	context.Logger.Printf("IUpdate: %s", c.parent.Name())
 	c.elapsed += context.DeltaTime
 	if c.elapsed > 1.0 {
 		c.count += 1
@@ -60,7 +60,7 @@ type DumpState struct {
 	elapsed float32
 }
 
-func (c *DumpState) New() Component.Component {
+func (c *DumpState) New() Component.IComponent {
 	return &DumpState{}
 }
 
@@ -104,7 +104,7 @@ func (this *Hello)Update(context *Component.Context) {
 	this.Hello(strconv.Itoa(1))
 }
 func TestLargeObjects(T *testing.T){
-	//====================== Component
+	//====================== IComponent
 	runtime := Component.NewRuntime(Component.Config{
 		ThreadPoolSize: 50,
 	})
@@ -168,7 +168,7 @@ func TestComplexSerialization(T *testing.T) {
 		w4 := Component.NewObject("Worker 4")
 
 		o3 := Component.NewObject("Container Tree")
-		//o4 := Component.NewObject("Container Four")
+		//o4 := IComponent.NewObject("Container Four")
 
 		o1.AddObject(w1)
 		o1.AddObject(w2)

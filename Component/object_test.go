@@ -61,7 +61,7 @@ func TestFindComponent(T *testing.T) {
 		o2 := Component.NewObject("B")
 		o3 := Component.NewObject("C")
 		o4 := Component.NewObject("D")
-		c1 := &FakeComponent{Id: "Component"}
+		c1 := &FakeComponent{Id: "IComponent"}
 
 		o1.AddObject(o2)
 		o2.AddObject(o3)
@@ -72,7 +72,7 @@ func TestFindComponent(T *testing.T) {
 		err := o1.Find(&c2, "B", "C", "D")
 
 		T.Assert(err == nil)
-		T.Assert(c2.Id == "Component")
+		T.Assert(c2.Id == "IComponent")
 	})
 }
 
@@ -82,7 +82,7 @@ func TestFindComponentOnRoot(T *testing.T) {
 		o2 := Component.NewObject("B")
 		o3 := Component.NewObject("C")
 		o4 := Component.NewObject("D")
-		c1 := &FakeComponent{Id: "Component"}
+		c1 := &FakeComponent{Id: "IComponent"}
 
 		o1.AddObject(o2)
 		o2.AddObject(o3)
@@ -93,7 +93,7 @@ func TestFindComponentOnRoot(T *testing.T) {
 		err := o1.Find(&c2)
 
 		T.Assert(err == nil)
-		T.Assert(c2.Id == "Component")
+		T.Assert(c2.Id == "IComponent")
 	})
 }
 
@@ -103,7 +103,7 @@ func TestModifyComponent(T *testing.T) {
 		o2 := Component.NewObject("B")
 		o3 := Component.NewObject("C")
 		o4 := Component.NewObject("D")
-		c1 := &FakeComponent{Id: "Component"}
+		c1 := &FakeComponent{Id: "IComponent"}
 
 		o1.AddObject(o2)
 		o2.AddObject(o3)
@@ -114,7 +114,7 @@ func TestModifyComponent(T *testing.T) {
 		err := o1.Find(&c2, "B", "C", "D")
 
 		T.Assert(err == nil)
-		T.Assert(c2.Id == "Component")
+		T.Assert(c2.Id == "IComponent")
 
 		c2.Count = 100
 
@@ -122,7 +122,7 @@ func TestModifyComponent(T *testing.T) {
 		o1.Find(&c3, "B", "C", "D")
 
 		T.Assert(err == nil)
-		T.Assert(c2.Id == "Component")
+		T.Assert(c2.Id == "IComponent")
 		T.Assert(c3.Count == 100)
 	})
 }

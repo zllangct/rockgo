@@ -6,5 +6,3 @@ const(
 )
 
 type ActorType int
-
-type ActorID = int64

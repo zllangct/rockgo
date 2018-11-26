@@ -1,4 +1,4 @@
-package timer
+package timer_v1
 
 import (
 	"fmt"
@@ -48,6 +48,6 @@ func Test(t *testing.T) {
 
 	for{
 		time.Sleep(60*time.Second)
-		logger.Info("last timer: ", atomic.LoadInt64(&tt))
+		logger.Info("last timer_v1: ", atomic.LoadInt64(&tt))
 	}
 }

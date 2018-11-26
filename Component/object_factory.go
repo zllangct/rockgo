@@ -9,7 +9,7 @@ import (
 // ComponentProvider maps between component instances and component templates
 type ComponentProvider interface {
 	Type() reflect.Type
-	New() Component
+	New() IComponent
 }
 
 // ObjectFactory is the overseer that can be used to convert between objects and object templates
@@ -78,12 +78,12 @@ func (factory *ObjectFactory) Deserialize(template *ObjectTemplate) (*Object, er
 }
 
 // deserializeComponent turns a component template into a component
-func (factory *ObjectFactory) deserializeComponent(template *ComponentTemplate) (Component, error) {
+func (factory *ObjectFactory) deserializeComponent(template *ComponentTemplate) (IComponent, error) {
 	for k, v := range factory.handlers {
 		if k == template.Type {
 			component := v.New()
-			if component.Type().Implements(reflect.TypeOf((*Persist)(nil)).Elem()) {
-				err := component.(Persist).Deserialize(template.Data)
+			if component.Type().Implements(reflect.TypeOf((*IPersist)(nil)).Elem()) {
+				err := component.(IPersist).Deserialize(template.Data)
 				if err != nil {
 					return nil, err
 				}
@@ -91,7 +91,7 @@ func (factory *ObjectFactory) deserializeComponent(template *ComponentTemplate) 
 			return component, nil
 		}
 	}
-	return nil, errors.Fail(ErrUnknownComponent{}, nil, fmt.Sprintf("Component type %s is not registered with the factory", template.Type))
+	return nil, errors.Fail(ErrUnknownComponent{}, nil, fmt.Sprintf("IComponent type %s is not registered with the factory", template.Type))
 }
 
 // serializeComponent converts a component into a template

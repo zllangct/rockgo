@@ -36,7 +36,7 @@ const debugText = `<html>
 	</body>
 	</html>`
 
-var debug = template.Must(template.New("RPC debug").Parse(debugText))
+var debug = template.Must(template.New("RPC debugMode").Parse(debugText))
 
 // If set, print log statements for internal and I/O errors.
 var debugLog = false
@@ -68,7 +68,7 @@ type debugHTTP struct {
 	*Server
 }
 
-// Runs at /debug/rpc
+// Runs at /debugMode/rpc
 func (server debugHTTP) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// Build a sorted version of the data.
 	var services serviceArray

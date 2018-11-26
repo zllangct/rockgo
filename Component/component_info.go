@@ -4,39 +4,49 @@ import "reflect"
 
 type componentInfo struct {
 	Type      reflect.Type // The components type, cached
-	Component Component    // The component instance
+	Component IComponent   // The component instance
+	Parent    *Object      // The component mount root
 	Active    int          // Number of frames this component has been active for
-	Start     Start        // Start interface for component, if any
-	Update    Update       // Update interface for component, if any
-	Destroy   Destroy
-	Persist   Persist // Persist interface for component, if any
-	Uniqual   Unique  // Is it unique
+	Awake     IAwake
+	Start     IStart       // IStart interface for component, if any
+	Update    IUpdate      // IUpdate interface for component, if any
+	Destroy   IDestroy
+	Persist   IPersist // IPersist interface for component, if any
+	Uniqual   IUnique  // Is it unique
 }
 
-func newComponentInfo(cmp Component) *componentInfo {
+func newComponentInfo(cmp IComponent,root *Object) *componentInfo {
 	rtn := &componentInfo{
 		Type: cmp.Type(),
 		Component: cmp,
+		Parent:root,
 		Active : 0}
-	if rtn.Type.Implements(reflect.TypeOf((*Start)(nil)).Elem()) {
-		rtn.Start = rtn.Component.(Start)
+
+	if rtn.Type.Implements(reflect.TypeOf((*IAwake)(nil)).Elem()) {
+		rtn.Awake = rtn.Component.(IAwake)
 	}
-	if rtn.Type.Implements(reflect.TypeOf((*Update)(nil)).Elem()) {
-		rtn.Update = rtn.Component.(Update)
+	if rtn.Type.Implements(reflect.TypeOf((*IStart)(nil)).Elem()) {
+		rtn.Start = rtn.Component.(IStart)
 	}
-	if rtn.Type.Implements(reflect.TypeOf((*Persist)(nil)).Elem()) {
-		rtn.Persist = rtn.Component.(Persist)
+	if rtn.Type.Implements(reflect.TypeOf((*IUpdate)(nil)).Elem()) {
+		rtn.Update = rtn.Component.(IUpdate)
 	}
-	if rtn.Type.Implements(reflect.TypeOf((*Destroy)(nil)).Elem()) {
-		rtn.Destroy = rtn.Component.(Destroy)
+	if rtn.Type.Implements(reflect.TypeOf((*IPersist)(nil)).Elem()) {
+		rtn.Persist = rtn.Component.(IPersist)
 	}
-	if rtn.Type.Implements(reflect.TypeOf((*Unique)(nil)).Elem()) {
-		rtn.Uniqual = rtn.Component.(Unique)
+	if rtn.Type.Implements(reflect.TypeOf((*IDestroy)(nil)).Elem()) {
+		rtn.Destroy = rtn.Component.(IDestroy)
+	}
+	if rtn.Type.Implements(reflect.TypeOf((*IUnique)(nil)).Elem()) {
+		rtn.Uniqual = rtn.Component.(IUnique)
+	}
+	if rtn.Type.Implements(reflect.TypeOf((*IComponentBase)(nil)).Elem()) {
+		rtn.Component.(IComponentBase).Init(root)
 	}
 	return rtn
 }
 
-// Update a single component
+// IUpdate a single component
 func (info *componentInfo) updateComponent(step float32, runtime *Runtime, context *Context) {
 	if info.Active == 0 && info.Start != nil {
 		runtime.workers.Run(func() {

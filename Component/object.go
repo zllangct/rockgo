@@ -38,9 +38,15 @@ func NewObject(names ...string) *Object {
 		writeLock:  &sync.Mutex{}}
 }
 
+func NewObjectWithComponent(component IComponent,names ...string) *Object {
+	o:=NewObject(names...)
+	return o.AddComponent(component)
+
+}
+
 // Add a behaviour to a node
-func (o *Object) AddComponent(component Component) *Object {
-	info := newComponentInfo(component)
+func (o *Object) AddComponent(component IComponent) *Object {
+	info := newComponentInfo(component,o)
 	o.WithLock(func() error {
 		if info.Uniqual != nil && info.Uniqual.IsUnique() {
 			if o.HasComponent(component) {
@@ -48,13 +54,16 @@ func (o *Object) AddComponent(component Component) *Object {
 			}
 		}
 		o.components = append(o.components, info)
+		if info.Awake!=nil{
+			info.Awake.Awake()
+		}
 		return nil
 	})
 	return o
 }
 
 // remove the first component finded
-func (o *Object) RemoveComponent(component Component) {
+func (o *Object) RemoveComponent(component IComponent) {
 	o.WithLock(func() error {
 		index:=-1
 		for i,v:=range o.components{
@@ -207,7 +216,7 @@ func (o *Object) GetComponentsInChildren(T reflect.Type) iter.Iter {
 	return cIter
 }
 
-// Update all components in this object
+// IUpdate all components in this object
 func (o *Object) Update(step float32, runtime ...*Runtime) {
 	activeRuntime := o.runtime
 	if len(runtime) > 0 {
@@ -261,7 +270,7 @@ func (o *Object) ID() int64 {
 
 // Find returns the first matching component on the object tree given by the name sequence or nil
 // component should be a pointer to store the output component into.
-// eg. If *FakeComponent implements Component, pass **FakeComponent to Find.
+// eg. If *FakeComponent implements IComponent, pass **FakeComponent to Find.
 func (o *Object) Find(component interface{}, query ...string) error {
 	componentType := reflect.TypeOf(component).Elem()
 
@@ -282,7 +291,7 @@ func (o *Object) Find(component interface{}, query ...string) error {
 	reflect.ValueOf(component).Elem().Set(reflect.ValueOf(cmp))
 	return nil
 }
-
+//TODO 需测试验证
 func (o *Object) HasComponent(component interface{}) bool {
 	componentType := reflect.TypeOf(component).Elem()
 	_, err := o.GetComponents(componentType).Next()

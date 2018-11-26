@@ -7,11 +7,11 @@ import (
 )
 
 /*
-	Actor Manager Component
+	Actor Manager IComponent
 */
 
 type ActorManagerComponent struct {
-	Dic sync.Map  // key,value = int64,*Component.Object
+	Dic sync.Map  // key,value = int64,*IComponent.Object
 }
 
 func (this *ActorManagerComponent) Type() reflect.Type {
@@ -22,7 +22,7 @@ func (this *ActorManagerComponent) Update(ctx *Component.Context) {
 
 }
 
-func (this *ActorManagerComponent) New() Component.Component {
+func (this *ActorManagerComponent) New() Component.IComponent {
 	return &ActorManagerComponent{}
 }
 

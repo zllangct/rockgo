@@ -22,7 +22,7 @@ func (fake *FakeConfiguredComponent) Type() reflect.Type {
 	return reflect.TypeOf(fake)
 }
 
-func (fake *FakeConfiguredComponent) New() Component.Component {
+func (fake *FakeConfiguredComponent) New() Component.IComponent {
 	return &FakeConfiguredComponent{}
 }
 

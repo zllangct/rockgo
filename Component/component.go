@@ -5,32 +5,33 @@ import (
 	"reflect"
 )
 
-//TODO 组件的Destroy
-//TODO Object 的 Destroy ,当对象销毁时,需要触发对象孩子的销毁,组件的销毁
 
-type Component interface {
+type IComponent interface {
 	Type() reflect.Type
 }
 
-type Unique interface {
+type IUnique interface {
 	IsUnique() bool
 }
 
-type Persist interface {
+type IPersist interface {
 	Serialize() (interface{}, error)
 	Deserialize(data interface{}) error
 }
 
-type Start interface {
+type IAwake interface {
+	Awake()
+}
+
+type IStart interface {
 	Start(context *Context)
 }
 
-type Update interface {
+type IUpdate interface {
 	Update(context *Context)
 }
 
-//TODO 添加组件销毁事件
-type Destroy interface {
+type IDestroy interface {
 	Destroy()
 }
 
@@ -39,4 +40,25 @@ type Context struct {
 	DeltaTime float32     // The delta step in global time for the update.
 	Logger    *log.Logger // The runtime logger.
 	Runtime   *Runtime
+}
+
+
+type IComponentBase interface {
+	Init(parent *Object)
+}
+
+type Base struct {
+	Parent *Object
+}
+
+func (this *Base)Init(parent *Object)  {
+	this.Parent=parent
+}
+
+func (this *Base)GetParent()*Object  {
+	return this.Parent
+}
+
+func (this *Base) Type() reflect.Type {
+	return reflect.TypeOf(this)
 }

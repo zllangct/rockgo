@@ -31,7 +31,7 @@ func (iterator *FilterComponentArrayIter) Next() (interface{}, error) {
 	}
 
 	// Look for a matching type
-	var cmp Component = nil
+	var cmp IComponent = nil
 	for iterator.err == nil {
 		if iterator.err != nil {
 			return nil, iterator.err
@@ -52,7 +52,8 @@ func (iterator *FilterComponentArrayIter) Next() (interface{}, error) {
 		}
 
 		value := (*iterator.current)[iterator.offset]
-		if value.Type == iterator.target {
+		//支持，通过实现过的接口类型查询
+		if value.Type == iterator.target || value.Type.Implements(iterator.target){
 			cmp = value.Component
 			break
 		}

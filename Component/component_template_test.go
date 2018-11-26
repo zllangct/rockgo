@@ -10,7 +10,7 @@ type ComponentTemplate struct {
 	parent *Component.Object
 }
 
-func (c *ComponentTemplate) New() Component.Component {
+func (c *ComponentTemplate) New() Component.IComponent {
 	return &ComponentTemplate{}
 }
 

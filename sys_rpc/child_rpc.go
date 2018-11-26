@@ -2,7 +2,7 @@ package sys_rpc
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO/cluster"
+	"github.com/zllangct/RockGO/clusterOld"
 	"github.com/zllangct/RockGO/clusterserver"
 	"github.com/zllangct/RockGO/logger"
 	"time"
@@ -16,13 +16,13 @@ type ChildRpc struct {
 /*
 master 通知父节点上线, 收到通知的子节点需要链接对应父节点
 */
-func (this *ChildRpc) RootTakeProxy(request *cluster.RpcRequest) {
+func (this *ChildRpc) RootTakeProxy(request *clusterOld.RpcRequest) {
 	rname := request.Rpcdata.Args[0].(string)
 	logger.Info(fmt.Sprintf("root node %s online. connecting...", rname))
 	clusterserver.GlobalClusterServer.ConnectToRemote(rname)
 }
 
-func (this *ChildRpc) ConnectOK(request *cluster.RpcRequest) {
+func (this *ChildRpc) ConnectOK(request *clusterOld.RpcRequest) {
 	rname := request.Rpcdata.Args[0].(string)
 	logger.Info(fmt.Sprintf("connect to %s successed!", rname))
 	child,err:= clusterserver.GlobalClusterServer.RemoteNodesMgr.GetChild(rname)
@@ -37,7 +37,7 @@ func (this *ChildRpc) ConnectOK(request *cluster.RpcRequest) {
 /*
 关闭节点信号
 */
-func (this *ChildRpc) CloseServer(request *cluster.RpcRequest){
+func (this *ChildRpc) CloseServer(request *clusterOld.RpcRequest){
 	delay := request.Rpcdata.Args[0].(int)
 	logger.Warn("server close kickdown.", delay, "second...")
 	time.Sleep(time.Duration(delay)*time.Second)
@@ -47,7 +47,7 @@ func (this *ChildRpc) CloseServer(request *cluster.RpcRequest){
 /*
 重新加载配置文件
 */
-func (this *ChildRpc) ReloadConfig(request *cluster.RpcRequest){
+func (this *ChildRpc) ReloadConfig(request *clusterOld.RpcRequest){
 	delay := request.Rpcdata.Args[0].(int)
 	logger.Warn("server ReloadConfig kickdown.", delay, "second...")
 	time.Sleep(time.Duration(delay)*time.Second)
@@ -59,7 +59,7 @@ func (this *ChildRpc) ReloadConfig(request *cluster.RpcRequest){
 /*
 检查节点是否下线
 */
-func (this *ChildRpc) CheckAlive(request *cluster.RpcRequest)(response map[string]interface{}){
+func (this *ChildRpc) CheckAlive(request *clusterOld.RpcRequest)(response map[string]interface{}){
 	logger.Debug("CheckAlive!")
 	response = make(map[string]interface{})
 	response["name"] = clusterserver.GlobalClusterServer.Name
@@ -69,7 +69,7 @@ func (this *ChildRpc) CheckAlive(request *cluster.RpcRequest)(response map[strin
 /*
 通知节点掉线（父节点或子节点）
 */
-func (this *ChildRpc)NodeDownNtf(request *cluster.RpcRequest) {
+func (this *ChildRpc)NodeDownNtf(request *clusterOld.RpcRequest) {
 	isChild := request.Rpcdata.Args[0].(bool)
 	nodeName := request.Rpcdata.Args[1].(string)
 	logger.Debug(fmt.Sprintf("node %s down ntf.", nodeName))

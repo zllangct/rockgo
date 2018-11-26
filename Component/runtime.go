@@ -96,7 +96,7 @@ func (runtime *Runtime) Objects() iter.Iter {
 
 // Schedules a task to execute between the next update loops.
 // Return immediately, but the task will only be executed after
-// the current Update() loop finishes.
+// the current IUpdate() loop finishes.
 // This effectively blocks until the current loop ends, then runs; then
 // finally returns.
 func (runtime *Runtime) ScheduleTask(task func()) {

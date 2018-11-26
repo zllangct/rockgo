@@ -17,7 +17,7 @@ type Hello struct {
 
 func (this *Hello) Hello(str string) {
 	sum := 0
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < 1; i++ {
 		sum = sum + i
 	}
 	//println("sum:",sum,str)
@@ -48,7 +48,7 @@ func main() {
 }
 
 func TestLargeObjects(){
-	//====================== Component
+	//====================== IComponent
 	runtime := Component.NewRuntime(Component.Config{
 		ThreadPoolSize: 50,
 	})
@@ -66,7 +66,7 @@ func TestLargeObjects(){
 		runtime.Update(float32(1))
 	}
 	elapsed1:=time.Since(t1)
-	println("component:",elapsed1.Seconds())
+	println("component:",elapsed1)
 
 	//========================== traditional
 	tasklist:=make([]*Hello,1000)
@@ -93,7 +93,7 @@ func TestLargeObjects(){
 	}
 	wg.Wait()
 	elapsed2:=time.Since(t2)
-	println("traditional:",elapsed2.Seconds())
+	println("traditional:",elapsed2)
 }
 
 

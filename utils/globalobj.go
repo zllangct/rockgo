@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/zllangct/RockGO/RockInterface"
 	"github.com/zllangct/RockGO/logger"
-	"github.com/zllangct/RockGO/timer"
+	"github.com/zllangct/RockGO/timer_v1"
 	"io/ioutil"
 	"os"
 	"strconv"
@@ -56,7 +56,7 @@ type GlobalObj struct {
 	FrequencyControl  string                            //  100/h, 100/m, 100/s
 	CmdInterpreter    RockInterface.ICommandInterpreter //xingo debug tool Interpreter
 	ProcessSignalChan chan os.Signal
-	safeTimerScheduel *timer.SafeTimerScheduel
+	safeTimerScheduel *timer_v1.SafeTimerScheduel
 	RoomMaxPlayer     int32
 	/*  database */
 	MysqlUser            string
@@ -94,7 +94,7 @@ func (this *GlobalObj) IsThreadSafeMode() bool {
 	}
 }
 
-func (this *GlobalObj) GetSafeTimer() *timer.SafeTimerScheduel {
+func (this *GlobalObj) GetSafeTimer() *timer_v1.SafeTimerScheduel {
 	return this.safeTimerScheduel
 }
 
@@ -110,7 +110,7 @@ func (this *GlobalObj) Reload() {
 	} else {
 		//init safetimer
 		if GlobalObject.safeTimerScheduel == nil && GlobalObject.IsThreadSafeMode() {
-			GlobalObject.safeTimerScheduel = timer.NewSafeTimerScheduel()
+			GlobalObject.safeTimerScheduel = timer_v1.NewSafeTimerScheduel()
 		}
 	}
 }

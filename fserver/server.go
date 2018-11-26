@@ -5,7 +5,7 @@ import (
 	"github.com/zllangct/RockGO/Network"
 	"github.com/zllangct/RockGO/RockInterface"
 	"github.com/zllangct/RockGO/logger"
-	"github.com/zllangct/RockGO/timer"
+	"github.com/zllangct/RockGO/timer_v1"
 	"github.com/zllangct/RockGO/utils"
 	"net"
 	"os"
@@ -152,7 +152,7 @@ func (this *Server) AddRouter(router interface{}) {
 }
 
 func (this *Server) CallLater(durations time.Duration, f func(v ...interface{}), args ...interface{}) {
-	delayTask := timer.NewTimer(durations, f, args)
+	delayTask := timer_v1.NewTimer(durations, f, args)
 	delayTask.Run()
 }
 
@@ -177,7 +177,7 @@ func (this *Server) CallWhen(ts string, f func(v ...interface{}), args ...interf
 
 func (this *Server) CallLoop(durations time.Duration, f func(v ...interface{}), args ...interface{}) {
 	go func() {
-		delayTask := timer.NewTimer(durations, f, args)
+		delayTask := timer_v1.NewTimer(durations, f, args)
 		for {
 			time.Sleep(delayTask.GetDurations())
 			delayTask.GetFunc().Call()

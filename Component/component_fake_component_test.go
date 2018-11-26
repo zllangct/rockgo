@@ -22,7 +22,7 @@ func (fake *FakeComponent) Update(_ *Component.Context) {
 	fake.Count += 1
 }
 
-func (fake *FakeComponent) New() Component.Component {
+func (fake *FakeComponent) New() Component.IComponent {
 	return &FakeComponent{}
 }
 

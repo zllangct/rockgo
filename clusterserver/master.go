@@ -2,7 +2,7 @@ package clusterserver
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO/cluster"
+	"github.com/zllangct/RockGO/clusterOld"
 	"github.com/zllangct/RockGO/fserver"
 	"github.com/zllangct/RockGO/RockInterface"
 	"github.com/zllangct/RockGO/logger"
@@ -17,27 +17,27 @@ const (
 
 type Master struct {
 	OnlineNodes  map[string]bool
-	Cconf        *cluster.ClusterConf
-	Childs       *cluster.ChildMgr
+	Cconf        *clusterOld.ClusterConf
+	Childs       *clusterOld.ChildMgr
 	TelnetServer RockInterface.Iserver
 	sync.RWMutex
 }
 
 func NewMaster(path string) *Master {
 	logger.SetPrefix(fmt.Sprintf("[%s]", "MASTER"))
-	cconf, err := cluster.NewClusterConf(path)
+	cconf, err := clusterOld.NewClusterConf(path)
 	if err != nil {
-		panic("cluster conf error!!!")
+		panic("clusterOld conf error!!!")
 	}
 	GlobalMaster = &Master{
 		OnlineNodes: make(map[string]bool),
 		Cconf:       cconf,
-		Childs:      cluster.NewChildMgr(),
+		Childs:      clusterOld.NewChildMgr(),
 	}
 	//regest callback
 	utils.GlobalObject.TcpPort = GlobalMaster.Cconf.Master.RootPort
-	utils.GlobalObject.Protoc = cluster.NewRpcServerProtocol()
-	utils.GlobalObject.RpcCProtoc = cluster.NewRpcClientProtocol()
+	utils.GlobalObject.Protoc = clusterOld.NewRpcServerProtocol()
+	utils.GlobalObject.RpcCProtoc = clusterOld.NewRpcClientProtocol()
 	utils.GlobalObject.OnClusterConnectioned = DoConnectionMade
 	utils.GlobalObject.OnClusterClosed = DoConnectionLost
 	utils.GlobalObject.Name = "master"
@@ -50,9 +50,9 @@ func NewMaster(path string) *Master {
 	if GlobalMaster.Cconf.Master.DebugPort > 0{
 		if GlobalMaster.Cconf.Master.Host != ""{
 			GlobalMaster.TelnetServer = fserver.NewTcpServer("telnet_server", "tcp4", GlobalMaster.Cconf.Master.Host,
-				GlobalMaster.Cconf.Master.DebugPort, 100, cluster.NewTelnetProtocol())
+				GlobalMaster.Cconf.Master.DebugPort, 100, clusterOld.NewTelnetProtocol())
 		}else{
-			GlobalMaster.TelnetServer = fserver.NewTcpServer("telnet_server", "tcp4", "127.0.0.1", GlobalMaster.Cconf.Master.DebugPort, 100, cluster.NewTelnetProtocol())
+			GlobalMaster.TelnetServer = fserver.NewTcpServer("telnet_server", "tcp4", "127.0.0.1", GlobalMaster.Cconf.Master.DebugPort, 100, clusterOld.NewTelnetProtocol())
 		}
 		logger.Info(fmt.Sprintf("telnet tool start: %s:%d.", GlobalMaster.Cconf.Master.Host, GlobalMaster.Cconf.Master.DebugPort))
 	}
@@ -136,7 +136,7 @@ func (this *Master)CheckChildsAlive(params ...interface{}) {
 		go this.CheckChildAlive(child)
 	}
 }
-func (this *Master)CheckChildAlive(child *cluster.Child){
+func (this *Master)CheckChildAlive(child *clusterOld.Child){
 	ch:=make(chan bool)
 	check:= func() {
 		for i:=0;i< KEEP_ALIVED_CHECKTIMES;i++{

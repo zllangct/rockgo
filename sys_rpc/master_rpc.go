@@ -1,7 +1,7 @@
 package sys_rpc
 
 import (
-	"github.com/zllangct/RockGO/cluster"
+	"github.com/zllangct/RockGO/clusterOld"
 	"github.com/zllangct/RockGO/clusterserver"
 	"github.com/zllangct/RockGO/logger"
 )
@@ -9,7 +9,7 @@ import (
 type MasterRpc struct {
 }
 
-func (this *MasterRpc) TakeProxy(request *cluster.RpcRequest) (response map[string]interface{}) {
+func (this *MasterRpc) TakeProxy(request *clusterOld.RpcRequest) (response map[string]interface{}) {
 	response = make(map[string]interface{}, 0)
 	name := request.Rpcdata.Args[0].(string)
 	logger.Info("node " + name + " connected to master.")
@@ -55,7 +55,7 @@ func (this *MasterRpc) TakeProxy(request *cluster.RpcRequest) (response map[stri
 }
 
 //主动通知master 节点掉线
-func (this *MasterRpc) ChildOffLine(request *cluster.RpcRequest) {
+func (this *MasterRpc) ChildOffLine(request *clusterOld.RpcRequest) {
 	name := request.Rpcdata.Args[0].(string)
 	logger.Info("node :" + name + " disconnected offline.")
 	clusterserver.GlobalMaster.ChildDisconnected(name)

@@ -404,6 +404,10 @@ type CodecEmulator struct {
 	err           error
 }
 
+func (codec *CodecEmulator)IOCallback(){
+
+}
+
 func (codec *CodecEmulator) Call(serviceMethod string, args *Args, reply *Reply) error {
 	codec.serviceMethod = serviceMethod
 	codec.args = args

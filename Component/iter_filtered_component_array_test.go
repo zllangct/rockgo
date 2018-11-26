@@ -14,7 +14,11 @@ func TestGetComponents(T *testing.T) {
 		obj := Component.NewObject("Object 1")
 		obj.AddComponent(&FakeComponent{Id: "1"})
 		obj.AddComponent(&FakeComponent{Id: "1"})
-		ci, err := iter.Collect(obj.GetComponents(reflect.TypeOf((*FakeComponent)(nil))))
+		os:=obj.GetComponents(reflect.TypeOf((Component.IComponent)(nil)))
+		ci, err := iter.Collect(os)
+		t2:=reflect.TypeOf((*FakeComponent)(nil))
+		_=t2
+		//ci, err := iter.Collect(obj.GetComponents(reflect.TypeOf((*FakeComponent)(nil))))
 		T.Assert(err == nil)
 		T.Assert(len(ci) == 1)
 		T.Assert(ci[0].(*FakeComponent).Id == "1")

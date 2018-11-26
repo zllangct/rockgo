@@ -1,4 +1,4 @@
-package timer
+package timer_v1
 
 import (
 	"time"
