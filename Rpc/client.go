@@ -143,6 +143,10 @@ func (client *Client) sendWithoutReply(call *Call) {
 			call.done()
 		}
 	}
+	if call != nil {
+		call.Error = nil
+		call.done()
+	}
 }
 func (client *Client) input() {
 	var err error
@@ -175,15 +179,23 @@ func (client *Client) input() {
 			// any subsequent requests will get the ReadResponseBody
 			// error if there is one.
 			call.Error = ServerError(response.Error)
-			err = client.codec.ReadResponseBody(invalidRequest)
+			err = client.codec.ReadResponseBody(nil)
 			if err != nil {
 				err = errors.New("reading error body: " + err.Error())
 			}
 			call.done()
 		default:
-			err = client.codec.ReadResponseBody(call.Reply)
-			if err != nil {
-				call.Error = errors.New("reading body " + err.Error())
+			if call.Reply==nil {
+				call.Error = ServerError(response.Error)
+				err = client.codec.ReadResponseBody(nil)
+				if err != nil {
+					err = errors.New("reading error body: " + err.Error())
+				}
+			}else{
+				err = client.codec.ReadResponseBody(call.Reply)
+				if err != nil {
+					call.Error = errors.New("reading body " + err.Error())
+				}
 			}
 			call.done()
 		}

@@ -189,12 +189,12 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 			continue
 		}
 		// Method needs three ins: receiver, *args, *reply.
-		if mtype.NumIn() != 3 {
-			if reportErr {
-				log.Printf("rpc.Register: method %q has %d input parameters; needs exactly three\n", mname, mtype.NumIn())
-			}
-			continue
-		}
+		//if mtype.NumIn() == 2  {
+		//	if reportErr {
+		//		log.Printf("rpc.Register: method %q has %d input parameters; needs exactly three\n", mname, mtype.NumIn())
+		//	}
+		//	continue
+		//}
 		// First arg need not be a pointer.
 		argType := mtype.In(1)
 		if !isExportedOrBuiltinType(argType) {
@@ -206,7 +206,7 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 		numin:=mtype.NumIn()
 
 		var replyType reflect.Type
-		if numin > 1{
+		if numin > 2{
 			// Second arg must be a pointer.
 			replyType = mtype.In(2)
 			if replyType.Kind() != reflect.Ptr {
@@ -260,16 +260,16 @@ func (server *Server) sendResponse(sending *sync.Mutex, req *Request, reply inte
 	}
 	resp.Seq = req.Seq
 	sending.Lock()
-	if req.Type == RPC_CALL_TYPE_NORMAL {
-		if reply == nil{
-			resp.Error = "service method has no reply"
-			reply = invalidRequest
-		}
-		err := codec.WriteResponse(resp, reply)
-		if debugLog && err != nil {
-			log.Println("rpc: writing response:", err)
-		}
+
+	if reply == nil{
+		resp.Error = "service method has no reply"
+		reply = invalidRequest
 	}
+	err := codec.WriteResponse(resp, reply)
+	if debugLog && err != nil {
+		log.Println("rpc: writing response:", err)
+	}
+
 	sending.Unlock()
 	server.freeResponse(resp)
 }
@@ -307,7 +307,9 @@ func (s *service) call(server *Server, sending *sync.Mutex, wg *sync.WaitGroup, 
 	}else{
 		reqi = replyv.Interface()
 	}
-	server.sendResponse(sending, req, reqi, codec, errmsg)
+	if req.Type == RPC_CALL_TYPE_NORMAL {
+		server.sendResponse(sending, req, reqi, codec, errmsg)
+	}
 	server.freeRequest(req)
 }
 
