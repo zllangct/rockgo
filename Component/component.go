@@ -44,15 +44,17 @@ type Context struct {
 
 
 type IComponentBase interface {
-	Init(parent *Object)
+	Init(parent *Object,t reflect.Type)
 }
 
 type Base struct {
 	Parent *Object
+	t reflect.Type
 }
 
-func (this *Base)Init(parent *Object)  {
+func (this *Base)Init(parent *Object,t reflect.Type)  {
 	this.Parent=parent
+	this.t=t
 }
 
 func (this *Base)GetParent()*Object  {
@@ -60,5 +62,5 @@ func (this *Base)GetParent()*Object  {
 }
 
 func (this *Base) Type() reflect.Type {
-	return reflect.TypeOf(this)
+	return this.t
 }

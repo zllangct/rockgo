@@ -1,19 +1,19 @@
 package Component
 
 import (
-	"log"
-	"os"
+	"errors"
+	"fmt"
+	"github.com/zllangct/RockGO/logger"
 	"sync"
 
-	"github.com/zllangct/RockGO/3RD/threadpool"
 	"github.com/zllangct/RockGO/3RD/iter"
+	"github.com/zllangct/RockGO/3RD/threadpool"
 )
 
 // Config configures a runtime.
 type Config struct {
 	ThreadPoolSize int
 	Factory        *ObjectFactory
-	Logger         *log.Logger
 }
 
 // Runtime is the basic operating unit of the mud.
@@ -21,7 +21,6 @@ type Config struct {
 type Runtime struct {
 	root       *Object                // The root object for this runtime.
 	workers    *threadpool.ThreadPool // The thread ConnPool for updating objects
-	logger     *log.Logger            // The logger for this runtime, if any.
 	updateLock *sync.Mutex            // The thread safe lock for updates.
 	factory    *ObjectFactory         // The serialization factory
 }
@@ -31,7 +30,6 @@ func NewRuntime(config Config) *Runtime {
 	validateConfig(&config)
 	runtime := &Runtime{
 		root:       NewObject(),
-		logger:     config.Logger,
 		updateLock: &sync.Mutex{},
 		workers:    threadpool.New(),
 		factory:    config.Factory}
@@ -44,9 +42,6 @@ func NewRuntime(config Config) *Runtime {
 func validateConfig(config *Config) {
 	if config.ThreadPoolSize <= 0 {
 		config.ThreadPoolSize = 10
-	}
-	if config.Logger == nil {
-		config.Logger = log.New(os.Stdout, "runtime: ", log.Ldate|log.Ltime|log.Lshortfile)
 	}
 	if config.Factory == nil {
 		config.Factory = NewObjectFactory()
@@ -61,6 +56,15 @@ func (runtime *Runtime) Root() *Object {
 // Factory returns the object factory for the runtime
 func (runtime *Runtime) Factory() *ObjectFactory {
 	return runtime.factory
+}
+
+func (runtime *Runtime)SetMaxThread(maxThread int) error {
+	if runtime.workers!=nil && maxThread > 0{
+		runtime.workers.MaxThreads =maxThread
+	}else{
+		return errors.New("max thread must > 0")
+	}
+	return nil
 }
 
 // Extract creates a deep copy of the object and then removes it from the runtime.
@@ -106,9 +110,9 @@ func (runtime *Runtime) ScheduleTask(task func()) {
 			if r != nil {
 				err, ok := r.(error)
 				if ok {
-					runtime.logger.Printf("Failed to execute scheduled task: %s", err.Error())
+					logger.Error(fmt.Sprintf("Failed to execute scheduled task: %s", err.Error()))
 				} else {
-					runtime.logger.Printf("Failed to execute scheduled task: %s", r)
+					logger.Error(fmt.Sprintf("Failed to execute scheduled task: %s", r))
 				}
 			}
 		})()

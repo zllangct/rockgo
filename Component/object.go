@@ -2,13 +2,12 @@ package Component
 
 import (
 	"fmt"
-	"log"
 	"reflect"
 	"strings"
 	"sync"
 
-	"github.com/zllangct/RockGO/3RD/iter"
 	"github.com/zllangct/RockGO/3RD/errors"
+	"github.com/zllangct/RockGO/3RD/iter"
 )
 
 // Node is a game object type.
@@ -238,7 +237,6 @@ func (o *Object) NewContext(delta float32, runtime ...*Runtime) *Context {
 	return &Context{
 		Object:    o,
 		DeltaTime: delta,
-		Logger:    activeRuntime.logger,
 		Runtime:   activeRuntime,
 	}
 }
@@ -312,14 +310,6 @@ func (o *Object) Runtime() *Runtime {
 			return o.runtime
 		}
 		marker = marker.parent
-	}
-	return nil
-}
-
-func (o *Object) Logger() *log.Logger {
-	runtime := o.runtime
-	if runtime != nil {
-		return runtime.logger
 	}
 	return nil
 }

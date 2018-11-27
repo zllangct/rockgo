@@ -1,0 +1,7 @@
+{
+    "MasterIPAddress": "127.0.0.1",
+    "MasterPort": 8888,
+    "LocalPort": 6666,
+    "APPName": null,
+    "Rule": null
+}

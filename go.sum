@@ -1,5 +1,7 @@
 github.com/TarsCloud/TarsGo v0.0.0-20181117101853-df0f3ee846b3 h1:l352SkBJ9PfeR/k3zU0k8P80do+z5nm+inglgCo+12U=
 github.com/TarsCloud/TarsGo v0.0.0-20181117101853-df0f3ee846b3/go.mod h1:ybmr1NnX41dauJftSX4BwnVAoA0UpE4PeyjMpPKIdzY=
+github.com/donnie4w/go-logger v0.0.0-20170827050443-4740c51383f4 h1:T9PR91sjTtrA1HmZB4G+M7OLCelch0f6rIEY7Mm1T4U=
+github.com/donnie4w/go-logger v0.0.0-20170827050443-4740c51383f4/go.mod h1:L7S4x0R7vv3xoOhGuyAJyCO2MYzWOpccM4Isn8jIUgY=
 github.com/golang/protobuf v1.2.0 h1:P3YflyNX/ehuJFLhxviNdFxQPkGK5cDcApsge1SqnvM=
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=

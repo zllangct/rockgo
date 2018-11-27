@@ -152,12 +152,11 @@ func TestComplexSerialization(T *testing.T) {
 		logger.SetOutput(ioutil.Discard) // No output thanks
 
 		runtime := Component.NewRuntime(Component.Config{
-			ThreadPoolSize: 10,
-			Logger:         logger})
+			ThreadPoolSize: 10})
 
 		runtime.Factory().Register(&AddRemoveChild{})
 
-		runtime.Root().AddComponent(&DumpState{})
+		runtime.Root().AddComponent(&DumpState{elapsed:11})
 
 		o1 := Component.NewObject("Container One")
 		w1 := Component.NewObject("Worker 1")
@@ -188,6 +187,11 @@ func TestComplexSerialization(T *testing.T) {
 		w4.AddComponent(&AddRemoveChild{})
 		o3.AddComponent(&Hello{})
 		runtime.Root().AddObject(o1)
+		t:=&DumpState{}
+		err:=runtime.Root().Find(t)
+		if err!=nil{
+			println(err.Error())
+		}
 
 		runtime.Update(0.1)
 
@@ -220,8 +224,7 @@ func TestComplexRuntime(T *testing.T) {
 		logger.SetOutput(ioutil.Discard) // No output thanks
 
 		runtime := Component.NewRuntime(Component.Config{
-			ThreadPoolSize: 10,
-			Logger:         logger})
+			ThreadPoolSize: 10})
 
 		runtime.Root().AddComponent(&DumpState{})
 

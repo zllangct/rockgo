@@ -14,7 +14,7 @@ import (
 	"github.com/zllangct/RockGO/RockInterface"
 )
 
-func NewServer()  {
+func NewServer(configPath string)  {
 
 }
 

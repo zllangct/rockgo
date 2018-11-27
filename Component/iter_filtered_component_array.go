@@ -53,7 +53,7 @@ func (iterator *FilterComponentArrayIter) Next() (interface{}, error) {
 
 		value := (*iterator.current)[iterator.offset]
 		//支持，通过实现过的接口类型查询
-		if value.Type == iterator.target || value.Type.Implements(iterator.target){
+		if value.Type == iterator.target || ( value.Type.Kind()==reflect.Interface && value.Type.Implements(iterator.target.Elem())){
 			cmp = value.Component
 			break
 		}

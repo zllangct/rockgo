@@ -16,12 +16,15 @@ type componentInfo struct {
 }
 
 func newComponentInfo(cmp IComponent,root *Object) *componentInfo {
+	t:=reflect.TypeOf(cmp)
 	rtn := &componentInfo{
-		Type: cmp.Type(),
+		Type: t,
 		Component: cmp,
 		Parent:root,
 		Active : 0}
-
+	if rtn.Type.Implements(reflect.TypeOf((*IComponentBase)(nil)).Elem()) {
+		rtn.Component.(IComponentBase).Init(root,t)
+	}
 	if rtn.Type.Implements(reflect.TypeOf((*IAwake)(nil)).Elem()) {
 		rtn.Awake = rtn.Component.(IAwake)
 	}
@@ -40,9 +43,7 @@ func newComponentInfo(cmp IComponent,root *Object) *componentInfo {
 	if rtn.Type.Implements(reflect.TypeOf((*IUnique)(nil)).Elem()) {
 		rtn.Uniqual = rtn.Component.(IUnique)
 	}
-	if rtn.Type.Implements(reflect.TypeOf((*IComponentBase)(nil)).Elem()) {
-		rtn.Component.(IComponentBase).Init(root)
-	}
+
 	return rtn
 }
 
