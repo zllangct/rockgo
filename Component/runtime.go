@@ -10,7 +10,7 @@ import (
 	"github.com/zllangct/RockGO/3RD/threadpool"
 )
 
-// Config configures a runtime.
+// ConfigComponent configures a runtime.
 type Config struct {
 	ThreadPoolSize int
 	Factory        *ObjectFactory

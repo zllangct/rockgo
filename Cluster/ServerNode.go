@@ -2,7 +2,7 @@ package Cluster
 
 import (
 	"github.com/zllangct/RockGO/Component"
-	"github.com/zllangct/RockGO/Config"
+	"github.com/zllangct/RockGO/ConfigComponent"
 	"runtime"
 )
 
@@ -19,14 +19,14 @@ func NewServerNode() *ServerNode  {
 
 func (this *ServerNode)Serve()  {
 	//读取配置文件，初始化配置
-	this.Runtime.Root().AddComponent(&Config.ConfigComponent{})
+	this.Runtime.Root().AddComponent(&ConfigComponent.ConfigComponent{})
 	//设置runtime工作线程
 	this.Runtime.SetMaxThread(this.GetConfig().CommonConfig.RuntimeMaxWorker)
 }
 
 //获取配置
-func (this *ServerNode)GetConfig() (*Config.ConfigComponent){
-	var config *Config.ConfigComponent
+func (this *ServerNode)GetConfig() (*ConfigComponent.ConfigComponent){
+	var config *ConfigComponent.ConfigComponent
 	err:=this.Runtime.Root().Find(&config)
 	if err!=nil{
 		println(err.Error())

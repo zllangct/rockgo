@@ -28,8 +28,8 @@ func (this *ConfigComponent) IsUnique() bool {
 }
 
 func (this *ConfigComponent) Awake() {
-	this.CommonConfigPath = "./Config/CommonConfig.json"
-	this.CusterConfigPath = "./Config/CusterConfig.json"
+	this.CommonConfigPath = "./ConfigComponent/CommonConfig.json"
+	this.CusterConfigPath = "./ConfigComponent/CusterConfig.json"
 	//初始化默认配置
 	this.SetDefault()
 	//读取配置文件
