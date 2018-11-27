@@ -89,7 +89,7 @@ func (this *DbOperate) OpenDB(set_index_func func(ms *mgo.Session)) error {
 	if set_index_func != nil{
 		set_index_func(this.session)
 	}
-	logger.Info(fmt.Sprintf("DbOperate Connect %v mongodb...OK", this.dbcfg.String()))
+	logger.Info(fmt.Sprintf("DbOperate connect %v mongodb...OK", this.dbcfg.String()))
 	return nil
 }
 

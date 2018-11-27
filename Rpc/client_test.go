@@ -73,7 +73,6 @@ func TestGobError(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-
 	var reply Reply
 	err = client.Call("S.Recv", &struct{}{}, &reply)
 	if err != nil {

@@ -22,6 +22,8 @@ const (
 	RPC_CALL_TYPE_NORMAL
 	RPC_CALL_TYPE_WITHOUTREPLY
 )
+var isDebug = true
+
 // ServerError represents an error that has been returned from
 // the remote side of the RPC connection.
 type ServerError string
@@ -61,6 +63,15 @@ type Client struct {
 	timeout  time.Duration
 	debugMode    bool
 }
+
+type TcpClient struct {
+	Client
+	remoteAddr string
+	network string
+	conn net.Conn
+}
+
+
 
 // A ClientCodec implements writing of RPC requests and
 // reading of RPC responses for the client side of an RPC session.
@@ -217,7 +228,7 @@ func (client *Client) StartHeartBeat()  {
 	go func() {
 		if !client.debugMode {
 			pingCount:=0
-			res:=&heartBeatReuslt{}
+			res:=&HeartBeatReuslt{}
 			tc:=time.NewTicker(client.heartInterval)
 			for {
 				res.Result=0
@@ -226,7 +237,7 @@ func (client *Client) StartHeartBeat()  {
 					return
 				}
 				err:= client.Call("InnerResponse.StartHeartBeat",nil,res)
-				if err!=nil || res.Result!=1{
+				if (err!=nil || res.Result!=1) && !client.debugMode{
 					pingCount++
 					if pingCount > 3{
 						client.Close()
@@ -239,6 +250,18 @@ func (client *Client) StartHeartBeat()  {
 	}()
 }
 
+func (client *TcpClient) connect()error  {
+	conn,err := net.Dial(client.network, client.remoteAddr)
+	if err != nil {
+		return err
+	}
+	client.conn=conn
+	return nil
+}
+func (client *TcpClient)Reconnect()error  {
+	//TODO Reconnect
+	return nil
+}
 // NewClient returns a new Client to handle requests to the
 // set of services at the other end of the connection.
 // It adds a buffer to the write side of the connection so
@@ -250,16 +273,33 @@ func (client *Client) StartHeartBeat()  {
 // concurrent reads or concurrent writes.
 func NewClient(conn io.ReadWriteCloser) *Client {
 	encBuf := bufio.NewWriter(conn)
-	client := &gobClientCodec{conn, gob.NewDecoder(conn), gob.NewEncoder(encBuf), encBuf}
-	return NewClientWithCodec(client)
+	codec := &gobClientCodec{conn, gob.NewDecoder(conn), gob.NewEncoder(encBuf), encBuf}
+	return NewClientWithCodec(codec)
 }
-
+func NewTcpClient(network string,remoteAddr string) (*TcpClient,error) {
+	client := &TcpClient{
+		remoteAddr:remoteAddr,
+		network:network,
+	}
+	err:= client.connect()
+	if err!= nil {
+		return nil,err
+	}
+	encBuf := bufio.NewWriter(client.conn)
+	codec := &gobClientCodec{client.conn, gob.NewDecoder(client.conn), gob.NewEncoder(encBuf), encBuf}
+	client.Client = *NewClientWithCodec(codec)
+	client.StartHeartBeat()
+	return client,nil
+}
 // NewClientWithCodec is like NewClient but uses the specified
 // codec to encode requests and decode responses.
 func NewClientWithCodec(codec ClientCodec) *Client {
 	client := &Client{
 		codec:   codec,
 		pending: make(map[uint64]*Call),
+		heartInterval:time.Millisecond*3000,
+		timeout:time.Millisecond*500000,
+		debugMode:isDebug,
 	}
 	go client.input()
 	return client
@@ -329,15 +369,14 @@ func DialHTTPPath(network, address, path string) (*Client, error) {
 }
 
 // Dial connects to an RPC server at the specified network address.
-func Dial(network, address string) (*Client, error) {
-	conn, err := net.Dial(network, address)
-	if err != nil {
-		return nil, err
+func Dial(network, address string) (*TcpClient, error) {
+	c,err:=NewTcpClient(network,address)
+	if err!=nil{
+		return nil,err
 	}
-	c:=NewClient(conn)
-	c.StartHeartBeat()
 	return c, nil
 }
+
 
 
 // Close calls the underlying codec's Close method. If the connection is already
