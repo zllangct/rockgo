@@ -25,20 +25,7 @@ func HttpRequestWrap(uri string, targat func(http.ResponseWriter, *http.Request)
 	}
 }
 
-func ReSettingLog() {
-	// --------------------------------------------init log start
-	logger.SetConsole(GlobalObject.SetToConsole)
-	if GlobalObject.LogFileType == logger.ROLLINGFILE {
-		logger.SetRollingFile(GlobalObject.LogPath, GlobalObject.LogName,
-			GlobalObject.MaxLogNum, GlobalObject.MaxFileSize, GlobalObject.LogFileUnit)
-	} else {
-		logger.SetRollingDaily(GlobalObject.LogPath, GlobalObject.LogName)
-		logger.SetLevel(GlobalObject.LogLevel)
-	}
-	// --------------------------------------------init log end
-}
-
-func XingoTry(f reflect.Value, args []reflect.Value, handler func(interface{})) {
+func Try(f reflect.Value, args []reflect.Value, handler func(interface{})) {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Info("-------------panic recover---------------")
@@ -50,11 +37,6 @@ func XingoTry(f reflect.Value, args []reflect.Value, handler func(interface{})) 
 	f.Call(args)
 }
 
-func Catch(f func())  {
-	if err := recover(); err != nil {
-		f()
-	}
-}
 
 func StrToBytes(strData string) []byte {
 	buffer := &bytes.Buffer{}
