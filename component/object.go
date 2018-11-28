@@ -48,13 +48,13 @@ func (o *Object) AddComponent(component IComponent) *Object {
 	info := newComponentInfo(component,o)
 	err:=o.WithLock(func() error {
 			if info.Uniqual != nil && info.Uniqual.IsUnique() {
-				if o.HasComponent(component) {
+				if o.HasComponent(info.Type) {
 					return errors.Fail(ErrUniqueComponent{}, nil, "This component is unique,the object already has a same component")
 				}
 			}
 			if info.Require!=nil{
 				for obj,requires := range info.Require.GetRequire(){
-					for require := range requires {
+					for _,require := range requires {
 						if !obj.HasComponent(require) {
 							return errors.Fail(ErrMissingComponent{}, nil, "This component require other components,some needed components are missing")
 						}
@@ -67,7 +67,9 @@ func (o *Object) AddComponent(component IComponent) *Object {
 			}
 			return nil
 		})
-	logger.Error(err)
+	if err!=nil {
+		logger.Error(err)
+	}
 	return o
 }
 
@@ -306,8 +308,7 @@ func (o *Object) Find(component interface{}, query ...string) error {
 	return nil
 }
 
-func (o *Object) HasComponent(component interface{}) bool {
-	componentType := reflect.TypeOf(component).Elem()
+func (o *Object) HasComponent(componentType reflect.Type) bool {
 	for _, value := range o.components {
 		if value.Type == componentType{
 			return true

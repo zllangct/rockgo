@@ -1,6 +1,7 @@
 package Actor
 
 import (
+	"bytes"
 	"errors"
 	"strings"
 )
@@ -15,31 +16,37 @@ const (
 	ADRESS_LOCALACTORID
 )
 var(
-	//actor地址不完整
-	ERR_ID_NOT_COMPLETE = errors.New("actor id is not complete")
+	//actor地址格式错误
+    ErrActorWrongFormat = errors.New("this format is wrong,should be : xx:cc:vv:bb:nn")
 )
 /*
 	ActorID such as "0001:0025:2214:0001:0001",
-	means "APPID:RULE:NODE:GROUP:LOCALACTORID"a
+	means "APPID:RULE:NODE:GROUP:LOCALACTORID"
 */
-type ActorID  string
+type ActorID  []string
 
-func (this ActorID)ToString() string {
-	return string(this)
-}
-//local actor id
-func (this ActorID)LocalID() ([]string,error) {
-	s:= strings.Split(string(this),":")
-	if len(s)<2 {
-		return s, ERR_ID_NOT_COMPLETE
+func (this ActorID)String() string {
+	buf:=bytes.Buffer{}
+	for index, value := range this {
+		buf.WriteString(value)
+		if index !=len(this)-1{
+			buf.WriteString(":")
+		}
 	}
-	return s[len(s)-2:],nil
+	return buf.String()
 }
+
 //complate actor location id
-func (this ActorID)ToArray() []string {
-	return strings.Split(string(this),":")
+func (this *ActorID) Parse(address string) (error){
+	arr:= strings.Split(address,":")
+	if len(arr)!=5{
+		return ErrActorWrongFormat
+	}
+	*this = arr
+	return nil
 }
+
 //returns address of actor
-func (this ActorID)GetAddress(addressType ActorAddressType) string  {
-	return  strings.Split(string(this),":")[addressType]
+func (this ActorID)GetSeparation(addressType ActorAddressType) string  {
+	return  this[addressType]
 }

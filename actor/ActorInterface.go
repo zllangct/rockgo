@@ -2,9 +2,9 @@ package Actor
 
 
 
-type Actor interface {
+type IActor interface {
 	Tell(message *ActorMessageInfo)error
-	//GetActorID()ActorID
+	GetActorID() ActorID
 }
 
 type IActorMessage interface {
@@ -12,6 +12,5 @@ type IActorMessage interface {
 }
 
 type IActorMessageHandler interface {
-	MessageType()int
 	MessageHandlers()map[string]func(message *ActorMessageInfo)
 }

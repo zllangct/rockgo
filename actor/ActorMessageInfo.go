@@ -8,8 +8,8 @@ import (
 	ActorMessage Information
 */
 type ActorSession struct {
-	Target        Actor
-	Self		  *ActorComponent
+	Target        IActor
+	Self          *ActorComponent
 	ActorProxy    *ActorProxyComponent
 	TargetActorID ActorID
 	SelfActorID   ActorID
@@ -26,7 +26,7 @@ func (this *ActorMessageInfo) Emit(message IActorMessage) error{
 		err:=errors.New("checking the message package title is required")
 		return err
 	}
-	if this.Session.Target==nil && this.Session.TargetActorID == ""  {
+	if this.Session.Target==nil && len(this.Session.TargetActorID)!=5  {
 		err:=errors.New("target address can not be empty")
 		return err
 	}

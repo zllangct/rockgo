@@ -13,12 +13,13 @@ type ActorProxyComponent struct {
 	remoteActors sync.Map //[ActorID,*actor]
 }
 
-func (this *ActorProxyComponent) GetRequire() (requires map[*Component.Object][]reflect.Type) {
+func (this *ActorProxyComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
+	requires:=make(map[*Component.Object][]reflect.Type)
 	//添加该组件需要根节点拥有ActorProxyComponent,ConfigComponent组件
 	requires[this.Parent.Root()] = []reflect.Type{
 		reflect.TypeOf(&Config.ConfigComponent{}),
 	}
-	return
+	return requires
 }
 
 func (this *ActorProxyComponent) IsUnique() bool {

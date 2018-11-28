@@ -12,6 +12,12 @@ import (
 	actor IComponent
 	actor内线程安全
 */
+const(
+	ACTOR_TYPE_LOCAL = ActorType(1)
+	ACTOR_TYPE_REMOTE = ActorType(2)
+)
+
+type ActorType int
 
 type ActorComponent struct {
 	Component.Base
@@ -31,13 +37,14 @@ func NewActorComponent() *ActorComponent {
 	}
 }
 
-func (this *ActorComponent) GetRequire() (requires map[*Component.Object][]reflect.Type) {
+func (this *ActorComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
+	requires:=make(map[*Component.Object][]reflect.Type)
 	//添加该组件需要根节点拥有ActorProxyComponent,ConfigComponent组件
 	requires[this.Parent.Root()] = []reflect.Type{
 		reflect.TypeOf(&Config.ConfigComponent{}),
 		reflect.TypeOf(&ActorProxyComponent{}),
 	}
-	return
+	return requires
 }
 
 func (this *ActorComponent) IsUnique() bool {
@@ -46,7 +53,7 @@ func (this *ActorComponent) IsUnique() bool {
 
 func (this *ActorComponent) Awake() {
 	//初始化Actor代理
-	err := this.Parent.Runtime().Root().Find(this.Proxy)
+	err := this.Parent.Runtime().Root().Find(&this.Proxy)
 	if err != nil {
 		panic(err)
 	}
@@ -73,6 +80,10 @@ func (this *ActorComponent) Tell(message *ActorMessageInfo) error {
 		return errors.New("this actor is inactive or destroyed")
 	}
 	return nil
+}
+
+func (this *ActorComponent) GetActorID() ActorID{
+	return this.ActorID
 }
 
 func (this *ActorComponent) dispatch() {

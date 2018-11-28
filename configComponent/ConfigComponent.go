@@ -12,7 +12,6 @@ import (
 	"runtime"
 )
 
-
 type ConfigComponent struct {
 	Component.Base
 	commonConfigPath  string
@@ -22,7 +21,6 @@ type ConfigComponent struct {
 	CusterConfig      *CusterConfig
 	CustomConfig      map[string]interface{}
 }
-
 
 func (this *ConfigComponent) IsUnique() bool {
 	return true
@@ -47,7 +45,7 @@ func (this *ConfigComponent) loadConfig(configpath string, cfg interface{}) erro
 					return err
 				}
 			}
-			b, err := json.MarshalIndent(cfg,"","    ")
+			b, err := json.MarshalIndent(cfg, "", "    ")
 			if err != nil {
 				return err
 			}
@@ -66,6 +64,7 @@ func (this *ConfigComponent) loadConfig(configpath string, cfg interface{}) erro
 	}
 	return nil
 }
+
 //重新读取配置文件，包括自定义配置文件
 func (this *ConfigComponent) ReloadConfig() {
 	this.loadConfig(this.commonConfigPath, this.CommonConfig)
@@ -74,19 +73,20 @@ func (this *ConfigComponent) ReloadConfig() {
 		this.loadConfig(path, this.CustomConfig[name])
 	}
 }
+
 // configComponent.CustomConfig[name] = structure
-func (this *ConfigComponent) LoadCoustomConfig(name string,path string,structure interface{})(err error) {
-	if name == "" || path ==""{
+func (this *ConfigComponent) LoadCoustomConfig(name string, path string, structure interface{}) (err error) {
+	if name == "" || path == "" {
 		return errors.New("config name or path can ont be empty")
 	}
-	kind:=reflect.TypeOf(structure).Kind()
-	if  kind != reflect.Ptr && kind != reflect.Map{
-		err=errors.New("structure must be pointer or map")
+	kind := reflect.TypeOf(structure).Kind()
+	if kind != reflect.Ptr && kind != reflect.Map {
+		err = errors.New("structure must be pointer or map")
 		return
 	}
 	this.loadConfig(path, structure)
-	this.CustomConfig[name]=structure
-	this.CustomConfig[name]= path
+	this.CustomConfig[name] = structure
+	this.CustomConfig[name] = path
 	return
 }
 
@@ -108,6 +108,8 @@ func (this *ConfigComponent) SetDefault() {
 		MasterIPAddress: "127.0.0.1",
 		MasterPort:      8888,
 		LocalPort:       6666,
+		AppName:         []string{"defaultApp"},
+		Rule:            []string{"master"},
 		Group:           []string{"single"},
 	}
 }
@@ -130,7 +132,7 @@ type CusterConfig struct {
 	MasterIPAddress string
 	MasterPort      int
 	LocalPort       int
-	APPName         []string
+	AppName         []string
 	Rule            []string
 	Group           []string
 }

@@ -36,6 +36,15 @@ func (this *ComponentGroups) AddGroup(groupName string, group ComponentGroup) er
 		g= append(g, value)
 	}
 	this.group[groupName] = g
+	//加入single组
+	tempGroup=map[reflect.Type]IComponent{}
+	temp:= append(([]IComponent)(this.group["single"]), ([]IComponent)(group)...)
+	for _, value := range temp {
+		tempGroup[reflect.TypeOf(value)]=value
+	}
+	for _, value := range tempGroup {
+		this.group["single"]= append(this.group["single"], value)
+	}
 	return nil
 }
 

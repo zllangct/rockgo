@@ -41,6 +41,8 @@ func (this *ServerNode) Serve() {
 	this.Runtime.Root().AddComponent(&Actor.ActorProxyComponent{})
 	//添加Actor组件，使该节点成为可通讯的节点
 	this.Runtime.Root().AddComponent(&Actor.ActorComponent{})
+	//添加组件到待选组件列表，默认添加master组件
+	this.AddComponentGroup("master",[]Component.IComponent{&MasterComponent{}})
 	//添加基础组件组,一般通过组建组的定义决定服务器节点的服务角色
 	this.componentGroup.AttachGroupTo(config.CusterConfig.Group, this.Runtime.Root())
 
