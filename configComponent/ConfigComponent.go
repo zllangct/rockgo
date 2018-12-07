@@ -18,7 +18,7 @@ type ConfigComponent struct {
 	clusterConfigPath string
 	customConfigPath  map[string]string
 	CommonConfig      *CommonConfig
-	CusterConfig      *CusterConfig
+	ClusterConfig     *ClusterConfig
 	CustomConfig      map[string]interface{}
 }
 
@@ -68,7 +68,7 @@ func (this *ConfigComponent) loadConfig(configpath string, cfg interface{}) erro
 //重新读取配置文件，包括自定义配置文件
 func (this *ConfigComponent) ReloadConfig() {
 	this.loadConfig(this.commonConfigPath, this.CommonConfig)
-	this.loadConfig(this.clusterConfigPath, this.CusterConfig)
+	this.loadConfig(this.clusterConfigPath, this.ClusterConfig)
 	for name, path := range this.customConfigPath {
 		this.loadConfig(path, this.CustomConfig[name])
 	}
@@ -104,13 +104,14 @@ func (this *ConfigComponent) SetDefault() {
 		LogConsolePrint: true,
 	}
 	this.CustomConfig = nil
-	this.CusterConfig = &CusterConfig{
-		MasterIPAddress: "127.0.0.1",
-		MasterPort:      8888,
-		LocalPort:       6666,
-		AppName:         []string{"defaultApp"},
-		Rule:            []string{"master"},
-		Group:           []string{"single"},
+	this.ClusterConfig = &ClusterConfig{
+		MasterAddress: "127.0.0.1:8888",
+		LocalAddress:  "127.0.0.1:6666",
+		AppName:       []string{"defaultApp"},
+		Role:          []string{"master"},
+		Group:         []string{},
+
+		ReportInterval: 1,
 	}
 }
 
@@ -128,11 +129,12 @@ type CommonConfig struct {
 	LogConsolePrint  bool            //是否输出log到控制台
 }
 
-type CusterConfig struct {
-	MasterIPAddress string
-	MasterPort      int
-	LocalPort       int
-	AppName         []string
-	Rule            []string
-	Group           []string
+type ClusterConfig struct {
+	MasterAddress string   //Master 地址,例如:127.0.0.1:8888
+	LocalAddress  string   //本节点IP,注意配置文件时，填写正确的局域网地址或者外网地址，不可为0.0.0.0
+	AppName       []string //本节点拥有的app
+	Role          []string //本节点拥有角色
+	Group         []string //本节点拥有组
+
+	ReportInterval int //子节点节点信息上报间隔
 }

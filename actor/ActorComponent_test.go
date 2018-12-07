@@ -19,7 +19,7 @@ func TestActorComponents(T *testing.T) {
 		runtime.Update(float32(i))
 	}
 	var c *Actor.ActorComponent
-	err:=o1.Find(c)
+	err:=o1.Find(&c)
 	if err!=nil{
 		panic(err)
 	}

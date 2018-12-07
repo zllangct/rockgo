@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/zllangct/RockGO/3rd/errors"
 	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/RockGO/utils/UUID"
 	"reflect"
 	"strings"
 	"sync"
@@ -12,7 +13,7 @@ import (
 
 // Node is a game object type.
 type Object struct {
-	id         int64
+	id         string
 	name       string
 	runtime    *Runtime
 	components []*componentInfo // The set of components attached to this node
@@ -29,7 +30,7 @@ func NewObject(names ...string) *Object {
 		name = names[0]
 	}
 	return &Object{
-		id:         makeObjectId(),
+		id:         UUID.Next(),
 		name:       name,
 		runtime:    nil,
 		components: make([]*componentInfo, 0),
@@ -47,7 +48,7 @@ func NewObjectWithComponent(component IComponent,names ...string) *Object {
 func (o *Object) AddComponent(component IComponent) *Object {
 	info := newComponentInfo(component,o)
 	err:=o.WithLock(func() error {
-			if info.Uniqual != nil && info.Uniqual.IsUnique() {
+			if info.Unique != nil && info.Unique.IsUnique() {
 				if o.HasComponent(info.Type) {
 					return errors.Fail(ErrUniqueComponent{}, nil, "This component is unique,the object already has a same component")
 				}
@@ -280,7 +281,7 @@ func (o *Object) Rename(name string) {
 }
 
 // Return the unique id of this object.
-func (o *Object) ID() int64 {
+func (o *Object) ID() string {
 	return o.id
 }
 

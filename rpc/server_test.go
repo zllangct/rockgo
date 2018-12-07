@@ -133,8 +133,8 @@ func startServer() {
 	log.Println("Test RPC server listening on", serverAddr)
 	go Accept(l)
 
-	//HandleHTTP()
-	//httpOnce.Do(startHttpServer)
+	HandleHTTP()
+	httpOnce.Do(startHttpServer)
 }
 
 func startNewServer() {

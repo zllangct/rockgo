@@ -3,25 +3,19 @@ package Actor
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"strings"
 )
 
 type ActorAddressType = int
 
-const (
-	ADRESS_APPID = iota
-	ADRESS_RULE
-	ADRESS_GROUP
-	ADDRESS_NODE
-	ADRESS_LOCALACTORID
-)
 var(
 	//actor地址格式错误
-    ErrActorWrongFormat = errors.New("this format is wrong,should be : xx:cc:vv:bb:nn")
+    ErrActorWrongFormat = errors.New("this format is wrong,should be : IP:Port:LocalActorID")
 )
 /*
-	ActorID such as "0001:0025:2214:0001:0001",
-	means "APPID:RULE:NODE:GROUP:LOCALACTORID"
+	ActorID such as "127.0.0.1:8888:0001",
+	means "IP:PORT:LOCALACTORID"
 */
 type ActorID  []string
 
@@ -39,14 +33,19 @@ func (this ActorID)String() string {
 //complate actor location id
 func (this *ActorID) Parse(address string) (error){
 	arr:= strings.Split(address,":")
-	if len(arr)!=5{
+	if len(arr)!=3{
 		return ErrActorWrongFormat
 	}
 	*this = arr
 	return nil
 }
 
-//returns address of actor
-func (this ActorID)GetSeparation(addressType ActorAddressType) string  {
-	return  this[addressType]
+//get node address
+func (this ActorID)GetNodeName() string  {
+	return fmt.Sprintf("%s:%s",this[0],this[1])
+}
+
+//get node address
+func (this ActorID)GetLocalActorID() string  {
+	return this[2]
 }

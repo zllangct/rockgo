@@ -13,7 +13,8 @@ type componentInfo struct {
 	Update    IUpdate      // IUpdate interface for component, if any
 	Destroy   IDestroy
 	Persist   IPersist // IPersist interface for component, if any
-	Uniqual   IUnique  // Is it unique
+
+	Unique   IUnique  // Is it unique
 }
 
 func newComponentInfo(cmp IComponent,root *Object) *componentInfo {
@@ -45,7 +46,7 @@ func newComponentInfo(cmp IComponent,root *Object) *componentInfo {
 		rtn.Destroy = rtn.Component.(IDestroy)
 	}
 	if rtn.Type.Implements(reflect.TypeOf((*IUnique)(nil)).Elem()) {
-		rtn.Uniqual = rtn.Component.(IUnique)
+		rtn.Unique = rtn.Component.(IUnique)
 	}
 
 	return rtn

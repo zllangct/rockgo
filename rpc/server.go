@@ -4,13 +4,15 @@ import (
 	"bufio"
 	"encoding/gob"
 	"errors"
+	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/RockGO/utils/UUID"
 	"io"
-	"log"
 	"net"
 	"net/http"
 	"reflect"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 	"unicode"
 	"unicode/utf8"
@@ -71,6 +73,7 @@ type Server struct {
 	freeResp   *Response
 	debugMode  bool
 	timeout    time.Duration
+	//Callback   func(event string,data ...interface{})
 }
 
 type HeartBeatReuslt struct {
@@ -85,11 +88,11 @@ func (this *InnerResponse)HeartBeat(args interface{}, result *HeartBeatReuslt) e
 }
 
 // NewServer returns a new ServerNode.
-func NewServer() *Server {
-	s := &Server{
-		timeout:time.Millisecond*5000,
-		debugMode:isDebug,
-	}
+func NewServer(callback ...func(event string,data ...interface{})) *Server {
+	s := defaultServer()
+	//if len(callback)>0 {
+	//	s.Callback =callback[0]
+	//}
 	s.Register(new(InnerResponse))
 	return s
 }
@@ -111,6 +114,14 @@ func isExportedOrBuiltinType(t reflect.Type) bool {
 	// PkgPath will be non-empty even for an exported type,
 	// so we need to check the type name as well.
 	return isExported(t.Name()) || t.PkgPath() == ""
+}
+
+func defaultServer() *Server {
+	s := &Server{
+		timeout:time.Millisecond*5000,
+		debugMode:isDebug,
+	}
+	return s
 }
 
 // Register publishes in the server the set of methods of the
@@ -143,12 +154,10 @@ func (server *Server) register(rcvr interface{}, name string, useName bool) erro
 	}
 	if sname == "" {
 		s := "rpc.Register: no service name for type " + s.typ.String()
-		log.Print(s)
 		return errors.New(s)
 	}
 	if !isExported(sname) && !useName {
 		s := "rpc.Register: type " + sname + " is not exported"
-		log.Print(s)
 		return errors.New(s)
 	}
 	s.name = sname
@@ -166,7 +175,6 @@ func (server *Server) register(rcvr interface{}, name string, useName bool) erro
 		} else {
 			str = "rpc.Register: type " + sname + " has no exported methods of suitable type"
 		}
-		log.Print(str)
 		return errors.New(str)
 	}
 
@@ -191,7 +199,7 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 		// Method needs three ins: receiver, *args, *reply.
 		//if mtype.NumIn() == 2  {
 		//	if reportErr {
-		//		log.Printf("rpc.Register: method %q has %d input parameters; needs exactly three\n", mname, mtype.NumIn())
+		//		logger.infof("rpc.Register: method %q has %d input parameters; needs exactly three\n", mname, mtype.NumIn())
 		//	}
 		//	continue
 		//}
@@ -199,7 +207,7 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 		argType := mtype.In(1)
 		if !isExportedOrBuiltinType(argType) {
 			if reportErr {
-				log.Printf("rpc.Register: argument type of method %q is not exported: %q\n", mname, argType)
+				logger.Info("rpc.Register: argument type of method %q is not exported: %q\n", mname, argType)
 			}
 			continue
 		}
@@ -211,14 +219,14 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 			replyType = mtype.In(2)
 			if replyType.Kind() != reflect.Ptr {
 				if reportErr {
-					log.Printf("rpc.Register: reply type of method %q is not a pointer: %q\n", mname, replyType)
+					logger.Info("rpc.Register: reply type of method %q is not a pointer: %q\n", mname, replyType)
 				}
 				continue
 			}
 			// Reply type must be exported.
 			if !isExportedOrBuiltinType(replyType) {
 				if reportErr {
-					log.Printf("rpc.Register: reply type of method %q is not exported: %q\n", mname, replyType)
+					logger.Info("rpc.Register: reply type of method %q is not exported: %q\n", mname, replyType)
 				}
 				continue
 			}
@@ -229,14 +237,14 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 		// Method needs one out.
 		if mtype.NumOut() != 1 {
 			if reportErr {
-				log.Printf("rpc.Register: method %q has %d output parameters; needs exactly one\n", mname, mtype.NumOut())
+				logger.Info("rpc.Register: method %q has %d output parameters; needs exactly one\n", mname, mtype.NumOut())
 			}
 			continue
 		}
 		// The return type of the method must be error.
 		if returnType := mtype.Out(0); returnType != typeOfError {
 			if reportErr {
-				log.Printf("rpc.Register: return type of method %q is %q, must be error\n", mname, returnType)
+				logger.Info("rpc.Register: return type of method %q is %q, must be error\n", mname, returnType)
 			}
 			continue
 		}
@@ -267,7 +275,7 @@ func (server *Server) sendResponse(sending *sync.Mutex, req *Request, reply inte
 	}
 	err := codec.WriteResponse(resp, reply)
 	if debugLog && err != nil {
-		log.Println("rpc: writing response:", err)
+		logger.Info("rpc: writing response:", err)
 	}
 
 	sending.Unlock()
@@ -314,12 +322,20 @@ func (s *service) call(server *Server, sending *sync.Mutex, wg *sync.WaitGroup, 
 }
 
 type gobServerCodec struct {
+	id 		   uint64
 	rwc        net.Conn
 	dec        *gob.Decoder
 	enc        *gob.Encoder
 	encBuf     *bufio.Writer
 	iocallback func()
 	closed     bool
+}
+
+func (c *gobServerCodec)GetID()uint64  {
+	return atomic.LoadUint64(&c.id)
+}
+func (c *gobServerCodec)SetID(id uint64){
+	atomic.StoreUint64(&c.id,id)
 }
 
 func (c *gobServerCodec) ReadRequestHeader(r *Request) error {
@@ -337,7 +353,7 @@ func (c *gobServerCodec) WriteResponse(r *Response, body interface{}) (err error
 		if c.encBuf.Flush() == nil {
 			// Gob couldn't encode the header. Should not happen, so if it does,
 			// shut down the connection to signal that the connection is broken.
-			log.Println("rpc: gob error encoding response:", err)
+			logger.Info("rpc: gob error encoding response:", err)
 			c.Close()
 		}
 		return
@@ -346,7 +362,7 @@ func (c *gobServerCodec) WriteResponse(r *Response, body interface{}) (err error
 		if c.encBuf.Flush() == nil {
 			// Was a gob problem encoding the body but the header has been written.
 			// Shut down the connection to signal that the connection is broken.
-			log.Println("rpc: gob error encoding body:", err)
+			logger.Info("rpc: gob error encoding body:", err)
 			c.Close()
 		}
 		return
@@ -371,15 +387,15 @@ func (c *gobServerCodec) Close() error {
 // See NewClient's comment for information about concurrent access.
 func (server *Server) ServeConn(conn net.Conn) {
 	buf := bufio.NewWriter(conn)
-	callback:= func() {
-		server.UpdateConnTimeout(conn)
-	}
 	srv := &gobServerCodec{
+		id :UUID.UInt64(),
 		rwc:    conn,
 		dec:    gob.NewDecoder(conn),
 		enc:    gob.NewEncoder(buf),
 		encBuf: buf,
-		iocallback:callback,
+		iocallback:func() {
+			server.UpdateConnTimeout(conn)
+		},
 	}
 	server.UpdateConnTimeout(conn)
 	server.ServeCodec(srv)
@@ -394,7 +410,7 @@ func (server *Server) ServeCodec(codec ServerCodec) {
 		service, mtype, req, argv, replyv, keepReading, err := server.readRequest(codec)
 		if err != nil {
 			if debugLog && err != io.EOF {
-				log.Println("rpc:", err)
+				logger.Info("rpc:", err)
 			}
 			if !keepReading {
 				break
@@ -563,7 +579,7 @@ func (server *Server) Accept(lis net.Listener) {
 	for {
 		conn, err := lis.Accept()
 		if err != nil {
-			log.Print("rpc.Serve: accept:", err.Error())
+			logger.Error("rpc.Serve: accept:", err.Error())
 			return
 		}
 		go server.ServeConn(conn)
@@ -599,6 +615,8 @@ type ServerCodec interface {
 	ReadRequestBody(interface{}) error
 	WriteResponse(*Response, interface{}) error
 	IOCallback()
+	GetID()uint64
+	SetID(id uint64)
 	// Close can be called multiple times and must be idempotent.
 	Close() error
 }
@@ -643,7 +661,7 @@ func (server *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 	conn, _, err := w.(http.Hijacker).Hijack()
 	if err != nil {
-		log.Print("rpc hijacking ", req.RemoteAddr, ": ", err.Error())
+		logger.Info("rpc hijacking ", req.RemoteAddr, ": ", err.Error())
 		return
 	}
 	io.WriteString(conn, "HTTP/1.0 "+connected+"\n\n")

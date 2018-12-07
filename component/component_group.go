@@ -1,71 +1,66 @@
 package Component
 
 import (
-	"github.com/zllangct/RockGO/3rd/errors"
-	"reflect"
+	"fmt"
+	"github.com/zllangct/RockGO/logger"
 )
 
 /*
-	组件组
+	Component组
+	ComponentGroup 一般按照分布式思想，同一功能节点，分为一组。
+	比如，网关组、大厅组、逻辑房间、位置服务等
 */
-type ComponentGroup  []IComponent
-
-
-func (this ComponentGroup) attachGroupTo(target *Object) error {
-	for _, component := range this {
-		target.AddComponent(component)
-	}
-	return nil
+type ComponentGroup struct {
+	Name    string
+	content []IComponent
 }
+
+func (this *ComponentGroup) attachGroupTo(target *Object) {
+	o := NewObject(this.Name)
+	target.AddObject(o)
+	for _, component := range this.content {
+		o.AddComponent(component)
+	}
+}
+
 /*
-	组件组集合
-	使用组件组时组建不会重复添加
+	所有可用Component组
 */
 type ComponentGroups struct {
-	group map[string]ComponentGroup //key:group name , value:component group
+	group map[string]*ComponentGroup //key:group name , value:component group
 }
 
-func (this *ComponentGroups) AddGroup(groupName string, group ComponentGroup) error {
-	//去重复
-	tempGroup:=map[reflect.Type]IComponent{}
-	for _, value := range group {
-		tempGroup[reflect.TypeOf(value)]=value
+func (this *ComponentGroups) AddGroup(groupName string, group []IComponent) {
+	this.group[groupName] = &ComponentGroup{
+		Name:    groupName,
+		content: group,
 	}
-	var g []IComponent
-	for _, value := range tempGroup {
-		g= append(g, value)
-	}
-	this.group[groupName] = g
-	//加入single组
-	tempGroup=map[reflect.Type]IComponent{}
-	temp:= append(([]IComponent)(this.group["single"]), ([]IComponent)(group)...)
-	for _, value := range temp {
-		tempGroup[reflect.TypeOf(value)]=value
-	}
-	for _, value := range tempGroup {
-		this.group["single"]= append(this.group["single"], value)
-	}
-	return nil
 }
 
-func (this *ComponentGroups) AttachGroupTo(groupName []string,target *Object) error {
-	tempGroup:=map[reflect.Type]IComponent{}
-	//group去重，不可重复添加
-	for _, value := range groupName {
-		if g,ok:=this.group[value];ok{
-			for _, c := range g {
-				tempGroup[reflect.TypeOf(g)]=c
+func (this *ComponentGroups) AttachGroupsTo(groupName []string, target *Object) error {
+	child,master := false,false
+	for _, name := range groupName {
+		if g, ok := this.group[name]; ok {
+			g.attachGroupTo(target)
+		} else {
+			if name == "single" {
+				for _, value := range this.group {
+					value.attachGroupTo(target)
+				}
 			}
-		}else{
-			return errors.Fail(ErrMissingGroup{}, nil, "no this group:"+value)
+			logger.Error(fmt.Sprintf("the group < %s > is not exist", name))
+		}
+		if name == "master" {
+			master = true
+		}
+		if name == "child"{
+			child = true
 		}
 	}
-	var g []IComponent
-	for _, value := range tempGroup {
-		g= append(g, value)
+	if !child && !master{
+		if g, ok := this.group["child"]; ok {
+			g.attachGroupTo(target)
+		}
 	}
-	ComponentGroup(g).attachGroupTo(target)
 	return nil
 }
-
-

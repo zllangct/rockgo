@@ -35,6 +35,7 @@ func (e ServerError) Error() string {
 var ErrShutdown = errors.New("connection is shut down")
 var ErrTimeout  = errors.New("rpc timeout")
 var ErrConnClosing =errors.New("conn is closing")
+var ErrErrorBody =errors.New("reading error body")
 // Call represents an active RPC.
 type Call struct {
 	ServiceMethod string      // The name of the service and method to call.
@@ -60,6 +61,7 @@ type Client struct {
 	pending  map[uint64]*Call
 	closing  bool // user has called Close
 	shutdown bool // server has told us to stop
+	CloseCallback func(event string,data ...interface{})
 	heartInterval time.Duration
 	timeout  time.Duration
 	debugMode    bool
@@ -182,7 +184,7 @@ func (client *Client) input() {
 			call.Error = ServerError(response.Error)
 			err = client.codec.ReadResponseBody(nil)
 			if err != nil {
-				err = errors.New("reading error body: " + err.Error())
+				err = ErrErrorBody
 			}
 			call.done()
 		default:
@@ -217,6 +219,7 @@ func (client *Client) input() {
 		call.Error = err
 		call.done()
 	}
+	client.CloseCallback("close",client)
 	client.mutex.Unlock()
 	client.reqMutex.Unlock()
 	if debugLog && err != io.EOF && !closing {
@@ -282,6 +285,7 @@ func (client *TcpClient)Reconnect()error  {
 	if err!= nil {
 		return err
 	}
+	client.CloseCallback("connected",client)
 	client.Client = *NewClientWithCodec(client.codec)
 	client.StartHeartBeat()
 	return nil
@@ -300,21 +304,26 @@ func NewClient(conn io.ReadWriteCloser) *Client {
 	codec := &gobClientCodec{conn, gob.NewDecoder(conn), gob.NewEncoder(encBuf), encBuf}
 	return NewClientWithCodec(codec)
 }
-func NewTcpClient(network string,remoteAddr string) (*TcpClient,error) {
+func NewTcpClient(network string,remoteAddr string,callback ...func(event string,data ...interface{})) (*TcpClient,error) {
 	client := &TcpClient{
 		remoteAddr:remoteAddr,
 		network:network,
+	}
+	if len(callback)>0{
+		client.CloseCallback=callback[0]
 	}
 	err:= client.connect()
 	if err!= nil {
 		return nil,err
 	}
+	client.CloseCallback("connected",client)
 	encBuf := bufio.NewWriter(client.conn)
 	codec := &gobClientCodec{client.conn, gob.NewDecoder(client.conn), gob.NewEncoder(encBuf), encBuf}
 	client.Client = *NewClientWithCodec(codec)
 	client.StartHeartBeat()
 	return client,nil
 }
+
 // NewClientWithCodec is like NewClient but uses the specified
 // codec to encode requests and decode responses.
 func NewClientWithCodec(codec ClientCodec) *Client {
@@ -394,8 +403,8 @@ func DialHTTPPath(network, address, path string) (*Client, error) {
 }
 
 // Dial connects to an RPC server at the specified network address.
-func Dial(network, address string) (*TcpClient, error) {
-	c,err:=NewTcpClient(network,address)
+func Dial(network, address string,callback ...func(event string,data ...interface{})) (*TcpClient, error) {
+	c,err:=NewTcpClient(network,address,callback...)
 	if err!=nil{
 		return nil,err
 	}
@@ -414,7 +423,13 @@ func (client *Client) Close() error {
 	}
 	client.closing = true
 	client.mutex.Unlock()
-	return client.codec.Close()
+	err:=client.codec.Close()
+	if err == nil {
+		//if client.CloseCallback!=nil && !client.shutdown{
+		//	go client.CloseCallback("close",client)
+		//}
+	}
+	return err
 }
 
 // Go invokes the function asynchronously. It returns the Call structure representing

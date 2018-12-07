@@ -52,6 +52,11 @@ func (this *ActorComponent) IsUnique() bool {
 }
 
 func (this *ActorComponent) Awake() {
+	//初始化消息分发器
+	go this.dispatch()
+}
+
+func (this *ActorComponent)Start(ctx *Component.Context)  {
 	//初始化Actor代理
 	err := this.Parent.Runtime().Root().Find(&this.Proxy)
 	if err != nil {
@@ -59,8 +64,6 @@ func (this *ActorComponent) Awake() {
 	}
 	//注册Actor到ActorProxy
 	this.Proxy.Register(this)
-	//初始化消息分发器
-	go this.dispatch()
 	//设置Actor状态为激活
 	atomic.StoreInt32(&this.active, 1)
 }
@@ -80,6 +83,10 @@ func (this *ActorComponent) Tell(message *ActorMessageInfo) error {
 		return errors.New("this actor is inactive or destroyed")
 	}
 	return nil
+}
+
+func (this *ActorComponent)Emit()  {
+
 }
 
 func (this *ActorComponent) GetActorID() ActorID{
