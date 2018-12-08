@@ -7,7 +7,7 @@ var master *MasterComponent
 type NodeInfo struct {
 	Address      string
 	Group   []string
-	AppName []string
+	AppName  string
 	Info    map[string]float32
 }
 
@@ -29,12 +29,18 @@ func (this *MasterService) ReportNodeInfo(args *NodeInfo, reply *bool) error {
 }
 
 func (this *MasterService) NodeInquiry(args *string, reply *[]*InquiryReply) error {
-	res,err:= master.NodeInquiry(*args)
+	res,err:= master.NodeInquiry(*args,false)
 	reply =&res
 	return err
 }
 
-func (this *MasterService) NodeInfoSynchronous(args string, reply *map[string]*NodeInfo) error {
+func (this *MasterService) NodeInquiryDetail(args *string, reply *[]*InquiryReply) error {
+	res,err:= master.NodeInquiry(*args,true)
+	reply =&res
+	return err
+}
+
+func (this *MasterService) NodeInfoSync(args string, reply *map[string]*NodeInfo) error {
 	if args != "sync" {
 		return errors.New("call service [ NodeInfoSynchronous ],has wrong argument")
 	}

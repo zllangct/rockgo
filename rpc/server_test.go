@@ -7,7 +7,6 @@ package rpc
 import (
 	"errors"
 	"fmt"
-	"io"
 	"log"
 	"net"
 	"net/http/httptest"
@@ -342,7 +341,7 @@ func TestHTTP(t *testing.T) {
 }
 
 func testHTTPRPC(t *testing.T, path string) {
-	var client *Client
+	var client *TcpClient
 	var err error
 	if path == "" {
 		client, err = DialHTTP("tcp", httpServerAddr)
@@ -409,90 +408,6 @@ func TestBuiltinTypes(t *testing.T) {
 	}
 }
 
-// CodecEmulator provides a client-like api and a ServerCodec interface.
-// Can be used to test ServeRequest.
-type CodecEmulator struct {
-	server        *Server
-	serviceMethod string
-	args          *Args
-	reply         *Reply
-	err           error
-}
-
-func (codec *CodecEmulator)IOCallback(){
-
-}
-
-func (codec *CodecEmulator) Call(serviceMethod string, args *Args, reply *Reply) error {
-	codec.serviceMethod = serviceMethod
-	codec.args = args
-	codec.reply = reply
-	codec.err = nil
-	var serverError error
-	if codec.server == nil {
-		serverError = ServeRequest(codec)
-	} else {
-		serverError = codec.server.ServeRequest(codec)
-	}
-	if codec.err == nil && serverError != nil {
-		codec.err = serverError
-	}
-	return codec.err
-}
-
-func (codec *CodecEmulator) ReadRequestHeader(req *Request) error {
-	req.ServiceMethod = codec.serviceMethod
-	req.Seq = 0
-	return nil
-}
-
-func (codec *CodecEmulator) ReadRequestBody(argv interface{}) error {
-	if codec.args == nil {
-		return io.ErrUnexpectedEOF
-	}
-	*(argv.(*Args)) = *codec.args
-	return nil
-}
-
-func (codec *CodecEmulator) WriteResponse(resp *Response, reply interface{}) error {
-	if resp.Error != "" {
-		codec.err = errors.New(resp.Error)
-	} else {
-		*codec.reply = *(reply.(*Reply))
-	}
-	return nil
-}
-
-func (codec *CodecEmulator) Close() error {
-	return nil
-}
-
-func TestServeRequest(t *testing.T) {
-	once.Do(startServer)
-	testServeRequest(t, nil)
-	newOnce.Do(startNewServer)
-	testServeRequest(t, newServer)
-}
-
-func testServeRequest(t *testing.T, server *Server) {
-	client := CodecEmulator{server: server}
-	defer client.Close()
-
-	args := &Args{7, 8}
-	reply := new(Reply)
-	err := client.Call("Arith.Add", args, reply)
-	if err != nil {
-		t.Errorf("Add: expected no error but got string %q", err.Error())
-	}
-	if reply.C != args.A+args.B {
-		t.Errorf("Add: expected %d got %d", reply.C, args.A+args.B)
-	}
-
-	err = client.Call("Arith.Add", nil, reply)
-	if err == nil {
-		t.Errorf("expected error calling Arith.Add with nil arg")
-	}
-}
 
 type ReplyNotPointer int
 type ArgNotPublic int
@@ -538,44 +453,7 @@ func TestRegistrationError(t *testing.T) {
 	}
 }
 
-type WriteFailCodec int
-
-func (WriteFailCodec) WriteRequest(*Request, interface{}) error {
-	// the panic caused by this error used to not unlock a lock.
-	return errors.New("fail")
-}
-
-func (WriteFailCodec) ReadResponseHeader(*Response) error {
-	select {}
-}
-
-func (WriteFailCodec) ReadResponseBody(interface{}) error {
-	select {}
-}
-
-func (WriteFailCodec) Close() error {
-	return nil
-}
-
-func TestSendDeadlock(t *testing.T) {
-	client := NewClientWithCodec(WriteFailCodec(0))
-	defer client.Close()
-
-	done := make(chan bool)
-	go func() {
-		testSendDeadlock(client)
-		testSendDeadlock(client)
-		done <- true
-	}()
-	select {
-	case <-done:
-		return
-	case <-time.After(5 * time.Second):
-		t.Fatal("deadlock")
-	}
-}
-
-func testSendDeadlock(client *Client) {
+func testSendDeadlock(client *TcpClient) {
 	defer func() {
 		recover()
 	}()
@@ -584,16 +462,16 @@ func testSendDeadlock(client *Client) {
 	client.Call("Arith.Add", args, reply)
 }
 
-func dialDirect() (*Client, error) {
+func dialDirect() (*TcpClient, error) {
 	client,err:=Dial("tcp", serverAddr)
-	return &client.Client,err
+	return client,err
 }
 
-func dialHTTP() (*Client, error) {
+func dialHTTP() (*TcpClient, error) {
 	return DialHTTP("tcp", httpServerAddr)
 }
 
-func countMallocs(dial func() (*Client, error), t *testing.T) float64 {
+func countMallocs(dial func() (*TcpClient, error), t *testing.T) float64 {
 	once.Do(startServer)
 	client, err := dial()
 	if err != nil {
@@ -632,39 +510,6 @@ func TestCountMallocsOverHTTP(t *testing.T) {
 		t.Skip("skipping; GOMAXPROCS>1")
 	}
 	fmt.Printf("mallocs per HTTP rpc round trip: %v\n", countMallocs(dialHTTP, t))
-}
-
-type writeCrasher struct {
-	done chan bool
-}
-
-func (writeCrasher) Close() error {
-	return nil
-}
-
-func (w *writeCrasher) Read(p []byte) (int, error) {
-	<-w.done
-	return 0, io.EOF
-}
-
-func (writeCrasher) Write(p []byte) (int, error) {
-	return 0, errors.New("fake write failure")
-}
-
-func TestClientWriteError(t *testing.T) {
-	w := &writeCrasher{done: make(chan bool)}
-	c := NewClient(w)
-	defer c.Close()
-
-	res := false
-	err := c.Call("foo", 1, &res)
-	if err == nil {
-		t.Fatal("expected error")
-	}
-	if err.Error() != "fake write failure" {
-		t.Error("unexpected value of error:", err)
-	}
-	w.done <- true
 }
 
 func TestTCPClose(t *testing.T) {
@@ -765,7 +610,7 @@ func TestShutdown(t *testing.T) {
 	}
 }
 
-func benchmarkEndToEnd(dial func() (*Client, error), b *testing.B) {
+func benchmarkEndToEnd(dial func() (*TcpClient, error), b *testing.B) {
 	once.Do(startServer)
 	client, err := dial()
 	if err != nil {
@@ -791,7 +636,7 @@ func benchmarkEndToEnd(dial func() (*Client, error), b *testing.B) {
 	})
 }
 
-func benchmarkEndToEndAsync(dial func() (*Client, error), b *testing.B) {
+func benchmarkEndToEndAsync(dial func() (*TcpClient, error), b *testing.B) {
 	if b.N == 0 {
 		return
 	}

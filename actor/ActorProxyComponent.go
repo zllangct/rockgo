@@ -2,10 +2,12 @@ package Actor
 
 import (
 	"errors"
+	"fmt"
+	"github.com/zllangct/RockGO/cluster"
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
-	"math/rand"
 	"net"
 	"reflect"
 	"sync"
@@ -17,6 +19,8 @@ type ActorProxyComponent struct {
 	Component.Base
 	nodeName         string
 	localActors    sync.Map 			//本地actor [ActorID,*actor]
+	config         *Config.ConfigComponent
+	nodeComponent  *Cluster.NodeComponent
 }
 
 func (this *ActorProxyComponent) GetRequire() map[*Component.Object][]reflect.Type {
@@ -33,24 +37,22 @@ func (this *ActorProxyComponent) IsUnique() bool {
 }
 
 func (this *ActorProxyComponent) Awake() {
-	//oMaster,err:= this.Parent.Root().FindObject("master")
-	//if err!=nil {
-	//	logger.Fatal("get master object failed")
-	//	panic(err)
-	//	return
-	//}
-	//err= oMaster.Find(&this.)
-	//if err != nil {
-	//	logger.Fatal("get node component failed")
-	//	panic(err)
-	//	return
-	//}
-}
-
-func (this *ActorProxyComponent) Register(actor *ActorComponent) {
-	if _, ok := this.localActors.LoadOrStore(actor.ActorID, actor); ok {
+	err := this.Parent.Root().Find(&this.config)
+	if err != nil {
+		logger.Fatal("get config component failed")
+		panic(err)
 		return
 	}
+}
+
+func (this *ActorProxyComponent) Register(actor *ActorComponent) error {
+	actor.ActorID = NewActorID()
+	id,err:= actor.ActorID.SetNodeID(this.nodeName)
+	if err!=nil {
+		return err
+	}
+	this.localActors.LoadOrStore(id, actor)
+	return nil
 }
 
 func (this *ActorProxyComponent) Unregister(actor *ActorComponent) {
@@ -62,17 +64,15 @@ func (this *ActorProxyComponent) Unregister(actor *ActorComponent) {
 
 
 func (this *ActorProxyComponent) Emit(actorID ActorID, service string, args interface{}, reply interface{}) error {
-	nodeName := actorID.GetNodeName()
+	nodeName := actorID.GetNodeID()
 	//本地消息不走网络
 	if nodeName == this.nodeName {
 
 		return nil
 	}
-
-	//if !this.isOnline {
-	//	return ErrNodeOffline
-	//}
-	
+	if !this.nodeComponent.IsOnline() {
+		return ErrNodeOffline
+	}
 	//客户端已经存在
 	clientInterface, ok := this.rpcClient.Load(id)
 	if ok {
@@ -99,35 +99,6 @@ func (this *ActorProxyComponent) Emit(actorID ActorID, service string, args inte
 
 
 
-
-}
-
-//获取位置节点
-func (this *ActorProxyComponent)GetLocationNodes()*rpc.TcpClient {
-	this.locationMutex.Lock()
-	defer this.locationMutex.Unlock()
-	//已存在
-	if len(this.locationClient) > 0 {
-		rnd:=rand.Intn(len(this.locationClient))
-		return this.locationClient[rnd]
-	}
-	//不存在
-
-}
-
-//从位置服务节点查询
-func (this *ActorProxyComponent)LocationInquiry()  {
-	this.locationMutex.Lock()
-	idx:=rand.Intn(len(this.locationClient))
-	locationClient:=this.locationClient[idx]
-	this.locationMutex.Unlock()
-	err := locationClient.Call(service, args, reply)
-}
-
-//查询节点,从master上面查询
-func (this *ActorProxyComponent)NodeInquiry(role string)  {
-	reply:=make([]string,0)
-	this.Parent.Root().Find()
 
 }
 

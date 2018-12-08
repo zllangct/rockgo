@@ -107,7 +107,7 @@ func (this *ConfigComponent) SetDefault() {
 	this.ClusterConfig = &ClusterConfig{
 		MasterAddress: "127.0.0.1:8888",
 		LocalAddress:  "127.0.0.1:6666",
-		AppName:       []string{"defaultApp"},
+		AppName:       "defaultApp",
 		Role:          []string{"master"},
 		Group:         []string{},
 
@@ -132,7 +132,7 @@ type CommonConfig struct {
 type ClusterConfig struct {
 	MasterAddress string   //Master 地址,例如:127.0.0.1:8888
 	LocalAddress  string   //本节点IP,注意配置文件时，填写正确的局域网地址或者外网地址，不可为0.0.0.0
-	AppName       []string //本节点拥有的app
+	AppName       string //本节点拥有的app
 	Role          []string //本节点拥有角色
 	Group         []string //本节点拥有组
 

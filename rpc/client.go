@@ -22,6 +22,7 @@ const (
 	RPC_CALL_TYPE_NORMAL
 	RPC_CALL_TYPE_WITHOUTREPLY
 )
+
 var isDebug = true
 
 // ServerError represents an error that has been returned from
@@ -33,9 +34,10 @@ func (e ServerError) Error() string {
 }
 
 var ErrShutdown = errors.New("connection is shut down")
-var ErrTimeout  = errors.New("rpc timeout")
-var ErrConnClosing =errors.New("conn is closing")
-var ErrErrorBody =errors.New("reading error body")
+var ErrTimeout = errors.New("rpc timeout")
+var ErrConnClosing = errors.New("conn is closing")
+var ErrErrorBody = errors.New("reading error body")
+
 // Call represents an active RPC.
 type Call struct {
 	ServiceMethod string      // The name of the service and method to call.
@@ -46,35 +48,29 @@ type Call struct {
 	Type          int
 }
 
-// Client represents an RPC Client.
+// TcpClient represents an RPC TcpClient.
 // There may be multiple outstanding Calls associated
-// with a single Client, and a Client may be used by
+// with a single TcpClient, and a TcpClient may be used by
 // multiple goroutines simultaneously.
-type Client struct {
+type TcpClient struct {
 	codec ClientCodec
+
+	network    string
+	conn       net.Conn
 
 	reqMutex sync.Mutex // protects following
 	request  Request
 
-	mutex    sync.Mutex // protects following
-	seq      uint64
-	pending  map[uint64]*Call
-	closing  bool // user has called Close
-	shutdown bool // server has told us to stop
-	CloseCallback func(event string,data ...interface{})
+	mutex         sync.Mutex // protects following
+	seq           uint64
+	pending       map[uint64]*Call
+	closing       bool // user has called Close
+	shutdown      bool // server has told us to stop
+	CloseCallback func(event string, data ...interface{})
 	heartInterval time.Duration
-	timeout  time.Duration
-	debugMode    bool
+	timeout       time.Duration
+	debugMode     bool
 }
-
-type TcpClient struct {
-	Client
-	remoteAddr string
-	network string
-	conn net.Conn
-}
-
-
 
 // A ClientCodec implements writing of RPC requests and
 // reading of RPC responses for the client side of an RPC session.
@@ -93,7 +89,7 @@ type ClientCodec interface {
 	Close() error
 }
 
-func (client *Client) send(call *Call) {
+func (client *TcpClient) send(call *Call) {
 	client.reqMutex.Lock()
 	defer client.reqMutex.Unlock()
 
@@ -113,7 +109,7 @@ func (client *Client) send(call *Call) {
 	// Encode and send the request.
 	client.request.Seq = seq
 	client.request.ServiceMethod = call.ServiceMethod
-	client.request.Type=call.Type
+	client.request.Type = call.Type
 	err := client.codec.WriteRequest(&client.request, call.Args)
 	if err != nil {
 		client.mutex.Lock()
@@ -126,7 +122,7 @@ func (client *Client) send(call *Call) {
 		}
 	}
 }
-func (client *Client) sendWithoutReply(call *Call) {
+func (client *TcpClient) sendWithoutReply(call *Call) {
 	client.reqMutex.Lock()
 	defer client.reqMutex.Unlock()
 
@@ -138,7 +134,7 @@ func (client *Client) sendWithoutReply(call *Call) {
 	}
 	// Encode and send the request.
 	client.request.ServiceMethod = call.ServiceMethod
-	client.request.Type=call.Type
+	client.request.Type = call.Type
 	err := client.codec.WriteRequest(&client.request, call.Args)
 	if err != nil {
 		if call != nil {
@@ -151,7 +147,7 @@ func (client *Client) sendWithoutReply(call *Call) {
 		call.done()
 	}
 }
-func (client *Client) input() {
+func (client *TcpClient) input() {
 	var err error
 	var response Response
 	for err == nil {
@@ -188,13 +184,13 @@ func (client *Client) input() {
 			}
 			call.done()
 		default:
-			if call.Reply==nil {
+			if call.Reply == nil {
 				call.Error = ServerError(response.Error)
 				err = client.codec.ReadResponseBody(nil)
 				if err != nil {
 					err = errors.New("reading error body: " + err.Error())
 				}
-			}else{
+			} else {
 				err = client.codec.ReadResponseBody(call.Reply)
 				if err != nil {
 					call.Error = errors.New("reading body " + err.Error())
@@ -219,7 +215,7 @@ func (client *Client) input() {
 		call.Error = err
 		call.done()
 	}
-	client.CloseCallback("close",client)
+	client.CloseCallback("close", client.conn.RemoteAddr().String())
 	client.mutex.Unlock()
 	client.reqMutex.Unlock()
 	if debugLog && err != io.EOF && !closing {
@@ -240,57 +236,47 @@ func (call *Call) done() {
 	}
 }
 
-func (client *Client) StartHeartBeat()  {
-	go func() {
-		if !client.debugMode {
-			pingCount:=0
-			res:=&HeartBeatReuslt{}
-			tc:=time.NewTicker(client.heartInterval)
-			for {
-				res.Result=0
-				<-tc.C
-				if client.closing || client.shutdown{
-					return
+func (client *TcpClient) StartHeartBeat() {
+	if !client.debugMode {
+		pingCount := 0
+		res := &HeartBeatReuslt{}
+		tc := time.NewTicker(client.heartInterval)
+		for {
+			res.Result = 0
+			<-tc.C
+			if client.closing || client.shutdown {
+				return
+			}
+			err := client.Call("InnerResponse.StartHeartBeat", nil, res)
+			if (err != nil || res.Result != 1) && !client.debugMode {
+				pingCount++
+				if pingCount > 3 {
+					client.Close()
 				}
-				err:= client.Call("InnerResponse.StartHeartBeat",nil,res)
-				if (err!=nil || res.Result!=1) && !client.debugMode{
-					pingCount++
-					if pingCount > 3{
-						client.Close()
-					}
-				}else{
-					pingCount=0
-				}
+			} else {
+				pingCount = 0
 			}
 		}
-	}()
+	}
 }
 
-func (client *TcpClient) connect()error  {
-	conn,err := net.Dial(client.network, client.remoteAddr)
-	if err != nil {
-		return err
-	}
-	client.conn=conn
-	return nil
-}
-func (client *TcpClient)Reconnect()error  {
+
+func (client *TcpClient) Reconnect() error {
 	if !client.closing && !client.shutdown {
 		return nil
 	}
 	if client.closing && !client.shutdown {
 		return ErrConnClosing
 	}
-	err:= client.connect()
-	if err!= nil {
+	conn, err := net.Dial(client.conn.RemoteAddr().Network(), client.conn.RemoteAddr().String())
+	if err != nil {
 		return err
 	}
-	client.CloseCallback("connected",client)
-	client.Client = *NewClientWithCodec(client.codec)
-	client.StartHeartBeat()
+	*client = *NewClientWithConn(conn)
 	return nil
 }
-// NewClient returns a new Client to handle requests to the
+
+// NewClient returns a new TcpClient to handle requests to the
 // set of services at the other end of the connection.
 // It adds a buffer to the write side of the connection so
 // the header and payload are sent as a unit.
@@ -299,42 +285,35 @@ func (client *TcpClient)Reconnect()error  {
 // so no interlocking is required. However each half may be accessed
 // concurrently so the implementation of conn should protect against
 // concurrent reads or concurrent writes.
-func NewClient(conn io.ReadWriteCloser) *Client {
-	encBuf := bufio.NewWriter(conn)
-	codec := &gobClientCodec{conn, gob.NewDecoder(conn), gob.NewEncoder(encBuf), encBuf}
-	return NewClientWithCodec(codec)
-}
-func NewTcpClient(network string,remoteAddr string,callback ...func(event string,data ...interface{})) (*TcpClient,error) {
-	client := &TcpClient{
-		remoteAddr:remoteAddr,
-		network:network,
-	}
-	if len(callback)>0{
-		client.CloseCallback=callback[0]
-	}
-	err:= client.connect()
-	if err!= nil {
-		return nil,err
-	}
-	client.CloseCallback("connected",client)
-	encBuf := bufio.NewWriter(client.conn)
-	codec := &gobClientCodec{client.conn, gob.NewDecoder(client.conn), gob.NewEncoder(encBuf), encBuf}
-	client.Client = *NewClientWithCodec(codec)
-	client.StartHeartBeat()
-	return client,nil
+func NewClient(conn net.Conn) *TcpClient {
+	return NewClientWithConn(conn)
 }
 
-// NewClientWithCodec is like NewClient but uses the specified
-// codec to encode requests and decode responses.
-func NewClientWithCodec(codec ClientCodec) *Client {
-	client := &Client{
-		codec:   codec,
-		pending: make(map[uint64]*Call),
-		heartInterval:time.Millisecond*3000,
-		timeout:time.Millisecond*500000,
-		debugMode:isDebug,
+func NewTcpClient(network string, remoteAddr string, callback ...func(event string, data ...interface{})) (*TcpClient, error) {
+	conn, err := net.Dial(network, remoteAddr)
+	if err != nil {
+		return nil, err
+	}
+	return NewClientWithConn(conn,callback...),nil
+}
+
+func NewClientWithConn(conn net.Conn, callback ...func(event string, data ...interface{})) *TcpClient {
+	encBuf := bufio.NewWriter(conn)
+	codec := &gobClientCodec{conn, gob.NewDecoder(conn), gob.NewEncoder(encBuf), encBuf}
+	client := &TcpClient{
+		conn:conn,
+		codec:         codec,
+		pending:       make(map[uint64]*Call),
+		heartInterval: time.Millisecond * 3000,
+		timeout:       time.Millisecond * 500000,
+		debugMode:     isDebug,
+	}
+	if len(callback) > 0 {
+		client.CloseCallback = callback[0]
 	}
 	go client.input()
+	go client.StartHeartBeat()
+	client.CloseCallback("connected", client)
 	return client
 }
 
@@ -370,13 +349,13 @@ func (c *gobClientCodec) Close() error {
 
 // DialHTTP connects to an HTTP RPC server at the specified network address
 // listening on the default HTTP RPC path.
-func DialHTTP(network, address string) (*Client, error) {
+func DialHTTP(network, address string) (*TcpClient, error) {
 	return DialHTTPPath(network, address, DefaultRPCPath)
 }
 
 // DialHTTPPath connects to an HTTP RPC server
 // at the specified network address and path.
-func DialHTTPPath(network, address, path string) (*Client, error) {
+func DialHTTPPath(network, address, path string) (*TcpClient, error) {
 	var err error
 	conn, err := net.Dial(network, address)
 	if err != nil {
@@ -403,19 +382,17 @@ func DialHTTPPath(network, address, path string) (*Client, error) {
 }
 
 // Dial connects to an RPC server at the specified network address.
-func Dial(network, address string,callback ...func(event string,data ...interface{})) (*TcpClient, error) {
-	c,err:=NewTcpClient(network,address,callback...)
-	if err!=nil{
-		return nil,err
+func Dial(network, address string, callback ...func(event string, data ...interface{})) (*TcpClient, error) {
+	c, err := NewTcpClient(network, address, callback...)
+	if err != nil {
+		return nil, err
 	}
 	return c, nil
 }
 
-
-
 // Close calls the underlying codec's Close method. If the connection is already
 // shutting down, ErrShutdown is returned.
-func (client *Client) Close() error {
+func (client *TcpClient) Close() error {
 	client.mutex.Lock()
 	if client.closing {
 		client.mutex.Unlock()
@@ -423,7 +400,7 @@ func (client *Client) Close() error {
 	}
 	client.closing = true
 	client.mutex.Unlock()
-	err:=client.codec.Close()
+	err := client.codec.Close()
 	if err == nil {
 		//if client.CloseCallback!=nil && !client.shutdown{
 		//	go client.CloseCallback("close",client)
@@ -436,7 +413,7 @@ func (client *Client) Close() error {
 // the invocation. The done channel will signal when the call is complete by returning
 // the same Call object. If done is nil, Go will allocate a new channel.
 // If non-nil, done must be buffered or Go will deliberately crash.
-func (client *Client) Go(serviceMethod string, args interface{}, reply interface{}, done chan *Call) *Call {
+func (client *TcpClient) Go(serviceMethod string, args interface{}, reply interface{}, done chan *Call) *Call {
 	call := new(Call)
 	call.ServiceMethod = serviceMethod
 	call.Args = args
@@ -453,22 +430,22 @@ func (client *Client) Go(serviceMethod string, args interface{}, reply interface
 		}
 	}
 	call.Done = done
-	if reply==nil{
-		call.Type=RPC_CALL_TYPE_WITHOUTREPLY
+	if reply == nil {
+		call.Type = RPC_CALL_TYPE_WITHOUTREPLY
 		client.sendWithoutReply(call)
-	}else{
-		call.Type=RPC_CALL_TYPE_NORMAL
+	} else {
+		call.Type = RPC_CALL_TYPE_NORMAL
 		client.send(call)
 	}
 	return call
 }
 
 // Call invokes the named function, waits for it to complete, and returns its error status.
-func (client *Client) Call(serviceMethod string, args interface{}, reply interface{}) error {
+func (client *TcpClient) Call(serviceMethod string, args interface{}, reply interface{}) error {
 	call := client.Go(serviceMethod, args, reply, make(chan *Call, 1))
 	select {
 	case <-timer.After(client.timeout):
-		call.Error=ErrTimeout
+		call.Error = ErrTimeout
 		return ErrTimeout
 	case <-call.Done:
 		return call.Error
@@ -476,7 +453,7 @@ func (client *Client) Call(serviceMethod string, args interface{}, reply interfa
 }
 
 // Call invokes the named function, waits for it to complete, and returns its error status.
-func (client *Client) CallWithoutReply(serviceMethod string, args interface{}) error {
+func (client *TcpClient) CallWithoutReply(serviceMethod string, args interface{}) error {
 	call := <-client.Go(serviceMethod, args, nil, make(chan *Call, 1)).Done
 	return call.Error
 }

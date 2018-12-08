@@ -29,6 +29,8 @@ type ActorComponent struct {
 	active       int32                  //是否激活,0：未激活 1：激活
 }
 
+
+
 func NewActorComponent() *ActorComponent {
 	return &ActorComponent{
 		queueReceive: make(chan *ActorMessageInfo, 10),

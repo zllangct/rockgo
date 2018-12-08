@@ -7,7 +7,6 @@ import (
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
 	"reflect"
-	"strings"
 	"sync"
 	"time"
 )
@@ -23,7 +22,7 @@ type LocationQuery struct {
 
 type LocationComponent struct {
 	Component.Base
-	locker sync.RWMutex
+	locker *sync.RWMutex
 	nodeComponent  *NodeComponent
 	Nodes         map[string]*NodeInfo
 	config	 *Config.ConfigComponent
@@ -40,7 +39,6 @@ func (this *LocationComponent) GetRequire() map[*Component.Object][]reflect.Type
 }
 
 func (this *LocationComponent) Awake() {
-	this.Nodes = make(map[string]*NodeInfo)
 	err:= this.Parent.Root().Find(&this.config)
 	if err != nil {
 		logger.Fatal("get config component failed")
@@ -75,49 +73,15 @@ func (this *LocationComponent)DoLocationSync()  {
 				continue
 			}
 		}
-		this.master.Call("MasterService.NodeInfoSynchronous","sync",&reply)
+		this.master.Call("MasterService.NodeInfoSync","sync",&reply)
 		time.Sleep(time.Second * interval)
 	}
 }
 
-//选择一个节点客户端
-func (this *LocationComponent) SelectNodeClient(appID string,role string,selector Selector) *rpc.TcpClient{
-
-	return nil
-}
-
-//筛选节点客户端组
-func (this *LocationComponent) SelectNodeGroup(appID string,role string) []*rpc.TcpClient{
-
-	return nil
-}
-
-//查询节点信息 args : "AppID:Role"
-func (this *LocationComponent) NodeInquiry(args string) ([]*InquiryReply, error) {
-	arg := strings.Split(args, ":")
-	if len(arg) != 2 {
-		return nil, errors.New("query string wrong")
+//查询节点信息 args : "AppID:Role:SelectorType"
+func (this *LocationComponent) NodeInquiry(args string,detail bool) ([]*InquiryReply, error) {
+	if this.Nodes==nil {
+		return nil, errors.New("this location node is waiting to sync")
 	}
-	err := errors.New("no available node ")
-	var reply []*InquiryReply
-	this.locker.RLock()
-	for nodeName, nodeInfo := range master.Nodes {
-		for _, name := range nodeInfo.AppName {
-			if name == arg[0] {
-				for _, role := range nodeInfo.Group {
-					if role == arg[1] {
-						reply = append(reply, &InquiryReply{
-							Node: nodeName,
-							Info: nodeInfo.Info,
-						})
-						err = nil
-						break
-					}
-				}
-				break
-			}
-		}
-	}
-	this.locker.RUnlock()
-	return reply, err
+	return Selector(this.Nodes).Select(args,detail,this.locker)
 }

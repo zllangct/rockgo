@@ -1,21 +1,24 @@
 package Cluster
 
 import (
-	"errors"
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/configComponent"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils"
 	"reflect"
-	"strings"
 	"sync"
+	"time"
 )
 
 type MasterComponent struct {
 	Component.Base
-	locker       sync.RWMutex
-	nodeComponent *NodeComponent
-	Nodes         map[string]*NodeInfo
+	locker          *sync.RWMutex
+	nodeComponent   *NodeComponent
+	Nodes           map[string]*NodeInfo
+
+	timeoutChecking map[string]*int
+
+	config 			*Config.ConfigComponent
 }
 
 func (this *MasterComponent) GetRequire() map[*Component.Object][]reflect.Type {
@@ -30,7 +33,14 @@ func (this *MasterComponent) GetRequire() map[*Component.Object][]reflect.Type {
 func (this *MasterComponent) Awake() {
 	this.Nodes = make(map[string]*NodeInfo)
 
-	err := this.Parent.Root().Find(&this.nodeComponent)
+	err:= this.Parent.Root().Find(&this.config)
+	if err != nil {
+		logger.Error("get config component failed")
+		panic(err)
+		return
+	}
+
+	err = this.Parent.Root().Find(&this.nodeComponent)
 	if err != nil {
 		logger.Error("find node component failed", err)
 		return
@@ -39,49 +49,47 @@ func (this *MasterComponent) Awake() {
 	//注册Master服务
 	s := new(MasterService)
 	s.init(this)
-	this.nodeComponent.rpcServer.Register(s)
+	_=this.nodeComponent.rpcServer.Register(s)
 
+	if !this.config.CommonConfig.Debug || false{
+		go this.TimeoutCheck()
+	}
 }
 
 //上报节点信息
 func (this *MasterComponent) UpdateNodeInfo(args *NodeInfo) {
 	this.locker.Lock()
 	this.Nodes[args.Address] = args
+	*this.timeoutChecking[args.Address]=0
 	this.locker.Unlock()
 }
 
-//查询节点信息 args : "AppID:Role"
-func (this *MasterComponent) NodeInquiry(args string) ([]*InquiryReply, error) {
-	arg := strings.Split(args, ":")
-	if len(arg) != 2 {
-		return nil, errors.New("query string wrong")
-	}
-	err := errors.New("no available node ")
-	var reply []*InquiryReply
-	this.locker.RLock()
-	for nodeName, nodeInfo := range master.Nodes {
-		for _, name := range nodeInfo.AppName {
-			if name == arg[0] {
-				for _, role := range nodeInfo.Group {
-					if role == arg[1] {
-						reply = append(reply, &InquiryReply{
-							Node: nodeName,
-							Info: nodeInfo.Info,
-						})
-						err = nil
-						break
-					}
-				}
-				break
-			}
-		}
-	}
-	this.locker.RUnlock()
-	return reply, err
+//查询节点信息 args : "AppID:Role:SelectorType"
+func (this *MasterComponent) NodeInquiry(args string,detail bool) ([]*InquiryReply, error) {
+	return Selector(this.Nodes).Select(args, detail,this.locker)
 }
 
+//检查超时节点
+func (this *MasterComponent) TimeoutCheck() map[string]*NodeInfo {
+	var interval = time.Duration(this.config.ClusterConfig.ReportInterval)
+	for{
+		time.Sleep(interval)
+		this.locker.Lock()
+		for addr, count := range this.timeoutChecking {
+			*count = *count + 1
+			if *count > 3 {
+				delete(this.Nodes, addr)
+				delete(this.timeoutChecking,addr)
+			}
+		}
+		this.locker.Unlock()
+	}
+}
+
+//深度复制节点信息
 func (this *MasterComponent) NodesCopy() map[string]*NodeInfo {
 	this.locker.RLock()
 	defer this.locker.RUnlock()
 	return utils.Copy(this.Nodes).(map[string]*NodeInfo)
 }
+

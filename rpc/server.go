@@ -5,14 +5,12 @@ import (
 	"encoding/gob"
 	"errors"
 	"github.com/zllangct/RockGO/logger"
-	"github.com/zllangct/RockGO/utils/UUID"
 	"io"
 	"net"
 	"net/http"
 	"reflect"
 	"strings"
 	"sync"
-	"sync/atomic"
 	"time"
 	"unicode"
 	"unicode/utf8"
@@ -322,20 +320,12 @@ func (s *service) call(server *Server, sending *sync.Mutex, wg *sync.WaitGroup, 
 }
 
 type gobServerCodec struct {
-	id 		   uint64
 	rwc        net.Conn
 	dec        *gob.Decoder
 	enc        *gob.Encoder
 	encBuf     *bufio.Writer
 	iocallback func()
 	closed     bool
-}
-
-func (c *gobServerCodec)GetID()uint64  {
-	return atomic.LoadUint64(&c.id)
-}
-func (c *gobServerCodec)SetID(id uint64){
-	atomic.StoreUint64(&c.id,id)
 }
 
 func (c *gobServerCodec) ReadRequestHeader(r *Request) error {
@@ -388,7 +378,6 @@ func (c *gobServerCodec) Close() error {
 func (server *Server) ServeConn(conn net.Conn) {
 	buf := bufio.NewWriter(conn)
 	srv := &gobServerCodec{
-		id :UUID.UInt64(),
 		rwc:    conn,
 		dec:    gob.NewDecoder(conn),
 		enc:    gob.NewEncoder(buf),
@@ -615,8 +604,6 @@ type ServerCodec interface {
 	ReadRequestBody(interface{}) error
 	WriteResponse(*Response, interface{}) error
 	IOCallback()
-	GetID()uint64
-	SetID(id uint64)
 	// Close can be called multiple times and must be idempotent.
 	Close() error
 }
