@@ -1,6 +1,7 @@
 package Cluster
 
 import (
+	"errors"
 	"github.com/zllangct/RockGO/rpc"
 	"math/rand"
 )
@@ -11,6 +12,9 @@ type NodeID struct {
 }
 
 func (this *NodeID) GetClient() (*rpc.TcpClient,error)  {
+	if this.addr == "" {
+		return nil,errors.New("this node id is empty")
+	}
 	return this.nodeComponent.GetNodeClient(this.addr)
 }
 
@@ -36,6 +40,9 @@ func (this *NodeIDGroup) NodesDetail() []*InquiryReply {
 //随机选择一个
 func (this *NodeIDGroup)RandClient() (*rpc.TcpClient,error) {
 	length:=len(this.nodes)
+	if length == 0 {
+		return nil,errors.New("this node id group is empty")
+	}
 	index:=rand.Intn(length)
 
 	return this.nodeComponent.GetNodeClient(this.nodes[index].Node)
@@ -43,6 +50,9 @@ func (this *NodeIDGroup)RandClient() (*rpc.TcpClient,error) {
 
 //选择一个负载最低的节点
 func (this *NodeIDGroup)MinLoadClient() (*rpc.TcpClient,error) {
+	if len(this.nodes) == 0 {
+		return nil,errors.New("this node id group is empty")
+	}
 	index:=SourceGroup(this.nodes).SelectMinLoad()
 	return this.nodeComponent.GetNodeClient(this.nodes[index].Node)
 }

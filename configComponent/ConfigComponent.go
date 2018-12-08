@@ -12,6 +12,8 @@ import (
 	"runtime"
 )
 
+var Config *ConfigComponent
+
 type ConfigComponent struct {
 	Component.Base
 	commonConfigPath  string
@@ -33,6 +35,9 @@ func (this *ConfigComponent) Awake() {
 	this.SetDefault()
 	//读取配置文件
 	this.ReloadConfig()
+
+	//全局共享
+	Config = this
 }
 
 func (this *ConfigComponent) loadConfig(configpath string, cfg interface{}) error {
@@ -111,7 +116,10 @@ func (this *ConfigComponent) SetDefault() {
 		Role:          []string{"master"},
 		Group:         []string{},
 
-		ReportInterval: 1,
+		ReportInterval: 3000,
+		RpcTimeout: 9000,
+		RpcCallTimeout :5000,
+		RpcHeartBeatInterval: 3000,
 	}
 }
 
@@ -136,5 +144,8 @@ type ClusterConfig struct {
 	Role          []string //本节点拥有角色
 	Group         []string //本节点拥有组
 
-	ReportInterval int //子节点节点信息上报间隔
+	ReportInterval int //子节点节点信息上报间隔，单位秒
+	RpcTimeout int 		//tcp链接超时，单位毫秒
+	RpcCallTimeout int //rpc调用超时
+	RpcHeartBeatInterval int //tcp心跳间隔
 }

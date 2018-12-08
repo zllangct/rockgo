@@ -8,14 +8,15 @@ import (
 	"strings"
 )
 
-type ActorAddressType = int
-
 var(
 	//actor地址格式错误
     ErrActorWrongFormat = errors.New("this format is wrong,should be : IP:Port:LocalActorID")
 )
+
+type ActorAddressType = int
+
 /*
-	ActorID such as "127.0.0.1:8888:0001",
+	ActorID such as "127.0.0.1:8888:XXXXXXX",
 	means "IP:PORT:LOCALATORID"
 */
 type ActorID  []string
@@ -23,6 +24,7 @@ type ActorID  []string
 func NewActorID() ActorID {
 	return []string{"","",UUID.Next()}
 }
+
 
 func (this ActorID)String() string {
 	buf:=bytes.Buffer{}

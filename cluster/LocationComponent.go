@@ -25,7 +25,6 @@ type LocationComponent struct {
 	locker *sync.RWMutex
 	nodeComponent  *NodeComponent
 	Nodes         map[string]*NodeInfo
-	config	 *Config.ConfigComponent
 	master   *rpc.TcpClient
 }
 
@@ -39,13 +38,7 @@ func (this *LocationComponent) GetRequire() map[*Component.Object][]reflect.Type
 }
 
 func (this *LocationComponent) Awake() {
-	err:= this.Parent.Root().Find(&this.config)
-	if err != nil {
-		logger.Fatal("get config component failed")
-		panic(err)
-		return
-	}
-	err = this.Parent.Root().Find(&this.nodeComponent)
+	err := this.Parent.Root().Find(&this.nodeComponent)
 	if err != nil {
 		logger.Error("find node component failed", err)
 		return
@@ -62,11 +55,11 @@ func (this *LocationComponent) Awake() {
 //同步节点信息到位置服务组件
 func (this *LocationComponent)DoLocationSync()  {
 	var reply bool
-	var interval = time.Duration(this.config.ClusterConfig.ReportInterval)
+	var interval = time.Duration(Config.Config.ClusterConfig.ReportInterval)
 	for {
 		if this.master == nil {
 			var err error
-			this.master,err=this.nodeComponent.GetNodeClient(this.config.ClusterConfig.MasterAddress)
+			this.master,err=this.nodeComponent.GetNodeClient(Config.Config.ClusterConfig.MasterAddress)
 			if err != nil {
 				logger.Error(err)
 				time.Sleep(time.Second * interval)
@@ -74,7 +67,7 @@ func (this *LocationComponent)DoLocationSync()  {
 			}
 		}
 		this.master.Call("MasterService.NodeInfoSync","sync",&reply)
-		time.Sleep(time.Second * interval)
+		time.Sleep(time.Millisecond * interval)
 	}
 }
 

@@ -22,7 +22,6 @@ type NodeComponent struct {
 	rpcClient      	sync.Map 				//RPC客户端集合
 	rpcServer      	*rpc.Server				//本节点RPC Server
 	locationClients *NodeIDGroup				//位置服务器集合
-	config 			*Config.ConfigComponent
 }
 
 func (this *NodeComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
@@ -34,13 +33,7 @@ func (this *NodeComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
 }
 
 func(this *NodeComponent)Awake(){
-	err:= this.Parent.Root().Find(&this.config)
-	if err != nil {
-		logger.Error("get config component failed")
-		panic(err)
-		return
-	}
-	this.AppName = this.config.ClusterConfig.AppName
+	this.AppName = Config.Config.ClusterConfig.AppName
 	//开始本节点RPC服务
 	this.StartRpcServer()
 	//查询位置服务器
@@ -77,12 +70,7 @@ func (this *NodeComponent)GetLocationServer()  {
 
 //RPC服务
 func (this *NodeComponent) StartRpcServer() error{
-	var config *Config.ConfigComponent
-	err := this.Parent.Root().Find(&config)
-	if err != nil {
-		return err
-	}
-	addr,err:= net.ResolveTCPAddr("tcp",config.ClusterConfig.LocalAddress)
+	addr,err:= net.ResolveTCPAddr("tcp",Config.Config.ClusterConfig.LocalAddress)
 	if err!=nil {
 		return err
 	}
@@ -98,25 +86,20 @@ func (this *NodeComponent) StartRpcServer() error{
 	return nil
 }
 
+func (this *NodeComponent)clientCallback(event string,data ...interface{}) {
+	switch event {
+	case "close":
+		nodeAddr := data[0].(string)
+		this.rpcClient.Delete(nodeAddr)
+	}
+}
+
 //获取节点客户端
 func (this *NodeComponent) GetNodeClient(addr string) (*rpc.TcpClient,error){
-	this.locker.RLock()
-	if !this.isOnline {
-		this.locker.RUnlock()
-		return nil,errors.New("this node is offline")
-	}
-	this.locker.RUnlock()
 	if v,ok:= this.rpcClient.Load(addr);ok {
 		return v.(*rpc.TcpClient),nil
 	}
-	callback:= func(event string,data ...interface{}) {
-		switch event {
-		case "close":
-			nodeAddr := data[0].(string)
-			this.rpcClient.Delete(nodeAddr)
-		}
-	}
-	client,err:= this.ConnectToNode(addr,callback)
+	client,err:= this.ConnectToNode(addr,this.clientCallback)
 	if err!=nil {
 		return nil,err
 	}
@@ -141,7 +124,9 @@ func (this *NodeComponent)GetNode(role string,selectorType ...SelectorType) (*No
 
 //从位置服务器查询并选择一个节点
 func (this *NodeComponent)GetNodeFromLocation(role string,selectorType ...SelectorType) (*NodeID,error) {
+	this.locker.Lock()
 	client,err:= this.locationClients.RandClient()
+	this.locker.Unlock()
 	if err!=nil {
 		return nil,err
 	}
@@ -167,7 +152,9 @@ func (this *NodeComponent)GetNodeFromLocation(role string,selectorType ...Select
 
 //从位置服务器查询
 func (this *NodeComponent)GetNodeGroupFromLocation(role string) (*NodeIDGroup,error) {
+	this.locker.Lock()
 	client,err:= this.locationClients.RandClient()
+	this.locker.Unlock()
 	if err!=nil {
 		return nil,err
 	}
@@ -184,7 +171,7 @@ func (this *NodeComponent)GetNodeGroupFromLocation(role string) (*NodeIDGroup,er
 }
 //从master查询并选择一个节点
 func (this *NodeComponent)GetNodeFromMaster(role string,selectorType ...SelectorType) (*NodeID,error) {
-	client,err:= this.locationClients.RandClient()
+	client,err:= this.GetNodeClient(Config.Config.ClusterConfig.MasterAddress)
 	if err!=nil {
 		return nil,err
 	}
@@ -209,7 +196,7 @@ func (this *NodeComponent)GetNodeFromMaster(role string,selectorType ...Selector
 }
 //从master查询
 func (this *NodeComponent)GetNodeGroupFromMaster(role string) (*NodeIDGroup,error) {
-	client,err:= this.GetNodeClient(this.config.ClusterConfig.MasterAddress)
+	client,err:= this.GetNodeClient(Config.Config.ClusterConfig.MasterAddress)
 	if err!=nil {
 		return nil,err
 	}

@@ -58,13 +58,12 @@ func (runtime *Runtime) Factory() *ObjectFactory {
 	return runtime.factory
 }
 
-func (runtime *Runtime)SetMaxThread(maxThread int) error {
+func (runtime *Runtime)SetMaxThread(maxThread int){
 	if runtime.workers!=nil && maxThread > 0{
 		runtime.workers.MaxThreads =maxThread
 	}else{
-		return errors.New("max thread must > 0")
+		logger.Error(errors.New("max thread must > 0"))
 	}
-	return nil
 }
 
 // Extract creates a deep copy of the object and then removes it from the runtime.

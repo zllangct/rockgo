@@ -13,12 +13,9 @@ import (
 type ChildComponent struct {
 	Component.Base
 	locker sync.RWMutex
-	NodeID string
 	rpcMaster      *rpc.TcpClient					//master节点
 	nodeComponent  *NodeComponent
 	reportCollecter []func()(string,float32)
-
-	config *Config.ConfigComponent
 }
 
 func (this *ChildComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
@@ -31,13 +28,7 @@ func (this *ChildComponent) GetRequire() (map[*Component.Object][]reflect.Type) 
 }
 
 func(this *ChildComponent)Awake(){
-	err:= this.Parent.Root().Find(&this.config)
-	if err != nil {
-		logger.Fatal("get config component failed")
-		panic(err)
-		return
-	}
-	err= this.Parent.Root().Find(&this.nodeComponent)
+	err:= this.Parent.Root().Find(&this.nodeComponent)
 	if err != nil {
 		logger.Fatal("get node component failed")
 		panic(err)
@@ -51,12 +42,12 @@ func(this *ChildComponent)Awake(){
 //上报节点信息
 func (this *ChildComponent)DoReport()  {
 	args:=&NodeInfo{
-		Address:      this.config.ClusterConfig.LocalAddress,
-		Group:   this.config.ClusterConfig.Role,
-		AppName: this.config.ClusterConfig.AppName,
+		Address:      Config.Config.ClusterConfig.LocalAddress,
+		Group:   Config.Config.ClusterConfig.Role,
+		AppName: Config.Config.ClusterConfig.AppName,
 	}
 	var reply bool
-	var interval = time.Duration(this.config.ClusterConfig.ReportInterval)
+	var interval = time.Duration(Config.Config.ClusterConfig.ReportInterval)
 	for {
 		this.locker.RLock()
 		m:=make(map[string]float32)
@@ -67,7 +58,7 @@ func (this *ChildComponent)DoReport()  {
 		args.Info = m
 		this.locker.RUnlock()
 		this.rpcMaster.Call("MasterService.ReportNodeInfo",args,&reply)
-		time.Sleep(time.Second * interval)
+		time.Sleep(time.Millisecond * interval)
 	}
 }
 
@@ -80,7 +71,7 @@ func (this *ChildComponent)AddReportInfo(field string,collectFunction func()(str
 
 //连接到master
 func (this *ChildComponent) ConnectToMaster() error {
-	addr:=this.config.ClusterConfig.MasterAddress
+	addr:=Config.Config.ClusterConfig.MasterAddress
 	callback :=func(event string,data ...interface{}) {
 		switch event {
 		case "close":
@@ -98,7 +89,7 @@ func (this *ChildComponent) ConnectToMaster() error {
 	this.locker.Lock()
 	this.nodeComponent.isOnline = true
 	this.locker.Unlock()
-	println(time.Now().Format("2006-01-02T 15:04:05"), "  reconnect to master success")
+	println(time.Now().Format("2006-01-02T 15:04:05"), "  connected to master")
 	return nil
 }
 

@@ -8,6 +8,7 @@ import (
 	"bufio"
 	"encoding/gob"
 	"errors"
+	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/timer"
 	"io"
 	"log"
@@ -67,9 +68,6 @@ type TcpClient struct {
 	closing       bool // user has called Close
 	shutdown      bool // server has told us to stop
 	CloseCallback func(event string, data ...interface{})
-	heartInterval time.Duration
-	timeout       time.Duration
-	debugMode     bool
 }
 
 // A ClientCodec implements writing of RPC requests and
@@ -237,20 +235,22 @@ func (call *Call) done() {
 }
 
 func (client *TcpClient) StartHeartBeat() {
-	if !client.debugMode {
+	if !DebugMode{
 		pingCount := 0
 		res := &HeartBeatReuslt{}
-		tc := time.NewTicker(client.heartInterval)
+		c:=time.NewTicker(HeartInterval)
 		for {
 			res.Result = 0
-			<-tc.C
+			<-c.C
 			if client.closing || client.shutdown {
 				return
 			}
-			err := client.Call("InnerResponse.StartHeartBeat", nil, res)
-			if (err != nil || res.Result != 1) && !client.debugMode {
+			err := client.Call("InnerResponse.HeartBeat", struct {}{}, res)
+			if err != nil || res.Result != 1 {
 				pingCount++
-				if pingCount > 3 {
+				if pingCount > 3 && !DebugMode{
+					logger.Error("tcp client timeout")
+					c.Stop()
 					client.Close()
 				}
 			} else {
@@ -275,7 +275,6 @@ func (client *TcpClient) Reconnect() error {
 	*client = *NewClientWithConn(conn)
 	return nil
 }
-
 // NewClient returns a new TcpClient to handle requests to the
 // set of services at the other end of the connection.
 // It adds a buffer to the write side of the connection so
@@ -304,16 +303,13 @@ func NewClientWithConn(conn net.Conn, callback ...func(event string, data ...int
 		conn:conn,
 		codec:         codec,
 		pending:       make(map[uint64]*Call),
-		heartInterval: time.Millisecond * 3000,
-		timeout:       time.Millisecond * 500000,
-		debugMode:     isDebug,
-	}
-	if len(callback) > 0 {
-		client.CloseCallback = callback[0]
 	}
 	go client.input()
 	go client.StartHeartBeat()
-	client.CloseCallback("connected", client)
+	if len(callback) > 0 {
+		client.CloseCallback = callback[0]
+		client.CloseCallback("connected", client)
+	}
 	return client
 }
 
@@ -444,7 +440,7 @@ func (client *TcpClient) Go(serviceMethod string, args interface{}, reply interf
 func (client *TcpClient) Call(serviceMethod string, args interface{}, reply interface{}) error {
 	call := client.Go(serviceMethod, args, reply, make(chan *Call, 1))
 	select {
-	case <-timer.After(client.timeout):
+	case <-timer.After(CallTimeout):
 		call.Error = ErrTimeout
 		return ErrTimeout
 	case <-call.Done:

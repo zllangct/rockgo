@@ -17,8 +17,6 @@ type MasterComponent struct {
 	Nodes           map[string]*NodeInfo
 
 	timeoutChecking map[string]*int
-
-	config 			*Config.ConfigComponent
 }
 
 func (this *MasterComponent) GetRequire() map[*Component.Object][]reflect.Type {
@@ -33,14 +31,7 @@ func (this *MasterComponent) GetRequire() map[*Component.Object][]reflect.Type {
 func (this *MasterComponent) Awake() {
 	this.Nodes = make(map[string]*NodeInfo)
 
-	err:= this.Parent.Root().Find(&this.config)
-	if err != nil {
-		logger.Error("get config component failed")
-		panic(err)
-		return
-	}
-
-	err = this.Parent.Root().Find(&this.nodeComponent)
+	err := this.Parent.Root().Find(&this.nodeComponent)
 	if err != nil {
 		logger.Error("find node component failed", err)
 		return
@@ -51,7 +42,7 @@ func (this *MasterComponent) Awake() {
 	s.init(this)
 	_=this.nodeComponent.rpcServer.Register(s)
 
-	if !this.config.CommonConfig.Debug || false{
+	if !Config.Config.CommonConfig.Debug || false{
 		go this.TimeoutCheck()
 	}
 }
@@ -71,9 +62,9 @@ func (this *MasterComponent) NodeInquiry(args string,detail bool) ([]*InquiryRep
 
 //检查超时节点
 func (this *MasterComponent) TimeoutCheck() map[string]*NodeInfo {
-	var interval = time.Duration(this.config.ClusterConfig.ReportInterval)
+	var interval = time.Duration(Config.Config.ClusterConfig.ReportInterval)
 	for{
-		time.Sleep(interval)
+		time.Sleep(time.Millisecond* interval)
 		this.locker.Lock()
 		for addr, count := range this.timeoutChecking {
 			*count = *count + 1

@@ -2,13 +2,9 @@ package Actor
 
 import (
 	"errors"
-	"fmt"
 	"github.com/zllangct/RockGO/cluster"
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/configComponent"
-	"github.com/zllangct/RockGO/logger"
-	"github.com/zllangct/RockGO/rpc"
-	"net"
 	"reflect"
 	"sync"
 )
@@ -17,10 +13,9 @@ var ErrNodeOffline =errors.New("this node is offline")
 
 type ActorProxyComponent struct {
 	Component.Base
-	nodeName         string
-	localActors    sync.Map 			//本地actor [ActorID,*actor]
-	config         *Config.ConfigComponent
-	nodeComponent  *Cluster.NodeComponent
+	nodeID        string
+	localActors   sync.Map 			//本地actor [ActorID,*actor]
+	nodeComponent *Cluster.NodeComponent
 }
 
 func (this *ActorProxyComponent) GetRequire() map[*Component.Object][]reflect.Type {
@@ -37,17 +32,12 @@ func (this *ActorProxyComponent) IsUnique() bool {
 }
 
 func (this *ActorProxyComponent) Awake() {
-	err := this.Parent.Root().Find(&this.config)
-	if err != nil {
-		logger.Fatal("get config component failed")
-		panic(err)
-		return
-	}
+	this.nodeID = Config.Config.ClusterConfig.LocalAddress
 }
 
 func (this *ActorProxyComponent) Register(actor *ActorComponent) error {
 	actor.ActorID = NewActorID()
-	id,err:= actor.ActorID.SetNodeID(this.nodeName)
+	id,err:= actor.ActorID.SetNodeID(this.nodeID)
 	if err!=nil {
 		return err
 	}
@@ -63,42 +53,18 @@ func (this *ActorProxyComponent) Unregister(actor *ActorComponent) {
 
 
 
-func (this *ActorProxyComponent) Emit(actorID ActorID, service string, args interface{}, reply interface{}) error {
-	nodeName := actorID.GetNodeID()
+func (this *ActorProxyComponent) Emit(actorID ActorID, message IActorMessage) error {
+	nodeID := actorID.GetNodeID()
 	//本地消息不走网络
-	if nodeName == this.nodeName {
+	if nodeID == this.nodeID {
 
 		return nil
 	}
-	if !this.nodeComponent.IsOnline() {
-		return ErrNodeOffline
-	}
-	//客户端已经存在
-	clientInterface, ok := this.rpcClient.Load(id)
-	if ok {
-		client := clientInterface.(*rpc.TcpClient)
-		err := client.Call(service, args, reply)
-		switch err {
-		case rpc.ErrConnClosing,rpc.ErrShutdown,rpc.ErrErrorBody,rpc.ErrTimeout:
-			this.rpcClient.Delete(id)
-		default:
-			return err
-		}
-	}
-	//客户端不存在,先在位置服务器上查询actor所在节点
-	if len(this.locationClient)>0{
-		MasterAddr := &net.TCPAddr{
-			IP:   net.ParseIP("0.0.0.0"),
-			Port: config.ClusterConfig.LocalPort,
-			Zone: "",
-		}
-
+	//非本地消息走网络代理
+	client, err := this.nodeComponent.GetNodeClient(nodeID)
+	if err!=nil {
 		return err
 	}
-	//如果位置服务器上没有，从master上面查询
-
-
-
 
 }
 

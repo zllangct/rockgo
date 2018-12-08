@@ -157,6 +157,73 @@ func startHttpServer() {
 	httpServerAddr = server.Listener.Addr().String()
 	log.Println("Test HTTP RPC server listening on", httpServerAddr)
 }
+type CustomTest struct {
+
+}
+type R struct {
+	Result bool
+	N *[]*I
+	C *I
+}
+
+func (this *R)String() string {
+	return fmt.Sprintf("%v",*this)
+}
+
+type I struct {
+	Name string
+}
+func (this *CustomTest)T1(args string,reply *R) error {
+	println(args)
+	reply.Result=true
+	r:=[]*I{
+		&I{Name:"zhao"},
+		&I{Name:"lei"},
+	}
+	reply.N=&r
+	reply.C=&I{
+		Name:"ssssss",
+	}
+	return nil
+}
+
+func TestRPCC(t *testing.T) {
+	once.Do(startServer1)
+	testRPC1(t, serverAddr)
+}
+func startServer1() {
+	Register(new(CustomTest))
+
+
+	var l net.Listener
+	l, serverAddr = listenTCP()
+	log.Println("Test RPC server listening on", serverAddr)
+	go Accept(l)
+
+	HandleHTTP()
+	httpOnce.Do(startHttpServer)
+}
+func testRPC1(t *testing.T, addr string) {
+	callback:= func(event string, data ...interface{}){
+		println(event,data[0])
+	}
+	client, err := Dial("tcp", addr,callback)
+	if err != nil {
+		t.Fatal("dialing", err)
+	}
+	defer client.Close()
+
+	// Synchronous calls
+	reply := new(R)
+	err = client.Call("CustomTest.T1", "12345", reply)
+	if err != nil {
+		t.Errorf("Add: expected no error but got string %q", err.Error())
+	}
+	println("Arith.Add reuslt:"+reply.String())
+	time.Sleep(time.Second* 20)
+}
+
+
 
 func TestRPC(t *testing.T) {
 	once.Do(startServer)

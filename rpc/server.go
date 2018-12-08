@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/gob"
 	"errors"
+	"fmt"
 	"github.com/zllangct/RockGO/logger"
 	"io"
 	"net"
@@ -69,9 +70,6 @@ type Server struct {
 	freeReq    *Request
 	respLock   sync.Mutex // protects freeResp
 	freeResp   *Response
-	debugMode  bool
-	timeout    time.Duration
-	//Callback   func(event string,data ...interface{})
 }
 
 type HeartBeatReuslt struct {
@@ -80,8 +78,8 @@ type HeartBeatReuslt struct {
 type InnerResponse struct {
 }
 
-func (this *InnerResponse)HeartBeat(args interface{}, result *HeartBeatReuslt) error {
-	result = &HeartBeatReuslt{Result: InnerResponseContent}
+func (this *InnerResponse)HeartBeat(args struct{}, result *HeartBeatReuslt) error {
+	result.Result= InnerResponseContent
 	return nil
 }
 
@@ -115,13 +113,8 @@ func isExportedOrBuiltinType(t reflect.Type) bool {
 }
 
 func defaultServer() *Server {
-	s := &Server{
-		timeout:time.Millisecond*5000,
-		debugMode:isDebug,
-	}
-	return s
+	return &Server{}
 }
-
 // Register publishes in the server the set of methods of the
 // receiver value that satisfy the following conditions:
 //	- exported method of exported type
@@ -205,7 +198,7 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 		argType := mtype.In(1)
 		if !isExportedOrBuiltinType(argType) {
 			if reportErr {
-				logger.Info("rpc.Register: argument type of method %q is not exported: %q\n", mname, argType)
+				logger.Info(fmt.Sprintf("rpc.Register: argument type of method %q is not exported: %q\n", mname, argType))
 			}
 			continue
 		}
@@ -217,14 +210,14 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 			replyType = mtype.In(2)
 			if replyType.Kind() != reflect.Ptr {
 				if reportErr {
-					logger.Info("rpc.Register: reply type of method %q is not a pointer: %q\n", mname, replyType)
+					logger.Info(fmt.Sprintf("rpc.Register: reply type of method %q is not a pointer: %q\n", mname, replyType))
 				}
 				continue
 			}
 			// Reply type must be exported.
 			if !isExportedOrBuiltinType(replyType) {
 				if reportErr {
-					logger.Info("rpc.Register: reply type of method %q is not exported: %q\n", mname, replyType)
+					logger.Info(fmt.Sprintf("rpc.Register: reply type of method %q is not exported: %q\n", mname, replyType))
 				}
 				continue
 			}
@@ -235,14 +228,14 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 		// Method needs one out.
 		if mtype.NumOut() != 1 {
 			if reportErr {
-				logger.Info("rpc.Register: method %q has %d output parameters; needs exactly one\n", mname, mtype.NumOut())
+				logger.Info(fmt.Sprintf("rpc.Register: method %q has %d output parameters; needs exactly one\n", mname, mtype.NumOut()))
 			}
 			continue
 		}
 		// The return type of the method must be error.
 		if returnType := mtype.Out(0); returnType != typeOfError {
 			if reportErr {
-				logger.Info("rpc.Register: return type of method %q is %q, must be error\n", mname, returnType)
+				logger.Info(fmt.Sprintf("rpc.Register: return type of method %q is %q, must be error\n", mname, returnType))
 			}
 			continue
 		}
@@ -575,9 +568,9 @@ func (server *Server) Accept(lis net.Listener) {
 	}
 }
 func (server *Server) UpdateConnTimeout(conn net.Conn) {
-	if !server.debugMode {
-		if server.timeout != 0 {
-			conn.SetDeadline(time.Now().Add(server.timeout))
+	if !DebugMode {
+		if Timeout != 0 {
+			conn.SetDeadline(time.Now().Add(Timeout))
 		}
 	}
 }

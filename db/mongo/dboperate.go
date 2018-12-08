@@ -15,12 +15,12 @@ const (
 )
 
 var (
-	XINGO_MONGODB_SESSION_NIL_ERR    = errors.New("DbOperate session nil.")
-	XINGO_MONGODB_NOTFOUND_ERR       = errors.New("not found!")
-	XINGO_MONGODB_DBFINDALL_ERR      = errors.New("DBFindAll failed,q is nil!")
-	XINGO_MONGODB_OPENGRIDFILE_ERR   =  errors.New("OpenGridFile failed!")
-	XINGO_MONGODB_READGRIDFILE_ERR   =  errors.New("ReadGridFile failed!")
-	XINGO_MONGODB_CREATEGRIDFILE_ERR   =  errors.New("CreateGridFile is nil")
+	MONGODB_SESSION_NIL_ERR    = errors.New("DbOperate session nil.")
+	MONGODB_NOTFOUND_ERR       = errors.New("not found!")
+	MONGODB_DBFINDALL_ERR      = errors.New("DBFindAll failed,q is nil!")
+	MONGODB_OPENGRIDFILE_ERR   =  errors.New("OpenGridFile failed!")
+	MONGODB_READGRIDFILE_ERR   =  errors.New("ReadGridFile failed!")
+	MONGODB_CREATEGRIDFILE_ERR =  errors.New("CreateGridFile is nil")
 )
 
 type DbCfg struct {
@@ -109,7 +109,7 @@ func (this *DbOperate) RefreshSession() {
 
 func (this *DbOperate) Insert(collection string, doc interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -122,7 +122,7 @@ func (this *DbOperate) Insert(collection string, doc interface{}) error {
 
 func (this *DbOperate) StrongInsert(collection string, doc interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -137,7 +137,7 @@ func (this *DbOperate) StrongInsert(collection string, doc interface{}) error {
 
 func (this *DbOperate) Cover(collection string, cond interface{}, change interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -150,7 +150,7 @@ func (this *DbOperate) Cover(collection string, cond interface{}, change interfa
 
 func (this *DbOperate) Update(collection string, cond interface{}, change interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -163,7 +163,7 @@ func (this *DbOperate) Update(collection string, cond interface{}, change interf
 
 func (this *DbOperate) StrongUpdate(collection string, cond interface{}, change interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -177,7 +177,7 @@ func (this *DbOperate) StrongUpdate(collection string, cond interface{}, change 
 
 func (this *DbOperate) UpdateInsert(collection string, cond interface{}, doc interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -194,7 +194,7 @@ func (this *DbOperate) UpdateInsert(collection string, cond interface{}, doc int
 
 func (this *DbOperate) StrongUpdateInsert(collection string, cond interface{}, doc interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -213,7 +213,7 @@ func (this *DbOperate) StrongUpdateInsert(collection string, cond interface{}, d
 
 func (this *DbOperate) RemoveOne(collection string, cond_name string, cond_value int64) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -231,7 +231,7 @@ func (this *DbOperate) RemoveOne(collection string, cond_name string, cond_value
 
 func (this *DbOperate) RemoveOneByCond(collection string, cond interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -250,7 +250,7 @@ func (this *DbOperate) RemoveOneByCond(collection string, cond interface{}) erro
 
 func (this *DbOperate) RemoveAll(collection string, cond interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -268,7 +268,7 @@ func (this *DbOperate) RemoveAll(collection string, cond interface{}) error {
 
 func (this *DbOperate) DBFindOne(collection string, cond interface{}, resHandler func(bson.M) error) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -295,7 +295,7 @@ func (this *DbOperate) DBFindOne(collection string, cond interface{}, resHandler
 
 func (this *DbOperate) StrongDBFindOne(collection string, cond interface{}, resHandler func(bson.M) error) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -324,7 +324,7 @@ func (this *DbOperate) StrongDBFindOne(collection string, cond interface{}, resH
 
 func (this *DbOperate) DBFindAll(collection string, cond interface{}, resHandler func(bson.M) error) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -334,7 +334,7 @@ func (this *DbOperate) DBFindAll(collection string, cond interface{}, resHandler
 	q := c.Find(cond)
 
 	if nil == q {
-		return XINGO_MONGODB_DBFINDALL_ERR
+		return MONGODB_DBFINDALL_ERR
 	}
 
 	iter := q.Iter()
@@ -355,7 +355,7 @@ func (this *DbOperate) DBFindAll(collection string, cond interface{}, resHandler
 
 func (this *DbOperate) StrongDBFindAll(collection string, cond interface{}, resHandler func(bson.M) error) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -369,7 +369,7 @@ func (this *DbOperate) StrongDBFindAll(collection string, cond interface{}, resH
 	logger.Debug(fmt.Sprintf("[DbOperate.DBFindAll] name:%s,query:%v", collection, cond))
 
 	if nil == q {
-		return XINGO_MONGODB_DBFINDALL_ERR
+		return MONGODB_DBFINDALL_ERR
 	}
 	iter := q.Iter()
 	m := make(bson.M)
@@ -388,7 +388,7 @@ func (this *DbOperate) StrongDBFindAll(collection string, cond interface{}, resH
 
 func (this *DbOperate) DBFindAllEx(collection string, cond interface{}, resHandler func(*mgo.Query) error) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -400,7 +400,7 @@ func (this *DbOperate) DBFindAllEx(collection string, cond interface{}, resHandl
 	logger.Error(fmt.Sprintf("[DbOperate.DBFindAll] name:%s,query:%v", collection, cond))
 
 	if nil == q {
-		return XINGO_MONGODB_DBFINDALL_ERR
+		return MONGODB_DBFINDALL_ERR
 	}
 	if nil != resHandler {
 		return resHandler(q)
@@ -410,7 +410,7 @@ func (this *DbOperate) DBFindAllEx(collection string, cond interface{}, resHandl
 
 func (this *DbOperate) StrongDBFindAllEx(collection string, cond interface{}, resHandler func(*mgo.Query) error) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -424,7 +424,7 @@ func (this *DbOperate) StrongDBFindAllEx(collection string, cond interface{}, re
 	logger.Debug(fmt.Sprintf("[DbOperate.DBFindAll] name:%s,query:%v", collection, cond))
 
 	if nil == q {
-		return XINGO_MONGODB_DBFINDALL_ERR
+		return MONGODB_DBFINDALL_ERR
 	}
 	if nil != resHandler {
 		return resHandler(q)
@@ -434,7 +434,7 @@ func (this *DbOperate) StrongDBFindAllEx(collection string, cond interface{}, re
 
 func (this *DbOperate) FindAndModify(collection string, cond interface{}, change mgo.Change, val interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -448,7 +448,7 @@ func (this *DbOperate) FindAndModify(collection string, cond interface{}, change
 
 func (this *DbOperate) FindAll(collection string, cond interface{}, all interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -462,7 +462,7 @@ func (this *DbOperate) FindAll(collection string, cond interface{}, all interfac
 
 func (this *DbOperate) StrongBatchInsert(collection string, docs ...interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -475,7 +475,7 @@ func (this *DbOperate) StrongBatchInsert(collection string, docs ...interface{})
 
 func (this *DbOperate) FindOne(collection string, cond interface{}, value interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -488,7 +488,7 @@ func (this *DbOperate) FindOne(collection string, cond interface{}, value interf
 //友情提示，如果存在多个document，会报错，请用DeleteAll
 func (this *DbOperate) DeleteOne(collection string, cond interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -500,7 +500,7 @@ func (this *DbOperate) DeleteOne(collection string, cond interface{}) error {
 
 func (this *DbOperate) DeleteAll(collection string, cond interface{}) (int, error) {
 	if this.session == nil {
-		return 0, XINGO_MONGODB_SESSION_NIL_ERR
+		return 0, MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -517,7 +517,7 @@ func (this *DbOperate) DeleteAll(collection string, cond interface{}) (int, erro
 // gridfs
 func (this *DbOperate) OpenGridFile(collection string, filename string) ([]byte, error) {
 	if this.session == nil {
-		return nil, XINGO_MONGODB_SESSION_NIL_ERR
+		return nil, MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -532,7 +532,7 @@ func (this *DbOperate) OpenGridFile(collection string, filename string) ([]byte,
 	}
 
 	if fsfile == nil {
-		return nil, XINGO_MONGODB_OPENGRIDFILE_ERR
+		return nil, MONGODB_OPENGRIDFILE_ERR
 	}
 	defer fsfile.Close()
 
@@ -540,7 +540,7 @@ func (this *DbOperate) OpenGridFile(collection string, filename string) ([]byte,
 	_, err = fsfile.Read(data)
 
 	if err != nil {
-		return nil, XINGO_MONGODB_READGRIDFILE_ERR
+		return nil, MONGODB_READGRIDFILE_ERR
 	}
 	return data, nil
 }
@@ -553,7 +553,7 @@ func (this *DbOperate) CreateGridFile(collection string, filename string, resHan
 
 	var doc gfsDocId
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -566,7 +566,7 @@ func (this *DbOperate) CreateGridFile(collection string, filename string, resHan
 		return err
 	}
 	if file == nil {
-		return XINGO_MONGODB_CREATEGRIDFILE_ERR
+		return MONGODB_CREATEGRIDFILE_ERR
 	}
 	if resHandler != nil{
 		err = resHandler(file)
@@ -592,7 +592,7 @@ func (this *DbOperate) CreateGridFile(collection string, filename string, resHan
 
 func (this *DbOperate) GridFileExists(collection string, filename string) (bool, error) {
 	if this.session == nil {
-		return false, XINGO_MONGODB_SESSION_NIL_ERR
+		return false, MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -614,7 +614,7 @@ func (this *DbOperate) GridFileExists(collection string, filename string) (bool,
 
 func (this *DbOperate) RemoveGridFile(collection string, filename string) (bool, error) {
 	if this.session == nil {
-		return false, XINGO_MONGODB_SESSION_NIL_ERR
+		return false, MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -633,7 +633,7 @@ func (this *DbOperate) RemoveGridFile(collection string, filename string) (bool,
 
 func (this *DbOperate) BulkInsertDoc(collection string, docs []interface{}) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -650,7 +650,7 @@ func (this *DbOperate) BulkInsertDoc(collection string, docs []interface{}) erro
 
 func (this *DbOperate) BulkInsert(collection string, pairs []bson.M) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -668,7 +668,7 @@ func (this *DbOperate) BulkInsert(collection string, pairs []bson.M) error {
 }
 func (this *DbOperate) BulkUpdate(collection string, pairs []bson.M) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
@@ -727,7 +727,7 @@ func (this *DbOperate) WriteGridFile(collection string, filename string, data []
 
 func (this *DbOperate) BulkUpsert(collection string, pairs []bson.M) error {
 	if this.session == nil {
-		return XINGO_MONGODB_SESSION_NIL_ERR
+		return MONGODB_SESSION_NIL_ERR
 	}
 
 	local_session := this.session.Copy()
