@@ -29,8 +29,8 @@ func (this *ConfigComponent) IsUnique() bool {
 }
 
 func (this *ConfigComponent) Awake() {
-	this.commonConfigPath = "./Config/CommonConfig.json"
-	this.clusterConfigPath = "./Config/ClusterConfig.json"
+	this.commonConfigPath = "./config/CommonConfig.json"
+	this.clusterConfigPath = "./config/ClusterConfig.json"
 	//初始化默认配置
 	this.SetDefault()
 	//读取配置文件
