@@ -6,8 +6,12 @@ package Actor
 
 type ActorMessageInfo struct {
 	Sender IActor
-	Message IActorMessage
+	Message *ActorMessage
 }
 
-
+type ActorRpcMessageInfo struct {
+	Target  ActorID
+	Sender ActorID
+	Message *ActorMessage
+}
 

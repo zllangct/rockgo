@@ -261,7 +261,6 @@ func (server *Server) sendResponse(sending *sync.Mutex, req *Request, reply inte
 	sending.Lock()
 
 	if reply == nil{
-		resp.Error = "service method has no reply"
 		reply = invalidRequest
 	}
 	err := codec.WriteResponse(resp, reply)

@@ -91,7 +91,7 @@ func (this *ActorComponent) dispatch() {
 		infos := this.Parent.AllComponents()
 		for _, info := range infos {
 			if messageHandler, ok := info.Component.(IActorMessageHandler); ok {
-				if handler, ok := messageHandler.MessageHandlers()[messageInfo.Message.Tittle()]; ok {
+				if handler, ok := messageHandler.MessageHandlers()[messageInfo.Message.Tittle]; ok {
 					handler(messageInfo)
 				}
 			}

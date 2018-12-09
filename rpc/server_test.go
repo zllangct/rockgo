@@ -163,7 +163,7 @@ type CustomTest struct {
 type R struct {
 	Result bool
 	N *[]*I
-	C *I
+	C []interface{}
 }
 
 func (this *R)String() string {
@@ -181,9 +181,8 @@ func (this *CustomTest)T1(args string,reply *R) error {
 		&I{Name:"lei"},
 	}
 	reply.N=&r
-	reply.C=&I{
-		Name:"ssssss",
-	}
+	reply.C=[]interface{}{1,2}
+
 	return nil
 }
 

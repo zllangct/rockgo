@@ -16,7 +16,7 @@ var(
 type ActorAddressType = int
 
 /*
-	ActorID such as "127.0.0.1:8888:XXXXXXX",
+	Target such as "127.0.0.1:8888:XXXXXXX",
 	means "IP:PORT:LOCALATORID"
 */
 type ActorID  []string

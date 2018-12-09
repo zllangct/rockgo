@@ -183,8 +183,8 @@ func (client *TcpClient) input() {
 			call.done()
 		default:
 			if call.Reply == nil {
-				call.Error = ServerError(response.Error)
-				err = client.codec.ReadResponseBody(nil)
+				//TODO 待测试，call调用，但无返回值
+				err = client.codec.ReadResponseBody(&struct{}{})
 				if err != nil {
 					err = errors.New("reading error body: " + err.Error())
 				}
