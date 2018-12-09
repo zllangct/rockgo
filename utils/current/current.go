@@ -21,8 +21,8 @@ func newCurrent() *Current {
 	return &Current{}
 }
 
-//ContextWithTarsCurrent set TarsCurrent
-func ContextWithTarsCurrent(ctx context.Context) context.Context {
+//ContextWithCurrent set TarsCurrent
+func ContextWithCurrent(ctx context.Context) context.Context {
 	tc := newCurrent()
 	ctx = context.WithValue(ctx, tcKey, tc)
 	return ctx

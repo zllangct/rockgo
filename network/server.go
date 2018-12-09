@@ -2,7 +2,6 @@ package network
 
 import (
 	"context"
-	"github.com/zllangct/RockGO/timer"
 	"sync/atomic"
 	"time"
 )
@@ -15,11 +14,10 @@ const (
 	//PACKAGE_ERROR shows is a error package.
 	PACKAGE_ERROR
 )
-//ProtoCol is interface for handling the server side tars package.
-type ProtoCol interface {
-	Invoke(ctx context.Context, pkg []byte) []byte
+//Protocol is interface for handling the server side tars package.
+type Protocol interface {
+	Invoke(ctx context.Context, pkg []byte)
 	ParsePackage(buff []byte) (int, int)
-	InvokeTimeout(pkg []byte) []byte
 }
 
 //ServerHandler  is interface with listen and handler method
@@ -36,7 +34,6 @@ type ServerConf struct {
 	AcceptTimeout  time.Duration
 	ReadTimeout    time.Duration
 	WriteTimeout   time.Duration
-	HandleTimeout  time.Duration
 	IdleTimeout    time.Duration
 	QueueCap       int
 	TCPReadBuffer  int
@@ -46,7 +43,7 @@ type ServerConf struct {
 
 //Server tars server struct.
 type Server struct {
-	svr        ProtoCol
+	svr        Protocol
 	conf       *ServerConf
 	lastInvoke time.Time
 	idleTime   time.Time
@@ -55,7 +52,7 @@ type Server struct {
 }
 
 //NewServer new Server and init with conf.
-func NewServer(svr ProtoCol, conf *ServerConf) *Server {
+func NewServer(svr Protocol, conf *ServerConf) *Server {
 	ts := &Server{svr: svr, conf: conf}
 	ts.isClosed = false
 	ts.lastInvoke = time.Now()
@@ -67,6 +64,8 @@ func (ts *Server) getHandler() (sh ServerHandler) {
 		sh = &tcpHandler{conf: ts.conf, ts: ts}
 	} else if ts.conf.Proto == "udp" {
 		sh = &udpHandler{conf: ts.conf, ts: ts}
+	}else if ts.conf.Proto == "ws" {
+		sh = &websocketHandler{conf: ts.conf, ts: ts}
 	} else {
 		panic("unsupport protocol: " + ts.conf.Proto)
 	}
@@ -98,24 +97,8 @@ func (ts *Server) IsZombie(timeout time.Duration) bool {
 	return conf.MaxInvoke != 0 && ts.numInvoke == conf.MaxInvoke && ts.lastInvoke.Add(timeout).Before(time.Now())
 }
 
-func (ts *Server) invoke(ctx context.Context, pkg []byte) []byte {
-	cfg := ts.conf
+func (ts *Server) invoke(ctx context.Context, pkg []byte) {
 	atomic.AddInt32(&ts.numInvoke, 1)
-	var rsp []byte
-	if cfg.HandleTimeout == 0 {
-		rsp = ts.svr.Invoke(ctx, pkg)
-	} else {
-		done := make(chan struct{})
-		go func() {
-			rsp = ts.svr.Invoke(ctx, pkg)
-			done <- struct{}{}
-		}()
-		select {
-		case <-timer.After(cfg.HandleTimeout):
-			rsp = ts.svr.InvokeTimeout(pkg)
-		case <-done:
-		}
-	}
+	ts.svr.Invoke(ctx, pkg)
 	atomic.AddInt32(&ts.numInvoke, -1)
-	return rsp
 }

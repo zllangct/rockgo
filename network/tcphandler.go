@@ -2,6 +2,7 @@ package network
 
 import (
 	"context"
+	"encoding/binary"
 	"fmt"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils/current"
@@ -15,6 +16,26 @@ import (
 
 
 )
+
+type TcpConn struct {
+	tcpConn   *net.TCPConn
+}
+
+func (this *TcpConn) WriteMessage(messageType int, data []byte) error  {
+	msg := make([]byte, 8)
+	msg = append(msg, data...)
+	binary.BigEndian.PutUint32(msg[:4], uint32(len(msg)))
+	binary.BigEndian.PutUint32(msg[4:8], uint32(messageType))
+	if _, err := this.tcpConn.Write(msg); err != nil {
+		logger.Error(fmt.Sprintf("send pkg to %v failed %v", this.tcpConn.RemoteAddr(), err))
+	}
+	return nil
+}
+
+func (this *TcpConn)Close() error {
+	this.tcpConn.Close()
+	return nil
+}
 
 type tcpHandler struct {
 	conf *ServerConf
@@ -42,12 +63,12 @@ func (h *tcpHandler) Listen() (err error) {
 	return
 }
 
-func (h *tcpHandler) handleConn(conn *net.TCPConn, pkg []byte) {
+func (h *tcpHandler) handleConn(conn *net.TCPConn, pkg []byte,workerID *int32) {
 	handler := func() {
 		ctx := context.Background()
 		remoteAddr := conn.RemoteAddr().String()
 		ipPort := strings.Split(remoteAddr, ":")
-		ctx = current.ContextWithTarsCurrent(ctx)
+		ctx = current.ContextWithCurrent(ctx)
 		ok := current.SetClientIPWithContext(ctx, ipPort[0])
 		if !ok {
 			logger.Error("Failed to set context with client ip")
@@ -56,10 +77,7 @@ func (h *tcpHandler) handleConn(conn *net.TCPConn, pkg []byte) {
 		if !ok {
 			logger.Error("Failed to set context with client port")
 		}
-		rsp := h.ts.invoke(ctx, pkg)
-		if _, err := conn.Write(rsp); err != nil {
-			logger.Error(fmt.Sprintf("send pkg to %v failed %v", remoteAddr, err))
-		}
+		h.ts.invoke(ctx, pkg)
 	}
 
 	cfg := h.conf
@@ -67,8 +85,13 @@ func (h *tcpHandler) handleConn(conn *net.TCPConn, pkg []byte) {
 		if h.gpool == nil {
 			h.gpool = gpool.NewPool(int(cfg.MaxInvoke), cfg.QueueCap)
 		}
-
-		h.gpool.JobQueue <- handler
+		job:=h.gpool.JobPool.Get().(*gpool.Job)
+		job.WorkerID =atomic.LoadInt32(workerID)
+		job.Job = handler
+		job.Callback= func(w int32){
+			atomic.StoreInt32(workerID,w)
+		}
+		h.gpool.JobQueue <-job
 	} else {
 		go handler()
 	}
@@ -105,6 +128,7 @@ func (h *tcpHandler) Handle() error {
 
 func (h *tcpHandler) recv(conn *net.TCPConn) {
 	defer conn.Close()
+	var workerID = int32(-1)
 	cfg := h.conf
 	buffer := make([]byte, 1024*4)
 	var currBuffer []byte // need a deep copy of buffer
@@ -141,7 +165,7 @@ func (h *tcpHandler) recv(conn *net.TCPConn) {
 				pkg := make([]byte, pkgLen-4)
 				copy(pkg, currBuffer[4:pkgLen])
 				currBuffer = currBuffer[pkgLen:]
-				h.handleConn(conn, pkg)
+				h.handleConn(conn, pkg,&workerID)
 				if len(currBuffer) > 0 {
 					continue
 				}

@@ -3,10 +3,10 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
+	"github.com/zllangct/RockGO/network"
 	"strconv"
 	"time"
-
-	"github.com/TarsCloud/TarsGo/tars/transport"
+	
 )
 
 //MyClient is a example client for tars client testing.
@@ -23,17 +23,17 @@ func (c *MyClient) Recv(pkg []byte) {
 //ParsePackage parse package from buff
 func (c *MyClient) ParsePackage(buff []byte) (pkgLen, status int) {
 	if len(buff) < 4 {
-		return 0, transport.PACKAGE_LESS
+		return 0, network.PACKAGE_LESS
 	}
 	length := binary.BigEndian.Uint32(buff[:4])
 
 	if length > 1048576000 || len(buff) > 1048576000 { // 1000MB
-		return 0, transport.PACKAGE_ERROR
+		return 0, network.PACKAGE_ERROR
 	}
 	if len(buff) < int(length) {
-		return 0, transport.PACKAGE_LESS
+		return 0, network.PACKAGE_LESS
 	}
-	return int(length), transport.PACKAGE_FULL
+	return int(length), network.PACKAGE_FULL
 }
 
 func getMsg(name string) []byte {
@@ -46,14 +46,14 @@ func getMsg(name string) []byte {
 
 func main() {
 	cp := &MyClient{}
-	conf := &transport.TarsClientConf{
+	conf := &network.ClientConf{
 		Proto:        "tcp",
 		QueueLen:     10000,
 		IdleTimeout:  time.Second * 5,
 		ReadTimeout:  time.Millisecond * 100,
 		WriteTimeout: time.Millisecond * 1000,
 	}
-	client := transport.NewTarsClient("localhost:3333", cp, conf)
+	client := network.NewClient("localhost:3333", cp, conf)
 
 	name := "Bob"
 	count := 500

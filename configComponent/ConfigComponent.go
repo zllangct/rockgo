@@ -35,7 +35,6 @@ func (this *ConfigComponent) Awake() {
 	this.SetDefault()
 	//读取配置文件
 	this.ReloadConfig()
-
 	//全局共享
 	Config = this
 }
