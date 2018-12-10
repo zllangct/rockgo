@@ -70,7 +70,7 @@ func (this *ServerNode) Serve() {
 }
 
 //获取节点的Object根对象
-func (this *ServerNode) GetRoot() *Component.Object {
+func (this *ServerNode) Root() *Component.Object {
 	return this.Runtime.Root()
 }
 //添加一个组件组到组建组列表，不会立即添加到对象

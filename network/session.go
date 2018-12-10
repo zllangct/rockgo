@@ -6,6 +6,7 @@ import (
 
 type Conn interface {
 	WriteMessage(messageType uint32, data []byte) error
+	Addr() string
 	Close() error
 }
 
@@ -14,6 +15,10 @@ type Session struct {
 	ID     		string
 	properties  map[string]interface{}
 	conn        Conn
+}
+
+func (this *Session)RemoteAddr() string {
+	return this.conn.Addr()
 }
 
 func (this *Session)Close() error {

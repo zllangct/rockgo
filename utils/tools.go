@@ -8,6 +8,8 @@ import (
 	"runtime/debug"
 	"time"
 	"bytes"
+	"unicode"
+	"unicode/utf8"
 )
 
 func HttpRequestWrap(uri string, targat func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
@@ -48,4 +50,19 @@ func BytesToStr(b []byte) string {
 	buffer := &bytes.Buffer{}
 	buffer.Write(b)
 	return buffer.String()
+}
+
+func IsExported(name string) bool {
+	rune, _ := utf8.DecodeRuneInString(name)
+	return unicode.IsUpper(rune)
+}
+
+// Is this type exported or a builtin?
+func IsExportedOrBuiltinType(t reflect.Type) bool {
+	for t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
+	// PkgPath will be non-empty even for an exported type,
+	// so we need to check the type name as well.
+	return IsExported(t.Name()) || t.PkgPath() == ""
 }

@@ -26,6 +26,10 @@ type WsConn struct {
 	wsConn *websocket.Conn
 }
 
+func (this *WsConn)Addr()string  {
+	return this.wsConn.RemoteAddr().String()
+}
+
 func (this *WsConn)WriteMessage(messageType uint32, data []byte) error{
 	return this.wsConn.WriteMessage(int(messageType),data)
 }

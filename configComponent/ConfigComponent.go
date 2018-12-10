@@ -106,6 +106,8 @@ func (this *ConfigComponent) SetDefault() {
 		LogFileUnit:     logger.MB,
 		LogFileMax:      10,
 		LogConsolePrint: true,
+
+
 	}
 	this.CustomConfig = nil
 	this.ClusterConfig = &ClusterConfig{
@@ -119,6 +121,9 @@ func (this *ConfigComponent) SetDefault() {
 		RpcTimeout: 9000,
 		RpcCallTimeout :5000,
 		RpcHeartBeatInterval: 3000,
+
+		NetConnTimeout: 9000,
+		NetListenAddress: "0.0.0.0:5555",
 	}
 }
 
@@ -134,6 +139,8 @@ type CommonConfig struct {
 	LogFileUnit      logger.UNIT     //log文件大小单位
 	LogFileMax       int             // log文件最大值
 	LogConsolePrint  bool            //是否输出log到控制台
+
+
 }
 
 type ClusterConfig struct {
@@ -147,4 +154,8 @@ type ClusterConfig struct {
 	RpcTimeout int 		//tcp链接超时，单位毫秒
 	RpcCallTimeout int //rpc调用超时
 	RpcHeartBeatInterval int //tcp心跳间隔
+
+	//外网
+	NetConnTimeout   int	//外网链接超时
+	NetListenAddress string //网关对外服务地址
 }

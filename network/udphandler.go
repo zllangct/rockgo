@@ -27,6 +27,9 @@ type UdpConn struct {
 	closeCallback func()
 	m			*sync.Map
 }
+func (this *UdpConn)Addr()string  {
+	return this.remoteAddr.String()
+}
 
 func (this *UdpConn)Init(){
 	go func() {
@@ -36,7 +39,7 @@ func (this *UdpConn)Init(){
 	}()
 }
 
-func (this UdpConn)SetReadDeadline(duration time.Duration)  {
+func (this *UdpConn)SetReadDeadline(duration time.Duration)  {
 	this.timeout=timer.After(duration)
 }
 

@@ -13,9 +13,9 @@ import (
 type MyServer struct{}
 
 //ParseMessage recv package and make response.
-func (s *MyServer) ParseMessage(ctx context.Context,req []byte)(uint32,[]byte) {
+func (s *MyServer) ParseMessage(ctx context.Context,req []byte)([]uint32,[]byte) {
 	println(string(req))
-	return 0, nil
+	return []uint32{0}, nil
 }
 
 //ParsePackage parse full tars package.

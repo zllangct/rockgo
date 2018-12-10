@@ -22,6 +22,10 @@ type TcpConn struct {
 	tcpConn   *net.TCPConn
 }
 
+func (this *TcpConn)Addr()string  {
+	return this.tcpConn.RemoteAddr().String()
+}
+
 func (this *TcpConn) WriteMessage(messageType uint32, data []byte) error  {
 	msg := make([]byte, 8)
 	msg = append(msg, data...)

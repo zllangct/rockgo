@@ -13,10 +13,10 @@ import (
 type MyServer struct{}
 
 //ParseMessage recv request and make response.
-func (s *MyServer) ParseMessage(ctx context.Context,req []byte)(uint32,[]byte){
+func (s *MyServer) ParseMessage(ctx context.Context,req []byte)([]uint32,[]byte){
 
 	fmt.Println("recv", string(req))
-	return 0, nil
+	return []uint32{0}, nil
 }
 
 //ParsePackage parse package from buff,check if tars package finished.

@@ -16,8 +16,8 @@ const (
 )
 //PackageProtocol is interface for handling the server side tars package.
 type Protocol interface {
-	ParseMessage(ctx context.Context, pkg []byte)([]uint32,[]byte)
-	ParsePackage(buff []byte) (int, int)
+	ParseMessage( context.Context,  []byte)([]uint32,[]byte)
+	ParsePackage( []byte) (int, int)
 }
 
 
