@@ -11,7 +11,7 @@ type Locker struct {
 	action func(data interface{})
 }
 
-// Invoke executes the action on the locker in mutex locked context
+// ParseMessage executes the action on the locker in mutex locked context
 func (locker *Locker) Invoke() {
 	locker.lock.Lock()
 	defer (func() {

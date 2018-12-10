@@ -16,11 +16,7 @@ type Hello struct {
 }
 
 func (this *Hello) Hello(str string) {
-	sum := 0
-	for i := 0; i < 1; i++ {
-		sum = sum + i
-	}
-	//println("sum:",sum,str)
+
 }
 func (this *Hello) Type() reflect.Type {
 	return reflect.TypeOf(this)
@@ -43,7 +39,7 @@ func main() {
 	time.Sleep(time.Second * 3)
 
 	TestPool()
-	TestLargeObjects()
+	//TestLargeObjects()
 
 
 	wait := make(chan bool)

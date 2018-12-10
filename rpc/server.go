@@ -287,7 +287,7 @@ func (s *service) call(server *Server, sending *sync.Mutex, wg *sync.WaitGroup, 
 	mtype.numCalls++
 	mtype.Unlock()
 	function := mtype.method.Func
-	// Invoke the method, providing a new value for the reply.
+	// ParseMessage the method, providing a new value for the reply.
 	args:=[]reflect.Value{s.rcvr, argv}
 	if mtype.ReplyType != nil {
 		args= append(args, replyv)

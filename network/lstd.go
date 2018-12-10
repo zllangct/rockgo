@@ -5,18 +5,19 @@ import (
 	"encoding/binary"
 )
 /*  LTD protocol
-	Length—（Type—Data） ，数据长度—（消息类型—消息体） 大小：  4 — （4 — n）
+	Length—（Session-Type—Data） ，数据长度—（会话—消息类型—消息体） 大小：  4 — （4—4 —n）
 */
-type LtdProtocol struct{}
+type LstdProtocol struct{}
 
 //ParseMessage recv request and make response.
-func (s *LtdProtocol) ParseMessage(ctx context.Context,data []byte)([]uint32,[]byte){
-	mt := binary.BigEndian.Uint32(data[:4])
-	return []uint32{mt}, data[4:]
+func (s *LstdProtocol) ParseMessage(ctx context.Context,data []byte)([]uint32,[]byte){
+	sess := binary.BigEndian.Uint32(data[:4])
+	mid := binary.BigEndian.Uint32(data[4:8])
+	return []uint32{sess,mid}, data[8:]
 }
 
 //ParsePackage parse package from buff,check if tars package finished.
-func (s *LtdProtocol) ParsePackage(buff []byte) (pkgLen, status int) {
+func (s *LstdProtocol) ParsePackage(buff []byte) (pkgLen, status int) {
 	if len(buff) < 4 {
 		return 0, PACKAGE_LESS
 	}

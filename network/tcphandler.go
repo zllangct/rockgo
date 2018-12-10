@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/RockGO/utils/UUID"
 	"github.com/zllangct/RockGO/utils/current"
 	"github.com/zllangct/RockGO/utils/gpool"
 	"io"
@@ -21,11 +22,11 @@ type TcpConn struct {
 	tcpConn   *net.TCPConn
 }
 
-func (this *TcpConn) WriteMessage(messageType int, data []byte) error  {
+func (this *TcpConn) WriteMessage(messageType uint32, data []byte) error  {
 	msg := make([]byte, 8)
 	msg = append(msg, data...)
 	binary.BigEndian.PutUint32(msg[:4], uint32(len(msg)))
-	binary.BigEndian.PutUint32(msg[4:8], uint32(messageType))
+	binary.BigEndian.PutUint32(msg[4:8], messageType)
 	if _, err := this.tcpConn.Write(msg); err != nil {
 		logger.Error(fmt.Sprintf("send pkg to %v failed %v", this.tcpConn.RemoteAddr(), err))
 	}
@@ -42,7 +43,6 @@ type tcpHandler struct {
 
 	lis *net.TCPListener
 	ts  *Server
-
 	acceptNum   int32
 	invokeNum   int32
 	readBuffer  int
@@ -63,13 +63,13 @@ func (h *tcpHandler) Listen() (err error) {
 	return
 }
 
-func (h *tcpHandler) handleConn(conn *net.TCPConn, pkg []byte,workerID *int32) {
+func (h *tcpHandler) handleConn(sess *Session, conn *net.TCPConn, pkg []byte) {
 	handler := func() {
-		ctx := context.Background()
 		remoteAddr := conn.RemoteAddr().String()
 		ipPort := strings.Split(remoteAddr, ":")
-		ctx = current.ContextWithCurrent(ctx)
+		ctx := current.ContextWithCurrent(context.Background())
 		ok := current.SetClientIPWithContext(ctx, ipPort[0])
+		ctx =context.WithValue(ctx,"sess",sess)
 		if !ok {
 			logger.Error("Failed to set context with client ip")
 		}
@@ -77,7 +77,13 @@ func (h *tcpHandler) handleConn(conn *net.TCPConn, pkg []byte,workerID *int32) {
 		if !ok {
 			logger.Error("Failed to set context with client port")
 		}
-		h.ts.invoke(ctx, pkg)
+		mid,data:= h.conf.PackageProtocol.ParseMessage(ctx, pkg)
+		h.ts.invoke(ctx, mid[0],data)
+	}
+
+	workerID,ok:=sess.GetProperty("workerID")
+	if !ok {
+		workerID = -1
 	}
 
 	cfg := h.conf
@@ -86,10 +92,10 @@ func (h *tcpHandler) handleConn(conn *net.TCPConn, pkg []byte,workerID *int32) {
 			h.gpool = gpool.NewPool(int(cfg.MaxInvoke), cfg.QueueCap)
 		}
 		job:=h.gpool.JobPool.Get().(*gpool.Job)
-		job.WorkerID =atomic.LoadInt32(workerID)
+		job.WorkerID = workerID.(int32)
 		job.Job = handler
 		job.Callback= func(w int32){
-			atomic.StoreInt32(workerID,w)
+			sess.SetProperty("workerID",w)
 		}
 		h.gpool.JobQueue <-job
 	} else {
@@ -100,7 +106,9 @@ func (h *tcpHandler) handleConn(conn *net.TCPConn, pkg []byte,workerID *int32) {
 func (h *tcpHandler) Handle() error {
 	cfg := h.conf
 	for !h.ts.isClosed {
-		h.lis.SetDeadline(time.Now().Add(cfg.AcceptTimeout)) // set accept timeout
+		if cfg.AcceptTimeout !=0 {
+			h.lis.SetDeadline(time.Now().Add(cfg.AcceptTimeout)) // set accept timeout
+		}
 		conn, err := h.lis.AcceptTCP()
 		if err != nil {
 			if !isNoDataError(err) {
@@ -113,10 +121,21 @@ func (h *tcpHandler) Handle() error {
 		go func(conn *net.TCPConn) {
 			logger.Debug("TCP accept:", conn.RemoteAddr())
 			atomic.AddInt32(&h.acceptNum, 1)
-			conn.SetReadBuffer(cfg.TCPReadBuffer)
-			conn.SetWriteBuffer(cfg.TCPWriteBuffer)
-			conn.SetNoDelay(cfg.TCPNoDelay)
-			h.recv(conn)
+			_=conn.SetReadBuffer(cfg.TCPReadBuffer)
+			_=conn.SetWriteBuffer(cfg.TCPWriteBuffer)
+			_=conn.SetNoDelay(cfg.TCPNoDelay)
+			sess:=&Session{
+				ID:UUID.Next(),
+				properties:make( map[string]interface{}),
+				conn:&TcpConn{tcpConn:conn},
+			}
+			if h.conf.OnClientConnected!=nil {
+				h.conf.OnClientConnected(sess)
+			}
+			h.recv(sess, conn)
+			if h.conf.OnClientDisconnected!=nil{
+				h.conf.OnClientDisconnected(sess)
+			}
 			atomic.AddInt32(&h.acceptNum, -1)
 		}(conn)
 	}
@@ -126,9 +145,10 @@ func (h *tcpHandler) Handle() error {
 	return nil
 }
 
-func (h *tcpHandler) recv(conn *net.TCPConn) {
+func (h *tcpHandler) recv(sess *Session, conn *net.TCPConn) {
 	defer conn.Close()
-	var workerID = int32(-1)
+	sess.SetProperty("workerID",-1)
+
 	cfg := h.conf
 	buffer := make([]byte, 1024*4)
 	var currBuffer []byte // need a deep copy of buffer
@@ -157,7 +177,7 @@ func (h *tcpHandler) recv(conn *net.TCPConn) {
 		}
 		currBuffer = append(currBuffer, buffer[:n]...)
 		for {
-			pkgLen, status := h.ts.svr.ParsePackage(currBuffer)
+			pkgLen, status := h.ts.conf.PackageProtocol.ParsePackage(currBuffer)
 			if status == PACKAGE_LESS {
 				break
 			}
@@ -165,7 +185,7 @@ func (h *tcpHandler) recv(conn *net.TCPConn) {
 				pkg := make([]byte, pkgLen-4)
 				copy(pkg, currBuffer[4:pkgLen])
 				currBuffer = currBuffer[pkgLen:]
-				h.handleConn(conn, pkg,&workerID)
+				h.handleConn(sess,conn, pkg)
 				if len(currBuffer) > 0 {
 					continue
 				}

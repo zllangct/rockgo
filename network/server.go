@@ -14,11 +14,13 @@ const (
 	//PACKAGE_ERROR shows is a error package.
 	PACKAGE_ERROR
 )
-//Protocol is interface for handling the server side tars package.
+//PackageProtocol is interface for handling the server side tars package.
 type Protocol interface {
-	Invoke(ctx context.Context, pkg []byte)
+	ParseMessage(ctx context.Context, pkg []byte)([]uint32,[]byte)
 	ParsePackage(buff []byte) (int, int)
 }
+
+
 
 //ServerHandler  is interface with listen and handler method
 type ServerHandler interface {
@@ -28,22 +30,25 @@ type ServerHandler interface {
 
 //ServerConf server config for tars server side.
 type ServerConf struct {
-	Proto          string
-	Address        string
-	MaxInvoke      int32
-	AcceptTimeout  time.Duration
-	ReadTimeout    time.Duration
-	WriteTimeout   time.Duration
-	IdleTimeout    time.Duration
-	QueueCap       int
-	TCPReadBuffer  int
-	TCPWriteBuffer int
-	TCPNoDelay     bool
+	Proto           string
+	PackageProtocol Protocol
+	NetAPI          NetAPI
+	Address         string
+	MaxInvoke       int32
+	AcceptTimeout   time.Duration
+	ReadTimeout     time.Duration
+	WriteTimeout    time.Duration
+	IdleTimeout     time.Duration
+	QueueCap        int
+	TCPReadBuffer   int
+	TCPWriteBuffer  int
+	TCPNoDelay      bool
+	OnClientConnected func(sess *Session)
+	OnClientDisconnected func(sess *Session)
 }
 
 //Server tars server struct.
 type Server struct {
-	svr        Protocol
 	conf       *ServerConf
 	lastInvoke time.Time
 	idleTime   time.Time
@@ -52,8 +57,8 @@ type Server struct {
 }
 
 //NewServer new Server and init with conf.
-func NewServer(svr Protocol, conf *ServerConf) *Server {
-	ts := &Server{svr: svr, conf: conf}
+func NewServer(conf *ServerConf) *Server {
+	ts := &Server{conf: conf}
 	ts.isClosed = false
 	ts.lastInvoke = time.Now()
 	return ts
@@ -97,8 +102,11 @@ func (ts *Server) IsZombie(timeout time.Duration) bool {
 	return conf.MaxInvoke != 0 && ts.numInvoke == conf.MaxInvoke && ts.lastInvoke.Add(timeout).Before(time.Now())
 }
 
-func (ts *Server) invoke(ctx context.Context, pkg []byte) {
+//消息分发
+func (ts *Server) invoke(ctx context.Context,mid uint32,data []byte) {
 	atomic.AddInt32(&ts.numInvoke, 1)
-	ts.svr.Invoke(ctx, pkg)
+	if sess,ok:=ctx.Value("sess").(*Session);ok{
+		ts.conf.NetAPI.Route(sess,mid,data)
+	}
 	atomic.AddInt32(&ts.numInvoke, -1)
 }

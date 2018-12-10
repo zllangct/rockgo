@@ -5,7 +5,7 @@ import (
 )
 
 type Conn interface {
-	WriteMessage(messageType int, data []byte) error
+	WriteMessage(messageType uint32, data []byte) error
 	Close() error
 }
 
@@ -34,6 +34,6 @@ func (this *Session)GetProperty(key string) (interface{},bool) {
 	return p,ok
 }
 
-func (this *Session)Emit(messageType int,message []byte) error {
+func (this *Session)Emit(messageType uint32,message []byte) error {
 	return this.conn.WriteMessage(messageType,message)
 }

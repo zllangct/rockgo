@@ -12,9 +12,10 @@ import (
 //MyServer testing tars udp server
 type MyServer struct{}
 
-//Invoke recv package and make response.
-func (s *MyServer) Invoke(ctx context.Context,req []byte) {
+//ParseMessage recv package and make response.
+func (s *MyServer) ParseMessage(ctx context.Context,req []byte)(uint32,[]byte) {
 	println(string(req))
+	return 0, nil
 }
 
 //ParsePackage parse full tars package.
@@ -33,9 +34,11 @@ func (s *MyServer) ParsePackage(buff []byte) (pkgLen, status int) {
 	return int(length), network.PACKAGE_FULL
 }
 func main() {
+	s := MyServer{}
 	conf := &network.ServerConf{
-		Proto:   "udp",
-		Address: "127.0.0.1:3333",
+		Proto:           "udp",
+		PackageProtocol: &s,
+		Address:         "127.0.0.1:3333",
 		//MaxAccept:     500,
 		MaxInvoke:     20,
 		AcceptTimeout: time.Millisecond * 500,
@@ -43,8 +46,8 @@ func main() {
 		WriteTimeout:  time.Millisecond * 100,
 		IdleTimeout:   time.Millisecond * 600000,
 	}
-	s := MyServer{}
-	svr := network.NewServer(&s, conf)
+
+	svr := network.NewServer(conf)
 	err := svr.Serve()
 	if err != nil {
 		fmt.Println(err)

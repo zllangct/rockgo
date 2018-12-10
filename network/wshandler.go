@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/RockGO/utils/UUID"
 	"github.com/zllangct/RockGO/utils/current"
 	"github.com/zllangct/RockGO/utils/gpool"
 	"log"
@@ -19,6 +20,19 @@ var upGrader = websocket.Upgrader{
 	CheckOrigin: func (r *http.Request) bool {
 		return true
 	},
+}
+
+type WsConn struct {
+	wsConn *websocket.Conn
+}
+
+func (this *WsConn)WriteMessage(messageType uint32, data []byte) error{
+	return this.wsConn.WriteMessage(int(messageType),data)
+}
+
+func (this *WsConn)Close() error {
+	this.wsConn.Close()
+	return nil
 }
 
 type websocketHandler struct {
@@ -39,12 +53,23 @@ func (h *websocketHandler) Listen() error {
 	router.GET("/ws", func(ctx *gin.Context) {
 		conn,err:=upGrader.Upgrade(ctx.Writer,ctx.Request,nil)
 		if err!=nil {
-			ctx.Writer.WriteString("server internal error")
+			_,_=ctx.Writer.WriteString("server internal error")
 			return
 		}
 		logger.Debug("TCP accept:", conn.RemoteAddr())
 		atomic.AddInt32(&h.acceptNum, 1)
-		h.recv(conn)
+		sess:=&Session{
+			ID:UUID.Next(),
+			properties:make( map[string]interface{}),
+			conn:&WsConn{wsConn:conn},
+		}
+		if h.conf.OnClientConnected!=nil {
+			h.conf.OnClientConnected(sess)
+		}
+		h.recv(sess, conn)
+		if h.conf.OnClientDisconnected!=nil{
+			h.conf.OnClientDisconnected(sess)
+		}
 		atomic.AddInt32(&h.acceptNum, -1)
 	})
 
@@ -59,11 +84,13 @@ func (h *websocketHandler) Handle() error {
 	return nil
 }
 
-func (h *websocketHandler) recv(conn *websocket.Conn) {
+func (h *websocketHandler) recv(sess *Session,conn *websocket.Conn) {
 	defer conn.Close()
-	var workerID = int32(-1)
+
+	sess.SetProperty("workerID",-1)
+
 	for !h.ts.isClosed {
-		_, message, err := conn.ReadMessage()
+		mt, message, err := conn.ReadMessage()
 		if err != nil {
 			logger.Error(fmt.Sprintf("Close connection %s: %v", h.conf.Address, err))
 			return
@@ -81,7 +108,7 @@ func (h *websocketHandler) recv(conn *websocket.Conn) {
 			if !ok {
 				logger.Error("Failed to set context with client port")
 			}
-			h.ts.invoke(ctx, message)
+			h.ts.invoke(ctx,uint32(mt),message)
 		}
 
 		cfg := h.conf
@@ -90,10 +117,12 @@ func (h *websocketHandler) recv(conn *websocket.Conn) {
 				h.gpool = gpool.NewPool(int(cfg.MaxInvoke), cfg.QueueCap)
 			}
 			job:=h.gpool.JobPool.Get().(*gpool.Job)
-			job.WorkerID =atomic.LoadInt32(&workerID)
+			if id,ok:= sess.GetProperty("workerID");ok{
+				job.WorkerID =id.(int32)
+			}
 			job.Job = handler
 			job.Callback= func(w int32){
-				atomic.StoreInt32(&workerID,w)
+				sess.SetProperty("workerID",w)
 			}
 			h.gpool.JobQueue <-job
 		}else{
@@ -112,7 +141,7 @@ func serveHome(ctx *gin.Context) {
 	w:=ctx.Writer
 	log.Println(r.URL)
 	if r.URL.Path != "/" {
-		http.Error(w, "Not found", http.StatusNotFound)
+		http.Error(w, "Api not found", http.StatusNotFound)
 		return
 	}
 	if r.Method != "GET" {
