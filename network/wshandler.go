@@ -105,6 +105,7 @@ func (h *websocketHandler) recv(sess *Session,conn *websocket.Conn) {
 			ipPort := strings.Split(remoteAddr, ":")
 			ctx = current.ContextWithCurrent(ctx)
 			ok := current.SetClientIPWithContext(ctx, ipPort[0])
+			ctx =context.WithValue(ctx,"sess",sess)
 			if !ok {
 				logger.Error("Failed to set context with client ip")
 			}

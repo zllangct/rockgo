@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/zllangct/RockGO/network"
 	"github.com/zllangct/RockGO/network/messageProtocol"
 )
@@ -12,12 +13,13 @@ type TestApi struct {
 	network.Base
 }
 
-func newTestApi() *TestApi  {
+func NewTestApi() *TestApi  {
 	r:=&TestApi{}
-	r.Base.Init(r,Testid2mt,&MessageProtocol.JsonProtocol{})
+	r.Init(r,Testid2mt,&MessageProtocol.JsonProtocol{})
 	return r
 }
 
-func (this *TestApi)Hello()  {
-	println("Hello RockGO")
+func (this *TestApi)Hello(sess *network.Session,message *TestMessage)  {
+	println(fmt.Sprintf("Hello,%s",message.Name))
+	println(fmt.Sprintf("this api parent:%s",this.GetParent().Name()))
 }

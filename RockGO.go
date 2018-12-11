@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+var Server *ServerNode
 var defaultNode *ServerNode
 
 type ServerNode struct {
