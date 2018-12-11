@@ -13,13 +13,15 @@ import (
 var Testid2mt = map[reflect.Type]uint32{
 	reflect.TypeOf(&TestMessage{}):1,
 }
+
 //消息定义
 type TestMessage struct {
 	Name string
 }
+
 //协议接口组
 type TestApi struct {
-	network.Base
+	network.ApiBase
 }
 
 func NewTestApi() *TestApi  {

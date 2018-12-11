@@ -58,7 +58,7 @@ func (this *NodeComponent)GetLocationServer()  {
 		}
 		g,err:= this.GetNodeGroupFromMaster("location")
 		if err!=nil {
-			logger.Debug(err)
+			//logger.Debug(err)
 			time.Sleep(time.Second)
 			continue
 		}
@@ -81,7 +81,7 @@ func (this *NodeComponent) StartRpcServer() error{
 		return err
 	}
 	this.rpcServer=server
-	logger.Info("Test RPC server listening on", addr.String())
+	logger.Info("Test RPC server listening on: ", addr.String())
 	go server.Accept(l)
 	return nil
 }

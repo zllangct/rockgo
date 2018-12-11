@@ -1,0 +1,15 @@
+{
+    "MasterAddress": "127.0.0.1:6666",
+    "LocalAddress": "127.0.0.1:6666",
+    "AppName": "defaultApp",
+    "Role": [
+        "master","child","login","gate"
+    ],
+    "Group": [],
+    "ReportInterval": 3000,
+    "RpcTimeout": 9000,
+    "RpcCallTimeout": 5000,
+    "RpcHeartBeatInterval": 3000,
+    "NetConnTimeout": 9000,
+    "NetListenAddress": "0.0.0.0:5555"
+}

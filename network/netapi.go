@@ -28,7 +28,7 @@ type methodType struct {
 }
 
 /*  仅初始化route id2mt 会写入，运行过程中并无竞态 */
-type Base struct {
+type ApiBase struct {
 	route map[uint32]*methodType
 	id2mt map[reflect.Type]uint32
 	protoc MessageProtocol
@@ -39,20 +39,20 @@ type Base struct {
 
 var ErrNotInit =errors.New("this api is not initialized")
 var ErrApiHandlerParamWrong = errors.New("this handler param wrong")
-var ErrApiRepeated = errors.New("this Base is  repeated")
+var ErrApiRepeated = errors.New("this ApiBase is  repeated")
 
-func (this *Base)checkInit()  {
+func (this *ApiBase)checkInit()  {
 	if !this.isInit {
 		panic(ErrNotInit)
 	}
 }
 
-func (this *Base)SetParent(parent *Component.Object){
+func (this *ApiBase)SetParent(parent *Component.Object){
 	this.checkInit()
 	this.parent = parent
 }
 
-func (this *Base)GetParent() (*Component.Object,error)  {
+func (this *ApiBase)GetParent() (*Component.Object,error)  {
 	this.checkInit()
 	var err error
 	if this.parent==nil {
@@ -61,7 +61,7 @@ func (this *Base)GetParent() (*Component.Object,error)  {
 	return this.parent,err
 }
 
-func (this *Base)MessageEncode(message interface{}) (uint32,[]byte,error) {
+func (this *ApiBase)MessageEncode(message interface{}) (uint32,[]byte,error) {
 	this.checkInit()
 	b,err:= this.protoc.Marshal(message)
 	if err!=nil {
@@ -75,7 +75,7 @@ func (this *Base)MessageEncode(message interface{}) (uint32,[]byte,error) {
 	}
 }
 
-func (this *Base)Init(subStruct interface{},id2mt map[reflect.Type]uint32,protocol MessageProtocol)  {
+func (this *ApiBase)Init(subStruct interface{},id2mt map[reflect.Type]uint32,protocol MessageProtocol)  {
 	this.route = map[uint32]*methodType{}
 	this.id2mt = id2mt
 	this.protoc = protocol
@@ -83,7 +83,7 @@ func (this *Base)Init(subStruct interface{},id2mt map[reflect.Type]uint32,protoc
 	this.Register(subStruct)
 }
 
-func (this *Base)Route(sess *Session, messageID uint32,data []byte)  {
+func (this *ApiBase)Route(sess *Session, messageID uint32,data []byte)  {
 	this.checkInit()
 	if mt,ok:= this.route[messageID];ok {
 		v:= reflect.New(mt.ArgsType)
@@ -99,10 +99,10 @@ func (this *Base)Route(sess *Session, messageID uint32,data []byte)  {
 		mt.method.Call(args)
 		return
 	}
-	logger.Debug(fmt.Sprintf("this Base:%d not found",messageID))
+	logger.Debug(fmt.Sprintf("this ApiBase:%d not found",messageID))
 }
 
-func (this *Base)On(handler interface{})  {
+func (this *ApiBase)On(handler interface{})  {
 	this.checkInit()
 	mValue:=reflect.ValueOf(handler)
 	mType :=reflect.TypeOf(handler)
@@ -123,7 +123,7 @@ func (this *Base)On(handler interface{})  {
 	}
 }
 
-func (this *Base)Register(api interface{})  {
+func (this *ApiBase)Register(api interface{})  {
 	this.checkInit()
 	this.resv = reflect.ValueOf(api)
 	typ:=reflect.TypeOf(api)

@@ -7,7 +7,10 @@ import (
 	"github.com/zllangct/RockGO/configComponent"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
+	"os"
+	"os/signal"
 	"runtime"
+	"syscall"
 	"time"
 )
 
@@ -18,6 +21,7 @@ type ServerNode struct {
 	Runtime        *Component.Runtime
 	componentGroup *Component.ComponentGroups
 	config 		   *Config.ConfigComponent
+	Close           chan struct{}
 }
 
 //新建一个服务节点
@@ -36,13 +40,16 @@ func DefaultNode() *ServerNode {
 	return defaultNode
 }
 //开始服务
-func (this *ServerNode) Serve() {
+func (this *ServerNode) Serve(){
 	//读取配置文件，初始化配置
 	this.Runtime.Root().AddComponent(&Config.ConfigComponent{})
+	//rpc
 	rpc.CallTimeout = time.Millisecond * time.Duration(Config.Config.ClusterConfig.RpcCallTimeout)
 	rpc.Timeout = time.Millisecond * time.Duration(Config.Config.ClusterConfig.RpcTimeout)
 	rpc.HeartInterval = time.Millisecond * time.Duration(Config.Config.ClusterConfig.RpcHeartBeatInterval)
 	rpc.DebugMode = Config.Config.CommonConfig.Debug
+	//log
+
 	//添加NodeComponent组件，使对象成为分布式节点
 	this.Runtime.Root().AddComponent(&Cluster.NodeComponent{})
 	//添加ActorProxy组件，组织节点间的通信
@@ -53,7 +60,7 @@ func (this *ServerNode) Serve() {
 	this.AddComponentGroup("master",[]Component.IComponent{&Cluster.MasterComponent{}})
 	this.AddComponentGroup("child",[]Component.IComponent{&Cluster.ChildComponent{}})
 	//添加基础组件组,一般通过组建组的定义决定服务器节点的服务角色
-	err:= this.componentGroup.AttachGroupsTo(this.GetConfig().ClusterConfig.Role, this.Runtime.Root())
+	err:= this.componentGroup.AttachGroupsTo(this.GetConfig().ClusterConfig.Role, this.Runtime.Root()) //TODO broken here
 	if err!=nil {
 		logger.Fatal(err)
 		panic(err)
@@ -68,6 +75,21 @@ func (this *ServerNode) Serve() {
 			time.Sleep(time.Millisecond * 500)
 		}
 	}()
+	c := make(chan os.Signal)
+	signal.Notify(c,syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+
+	for  {
+		select {
+		case <-c:
+			//do something else
+
+
+			//close success
+			logger.Fatal("server is closed")
+			return
+		}
+	}
+
 }
 
 //获取节点的Object根对象

@@ -42,7 +42,7 @@ func (this *ActorProxyComponent) Register(actor *ActorComponent) error {
 	if err != nil {
 		return err
 	}
-	this.localActors.LoadOrStore(*id, actor)
+	this.localActors.LoadOrStore((*id)[2], actor)
 	return nil
 }
 

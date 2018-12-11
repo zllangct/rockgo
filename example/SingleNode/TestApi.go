@@ -10,7 +10,7 @@ import (
 
 //协议接口组
 type TestApi struct {
-	network.Base
+	network.ApiBase
 }
 
 func NewTestApi() *TestApi  {
@@ -21,5 +21,11 @@ func NewTestApi() *TestApi  {
 
 func (this *TestApi)Hello(sess *network.Session,message *TestMessage)  {
 	println(fmt.Sprintf("Hello,%s",message.Name))
-	println(fmt.Sprintf("this api parent:%s",this.GetParent().Name()))
+	p,err:=this.GetParent()
+	if err==nil {
+		println(fmt.Sprintf("this api parent:%s",p.Name()))
+	}
+
+	//reply
+	sess.Emit(1,[]byte("hello client"))
 }

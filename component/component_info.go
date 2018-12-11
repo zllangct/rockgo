@@ -56,13 +56,13 @@ func newComponentInfo(cmp IComponent,root *Object) *componentInfo {
 func (info *componentInfo) updateComponent(step float32, runtime *Runtime, context *Context) {
 	if info.Active == 0 && info.Start != nil {
 		runtime.workers.Run(func() {
-			info.Start.Start(context)
 			info.Active += 1
+			info.Start.Start(context)
 		})
 	} else if info.Update != nil {
 		runtime.workers.Run(func() {
-			info.Update.Update(context)
 			info.Active += 1
+			info.Update.Update(context)
 		})
 	}
 }

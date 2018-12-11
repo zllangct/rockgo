@@ -2,7 +2,9 @@ package threadpool
 
 import (
 	"container/list"
-	"log"
+	"fmt"
+	"github.com/zllangct/RockGO/logger"
+	"runtime/debug"
 	"sync"
 )
 
@@ -52,7 +54,8 @@ func (pool *ThreadPool) run(task func(), requireLock bool) {
 			defer func() {
 				pool.lock.Lock()
 				if r := recover(); r != nil {
-					log.Printf("%s", r)
+					logger.Error(fmt.Sprintf("%s", r))
+					logger.Error(string(debug.Stack()))
 				}
 				pool.activeDown()
 				pool.nextTask()

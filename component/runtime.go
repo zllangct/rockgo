@@ -29,7 +29,7 @@ type Runtime struct {
 func NewRuntime(config Config) *Runtime {
 	validateConfig(&config)
 	runtime := &Runtime{
-		root:       NewObject(),
+		root:       NewObject("runtime"),
 		updateLock: &sync.Mutex{},
 		workers:    threadpool.New(),
 		factory:    config.Factory}

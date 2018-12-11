@@ -29,7 +29,9 @@ func (this *MasterComponent) GetRequire() map[*Component.Object][]reflect.Type {
 }
 
 func (this *MasterComponent) Awake() {
+	this.locker = &sync.RWMutex{}
 	this.Nodes = make(map[string]*NodeInfo)
+	this.timeoutChecking =make(map[string]*int)
 
 	err := this.Parent.Root().Find(&this.nodeComponent)
 	if err != nil {
@@ -51,7 +53,12 @@ func (this *MasterComponent) Awake() {
 func (this *MasterComponent) UpdateNodeInfo(args *NodeInfo) {
 	this.locker.Lock()
 	this.Nodes[args.Address] = args
-	*this.timeoutChecking[args.Address]=0
+	c:=this.timeoutChecking[args.Address]
+	if c == nil {
+		c=new(int)
+	}
+	*c=0
+
 	this.locker.Unlock()
 }
 

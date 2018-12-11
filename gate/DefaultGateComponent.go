@@ -41,7 +41,7 @@ func (this *DefaultGateComponent) Awake() {
 	}
 	this.NetAPI.SetParent(this.Parent)
 	conf := &network.ServerConf{
-		Proto:                "tcp",
+		Proto:                "ws",
 		Address:              Config.Config.ClusterConfig.NetListenAddress,
 		ReadTimeout:          time.Millisecond * time.Duration(Config.Config.ClusterConfig.NetConnTimeout),
 		OnClientDisconnected: this.OnDropped,

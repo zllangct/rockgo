@@ -52,7 +52,7 @@ func (this Selector) Select(query string,detail bool,locker *sync.RWMutex) ([]*I
 	err := errors.New("no available node ")
 	var reply = make([]*InquiryReply,0)
 	locker.RLock()
-	for nodeName, nodeInfo := range master.Nodes {
+	for nodeName, nodeInfo := range this {
 		if nodeInfo.AppName == args[0] {
 			for _, role := range nodeInfo.Group {
 				if role == args[1] {

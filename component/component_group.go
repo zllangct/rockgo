@@ -31,6 +31,9 @@ type ComponentGroups struct {
 }
 
 func (this *ComponentGroups) AddGroup(groupName string, group []IComponent) {
+	if this.group ==nil{
+		this.group = make(map[string]*ComponentGroup)
+	}
 	this.group[groupName] = &ComponentGroup{
 		Name:    groupName,
 		content: group,

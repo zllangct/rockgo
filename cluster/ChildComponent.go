@@ -35,7 +35,10 @@ func(this *ChildComponent)Awake(){
 		return
 	}
 
-	this.ConnectToMaster()
+	err= this.ConnectToMaster()
+	if err!=nil {
+		logger.Error(err)
+	}
 	go this.DoReport()
 }
 
@@ -57,7 +60,9 @@ func (this *ChildComponent)DoReport()  {
 		}
 		args.Info = m
 		this.locker.RUnlock()
-		this.rpcMaster.Call("MasterService.ReportNodeInfo",args,&reply)
+		if this.rpcMaster!=nil {
+			_=this.rpcMaster.Call("MasterService.ReportNodeInfo",args,&reply)
+		}
 		time.Sleep(time.Millisecond * interval)
 	}
 }
@@ -80,16 +85,17 @@ func (this *ChildComponent) ConnectToMaster() error {
 		}
 	}
 	var err error
-	for err != nil {
+	for {
 		this.rpcMaster, err = this.nodeComponent.ConnectToNode(addr,callback)
-		if err != nil {
-			return err
+		if err == nil {
+			break
 		}
+		time.Sleep(time.Millisecond*500)
 	}
 	this.locker.Lock()
 	this.nodeComponent.isOnline = true
 	this.locker.Unlock()
-	println(time.Now().Format("2006-01-02T 15:04:05"), "  connected to master")
+	logger.Info(time.Now().Format("2006-01-02T 15:04:05"), "  connected to master")
 	return nil
 }
 

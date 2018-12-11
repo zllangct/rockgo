@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/logger"
 	"reflect"
 	"sync/atomic"
 )
@@ -56,7 +57,10 @@ func (this *ActorComponent)Start(ctx *Component.Context)  {
 		panic(err)
 	}
 	//注册Actor到ActorProxy
-	this.Proxy.Register(this)
+	err = this.Proxy.Register(this)
+	if err!=nil {
+		logger.Error(err)
+	}
 	//设置Actor状态为激活
 	atomic.StoreInt32(&this.active, 1)
 }
