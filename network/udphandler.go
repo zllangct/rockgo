@@ -26,6 +26,7 @@ type UdpConn struct {
 	timeout    <-chan struct{}
 	closeCallback func()
 	m			*sync.Map
+	once        *sync.Once
 }
 func (this *UdpConn)Addr()string  {
 	return this.remoteAddr.String()
@@ -40,6 +41,7 @@ func (this *UdpConn)Init(){
 }
 
 func (this *UdpConn)SetReadDeadline(duration time.Duration)  {
+	this.once.Do(this.Init)
 	this.timeout=timer.After(duration)
 }
 

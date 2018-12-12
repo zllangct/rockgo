@@ -24,8 +24,8 @@ type ConfigComponent struct {
 	CustomConfig      map[string]interface{}
 }
 
-func (this *ConfigComponent) IsUnique() bool {
-	return true
+func (this *ConfigComponent) IsUnique() int {
+	return Component.UNIQUE_TYPE_GLOBAL
 }
 
 func (this *ConfigComponent) Awake() {
@@ -137,7 +137,7 @@ type CommonConfig struct {
 	LogPath          string          //log的存储根目录
 	LogMode          logger.ROLLTYPE //log文件存储模式，分为按文件大小分割，按日期分割
 	LogFileUnit      logger.UNIT     //log文件大小单位
-	LogFileMax       int             // log文件最大值
+	LogFileMax       int64             // log文件最大值
 	LogConsolePrint  bool            //是否输出log到控制台
 
 

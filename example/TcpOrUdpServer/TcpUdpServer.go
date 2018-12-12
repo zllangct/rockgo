@@ -48,12 +48,14 @@ func main() {
 		"   地址：ws://127.0.0.1:8080/ws")
 
 	conf := &network.ServerConf{
-		Proto:                "ws",
+		Proto:                "tcp",  // 或者为udp
 		Address:              "0.0.0.0:8080",
 		ReadTimeout:          time.Millisecond * 10000,
 		OnClientDisconnected: OnDropped,
 		OnClientConnected:    OnConnected,
 		NetAPI:               NewTestApi(),
+		WriteTimeout:  time.Millisecond * 1000,
+		IdleTimeout:   time.Millisecond * 600000,
 	}
 
 	svr := network.NewServer(conf)

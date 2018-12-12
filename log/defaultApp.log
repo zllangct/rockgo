@@ -1,0 +1,98 @@
+2018/12/12 16:15:03 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 16:15:03 NodeComponent.go:245: info 2018-12-12T 16:15:03  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 16:15:03 ChildComponent.go:105: info 2018-12-12T 16:15:03  connected to master
+2018/12/12 16:15:03 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 16:15:20 RockGO.go:95: fatal server is closed
+2018/12/12 19:28:22 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 19:28:22 NodeComponent.go:245: info 2018-12-12T 19:28:22  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 19:28:22 ChildComponent.go:105: info 2018-12-12T 19:28:22  connected to master
+2018/12/12 19:28:22 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 19:29:13 RockGO.go:95: fatal server is closed
+2018/12/12 19:33:37 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 19:33:37 NodeComponent.go:245: info 2018-12-12T 19:33:37  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 19:33:37 ChildComponent.go:105: info 2018-12-12T 19:33:37  connected to master
+2018/12/12 19:33:37 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 19:34:12 RockGO.go:95: fatal server is closed
+2018/12/12 19:35:50 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 19:35:54 NodeComponent.go:245: info 2018-12-12T 19:35:54  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 19:35:54 ChildComponent.go:105: info 2018-12-12T 19:35:54  connected to master
+2018/12/12 19:35:59 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 19:36:10 RockGO.go:95: fatal server is closed
+2018/12/12 19:36:15 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 19:36:42 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 20:41:43 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 20:41:48 NodeComponent.go:245: info 2018-12-12T 20:41:48  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 20:41:48 ChildComponent.go:105: info 2018-12-12T 20:41:48  connected to master
+2018/12/12 20:41:48 component_group.go:57: error the group < gete1 > is not exist
+2018/12/12 20:41:48 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 20:42:11 RockGO.go:95: fatal server is closed
+2018/12/12 20:42:46 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 20:42:46 NodeComponent.go:245: info 2018-12-12T 20:42:46  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 20:42:46 ChildComponent.go:105: info 2018-12-12T 20:42:46  connected to master
+2018/12/12 20:42:46 component_group.go:57: error the group < gete1 > is not exist
+2018/12/12 20:42:46 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 20:44:07 RockGO.go:95: fatal server is closed
+2018/12/12 20:44:10 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 20:44:10 NodeComponent.go:245: info 2018-12-12T 20:44:10  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 20:44:10 ChildComponent.go:105: info 2018-12-12T 20:44:10  connected to master
+2018/12/12 20:44:10 component_group.go:57: error the group < gete1 > is not exist
+2018/12/12 20:44:10 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 20:44:18 RockGO.go:95: fatal server is closed
+2018/12/12 20:44:44 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 20:44:55 NodeComponent.go:245: info 2018-12-12T 20:44:55  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 20:44:55 ChildComponent.go:105: info 2018-12-12T 20:44:55  connected to master
+2018/12/12 20:45:09 component_group.go:57: error the group < gete1 > is not exist
+2018/12/12 20:45:09 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 20:45:17 RockGO.go:95: fatal server is closed
+2018/12/12 20:47:28 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 20:47:29 NodeComponent.go:245: info 2018-12-12T 20:47:29  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 20:47:29 ChildComponent.go:105: info 2018-12-12T 20:47:29  connected to master
+2018/12/12 20:47:41 component_group.go:57: error the group < gete1 > is not exist
+2018/12/12 20:47:41 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 20:48:20 RockGO.go:95: fatal server is closed
+2018/12/12 20:50:09 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 20:50:57 NodeComponent.go:245: info 2018-12-12T 20:50:57  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 20:50:57 ChildComponent.go:105: info 2018-12-12T 20:50:57  connected to master
+2018/12/12 20:51:01 component_group.go:57: error the group < gete1 > is not exist
+2018/12/12 20:51:01 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 20:51:13 RockGO.go:95: fatal server is closed
+2018/12/12 20:51:18 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 20:51:25 NodeComponent.go:245: info 2018-12-12T 20:51:25  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 20:51:25 ChildComponent.go:105: info 2018-12-12T 20:51:25  connected to master
+2018/12/12 20:51:28 component_group.go:57: error the group < gete1 > is not exist
+2018/12/12 20:51:28 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 20:51:30 RockGO.go:95: fatal server is closed
+2018/12/12 20:51:49 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 20:51:50 NodeComponent.go:245: info 2018-12-12T 20:51:50  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 20:51:50 ChildComponent.go:105: info 2018-12-12T 20:51:50  connected to master
+2018/12/12 20:51:54 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 20:51:56 object.go:82: error (Component.ErrUniqueComponent) This component is unique global,one object already has a same component
+2018/12/12 20:52:33 RockGO.go:95: fatal server is closed
+2018/12/12 20:52:48 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 20:52:50 NodeComponent.go:245: info 2018-12-12T 20:52:50  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 20:52:50 ChildComponent.go:105: info 2018-12-12T 20:52:50  connected to master
+2018/12/12 20:52:50 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 20:52:50 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 20:52:50 wshandler.go:84: fatal ListenAndServe: listen tcp 0.0.0.0:5555: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/12 20:53:41 RockGO.go:95: fatal server is closed
+2018/12/12 21:01:21 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 21:01:21 NodeComponent.go:245: info 2018-12-12T 21:01:21  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 21:01:21 ChildComponent.go:105: info 2018-12-12T 21:01:21  connected to master
+2018/12/12 21:01:21 object.go:82: error (Component.ErrUniqueComponent) This component is unique global,one object already has a same component
+2018/12/12 21:01:21 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 21:01:25 RockGO.go:95: fatal server is closed

@@ -50,16 +50,24 @@ func NewObjectWithComponent(component IComponent,names ...string) *Object {
 func (o *Object) AddComponent(component IComponent) *Object {
 	info := newComponentInfo(component,o)
 	err:=o.WithLock(func() error {
-			if info.Unique != nil && info.Unique.IsUnique() {
-				if o.HasComponent(info.Type) {
-					return errors.Fail(ErrUniqueComponent{}, nil, "This component is unique,the object already has a same component")
+			if info.Unique != nil {
+				switch info.Unique.IsUnique() {
+				case UNIQUE_TYPE_GLOBAL:
+					_, err := o.Root().GetComponentsInChildren(reflect.TypeOf(component)).Next()
+					if err == nil {
+						return errors.Fail(ErrUniqueComponent{}, nil, "This component is unique global,one object already has a same component")
+					}
+				case UNIQUE_TYPE_LOCAL:
+					if o.HasComponent(reflect.TypeOf(component)) {
+						return errors.Fail(ErrUniqueComponent{}, nil, "This component is unique,this object already has a same component")
+					}
 				}
 			}
 			if info.Require!=nil{
 				for obj,requires := range info.Require.GetRequire(){
 					for _,require := range requires {
 						if !obj.HasComponent(require) {
-							return errors.Fail(ErrMissingComponent{}, nil, "This component require other components,some needed components are missing")
+							return errors.Fail(ErrMissingComponent{}, nil, "This component require other components,some are missing")
 						}
 					}
 				}
@@ -289,10 +297,11 @@ func (o *Object) Name() string {
 
 // Rename the object
 func (o *Object) Rename(name string) {
-	o.WithLock(func() error {
+	err:=o.WithLock(func() error {
 		o.name = name
 		return nil
 	})
+	logger.Error(err)
 }
 
 // Return the unique id of this object.
@@ -325,12 +334,11 @@ func (o *Object) Find(component interface{}, query ...string) error {
 }
 
 func (o *Object) HasComponent(componentType reflect.Type) bool {
-	for _, value := range o.components {
-		if value.Type == componentType{
-			return true
-		}
+	_, err := o.GetComponents(componentType).Next()
+	if err != nil {
+		return false
 	}
-	return false
+	return true
 }
 
 func (o *Object) Runtime() *Runtime {

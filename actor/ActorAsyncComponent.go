@@ -11,7 +11,7 @@ import (
 
 /*
 	async actor IComponent
-	异步actor内 非线程安全
+	异步任务actor内 非线程安全
 */
 
 type ActorAsyncComponent struct {
@@ -32,8 +32,8 @@ func (this *ActorAsyncComponent) GetRequire() (map[*Component.Object][]reflect.T
 	return requires
 }
 
-func (this *ActorAsyncComponent) IsUnique() bool {
-	return true
+func (this *ActorAsyncComponent) IsUnique() int {
+	return Component.UNIQUE_TYPE_LOCAL
 }
 
 func (this *ActorAsyncComponent) Awake() {
@@ -60,7 +60,10 @@ func (this *ActorAsyncComponent) Destroy() {
 	this.Proxy.Unregister(this)
 }
 
-func (this *ActorAsyncComponent) Tell(messageInfo *ActorMessageInfo) error {
+func (this *ActorAsyncComponent) Tell(messageInfo *ActorMessageInfo,reply ...*ActorMessage) error {
+	if len(reply)>0 {
+		messageInfo.Reply = reply[0]
+	}
 	if atomic.LoadInt32(&this.active) != 0 {
 		go this.handle(messageInfo)
 	} else {

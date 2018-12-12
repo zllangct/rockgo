@@ -39,7 +39,7 @@ func Test(t *testing.T) {
 	//一般习惯是测试阶段为debug，		 生成环境为info以上
 	logger.SetLevel(logger.DEBUG)
 
-	for i := 100; i > 0; i-- {
+	for i := 10; i > 0; i-- {
 		go _log(i)
 	}
 	time.Sleep(2 * time.Second)
@@ -50,7 +50,7 @@ func Test(t *testing.T) {
 	lg.SetLevelFile(logger.INFO, `C:\Users\Thinkpad\Desktop\logtest`, "info.log")
 	lg.SetLevelFile(logger.WARN, `C:\Users\Thinkpad\Desktop\logtest`, "warn.log")
 	lg.Debug("debug hello world")
-	for i := 100; i > 0; i-- {
+	for i := 10; i > 0; i-- {
 		go lg.Info("info hello world >>>>>>>>>>>>>>>>>> ", i)
 	}
 	lg.Warn("warn hello world")

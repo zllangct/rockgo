@@ -5,13 +5,19 @@ import (
 	"reflect"
 )
 
+const (
+	UNIQUE_TYPE_NONE    =iota //non-uniqueness
+	UNIQUE_TYPE_LOCAL         //unique within this parent object
+	UNIQUE_TYPE_GLOBAL        //unique global
+
+)
 
 type IComponent interface {
 	Type() reflect.Type
 }
 
 type IUnique interface {
-	IsUnique() bool
+	IsUnique() int
 }
 
 type IRequire interface {

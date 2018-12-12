@@ -21,6 +21,10 @@ type DefaultGateComponent struct {
 	NetAPI        network.NetAPI
 }
 
+func (this *DefaultGateComponent)IsUnique()int  {
+	return Component.UNIQUE_TYPE_GLOBAL
+}
+
 func (this *DefaultGateComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
 	requires[this.Parent.Root()] = []reflect.Type{

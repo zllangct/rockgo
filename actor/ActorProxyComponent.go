@@ -29,8 +29,8 @@ func (this *ActorProxyComponent) GetRequire() map[*Component.Object][]reflect.Ty
 	return requires
 }
 
-func (this *ActorProxyComponent) IsUnique() bool {
-	return true
+func (this *ActorProxyComponent) IsUnique() int {
+	return Component.UNIQUE_TYPE_GLOBAL
 }
 
 func (this *ActorProxyComponent) Awake() {
@@ -55,7 +55,7 @@ func (this *ActorProxyComponent) Unregister(actor IActor) {
 }
 
 //本地消息
-func (this *ActorProxyComponent) LocalTell(actorID ActorID, messageInfo *ActorMessageInfo) error {
+func (this *ActorProxyComponent) LocalTell(actorID ActorID, messageInfo *ActorMessageInfo,reply *ActorMessage) error {
 	v, ok := this.localActors.Load(actorID)
 	if !ok {
 		return ErrNoThisActor
@@ -64,22 +64,20 @@ func (this *ActorProxyComponent) LocalTell(actorID ActorID, messageInfo *ActorMe
 	if !ok {
 		return ErrNoThisActor
 	}
-	return actor.Tell(messageInfo)
+	return actor.Tell(messageInfo,reply)
 }
 
-func (this *ActorProxyComponent) Emit(actorID ActorID, messageInfo *ActorMessageInfo) error {
+func (this *ActorProxyComponent) Emit(actorID ActorID, messageInfo *ActorMessageInfo,reply *ActorMessage) error {
 	nodeID := actorID.GetNodeID()
 	//本地消息不走网络
 	if nodeID == this.nodeID {
-
-		return nil
+		return this.LocalTell(actorID,messageInfo,reply)
 	}
 	//非本地消息走网络代理
 	client, err := this.nodeComponent.GetNodeClient(nodeID)
 	if err != nil {
 		return err
 	}
-	var reply = false
 	err = client.Call("ActorService.Tell", &ActorRpcMessageInfo{
 		Target:  actorID,
 		Sender:  messageInfo.Sender.ID(),

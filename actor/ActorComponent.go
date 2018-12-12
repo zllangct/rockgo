@@ -39,8 +39,8 @@ func (this *ActorComponent) GetRequire() (map[*Component.Object][]reflect.Type) 
 	return requires
 }
 
-func (this *ActorComponent) IsUnique() bool {
-	return true
+func (this *ActorComponent) IsUnique() int {
+	return Component.UNIQUE_TYPE_LOCAL
 }
 
 func (this *ActorComponent) Awake() {
@@ -70,7 +70,10 @@ func (this *ActorComponent) Destroy() {
 	this.Proxy.Unregister(this)
 }
 
-func (this *ActorComponent) Tell(messageInfo *ActorMessageInfo) error {
+func (this *ActorComponent) Tell(messageInfo *ActorMessageInfo,reply ...*ActorMessage) error {
+	if len(reply)>0 {
+		messageInfo.Reply = reply[0]
+	}
 	if atomic.LoadInt32(&this.active) != 0 {
 		this.queueReceive <- messageInfo
 	} else {

@@ -3,7 +3,7 @@ package Actor
 
 
 type IActor interface {
-	Tell(message *ActorMessageInfo) error
+	Tell(message *ActorMessageInfo,reply ...*ActorMessage) error
 	ID() ActorID
 }
 
@@ -20,6 +20,12 @@ func (this *ActorRemote)ID ()ActorID{
 	return this.actorID
 }
 
-func (this *ActorRemote)Tell(messageInfo *ActorMessageInfo) error{
-	return this.proxy.Emit(this.ID(),messageInfo)
+func (this *ActorRemote)Tell(messageInfo *ActorMessageInfo,reply ...*ActorMessage) error{
+	if len(reply)==0 {
+		r := new(ActorMessage)
+		return this.proxy.Emit(this.ID(),messageInfo,r)
+	}else{
+		r:=reply[0]
+		return this.proxy.Emit(this.ID(),messageInfo,r)
+	}
 }
