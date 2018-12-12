@@ -42,8 +42,11 @@ func (this *MasterComponent) Awake() {
 	//注册Master服务
 	s := new(MasterService)
 	s.init(this)
-	_=this.nodeComponent.rpcServer.Register(s)
-
+	err=this.nodeComponent.Register(s)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
 	if !Config.Config.CommonConfig.Debug || false{
 		go this.TimeoutCheck()
 	}

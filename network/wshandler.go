@@ -77,11 +77,15 @@ func (h *websocketHandler) Listen() error {
 		atomic.AddInt32(&h.acceptNum, -1)
 	})
 
-	err := router.Run(cfg.Address)
-	if err != nil {
-		logger.Fatal("ListenAndServe: ", err)
-	}
-	return err
+	go func() {
+		logger.Info(fmt.Sprintf("Listening and serving HTTP on %s\n", cfg.Address))
+		err := router.Run(cfg.Address)
+		if err != nil {
+			logger.Fatal("ListenAndServe: ", err)
+		}
+	}()
+
+	return nil
 }
 
 func (h *websocketHandler) Handle() error {

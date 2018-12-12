@@ -5,6 +5,9 @@ import (
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/gate"
 )
+/*
+	单服 多角色 实例，本实例包括 网关角色和登录角色，诸如，大厅角色、房间角色同理配置。
+*/
 
 func main()  {
 	RockGO.Server = RockGO.DefaultNode()

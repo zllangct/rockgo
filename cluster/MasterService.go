@@ -28,15 +28,15 @@ func (this *MasterService) ReportNodeInfo(args *NodeInfo, reply *bool) error {
 	return nil
 }
 
-func (this *MasterService) NodeInquiry(args *string, reply *[]*InquiryReply) error {
-	res,err:= this.master.NodeInquiry(*args,false)
-	reply =&res
+func (this *MasterService) NodeInquiry(args string, reply *[]*InquiryReply) error {
+	res,err:= this.master.NodeInquiry(args,false)
+	*reply =res
 	return err
 }
 
-func (this *MasterService) NodeInquiryDetail(args *string, reply *[]*InquiryReply) error {
-	res,err:= this.master.NodeInquiry(*args,true)
-	reply =&res
+func (this *MasterService) NodeInquiryDetail(args string, reply *[]*InquiryReply) error {
+	res,err:= this.master.NodeInquiry(args,true)
+	*reply =res
 	return err
 }
 
@@ -45,6 +45,6 @@ func (this *MasterService) NodeInfoSync(args string, reply *map[string]*NodeInfo
 		return errors.New("call service [ NodeInfoSynchronous ],has wrong argument")
 	}
 	nodes := this.master.NodesCopy()
-	reply=&nodes
+	*reply=nodes
 	return nil
 }

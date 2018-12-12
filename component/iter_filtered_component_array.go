@@ -50,8 +50,11 @@ func (iterator *FilterComponentArrayIter) Next() (interface{}, error) {
 				return nil, iterator.err
 			}
 		}
-
 		value := (*iterator.current)[iterator.offset]
+		if iterator.target==nil {
+			cmp = value.Component
+			break
+		}
 		//支持，通过实现过的接口类型查询,接口查询效率低下，慎重使用。
 		if value.Type == iterator.target || ( value.Type.Kind()==reflect.Interface && value.Type.Implements(iterator.target.Elem())){
 			cmp = value.Component

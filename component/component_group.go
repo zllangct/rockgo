@@ -17,7 +17,10 @@ type ComponentGroup struct {
 
 func (this *ComponentGroup) attachGroupTo(target *Object) {
 	o := NewObject(this.Name)
-	target.AddObject(o)
+	err:=target.AddObject(o)
+	if err!=nil {
+		logger.Error(err)
+	}
 	for _, component := range this.content {
 		o.AddComponent(component)
 	}

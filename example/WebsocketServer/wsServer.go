@@ -61,6 +61,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	<-make(chan struct{})
 }
 
 func OnConnected(sess *network.Session) {

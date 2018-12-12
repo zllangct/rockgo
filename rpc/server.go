@@ -188,12 +188,9 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 			continue
 		}
 		// Method needs three ins: receiver, *args, *reply.
-		//if mtype.NumIn() == 2  {
-		//	if reportErr {
-		//		logger.infof("rpc.Register: method %q has %d input parameters; needs exactly three\n", mname, mtype.NumIn())
-		//	}
-		//	continue
-		//}
+		if mtype.NumIn() < 2  {
+			continue
+		}
 		// First arg need not be a pointer.
 		argType := mtype.In(1)
 		if !isExportedOrBuiltinType(argType) {
@@ -209,9 +206,9 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 			// Second arg must be a pointer.
 			replyType = mtype.In(2)
 			if replyType.Kind() != reflect.Ptr {
-				if reportErr {
-					logger.Info(fmt.Sprintf("rpc.Register: reply type of method %q is not a pointer: %q\n", mname, replyType))
-				}
+				//if reportErr {
+				//	logger.Info(fmt.Sprintf("rpc.Register: reply type of method %q is not a pointer: %q\n", mname, replyType))
+				//}
 				continue
 			}
 			// Reply type must be exported.

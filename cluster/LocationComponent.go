@@ -47,8 +47,11 @@ func (this *LocationComponent) Awake() {
 	//注册位置服务节点RPC服务
 	service:=new(LocationService)
 	service.init(this)
-	this.nodeComponent.rpcServer.Register(service)
-
+	err= this.nodeComponent.Register(service)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
 	go this.DoLocationSync()
 }
 

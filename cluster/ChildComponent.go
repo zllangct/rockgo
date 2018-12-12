@@ -52,6 +52,7 @@ func (this *ChildComponent)DoReport()  {
 	var reply bool
 	var interval = time.Duration(Config.Config.ClusterConfig.ReportInterval)
 	for {
+		reply=false
 		this.locker.RLock()
 		m:=make(map[string]float32)
 		for _, collector := range this.reportCollecter {
@@ -63,6 +64,12 @@ func (this *ChildComponent)DoReport()  {
 		if this.rpcMaster!=nil {
 			_=this.rpcMaster.Call("MasterService.ReportNodeInfo",args,&reply)
 		}
+
+		//var rr []*InquiryReply
+		//err := this.rpcMaster.Call("MasterService.NodeInquiry","defaultApp:login",&rr)
+		//if err!=nil {
+		//
+		//}
 		time.Sleep(time.Millisecond * interval)
 	}
 }

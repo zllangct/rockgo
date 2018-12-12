@@ -89,7 +89,8 @@ func (this *ApiBase)Route(sess *Session, messageID uint32,data []byte)  {
 		v:= reflect.New(mt.ArgsType)
 		err:= this.protoc.Unmarshal(data,v.Interface())
 		if err!=nil{
-			logger.Error(fmt.Sprintf("unmarshal message failed :%s ,%s",mt.ArgsType.Elem().Name(),err))
+			logger.Debug(fmt.Sprintf("unmarshal message failed :%s ,%s",mt.ArgsType.Elem().Name(),err))
+			return
 		}
 		args:=[]reflect.Value{
 			this.resv,
@@ -168,3 +169,7 @@ func (this *ApiBase)Register(api interface{})  {
 	logger.Info(fmt.Sprintf("======   register API group: %s end   ======",typ.Elem().Name()))
 }
 
+func (this *ApiBase)GetMessageType(message interface{}) (uint32,bool) {
+	id,ok:=this.id2mt[reflect.TypeOf(message)]
+	return id,ok
+}

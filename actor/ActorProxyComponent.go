@@ -5,6 +5,7 @@ import (
 	"github.com/zllangct/RockGO/cluster"
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/utils/UUID"
 	"reflect"
 	"sync"
 )
@@ -36,18 +37,19 @@ func (this *ActorProxyComponent) Awake() {
 	this.nodeID = Config.Config.ClusterConfig.LocalAddress
 }
 
-func (this *ActorProxyComponent) Register(actor *ActorComponent) error {
-	actor.ActorID = NewActorID()
-	id, err := actor.ActorID.SetNodeID(this.nodeID)
+func (this *ActorProxyComponent) Register(actor IActor) error {
+	id:=actor.ID()
+	id[2]=UUID.Next()
+	id, err := id.SetNodeID(this.nodeID)
 	if err != nil {
 		return err
 	}
-	this.localActors.LoadOrStore((*id)[2], actor)
+	this.localActors.LoadOrStore(id[2], actor)
 	return nil
 }
 
-func (this *ActorProxyComponent) Unregister(actor *ActorComponent) {
-	if _, ok := this.localActors.Load(actor.ActorID); ok {
+func (this *ActorProxyComponent) Unregister(actor IActor) {
+	if _, ok := this.localActors.Load(actor.ID()); ok {
 		return
 	}
 }

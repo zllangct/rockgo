@@ -35,7 +35,10 @@ func (this *NodeComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
 func(this *NodeComponent)Awake(){
 	this.AppName = Config.Config.ClusterConfig.AppName
 	//开始本节点RPC服务
-	this.StartRpcServer()
+	err:= this.StartRpcServer()
+	if err!=nil {
+		logger.Error(err)
+	}
 	//查询位置服务器
 	go this.GetLocationServer()
 }
@@ -86,6 +89,10 @@ func (this *NodeComponent) StartRpcServer() error{
 	return nil
 }
 
+func (this *NodeComponent)Register(rcvr interface{}) error {
+	return this.rpcServer.Register(rcvr)
+}
+
 func (this *NodeComponent)clientCallback(event string,data ...interface{}) {
 	switch event {
 	case "close":
@@ -124,9 +131,12 @@ func (this *NodeComponent)GetNode(role string,selectorType ...SelectorType) (*No
 
 //从位置服务器查询并选择一个节点
 func (this *NodeComponent)GetNodeFromLocation(role string,selectorType ...SelectorType) (*NodeID,error) {
-	this.locker.Lock()
-	client,err:= this.locationClients.RandClient()
-	this.locker.Unlock()
+	var client *rpc.TcpClient
+	var err error
+	if this.locationClients==nil{
+		return nil, errors.New("location server not found")
+	}
+	client,err= this.locationClients.RandClient()
 	if err!=nil {
 		return nil,err
 	}
@@ -176,11 +186,11 @@ func (this *NodeComponent)GetNodeFromMaster(role string,selectorType ...Selector
 		return nil,err
 	}
 	var reply *[]*InquiryReply
-	args:=fmt.Sprintf("%s:%s",this.AppName,"location")
+	args:=fmt.Sprintf("%s:%s",this.AppName,role)
 	if len(selectorType)>0{
 		args=fmt.Sprintf("%s:%s",args,string(selectorType[0]))
 	}
-	err = client.Call("MasterService.NodeInquiryDetail",args,&reply)
+	err = client.Call("MasterService.NodeInquiry",args,&reply)
 	if err!=nil {
 		return nil,err
 	}

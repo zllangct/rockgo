@@ -1,11 +1,13 @@
 package Component
 
 import (
+	errors2 "errors"
 	"fmt"
 	"github.com/zllangct/RockGO/3rd/errors"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils/UUID"
 	"reflect"
+	"runtime/debug"
 	"strings"
 	"sync"
 	"github.com/zllangct/RockGO/3rd/iter"
@@ -70,6 +72,7 @@ func (o *Object) AddComponent(component IComponent) *Object {
 		})
 	if err!=nil {
 		logger.Error(err)
+		//logger.Error(string(debug.Stack()))
 	}
 	return o
 }
@@ -109,42 +112,53 @@ func (o *Object) RemoveComponentsByType(t reflect.Type) {
 }
 // Add a child object
 func (o *Object) AddObject(object *Object) error {
-	object.Move(nil)
-	return o.WithLock(func() error {
+	var err error
+	err = object.Move(nil)
+	if err!=nil {
+		return err
+	}
+	 err = o.WithLock(func() error {
 		if o == object || o.HasParent(object) {
 			return errors.Fail(ErrBadObject{}, nil, "Circular object references are not permitted")
 		} else {
 			// Move the object into the new parent 'o'; this will lock the child and the old parent.
-			object.Move(o)
-
+			err:=object.Move(o)
+			if err!=nil {
+				return err
+			}
 			// Now assign a new reference to this object
 			o.children = append(o.children, object)
 		}
 		return nil
 	})
+	return err
 }
 
 // Move the object into a new parent object, which may also be nil
-func (o *Object) Move(parent *Object) error {
+func (o *Object) Move(parent *Object) (err error) {
 	oldParent := o.Parent()
 	if oldParent != nil {
-		if err := oldParent.RemoveObject(o); err != nil {
-			return err
+		if err = oldParent.RemoveObject(o); err != nil {
+			return
 		}
 	}
-	return o.WithLock(func() error {
+	err = o.WithLock(func()error{
 		o.parent = parent
-		o.runtime = parent.runtime // see Runtime()
+		if parent !=nil {
+			o.runtime = parent.runtime // see Runtime()
+		}
 		return nil
 	})
+	return
 }
 
 // Remove a child object
-func (o *Object) RemoveObject(object *Object) error {
+func (o *Object) RemoveObject(object *Object) (err error) {
 	if o == object {
-		return errors.Fail(ErrBadObject{}, nil, "Cannot remove object from itself")
+		err=errors.Fail(ErrBadObject{}, nil, "Cannot remove object from itself")
+		return
 	}
-	return o.WithLock(func() error {
+	err=o.WithLock(func() error {
 		offset := -1
 		for i := 0; i < len(o.children); i++ {
 			if o.children[i] == object {
@@ -155,7 +169,7 @@ func (o *Object) RemoveObject(object *Object) error {
 		if offset >= 0 {
 			o.children = append(o.children[:offset], o.children[offset+1:]...)
 		}
-		object.WithLock(func() error {
+		err:= object.WithLock(func() error {
 			for _, cpt := range object.components {
 				if cpt.Destroy != nil {
 					cpt.Destroy.Destroy()
@@ -166,8 +180,9 @@ func (o *Object) RemoveObject(object *Object) error {
 			return nil
 		})
 
-		return nil
+		return err
 	})
+	return
 }
 
 // Check if an object has a parent
@@ -215,8 +230,8 @@ func (o *Object) GetComponents(T reflect.Type) iter.Iter {
 	return fromComponentArray(&o.components, T)
 }
 
-func (o *Object) AllComponents() []*componentInfo {
-	return o.components
+func (o *Object) AllComponents() iter.Iter  {
+	return fromComponentArray(&o.components, nil)
 }
 
 // GetComponentsInChildren returns an iterator of all components matching the given type in all children.
@@ -427,7 +442,9 @@ func (o *Object) Debug(indents ...int) string {
 func (o *Object) WithLock(action func() error) (err error) {
 	defer (func() {
 		if r := recover(); r != nil {
-			err = r.(error)
+			//debug.PrintStack()
+			errs := r.(error).Error()
+			err = errors2.New(errs+"\n"+string(debug.Stack()))
 		}
 		o.locked = false
 		o.writeLock.Unlock()

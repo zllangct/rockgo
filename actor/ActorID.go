@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/zllangct/RockGO/utils/UUID"
 	"strings"
 )
 
@@ -21,10 +20,11 @@ type ActorAddressType = int
 */
 type ActorID  []string
 
-func NewActorID() ActorID {
-	return []string{"","",UUID.Next()}
-}
 
+
+func EmptyActorID() ActorID {
+	return make([]string,3)
+}
 
 func (this ActorID)String() string {
 	buf:=bytes.Buffer{}
@@ -37,14 +37,14 @@ func (this ActorID)String() string {
 	return buf.String()
 }
 
-func (this *ActorID) SetNodeID(address string) (*ActorID,error) {
+func (this *ActorID) SetNodeID(address string) (ActorID,error) {
 	arr:= strings.Split(address,":")
 	if len(arr)!=2{
 		return nil,ErrActorWrongFormat
 	}
 	(*this)[0]=arr[0]
 	(*this)[1]=arr[1]
-	return this,nil
+	return *this,nil
 }
 
 func (this *ActorID) SetLocalActorID(id string) *ActorID{

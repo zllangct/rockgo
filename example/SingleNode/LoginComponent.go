@@ -39,14 +39,23 @@ func (this *LoginComponent) Awake() {
 	this.players.Store("zllang3",&PlayerInfo{Account:"zllang3",Password:"123456",Name:"zhaolei3",Age:13,Coin:300,LastLoginTime:time.Now()})
 	this.players.Store("zllang4",&PlayerInfo{Account:"zllang4",Password:"123456",Name:"zhaolei4",Age:14,Coin:400,LastLoginTime:time.Now()})
 	this.players.Store("zllang5",&PlayerInfo{Account:"zllang5",Password:"123456",Name:"zhaolei5",Age:15,Coin:500,LastLoginTime:time.Now()})
+
+	err= this.nodeComponent.Register(this)
+	if err!=nil {
+		logger.Fatal("get node component failed")
+		panic(err)
+		return
+	}
 }
 
 var ErrLoginPlayerNotExist =errors.New("this player doesnt exist")
 
-func (this *LoginComponent)Login(account string)(*PlayerInfo, error) {
+func (this *LoginComponent)Login(account string,reply *PlayerInfo)error {
 	if p,ok:= this.players.Load(account);ok{
-		return p.(*PlayerInfo),nil
+		*reply = *(p.(*PlayerInfo))
+		return nil
 	}else{
-		return nil,ErrLoginPlayerNotExist
+		return ErrLoginPlayerNotExist
 	}
 }
+

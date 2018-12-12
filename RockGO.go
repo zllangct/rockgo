@@ -60,13 +60,13 @@ func (this *ServerNode) Serve(){
 	this.AddComponentGroup("master",[]Component.IComponent{&Cluster.MasterComponent{}})
 	this.AddComponentGroup("child",[]Component.IComponent{&Cluster.ChildComponent{}})
 	//添加基础组件组,一般通过组建组的定义决定服务器节点的服务角色
-	err:= this.componentGroup.AttachGroupsTo(this.GetConfig().ClusterConfig.Role, this.Runtime.Root()) //TODO broken here
+	err:= this.componentGroup.AttachGroupsTo(Config.Config.ClusterConfig.Role, this.Runtime.Root()) //TODO broken here
 	if err!=nil {
 		logger.Fatal(err)
 		panic(err)
 	}
 	//设置runtime工作线程
-	this.Runtime.SetMaxThread(this.GetConfig().CommonConfig.RuntimeMaxWorker)
+	this.Runtime.SetMaxThread(Config.Config.CommonConfig.RuntimeMaxWorker)
 	go func() {
 		var step float32=0
 		for {

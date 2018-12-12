@@ -46,16 +46,13 @@ func (this *ActorComponent) IsUnique() bool {
 func (this *ActorComponent) Awake() {
 	this.queueReceive= make(chan *ActorMessageInfo, 10)
 	this.close=       make(chan bool)
-	//初始化消息分发器
-	go this.dispatch()
-}
-
-func (this *ActorComponent)Start(ctx *Component.Context)  {
 	//初始化Actor代理
 	err := this.Parent.Runtime().Root().Find(&this.Proxy)
 	if err != nil {
 		panic(err)
 	}
+	//初始化ID
+	this.ActorID= EmptyActorID()
 	//注册Actor到ActorProxy
 	err = this.Proxy.Register(this)
 	if err!=nil {
@@ -63,6 +60,8 @@ func (this *ActorComponent)Start(ctx *Component.Context)  {
 	}
 	//设置Actor状态为激活
 	atomic.StoreInt32(&this.active, 1)
+	//初始化消息分发器
+	go this.dispatch()
 }
 
 func (this *ActorComponent) Destroy() {
@@ -92,9 +91,11 @@ func (this *ActorComponent) dispatch() {
 	var messageInfo *ActorMessageInfo
 	var ok bool
 	handle := func(messageInfo *ActorMessageInfo) {
-		infos := this.Parent.AllComponents()
-		for _, info := range infos {
-			if messageHandler, ok := info.Component.(IActorMessageHandler); ok {
+		cps := this.Parent.AllComponents()
+		var err error = nil
+		var val interface{}
+		for val, err = cps.Next(); err == nil; val, err = cps.Next() {
+			if messageHandler, ok := val.(IActorMessageHandler); ok {
 				if handler, ok := messageHandler.MessageHandlers()[messageInfo.Message.Tittle]; ok {
 					handler(messageInfo)
 				}

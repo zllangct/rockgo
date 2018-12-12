@@ -8,3 +8,6 @@ type TestMessage struct {
 	Name string
 }
 
+type TestLogin struct {
+	Account string
+}
