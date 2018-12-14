@@ -2,9 +2,11 @@ package Actor
 
 import (
 	"errors"
+	"fmt"
 	"github.com/zllangct/RockGO/cluster"
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
 	"github.com/zllangct/RockGO/utils/UUID"
 	"reflect"
@@ -127,17 +129,17 @@ func (this *ActorProxyComponent) LocalTell(actorID ActorID, messageInfo *ActorMe
 	if !ok {
 		return ErrNoThisActor
 	}
-	return actor.Tell(messageInfo.Sender,messageInfo.Message,messageInfo.Reply)
+	return actor.Tell(messageInfo.Sender,messageInfo.Message,messageInfo.reply)
 }
 
 //通过actor id 发送消息
 func (this *ActorProxyComponent) Emit(actorID ActorID, messageInfo *ActorMessageInfo) error {
-	println("emit:",messageInfo.Message.Tittle)
+	logger.Debug(fmt.Sprintf("Actor: [ %s ] send message [ %s ] to actor [ %s ]",messageInfo.Sender.ID(),messageInfo.Message.Tittle,actorID.String()))
 	nodeID := actorID.GetNodeID()
 	//本地消息不走网络
-	//if nodeID == this.nodeID {
-	//	return this.LocalTell(actorID,messageInfo)
-	//}
+	if nodeID == this.nodeID {
+		return this.LocalTell(actorID,messageInfo)
+	}
 	//非本地消息走网络代理
 	client, err := this.nodeComponent.GetNodeClient(nodeID)
 	if err != nil {
@@ -147,7 +149,7 @@ func (this *ActorProxyComponent) Emit(actorID ActorID, messageInfo *ActorMessage
 		Target:  actorID,
 		Sender:  messageInfo.Sender.ID(),
 		Message: messageInfo.Message,
-	}, messageInfo.Reply)
+	}, messageInfo.reply)
 	if err != nil {
 		return err
 	}

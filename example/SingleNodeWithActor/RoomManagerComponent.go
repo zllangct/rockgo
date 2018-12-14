@@ -31,28 +31,20 @@ func (this *RoomManagerComponent)NewRoom(message *Actor.ActorMessageInfo)  {
 	this.increasing++
 	c.RoomID=this.increasing
 	this.rooms[c.RoomID]=c
-	message.Reply=&Actor.ActorMessage{
-		Data:[]interface{}{c.RoomID},
-	}
+	message.Reply("",c.RoomID)
 }
 
 func (this *RoomManagerComponent)EnterRoom(message *Actor.ActorMessageInfo)  {
 	roomID:=message.Message.Data[0].(int)
 	UID:=message.Message.Data[1].(int)
 	player:=&Player{UID:UID}
-	if room,ok:=this.rooms[roomID];ok{
-		err:=room.Enter(player)
-		if err!=nil {
-			*message.Reply=Actor.ActorMessage{
-				Data:[]interface{}{false},
-			}
-		}
-	}else{
-		*message.Reply=Actor.ActorMessage{
-			Data:[]interface{}{false},
-		}
+	room,ok:=this.rooms[roomID]
+	if !ok {
+		message.Reply("",false)
 	}
-	*message.Reply=Actor.ActorMessage{
-		Data:[]interface{}{true},
+	reply,err:=room.Enter(player)
+	if err!=nil {
+		message.Reply("",false)
 	}
+	message.Reply("",true,reply)
 }

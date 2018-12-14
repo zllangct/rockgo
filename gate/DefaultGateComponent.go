@@ -61,7 +61,7 @@ func (this *DefaultGateComponent) Awake()error {
 
 func (this *DefaultGateComponent) OnConnected(sess *network.Session) {
 	this.clients.Store(sess.ID, sess)
-	logger.Debug(fmt.Sprintf("client %s connected,session id :%s", sess.RemoteAddr(), sess.ID))
+	logger.Debug(fmt.Sprintf("client [ %s ] connected,session id :[ %s ]", sess.RemoteAddr(), sess.ID))
 }
 
 func (this *DefaultGateComponent) OnDropped(sess *network.Session) {
@@ -79,7 +79,7 @@ func (this *DefaultGateComponent) SendMessage(sid string, message interface{}) e
 			return err
 		}
 	}
-	return errors.New(fmt.Sprintf("this session id: %s not exist", sid))
+	return errors.New(fmt.Sprintf("this session id: [ %s ] not exist", sid))
 }
 
 func (this *DefaultGateComponent) Emit(sess *network.Session, message interface{}) error {

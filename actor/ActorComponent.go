@@ -86,20 +86,29 @@ func (this *ActorComponent) Destroy() {
 	this.Proxy.Unregister(this)
 }
 
-func (this *ActorComponent) Tell(sender IActor,message *ActorMessage,reply ...*ActorMessage) error {
+func (this *ActorComponent) Tell(sender IActor,message *ActorMessage,reply ...**ActorMessage) error {
+	if atomic.LoadInt32(&this.active) == 0 {
+		return errors.New("this actor is inactive or destroyed")
+	}
+
 	messageInfo:=&ActorMessageInfo{
 		Sender:sender,
 		Message:message,
 	}
+
 	if len(reply)>0 {
-		messageInfo.Reply = reply[0]
+		messageInfo.NeedReply(true)
+		messageInfo.reply=reply[0]
+	}else{
+		messageInfo.NeedReply(false)
 	}
-	if atomic.LoadInt32(&this.active) != 0 {
-		this.queueReceive <- messageInfo
-	} else {
-		return errors.New("this actor is inactive or destroyed")
+
+	this.queueReceive <- messageInfo
+
+	if messageInfo.IsNeedReply() {
+		<-messageInfo.done
 	}
-	return nil
+	return messageInfo.err
 }
 
 func (this *ActorComponent)Emit()  {
@@ -144,6 +153,7 @@ func (this *ActorComponent) Catch(handler func(message *ActorMessageInfo),m *Act
 		if r := recover(); r != nil {
 			err := errors.New(r.(error).Error() + "\n" + string(debug.Stack()))
 			logger.Error(err)
+			m.CallError(err)
 		}
 	})()
 	handler(m)

@@ -75,7 +75,7 @@ func (this *TestApi)CreateRoom(sess *network.Session,message *TestCreateRoom)  {
 	roomManager:=Actor.NewActor(g.RndOne(), actor.Proxy)
 	var res *Actor.ActorMessage
 	err=roomManager.Tell(actor,&Actor.ActorMessage{
-		Tittle:"newRoom"},res)
+		Tittle:"newRoom"},&res)
 	if err != nil {
 		errReply()
 		return

@@ -89,7 +89,7 @@ func (this *NodeComponent) StartRpcServer() error{
 		return err
 	}
 	this.rpcServer=server
-	logger.Info("Test RPC server listening on: ", addr.String())
+	logger.Info(fmt.Sprintf("NodeComponent RPC server listening on: [ %s ]", addr.String()))
 	go server.Accept(l)
 	return nil
 }

@@ -194,9 +194,9 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 		// First arg need not be a pointer.
 		argType := mtype.In(1)
 		if !isExportedOrBuiltinType(argType) {
-			if reportErr {
-				logger.Info(fmt.Sprintf("rpc.Register: argument type of method %q is not exported: %q\n", mname, argType))
-			}
+			//if reportErr {
+			//	logger.Info(fmt.Sprintf("rpc.Register: argument type of method %q is not exported: %q\n", mname, argType))
+			//}
 			continue
 		}
 		numin:=mtype.NumIn()
@@ -211,11 +211,11 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 				//}
 				continue
 			}
-			// Reply type must be exported.
+			// reply type must be exported.
 			if !isExportedOrBuiltinType(replyType) {
-				if reportErr {
-					logger.Info(fmt.Sprintf("rpc.Register: reply type of method %q is not exported: %q\n", mname, replyType))
-				}
+				//if reportErr {
+				//	logger.Info(fmt.Sprintf("rpc.Register: reply type of method %q is not exported: %q\n", mname, replyType))
+				//}
 				continue
 			}
 		}else{
@@ -224,19 +224,20 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 
 		// Method needs one out.
 		if mtype.NumOut() != 1 {
-			if reportErr {
-				logger.Info(fmt.Sprintf("rpc.Register: method %q has %d output parameters; needs exactly one\n", mname, mtype.NumOut()))
-			}
+			//if reportErr {
+			//	logger.Info(fmt.Sprintf("rpc.Register: method %q has %d output parameters; needs exactly one\n", mname, mtype.NumOut()))
+			//}
 			continue
 		}
 		// The return type of the method must be error.
 		if returnType := mtype.Out(0); returnType != typeOfError {
-			if reportErr {
-				logger.Info(fmt.Sprintf("rpc.Register: return type of method %q is %q, must be error\n", mname, returnType))
-			}
+			//if reportErr {
+			//	logger.Info(fmt.Sprintf("rpc.Register: return type of method %q is %q, must be error\n", mname, returnType))
+			//}
 			continue
 		}
 		methods[mname] = &methodType{method: method, ArgType: argType, ReplyType: replyType}
+		logger.Info(fmt.Sprintf("rpc.Register: service: [ %s ], method [ %s ] is registed",typ.Elem().Name(), mname))
 	}
 	return methods
 }

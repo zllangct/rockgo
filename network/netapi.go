@@ -135,7 +135,7 @@ func (this *ApiBase)Register(api interface{})  {
 	this.checkInit()
 	this.resv = reflect.ValueOf(api)
 	typ:=reflect.TypeOf(api)
-	logger.Info(fmt.Sprintf("====== start to register API group:%s ======",typ.Elem().Name()))
+	logger.Info(fmt.Sprintf("====== start to register API group: [ %s ] ======",typ.Elem().Name()))
 
 	st:=reflect.TypeOf(&Session{})
 	for m := 0; m < typ.NumMethod(); m++ {
@@ -170,10 +170,10 @@ func (this *ApiBase)Register(api interface{})  {
 					ArgsType:argsType,
 				}
 			}
-			logger.Info(fmt.Sprintf("Add api: %s, handler: %s.%s(*network.Session,*%s)",argsType.Elem().Name(),typ.Elem().Name(),mname,argsType.Elem().Name()))
+			logger.Info(fmt.Sprintf("Add api: [ %s ], handler: [ %s.%s(*network.Session,*%s) ]",argsType.Elem().Name(),typ.Elem().Name(),mname,argsType.Elem().Name()))
 		}
 	}
-	logger.Info(fmt.Sprintf("======   register API group: %s end   ======",typ.Elem().Name()))
+	logger.Info(fmt.Sprintf("======   register API group: [ %s ] end   ======",typ.Elem().Name()))
 }
 
 func (this *ApiBase)GetMessageType(message interface{}) (uint32,bool) {

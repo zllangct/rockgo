@@ -82,7 +82,7 @@ func (h *udpHandler) Listen() error {
 	if err != nil {
 		return err
 	}
-	logger.Info("UDP listen", h.conn.LocalAddr())
+	logger.Info(fmt.Sprintf("TCP server listening and serving TCP on: [ %s ]", h.conn.LocalAddr()))
 	return nil
 }
 

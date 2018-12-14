@@ -63,7 +63,7 @@ func (h *tcpHandler) Listen() (err error) {
 		return err
 	}
 	h.lis, err = net.ListenTCP("tcp4", addr)
-	logger.Info("Listening on", cfg.Address)
+	logger.Info(fmt.Sprintf("TCP server listening and serving TCP on: [ %s ]", cfg.Address))
 	return
 }
 

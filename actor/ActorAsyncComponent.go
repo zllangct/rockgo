@@ -63,20 +63,29 @@ func (this *ActorAsyncComponent) Destroy() {
 	this.Proxy.Unregister(this)
 }
 
-func (this *ActorAsyncComponent) Tell(sender IActor,message *ActorMessage,reply ...*ActorMessage) error {
+func (this *ActorAsyncComponent) Tell(sender IActor,message *ActorMessage,reply ...**ActorMessage) error {
+	if atomic.LoadInt32(&this.active) != 0 {
+		return errors.New("this actor is inactive or destroyed")
+	}
+
 	messageInfo:=&ActorMessageInfo{
 		Sender:sender,
 		Message:message,
 	}
+
 	if len(reply)>0 {
-		messageInfo.Reply = reply[0]
+		messageInfo.NeedReply(true)
+		messageInfo.reply = reply[0]
+	}else{
+		messageInfo.NeedReply(false)
 	}
-	if atomic.LoadInt32(&this.active) != 0 {
-		go this.handle(messageInfo)
-	} else {
-		return errors.New("this actor is inactive or destroyed")
+
+	go this.handle(messageInfo)
+
+	if messageInfo.IsNeedReply() {
+		<-messageInfo.done
 	}
-	return nil
+	return messageInfo.err
 }
 
 func (this *ActorAsyncComponent)Emit()  {
@@ -99,11 +108,13 @@ func (this *ActorAsyncComponent) handle(messageInfo *ActorMessageInfo) {
 		}
 	}
 }
+
 func (this *ActorAsyncComponent) Catch(handler func(message *ActorMessageInfo),m *ActorMessageInfo) {
 	defer (func() {
 		if r := recover(); r != nil {
 			err := errors.New(r.(error).Error() + "\n" + string(debug.Stack()))
 			logger.Error(err)
+			m.CallError(err)
 		}
 	})()
 	handler(m)

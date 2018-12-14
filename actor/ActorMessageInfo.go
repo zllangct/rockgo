@@ -5,9 +5,38 @@ package Actor
 */
 
 type ActorMessageInfo struct {
-	Sender IActor
+	Sender  IActor
 	Message *ActorMessage
-	Reply *ActorMessage
+	reply   **ActorMessage
+	done    chan struct{}
+	err     error
+}
+
+func (this *ActorMessageInfo)NeedReply(isReply bool)  {
+	if isReply {
+		this.done = make(chan struct{})
+	}
+}
+
+func (this *ActorMessageInfo)IsNeedReply() bool {
+	return this.done != nil
+}
+
+func (this *ActorMessageInfo)Reply(tittle string,args ...interface{})  {
+	if this.done!=nil {
+		*this.reply=&ActorMessage{
+			Tittle:tittle,
+			Data:args,
+		}
+		this.done<- struct{}{}
+	}
+}
+
+func (this *ActorMessageInfo)CallError(err error)  {
+	this.err=err
+	if this.done!=nil {
+		this.done<- struct{}{}
+	}
 }
 
 type ActorRpcMessageInfo struct {
