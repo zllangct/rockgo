@@ -33,12 +33,10 @@ func (this *DefaultGateComponent) GetRequire() map[*Component.Object][]reflect.T
 	return requires
 }
 
-func (this *DefaultGateComponent) Awake() {
+func (this *DefaultGateComponent) Awake()error {
 	err := this.Parent.Root().Find(&this.nodeComponent)
 	if err != nil {
-		logger.Fatal("get node component failed")
-		panic(err)
-		return
+		return err
 	}
 	if this.NetAPI==nil {
 		panic(errors.New("NetAPI is necessity of defaultGateComponent"))
@@ -56,8 +54,9 @@ func (this *DefaultGateComponent) Awake() {
 	svr := network.NewServer(conf)
 	err = svr.Serve()
 	if err != nil {
-		panic(err)
+		return err
 	}
+	return nil
 }
 
 func (this *DefaultGateComponent) OnConnected(sess *network.Session) {
@@ -75,7 +74,10 @@ func (this *DefaultGateComponent) SendMessage(sid string, message interface{}) e
 		if err != nil {
 			return err
 		}
-		s.(*network.Session).Emit(mid, b)
+		err=s.(*network.Session).Emit(mid, b)
+		if err != nil {
+			return err
+		}
 	}
 	return errors.New(fmt.Sprintf("this session id: %s not exist", sid))
 }
@@ -85,6 +87,5 @@ func (this *DefaultGateComponent) Emit(sess *network.Session, message interface{
 	if err != nil {
 		return err
 	}
-	sess.Emit(mid, b)
-	return nil
+	return sess.Emit(mid, b)
 }

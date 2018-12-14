@@ -3,7 +3,6 @@ package Cluster
 import (
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/configComponent"
-	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils"
 	"reflect"
 	"sync"
@@ -15,7 +14,7 @@ type MasterComponent struct {
 	locker          *sync.RWMutex
 	nodeComponent   *NodeComponent
 	Nodes           map[string]*NodeInfo
-
+	NodesOffline    map[string]struct{}
 	timeoutChecking map[string]*int
 }
 
@@ -28,15 +27,15 @@ func (this *MasterComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	return requires
 }
 
-func (this *MasterComponent) Awake() {
+func (this *MasterComponent) Awake() error{
 	this.locker = &sync.RWMutex{}
 	this.Nodes = make(map[string]*NodeInfo)
+	this.NodesOffline =make(map[string]struct{})
 	this.timeoutChecking =make(map[string]*int)
 
 	err := this.Parent.Root().Find(&this.nodeComponent)
 	if err != nil {
-		logger.Error("find node component failed", err)
-		return
+		return err
 	}
 
 	//注册Master服务
@@ -44,18 +43,19 @@ func (this *MasterComponent) Awake() {
 	s.init(this)
 	err=this.nodeComponent.Register(s)
 	if err != nil {
-		logger.Error(err)
-		return
+		return err
 	}
 	if !Config.Config.CommonConfig.Debug || false{
 		go this.TimeoutCheck()
 	}
+	return nil
 }
 
 //上报节点信息
 func (this *MasterComponent) UpdateNodeInfo(args *NodeInfo) {
 	this.locker.Lock()
 	this.Nodes[args.Address] = args
+	delete(this.NodesOffline, args.Address)
 	c:=this.timeoutChecking[args.Address]
 	if c == nil {
 		c=new(int)
@@ -81,6 +81,7 @@ func (this *MasterComponent) TimeoutCheck() map[string]*NodeInfo {
 			if *count > 3 {
 				delete(this.Nodes, addr)
 				delete(this.timeoutChecking,addr)
+				this.NodesOffline[addr]= struct{}{}
 			}
 		}
 		this.locker.Unlock()
@@ -92,5 +93,10 @@ func (this *MasterComponent) NodesCopy() map[string]*NodeInfo {
 	this.locker.RLock()
 	defer this.locker.RUnlock()
 	return utils.Copy(this.Nodes).(map[string]*NodeInfo)
+}
+func (this *MasterComponent) NodesOfflineCopy() map[string]struct{} {
+	this.locker.RLock()
+	defer this.locker.RUnlock()
+	return utils.Copy(this.NodesOffline).(map[string]struct{})
 }
 

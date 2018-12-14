@@ -3,13 +3,15 @@
     "LocalAddress": "127.0.0.1:6666",
     "AppName": "defaultApp",
     "Role": [
-        "master","child","login","gate"
+        "master","child","gate","room","location","actorlocation"
     ],
     "Group": [],
     "ReportInterval": 3000,
     "RpcTimeout": 9000,
     "RpcCallTimeout": 5000,
     "RpcHeartBeatInterval": 3000,
+    "IsLocationNode": true,
     "NetConnTimeout": 9000,
-    "NetListenAddress": "0.0.0.0:5555"
+    "NetListenAddress": "0.0.0.0:5555",
+    "IsActorModel": true
 }

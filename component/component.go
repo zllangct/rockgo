@@ -30,7 +30,7 @@ type IPersist interface {
 }
 
 type IAwake interface {
-	Awake()
+	Awake() error
 }
 
 type IStart interface {

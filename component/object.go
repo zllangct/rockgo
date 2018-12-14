@@ -4,13 +4,13 @@ import (
 	errors2 "errors"
 	"fmt"
 	"github.com/zllangct/RockGO/3rd/errors"
+	"github.com/zllangct/RockGO/3rd/iter"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils/UUID"
 	"reflect"
 	"runtime/debug"
 	"strings"
 	"sync"
-	"github.com/zllangct/RockGO/3rd/iter"
 )
 
 // Node is a game object type.
@@ -40,98 +40,99 @@ func NewObject(names ...string) *Object {
 		writeLock:  &sync.Mutex{}}
 }
 
-func NewObjectWithComponent(component IComponent,names ...string) *Object {
-	o:=NewObject(names...)
+func NewObjectWithComponent(component IComponent, names ...string) *Object {
+	o := NewObject(names...)
 	return o.AddComponent(component)
 
 }
 
 // Add a behaviour to a node
 func (o *Object) AddComponent(component IComponent) *Object {
-	info := newComponentInfo(component,o)
-	err:=o.WithLock(func() error {
-			if info.Unique != nil {
-				switch info.Unique.IsUnique() {
-				case UNIQUE_TYPE_GLOBAL:
-					_, err := o.Root().GetComponentsInChildren(reflect.TypeOf(component)).Next()
-					if err == nil {
-						return errors.Fail(ErrUniqueComponent{}, nil, "This component is unique global,one object already has a same component")
-					}
-				case UNIQUE_TYPE_LOCAL:
-					if o.HasComponent(reflect.TypeOf(component)) {
-						return errors.Fail(ErrUniqueComponent{}, nil, "This component is unique,this object already has a same component")
+	info := newComponentInfo(component, o)
+	err := o.WithLock(func() error {
+		if info.Unique != nil {
+			switch info.Unique.IsUnique() {
+			case UNIQUE_TYPE_GLOBAL:
+				_, err := o.Root().GetComponentsInChildren(reflect.TypeOf(component)).Next()
+				if err == nil {
+					return errors.Fail(ErrUniqueComponent{}, nil, "This component is unique global,one object already has a same component")
+				}
+			case UNIQUE_TYPE_LOCAL:
+				if o.HasComponent(reflect.TypeOf(component)) {
+					return errors.Fail(ErrUniqueComponent{}, nil, "This component is unique,this object already has a same component")
+				}
+			}
+		}
+		if info.Require != nil {
+			for obj, requires := range info.Require.GetRequire() {
+				for _, require := range requires {
+					if !obj.HasComponent(require) {
+						return errors.Fail(ErrMissingComponent{}, nil, "This component require other components,some are missing")
 					}
 				}
 			}
-			if info.Require!=nil{
-				for obj,requires := range info.Require.GetRequire(){
-					for _,require := range requires {
-						if !obj.HasComponent(require) {
-							return errors.Fail(ErrMissingComponent{}, nil, "This component require other components,some are missing")
-						}
-					}
-				}
-			}
-			o.components = append(o.components, info)
-			if info.Awake!=nil{
-				info.Awake.Awake()
-			}
-			return nil
-		})
-	if err!=nil {
+		}
+		o.components = append(o.components, info)
+		if info.Awake != nil {
+			return info.Awake.Awake()
+		}
+		return nil
+	})
+	if err != nil {
 		logger.Error(err)
-		//logger.Error(string(debug.Stack()))
 	}
 	return o
 }
 
 // remove the first component finded
 func (o *Object) RemoveComponent(component IComponent) {
-	err:=o.WithLock(func() error {
-			index:=-1
-			for i,v:=range o.components{
-				if v.Component == component{
-					index=i
-					break
-				}
+	err := o.WithLock(func() error {
+		index := -1
+		for i, v := range o.components {
+			if v.Component == component {
+				index = i
+				break
 			}
-			if index!=-1{
-				o.components = append(o.components[:index],o.components[index+1:]...)
-			}
-			return nil
-		})
+		}
+		if index != -1 {
+			o.components = append(o.components[:index], o.components[index+1:]...)
+		}
+		return nil
+	})
 	logger.Error(err)
 }
+
 //remove all components
 func (o *Object) RemoveComponentsByType(t reflect.Type) {
-	err:=o.WithLock(func() error {
-		for i:=0;i<len(o.components) ; i++ {
-			A:
-			if o.components[i].Type == t{
-				o.components = append(o.components[:i],o.components[i+1:]...)
-				if i < len(o.components){
+	err := o.WithLock(func() error {
+		for i := 0; i < len(o.components); i++ {
+		A:
+			if o.components[i].Type == t {
+				o.components = append(o.components[:i], o.components[i+1:]...)
+				if i < len(o.components) {
 					goto A
 				}
 			}
 		}
 		return nil
-		})
+	})
 	logger.Error(err)
 }
+
 // Add a child object
 func (o *Object) AddObject(object *Object) error {
 	var err error
 	err = object.Move(nil)
-	if err!=nil {
+	if err != nil {
 		return err
 	}
-	 err = o.WithLock(func() error {
+	err = o.WithLock(func() error {
 		if o == object || o.HasParent(object) {
 			return errors.Fail(ErrBadObject{}, nil, "Circular object references are not permitted")
 		} else {
 			// Move the object into the new parent 'o'; this will lock the child and the old parent.
-			err:=object.Move(o)
-			if err!=nil {
+			err := object.Move(o)
+			if err != nil {
 				return err
 			}
 			// Now assign a new reference to this object
@@ -150,9 +151,9 @@ func (o *Object) Move(parent *Object) (err error) {
 			return
 		}
 	}
-	err = o.WithLock(func()error{
+	err = o.WithLock(func() error {
 		o.parent = parent
-		if parent !=nil {
+		if parent != nil {
 			o.runtime = parent.runtime // see Runtime()
 		}
 		return nil
@@ -163,10 +164,10 @@ func (o *Object) Move(parent *Object) (err error) {
 // Remove a child object
 func (o *Object) RemoveObject(object *Object) (err error) {
 	if o == object {
-		err=errors.Fail(ErrBadObject{}, nil, "Cannot remove object from itself")
+		err = errors.Fail(ErrBadObject{}, nil, "Cannot remove object from itself")
 		return
 	}
-	err=o.WithLock(func() error {
+	err = o.WithLock(func() error {
 		offset := -1
 		for i := 0; i < len(o.children); i++ {
 			if o.children[i] == object {
@@ -177,7 +178,7 @@ func (o *Object) RemoveObject(object *Object) (err error) {
 		if offset >= 0 {
 			o.children = append(o.children[:offset], o.children[offset+1:]...)
 		}
-		err:= object.WithLock(func() error {
+		err := object.WithLock(func() error {
 			for _, cpt := range object.components {
 				if cpt.Destroy != nil {
 					cpt.Destroy.Destroy()
@@ -238,7 +239,7 @@ func (o *Object) GetComponents(T reflect.Type) iter.Iter {
 	return fromComponentArray(&o.components, T)
 }
 
-func (o *Object) AllComponents() iter.Iter  {
+func (o *Object) AllComponents() iter.Iter {
 	return fromComponentArray(&o.components, nil)
 }
 
@@ -297,7 +298,7 @@ func (o *Object) Name() string {
 
 // Rename the object
 func (o *Object) Rename(name string) {
-	err:=o.WithLock(func() error {
+	err := o.WithLock(func() error {
 		o.name = name
 		return nil
 	})
@@ -450,9 +451,8 @@ func (o *Object) Debug(indents ...int) string {
 func (o *Object) WithLock(action func() error) (err error) {
 	defer (func() {
 		if r := recover(); r != nil {
-			//debug.PrintStack()
 			errs := r.(error).Error()
-			err = errors2.New(errs+"\n"+string(debug.Stack()))
+			err = errors2.New(errs + "\n" + string(debug.Stack()))
 		}
 		o.locked = false
 		o.writeLock.Unlock()

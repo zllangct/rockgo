@@ -96,3 +96,1158 @@
 2018/12/12 21:01:21 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
 
 2018/12/12 21:01:25 RockGO.go:95: fatal server is closed
+2018/12/12 23:42:04 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 23:42:08 RockGO.go:95: fatal server is closed
+2018/12/12 23:42:40 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 23:43:39 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 23:44:14 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 23:45:44 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 23:45:52 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 23:46:02 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 23:47:50 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 23:48:28 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 23:50:36 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 23:51:29 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 23:53:07 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 23:53:11 NodeComponent.go:245: info 2018-12-12T 23:53:11  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 23:53:11 ChildComponent.go:105: info 2018-12-12T 23:53:11  connected to master
+2018/12/12 23:53:11 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 23:58:26 RockGO.go:95: fatal server is closed
+2018/12/12 23:58:34 NodeComponent.go:87: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/12 23:58:34 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/12 23:58:34 NodeComponent.go:245: info 2018-12-12T 23:58:34  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/12 23:58:34 ChildComponent.go:102: info 2018-12-12T 23:58:34  connected to master
+2018/12/13 00:04:10 wshandler.go:63: debug TCP accept:127.0.0.1:55569
+2018/12/13 00:04:10 DefaultGateComponent.go:65: debug client 127.0.0.1:55569 connected,session id :4cRonus0K5YiDCr4ZOdEBv
+2018/12/13 00:29:14 RockGO.go:95: fatal server is closed
+2018/12/13 20:35:23 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 20:35:23 netapi.go:131: info ====== start to register API group:TestApi ======
+2018/12/13 20:35:23 netapi.go:166: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 20:35:23 netapi.go:166: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 20:35:23 netapi.go:169: info ======   register API group: TestApi end   ======
+2018/12/13 20:40:58 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 20:41:16 netapi.go:131: info ====== start to register API group:TestApi ======
+2018/12/13 20:41:16 netapi.go:166: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 20:41:16 netapi.go:166: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 20:41:16 netapi.go:169: info ======   register API group: TestApi end   ======
+2018/12/13 20:45:01 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 20:45:01 netapi.go:131: info ====== start to register API group:TestApi ======
+2018/12/13 20:45:01 netapi.go:166: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 20:45:01 netapi.go:166: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 20:45:01 netapi.go:169: info ======   register API group: TestApi end   ======
+2018/12/13 20:47:50 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 20:47:50 netapi.go:131: info ====== start to register API group:TestApi ======
+2018/12/13 20:47:50 netapi.go:166: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 20:47:50 netapi.go:166: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 20:47:50 netapi.go:169: info ======   register API group: TestApi end   ======
+2018/12/13 20:51:12 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 20:51:12 netapi.go:131: info ====== start to register API group:TestApi ======
+2018/12/13 20:51:12 netapi.go:166: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 20:51:12 netapi.go:166: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 20:51:12 netapi.go:169: info ======   register API group: TestApi end   ======
+2018/12/13 20:51:46 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 20:52:16 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 20:52:16 netapi.go:131: info ====== start to register API group:TestApi ======
+2018/12/13 20:52:16 netapi.go:166: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 20:52:16 netapi.go:166: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 20:52:16 netapi.go:169: info ======   register API group: TestApi end   ======
+2018/12/13 20:52:16 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 20:52:30 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 20:52:30 netapi.go:131: info ====== start to register API group:TestApi ======
+2018/12/13 20:52:30 netapi.go:166: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 20:52:30 netapi.go:166: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 20:52:30 netapi.go:169: info ======   register API group: TestApi end   ======
+2018/12/13 20:52:30 NodeComponent.go:272: info 2018-12-13T 20:52:30  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 20:53:41 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 20:53:47 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 20:53:47 netapi.go:131: info ====== start to register API group:TestApi ======
+2018/12/13 20:53:47 netapi.go:166: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 20:53:47 netapi.go:166: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 20:53:47 netapi.go:169: info ======   register API group: TestApi end   ======
+2018/12/13 20:53:47 NodeComponent.go:272: info 2018-12-13T 20:53:47  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 20:54:16 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 20:54:52 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 20:54:52 netapi.go:131: info ====== start to register API group:TestApi ======
+2018/12/13 20:54:52 netapi.go:166: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 20:54:52 netapi.go:166: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 20:54:52 netapi.go:169: info ======   register API group: TestApi end   ======
+2018/12/13 20:54:52 NodeComponent.go:272: info 2018-12-13T 20:54:52  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 20:54:55 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 20:55:15 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 20:55:15 netapi.go:131: info ====== start to register API group:TestApi ======
+2018/12/13 20:55:15 netapi.go:166: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 20:55:15 netapi.go:166: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 20:55:15 netapi.go:169: info ======   register API group: TestApi end   ======
+2018/12/13 20:55:28 NodeComponent.go:272: info 2018-12-13T 20:55:28  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 20:57:47 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 20:57:47 netapi.go:131: info ====== start to register API group:TestApi ======
+2018/12/13 20:57:47 netapi.go:166: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 20:57:47 netapi.go:166: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 20:57:47 netapi.go:169: info ======   register API group: TestApi end   ======
+2018/12/13 20:57:48 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 20:57:48 NodeComponent.go:272: info 2018-12-13T 20:57:48  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 20:57:48 NodeComponent.go:272: info 2018-12-13T 20:57:48  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 20:57:48 NodeComponent.go:272: info 2018-12-13T 20:57:48  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 20:57:48 NodeComponent.go:272: info 2018-12-13T 20:57:48  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 20:57:48 ChildComponent.go:101: info 2018-12-13T 20:57:48  connected to master
+2018/12/13 20:57:48 NodeComponent.go:272: info 2018-12-13T 20:57:48  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 20:58:21 wshandler.go:63: debug TCP accept:127.0.0.1:57737
+2018/12/13 20:58:21 DefaultGateComponent.go:64: debug client 127.0.0.1:57737 connected,session id :FAvmOw50d5mbG6GZJ110mR
+2018/12/13 21:02:43 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 21:02:43 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 21:02:43 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 21:02:43 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 21:02:43 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 21:02:43 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 21:02:43 NodeComponent.go:272: info 2018-12-13T 21:02:43  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:02:43 NodeComponent.go:272: info 2018-12-13T 21:02:43  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:02:43 NodeComponent.go:272: info 2018-12-13T 21:02:43  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:02:43 NodeComponent.go:272: info 2018-12-13T 21:02:43  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:02:43 ChildComponent.go:101: info 2018-12-13T 21:02:43  connected to master
+2018/12/13 21:02:43 NodeComponent.go:272: info 2018-12-13T 21:02:43  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:02:46 wshandler.go:63: debug TCP accept:127.0.0.1:57804
+2018/12/13 21:02:46 DefaultGateComponent.go:64: debug client 127.0.0.1:57804 connected,session id :q8pzhuMIa2C3Sp6T7ln3WX
+2018/12/13 21:04:33 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 21:06:31 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 21:06:31 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 21:06:31 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 21:06:31 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 21:06:31 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 21:07:09 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 21:07:15 NodeComponent.go:272: info 2018-12-13T 21:07:15  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:07:21 NodeComponent.go:272: info 2018-12-13T 21:07:21  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:07:21 NodeComponent.go:272: info 2018-12-13T 21:07:11  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:07:25 NodeComponent.go:272: info 2018-12-13T 21:07:21  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:07:25 NodeComponent.go:272: info 2018-12-13T 21:07:21  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:07:25 ChildComponent.go:101: info 2018-12-13T 21:07:25  connected to master
+2018/12/13 21:07:33 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 21:07:36 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 21:07:36 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 21:07:36 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 21:07:36 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 21:07:36 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 21:07:52 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 21:07:52 NodeComponent.go:272: info 2018-12-13T 21:07:52  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:08:02 NodeComponent.go:272: info 2018-12-13T 21:08:02  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:08:02 ChildComponent.go:101: info 2018-12-13T 21:08:02  connected to master
+2018/12/13 21:08:02 NodeComponent.go:272: info 2018-12-13T 21:08:01  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:08:02 NodeComponent.go:272: info 2018-12-13T 21:08:02  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:08:02 NodeComponent.go:272: info 2018-12-13T 21:08:01  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:08:24 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 21:08:27 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 21:08:27 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 21:08:27 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 21:08:27 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 21:08:27 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 21:18:19 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 21:18:25 NodeComponent.go:272: info 2018-12-13T 21:18:25  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:18:25 NodeComponent.go:272: info 2018-12-13T 21:18:25  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:18:25 NodeComponent.go:272: info 2018-12-13T 21:18:25  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:18:25 NodeComponent.go:272: info 2018-12-13T 21:18:25  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:18:25 ChildComponent.go:101: info 2018-12-13T 21:18:25  connected to master
+2018/12/13 21:18:25 NodeComponent.go:272: info 2018-12-13T 21:18:25  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:18:30 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 21:18:33 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 21:18:33 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 21:18:33 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 21:18:33 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 21:18:33 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 21:18:33 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 21:18:33 NodeComponent.go:272: info 2018-12-13T 21:18:33  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:18:33 NodeComponent.go:272: info 2018-12-13T 21:18:33  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:18:33 NodeComponent.go:272: info 2018-12-13T 21:18:33  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:18:33 NodeComponent.go:272: info 2018-12-13T 21:18:33  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:18:33 NodeComponent.go:272: info 2018-12-13T 21:18:33  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:18:33 ChildComponent.go:101: info 2018-12-13T 21:18:33  connected to master
+2018/12/13 21:20:08 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 21:20:11 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 21:20:11 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 21:20:11 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 21:20:11 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 21:20:11 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 21:20:11 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 21:20:29 NodeComponent.go:272: info 2018-12-13T 21:20:29  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:20:29 NodeComponent.go:272: info 2018-12-13T 21:20:29  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:20:29 NodeComponent.go:272: info 2018-12-13T 21:20:29  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:20:29 NodeComponent.go:272: info 2018-12-13T 21:20:29  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:20:29 ChildComponent.go:101: info 2018-12-13T 21:20:29  connected to master
+2018/12/13 21:20:29 NodeComponent.go:272: info 2018-12-13T 21:20:29  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:20:42 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 21:23:24 NodeComponent.go:90: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 21:23:24 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 21:23:24 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 21:23:24 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 21:23:24 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 21:23:24 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 21:23:24 NodeComponent.go:272: info 2018-12-13T 21:23:24  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:23:24 NodeComponent.go:272: info 2018-12-13T 21:23:24  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:23:24 NodeComponent.go:272: info 2018-12-13T 21:23:24  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:23:24 NodeComponent.go:272: info 2018-12-13T 21:23:24  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:23:24 ChildComponent.go:101: info 2018-12-13T 21:23:24  connected to master
+2018/12/13 21:23:24 server.go:563: debug 127.0.0.1:58185
+2018/12/13 21:23:24 server.go:563: debug 127.0.0.1:58186
+2018/12/13 21:23:24 NodeComponent.go:272: info 2018-12-13T 21:23:24  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:23:24 server.go:563: debug 127.0.0.1:58187
+2018/12/13 21:23:24 server.go:563: debug 127.0.0.1:58188
+2018/12/13 21:23:24 server.go:563: debug 127.0.0.1:58190
+2018/12/13 21:38:04 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 21:39:28 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 21:39:28 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 21:39:28 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 21:39:28 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 21:39:28 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 21:39:28 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 21:39:28 server.go:563: debug 127.0.0.1:58374
+2018/12/13 21:39:28 server.go:563: debug 127.0.0.1:58377
+2018/12/13 21:39:28 server.go:563: debug 127.0.0.1:58375
+2018/12/13 21:39:28 NodeComponent.go:283: info 2018-12-13T 21:39:28  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:39:28 NodeComponent.go:283: info 2018-12-13T 21:39:28  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:39:28 server.go:563: debug 127.0.0.1:58378
+2018/12/13 21:39:28 NodeComponent.go:283: info 2018-12-13T 21:39:28  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:39:28 NodeComponent.go:283: info 2018-12-13T 21:39:28  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:39:28 ChildComponent.go:101: info 2018-12-13T 21:39:28  connected to master
+2018/12/13 21:39:28 NodeComponent.go:283: info 2018-12-13T 21:39:28  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:39:28 server.go:563: debug 127.0.0.1:58376
+2018/12/13 21:39:38 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 21:52:57 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 21:52:57 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 21:52:57 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 21:52:57 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 21:52:57 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 21:56:44 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 21:56:44 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 21:56:44 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 21:56:44 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 21:56:44 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 21:56:44 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 21:56:44 server.go:563: debug 127.0.0.1:58545
+2018/12/13 21:56:44 server.go:563: debug 127.0.0.1:58546
+2018/12/13 21:56:44 NodeComponent.go:278: info 2018-12-13T 21:56:44  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:56:44 NodeComponent.go:278: info 2018-12-13T 21:56:44  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:56:44 ChildComponent.go:101: info 2018-12-13T 21:56:44  connected to master
+2018/12/13 21:58:20 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 21:58:53 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 21:58:53 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 21:58:53 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 21:58:53 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 21:58:53 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 21:58:53 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 21:58:53 server.go:563: debug 127.0.0.1:58587
+2018/12/13 21:58:53 server.go:563: debug 127.0.0.1:58588
+2018/12/13 21:58:53 NodeComponent.go:278: info 2018-12-13T 21:58:53  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:58:53 NodeComponent.go:278: info 2018-12-13T 21:58:53  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:58:53 ChildComponent.go:101: info 2018-12-13T 21:58:53  connected to master
+2018/12/13 21:59:05 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 21:59:09 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 21:59:09 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 21:59:09 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 21:59:09 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 21:59:09 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 21:59:09 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 21:59:09 server.go:563: debug 127.0.0.1:58598
+2018/12/13 21:59:09 NodeComponent.go:278: info 2018-12-13T 21:59:09  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:59:09 NodeComponent.go:278: info 2018-12-13T 21:59:09  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:59:09 ChildComponent.go:101: info 2018-12-13T 21:59:09  connected to master
+2018/12/13 21:59:09 server.go:563: debug 127.0.0.1:58597
+2018/12/13 21:59:15 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 21:59:19 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 21:59:19 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 21:59:19 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 21:59:19 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 21:59:19 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 21:59:19 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 21:59:19 server.go:563: debug 127.0.0.1:58607
+2018/12/13 21:59:19 NodeComponent.go:278: info 2018-12-13T 21:59:19  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:59:19 NodeComponent.go:278: info 2018-12-13T 21:59:19  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 21:59:19 ChildComponent.go:101: info 2018-12-13T 21:59:19  connected to master
+2018/12/13 21:59:19 server.go:563: debug 127.0.0.1:58606
+2018/12/13 21:59:52 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 22:29:06 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 22:29:06 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 22:29:06 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 22:29:06 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 22:29:06 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 22:29:56 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 22:29:56 NodeComponent.go:278: info 2018-12-13T 22:29:56  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 22:29:56 NodeComponent.go:278: info 2018-12-13T 22:29:56  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 22:29:56 ChildComponent.go:101: info 2018-12-13T 22:29:56  connected to master
+2018/12/13 22:30:18 server.go:563: debug 127.0.0.1:58910
+2018/12/13 22:30:26 server.go:563: debug 127.0.0.1:58911
+2018/12/13 22:30:56 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 22:30:59 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 22:30:59 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 22:30:59 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 22:30:59 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 22:30:59 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 22:31:29 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 22:31:29 server.go:563: debug 127.0.0.1:58930
+2018/12/13 22:31:29 NodeComponent.go:278: info 2018-12-13T 22:31:29  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 22:31:29 ChildComponent.go:101: info 2018-12-13T 22:31:29  connected to master
+2018/12/13 22:31:29 NodeComponent.go:278: info 2018-12-13T 22:31:29  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 22:31:29 server.go:563: debug 127.0.0.1:58931
+2018/12/13 22:31:36 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 22:48:14 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 22:48:14 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 22:48:14 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 22:48:14 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 22:48:14 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 22:48:17 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 22:48:17 NodeComponent.go:278: info 2018-12-13T 22:48:17  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 22:48:17 NodeComponent.go:278: info 2018-12-13T 22:48:17  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 22:48:17 ChildComponent.go:101: info 2018-12-13T 22:48:17  connected to master
+2018/12/13 22:48:17 server.go:563: debug 127.0.0.1:59171
+2018/12/13 22:48:17 server.go:563: debug 127.0.0.1:59172
+2018/12/13 22:48:22 wshandler.go:63: debug TCP accept:127.0.0.1:59176
+2018/12/13 22:48:22 DefaultGateComponent.go:64: debug client 127.0.0.1:59176 connected,session id :q7uNg4n7oS7TkOMlsCBqNf
+2018/12/13 22:48:40 RockGO.go:111: fatal ====== Server is closed ======
+2018/12/13 22:53:02 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 22:53:02 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 22:53:02 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 22:53:02 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 22:53:02 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 22:53:02 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 22:53:02 NodeComponent.go:278: info 2018-12-13T 22:53:02  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 22:53:02 NodeComponent.go:278: info 2018-12-13T 22:53:02  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 22:53:02 ChildComponent.go:101: info 2018-12-13T 22:53:02  connected to master
+2018/12/13 22:53:02 server.go:563: debug 127.0.0.1:59215
+2018/12/13 22:53:02 server.go:563: debug 127.0.0.1:59216
+2018/12/13 22:58:27 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 22:58:27 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 22:58:27 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 22:58:27 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 22:58:27 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 22:58:27 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 22:58:27 server.go:563: debug 127.0.0.1:59384
+2018/12/13 22:58:27 NodeComponent.go:278: info 2018-12-13T 22:58:27  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 22:58:27 ChildComponent.go:101: info 2018-12-13T 22:58:27  connected to master
+2018/12/13 22:58:27 server.go:563: debug 127.0.0.1:59385
+2018/12/13 22:58:27 NodeComponent.go:278: info 2018-12-13T 22:58:27  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 22:59:17 wshandler.go:63: debug TCP accept:127.0.0.1:59394
+2018/12/13 22:59:17 DefaultGateComponent.go:64: debug client 127.0.0.1:59394 connected,session id :RBajJFBt1o2WzPf8cDqNPl
+2018/12/13 23:17:47 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 23:17:47 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 23:17:47 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 23:17:47 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 23:17:47 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 23:17:47 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 23:17:47 server.go:563: debug 127.0.0.1:59571
+2018/12/13 23:17:47 NodeComponent.go:278: info 2018-12-13T 23:17:47  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:17:47 ChildComponent.go:101: info 2018-12-13T 23:17:47  connected to master
+2018/12/13 23:17:47 NodeComponent.go:278: info 2018-12-13T 23:17:47  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:17:47 server.go:563: debug 127.0.0.1:59572
+2018/12/13 23:18:00 wshandler.go:63: debug TCP accept:127.0.0.1:59579
+2018/12/13 23:18:00 DefaultGateComponent.go:64: debug client 127.0.0.1:59579 connected,session id :9C4B3Vc3qto35tZTun2LwI
+2018/12/13 23:30:15 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 23:30:15 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 23:30:15 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 23:30:15 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 23:30:15 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 23:30:15 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 23:30:15 server.go:563: debug 127.0.0.1:59694
+2018/12/13 23:30:15 NodeComponent.go:278: info 2018-12-13T 23:30:15  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:30:15 NodeComponent.go:278: info 2018-12-13T 23:30:15  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:30:15 ChildComponent.go:101: info 2018-12-13T 23:30:15  connected to master
+2018/12/13 23:30:15 server.go:563: debug 127.0.0.1:59695
+2018/12/13 23:30:19 wshandler.go:63: debug TCP accept:127.0.0.1:59699
+2018/12/13 23:30:19 DefaultGateComponent.go:64: debug client 127.0.0.1:59699 connected,session id :sEA12Q62qYt5JuCn3eLdgv
+2018/12/13 23:30:54 server.go:344: info rpc: gob error encoding body:gob: type sync.RWMutex has no exported fields
+2018/12/13 23:35:28 server.go:563: debug 127.0.0.1:59737
+2018/12/13 23:35:28 NodeComponent.go:278: info 2018-12-13T 23:35:28  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:37:26 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 23:37:26 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 23:37:26 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 23:37:26 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 23:37:26 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 23:37:26 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 23:37:26 NodeComponent.go:278: info 2018-12-13T 23:37:26  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:37:26 NodeComponent.go:278: info 2018-12-13T 23:37:26  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:37:26 server.go:563: debug 127.0.0.1:59763
+2018/12/13 23:37:26 ChildComponent.go:101: info 2018-12-13T 23:37:26  connected to master
+2018/12/13 23:37:26 server.go:563: debug 127.0.0.1:59764
+2018/12/13 23:37:39 wshandler.go:63: debug TCP accept:127.0.0.1:59770
+2018/12/13 23:37:39 DefaultGateComponent.go:64: debug client 127.0.0.1:59770 connected,session id :mjXJYGrwYdzEmnzZn8ZBue
+2018/12/13 23:37:52 server.go:344: info rpc: gob error encoding body:gob: type sync.RWMutex has no exported fields
+2018/12/13 23:39:15 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 23:39:15 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 23:39:15 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 23:39:15 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 23:39:15 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 23:39:15 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 23:39:15 server.go:563: debug 127.0.0.1:59785
+2018/12/13 23:39:15 NodeComponent.go:278: info 2018-12-13T 23:39:15  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:39:15 NodeComponent.go:278: info 2018-12-13T 23:39:15  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:39:15 ChildComponent.go:101: info 2018-12-13T 23:39:15  connected to master
+2018/12/13 23:39:15 server.go:563: debug 127.0.0.1:59786
+2018/12/13 23:39:17 RockGO.go:115: fatal ====== Server is closed ======
+2018/12/13 23:39:24 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 23:39:24 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 23:39:24 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 23:39:24 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 23:39:24 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 23:39:24 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 23:39:24 server.go:563: debug 127.0.0.1:59792
+2018/12/13 23:39:24 NodeComponent.go:278: info 2018-12-13T 23:39:24  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:39:24 NodeComponent.go:278: info 2018-12-13T 23:39:24  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:39:24 ChildComponent.go:101: info 2018-12-13T 23:39:24  connected to master
+2018/12/13 23:39:24 server.go:563: debug 127.0.0.1:59793
+2018/12/13 23:39:27 wshandler.go:63: debug TCP accept:127.0.0.1:59796
+2018/12/13 23:39:27 DefaultGateComponent.go:64: debug client 127.0.0.1:59796 connected,session id :6sBn0vAFoneMn7u7YaaNMQ
+2018/12/13 23:39:38 server.go:344: info rpc: gob error encoding body:gob: type sync.RWMutex has no exported fields
+2018/12/13 23:40:08 NodeComponent.go:278: info 2018-12-13T 23:40:08  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:40:08 server.go:563: debug 127.0.0.1:59805
+2018/12/13 23:49:01 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 23:49:01 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 23:49:01 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 23:49:01 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 23:49:01 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 23:49:01 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 23:49:01 NodeComponent.go:278: info 2018-12-13T 23:49:01  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:49:01 ChildComponent.go:101: info 2018-12-13T 23:49:01  connected to master
+2018/12/13 23:49:01 NodeComponent.go:278: info 2018-12-13T 23:49:01  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:49:01 server.go:563: debug 127.0.0.1:59909
+2018/12/13 23:49:01 server.go:563: debug 127.0.0.1:59908
+2018/12/13 23:49:05 wshandler.go:63: debug TCP accept:127.0.0.1:59912
+2018/12/13 23:49:05 DefaultGateComponent.go:64: debug client 127.0.0.1:59912 connected,session id :Oa91taBt2enAkcdCvFkCRV
+2018/12/13 23:50:53 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 23:50:53 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 23:50:53 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 23:50:53 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 23:50:53 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 23:50:53 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 23:50:53 NodeComponent.go:278: info 2018-12-13T 23:50:53  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:50:53 NodeComponent.go:278: info 2018-12-13T 23:50:53  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:50:53 ChildComponent.go:101: info 2018-12-13T 23:50:53  connected to master
+2018/12/13 23:50:53 server.go:563: debug 127.0.0.1:59932
+2018/12/13 23:50:53 server.go:563: debug 127.0.0.1:59933
+2018/12/13 23:51:01 wshandler.go:63: debug TCP accept:127.0.0.1:59938
+2018/12/13 23:51:01 DefaultGateComponent.go:64: debug client 127.0.0.1:59938 connected,session id :x37gnWkpTb7pIUcWOegXVl
+2018/12/13 23:51:42 netapi.go:92: error runtime error: hash of unhashable type Actor.ActorID
+goroutine 184505 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/network.(*ApiBase).Route.func1()
+	C:/GOPATH/projects/RockGO/network/netapi.go:91 +0xd9
+panic(0xbfe660, 0xc00036c040)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+sync.(*Map).Load(0xc0001df678, 0xc1bd20, 0xc0004b1150, 0x0, 0x0, 0x0)
+	C:/Go/src/sync/map.go:113 +0x401
+github.com/zllangct/RockGO/actor.(*ActorProxyComponent).LocalTell(0xc0001df650, 0xc0005bc120, 0x3, 0x3, 0xc0003a00c0, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/actor/ActorProxyComponent.go:115 +0xdc
+github.com/zllangct/RockGO/actor.(*ActorProxyComponent).Emit(0xc0001df650, 0xc0005bc120, 0x3, 0x3, 0xc0003a00c0, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/actor/ActorProxyComponent.go:131 +0x11f
+github.com/zllangct/RockGO/actor.(*ActorRemote).Tell(0xc0003a00a0, 0xde2020, 0xc000126900, 0xc000640000, 0xc000524008, 0x1, 0x1, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/actor/Actor.go:40 +0x1a1
+main.(*TestApi).CreateRoom(0xc0001264e0, 0xc0006631c0, 0xc00031cd30)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/TestApi.go:77 +0x444
+reflect.Value.call(0xc0001265a0, 0xc0001280d8, 0x13, 0xcc929d, 0x4, 0xc0004b1de8, 0x3, 0x3, 0x0, 0x0, ...)
+	C:/Go/src/reflect/value.go:447 +0xbbb
+reflect.Value.Call(0xc0001265a0, 0xc0001280d8, 0x13, 0xc0004b1de8, 0x3, 0x3, 0x0, 0x0, 0x0)
+	C:/Go/src/reflect/value.go:308 +0xd1
+github.com/zllangct/RockGO/network.(*ApiBase).Route(0xc0001264e0, 0xc0006631c0, 0x1, 0xc000558000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/netapi.go:107 +0x692
+github.com/zllangct/RockGO/network.(*Server).invoke(0xc000118480, 0xde4aa0, 0xc0005db680, 0x1, 0xc000558000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/server.go:109 +0x127
+github.com/zllangct/RockGO/network.(*websocketHandler).recv.func1()
+	C:/GOPATH/projects/RockGO/network/wshandler.go:120 +0x2e5
+created by github.com/zllangct/RockGO/network.(*websocketHandler).recv
+	C:/GOPATH/projects/RockGO/network/wshandler.go:138 +0x7cf
+
+2018/12/13 23:53:35 RockGO.go:115: fatal ====== Server is closed ======
+2018/12/13 23:53:39 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 23:53:39 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 23:53:39 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 23:53:39 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 23:53:39 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 23:53:39 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 23:53:39 server.go:563: debug 127.0.0.1:59965
+2018/12/13 23:53:39 NodeComponent.go:278: info 2018-12-13T 23:53:39  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:53:39 NodeComponent.go:278: info 2018-12-13T 23:53:39  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:53:39 ChildComponent.go:101: info 2018-12-13T 23:53:39  connected to master
+2018/12/13 23:53:39 server.go:563: debug 127.0.0.1:59966
+2018/12/13 23:53:46 wshandler.go:63: debug TCP accept:127.0.0.1:59969
+2018/12/13 23:53:46 DefaultGateComponent.go:64: debug client 127.0.0.1:59969 connected,session id :SpGWYvg5oeR46JhM8FjaPM
+2018/12/13 23:53:54 netapi.go:92: error runtime error: hash of unhashable type Actor.ActorID
+goroutine 108876 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/network.(*ApiBase).Route.func1()
+	C:/GOPATH/projects/RockGO/network/netapi.go:91 +0xd9
+panic(0xbfe660, 0xc0003da110)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+sync.(*Map).Load(0xc0001e6a38, 0xc1bd20, 0xc000537150, 0x0, 0x0, 0x0)
+	C:/Go/src/sync/map.go:113 +0x401
+github.com/zllangct/RockGO/actor.(*ActorProxyComponent).LocalTell(0xc0001e6a10, 0xc00047c5d0, 0x3, 0x3, 0xc00054fdc0, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/actor/ActorProxyComponent.go:115 +0xdc
+github.com/zllangct/RockGO/actor.(*ActorProxyComponent).Emit(0xc0001e6a10, 0xc00047c5d0, 0x3, 0x3, 0xc00054fdc0, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/actor/ActorProxyComponent.go:131 +0x11f
+github.com/zllangct/RockGO/actor.(*ActorRemote).Tell(0xc00054fda0, 0xde2020, 0xc0000f72c0, 0xc00047c600, 0xc0002729c8, 0x1, 0x1, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/actor/Actor.go:40 +0x1a1
+main.(*TestApi).CreateRoom(0xc0000f6ea0, 0xc00059a040, 0xc000394180)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/TestApi.go:77 +0x444
+reflect.Value.call(0xc0000f6f60, 0xc00008e640, 0x13, 0xcc929d, 0x4, 0xc000537de8, 0x3, 0x3, 0x0, 0x0, ...)
+	C:/Go/src/reflect/value.go:447 +0xbbb
+reflect.Value.Call(0xc0000f6f60, 0xc00008e640, 0x13, 0xc000537de8, 0x3, 0x3, 0x0, 0x0, 0x0)
+	C:/Go/src/reflect/value.go:308 +0xd1
+github.com/zllangct/RockGO/network.(*ApiBase).Route(0xc0000f6ea0, 0xc00059a040, 0x1, 0xc000214000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/netapi.go:107 +0x692
+github.com/zllangct/RockGO/network.(*Server).invoke(0xc00018be00, 0xde4aa0, 0xc0004cfbf0, 0x1, 0xc000214000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/server.go:109 +0x127
+github.com/zllangct/RockGO/network.(*websocketHandler).recv.func1()
+	C:/GOPATH/projects/RockGO/network/wshandler.go:120 +0x2e5
+created by github.com/zllangct/RockGO/network.(*websocketHandler).recv
+	C:/GOPATH/projects/RockGO/network/wshandler.go:138 +0x7cf
+
+2018/12/13 23:54:29 RockGO.go:115: fatal ====== Server is closed ======
+2018/12/13 23:54:32 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 23:54:32 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 23:54:32 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 23:54:32 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 23:54:32 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 23:54:32 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 23:54:32 NodeComponent.go:278: info 2018-12-13T 23:54:32  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:54:32 NodeComponent.go:278: info 2018-12-13T 23:54:32  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:54:32 server.go:563: debug 127.0.0.1:59977
+2018/12/13 23:54:32 ChildComponent.go:101: info 2018-12-13T 23:54:32  connected to master
+2018/12/13 23:54:32 server.go:563: debug 127.0.0.1:59978
+2018/12/13 23:54:35 wshandler.go:63: debug TCP accept:127.0.0.1:59981
+2018/12/13 23:54:35 DefaultGateComponent.go:64: debug client 127.0.0.1:59981 connected,session id :PamBYi8r0WwzgGiVqPWxEs
+2018/12/13 23:54:46 netapi.go:92: error runtime error: hash of unhashable type Actor.ActorID
+goroutine 36022 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/network.(*ApiBase).Route.func1()
+	C:/GOPATH/projects/RockGO/network/netapi.go:91 +0xd9
+panic(0xbfe660, 0xc000248b30)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+sync.(*Map).Load(0xc000097838, 0xc1bd20, 0xc00027b150, 0x0, 0x0, 0x0)
+	C:/Go/src/sync/map.go:113 +0x401
+github.com/zllangct/RockGO/actor.(*ActorProxyComponent).LocalTell(0xc000097810, 0xc0002f47b0, 0x3, 0x3, 0xc00007e540, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/actor/ActorProxyComponent.go:115 +0xdc
+github.com/zllangct/RockGO/actor.(*ActorProxyComponent).Emit(0xc000097810, 0xc0002f47b0, 0x3, 0x3, 0xc00007e540, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/actor/ActorProxyComponent.go:131 +0x11f
+github.com/zllangct/RockGO/actor.(*ActorRemote).Tell(0xc00007e520, 0xde2020, 0xc000028ae0, 0xc000224990, 0xc000006d08, 0x1, 0x1, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/actor/Actor.go:40 +0x1a1
+main.(*TestApi).CreateRoom(0xc0000286c0, 0xc0000fde40, 0xc000388b90)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/TestApi.go:77 +0x444
+reflect.Value.call(0xc000028780, 0xc000006578, 0x13, 0xcc929d, 0x4, 0xc00027bde8, 0x3, 0x3, 0x0, 0x0, ...)
+	C:/Go/src/reflect/value.go:447 +0xbbb
+reflect.Value.Call(0xc000028780, 0xc000006578, 0x13, 0xc00027bde8, 0x3, 0x3, 0x0, 0x0, 0x0)
+	C:/Go/src/reflect/value.go:308 +0xd1
+github.com/zllangct/RockGO/network.(*ApiBase).Route(0xc0000286c0, 0xc0000fde40, 0x1, 0xc0001dc000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/netapi.go:107 +0x692
+github.com/zllangct/RockGO/network.(*Server).invoke(0xc00020e080, 0xde4aa0, 0xc0000f6c00, 0x1, 0xc0001dc000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/server.go:109 +0x127
+github.com/zllangct/RockGO/network.(*websocketHandler).recv.func1()
+	C:/GOPATH/projects/RockGO/network/wshandler.go:120 +0x2e5
+created by github.com/zllangct/RockGO/network.(*websocketHandler).recv
+	C:/GOPATH/projects/RockGO/network/wshandler.go:138 +0x7cf
+
+2018/12/13 23:54:48 RockGO.go:115: fatal ====== Server is closed ======
+2018/12/13 23:54:51 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 23:54:51 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 23:54:51 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 23:54:51 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 23:54:51 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 23:54:51 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 23:54:51 NodeComponent.go:278: info 2018-12-13T 23:54:51  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:54:51 ChildComponent.go:101: info 2018-12-13T 23:54:51  connected to master
+2018/12/13 23:54:51 NodeComponent.go:278: info 2018-12-13T 23:54:51  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:54:51 server.go:563: debug 127.0.0.1:59986
+2018/12/13 23:54:51 server.go:563: debug 127.0.0.1:59987
+2018/12/13 23:54:53 wshandler.go:63: debug TCP accept:127.0.0.1:59990
+2018/12/13 23:54:53 DefaultGateComponent.go:64: debug client 127.0.0.1:59990 connected,session id :YO4FnnCVys3H9ddF4zf2ii
+2018/12/13 23:56:19 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 23:56:19 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 23:56:19 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 23:56:19 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 23:56:19 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 23:56:19 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 23:56:19 NodeComponent.go:278: info 2018-12-13T 23:56:19  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:56:19 server.go:563: debug 127.0.0.1:60003
+2018/12/13 23:56:19 NodeComponent.go:278: info 2018-12-13T 23:56:19  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:56:19 ChildComponent.go:101: info 2018-12-13T 23:56:19  connected to master
+2018/12/13 23:56:19 server.go:563: debug 127.0.0.1:60004
+2018/12/13 23:56:22 wshandler.go:63: debug TCP accept:127.0.0.1:60007
+2018/12/13 23:56:22 DefaultGateComponent.go:64: debug client 127.0.0.1:60007 connected,session id :vAj4Bapv1F1Jw1Np64TNPw
+2018/12/13 23:56:33 netapi.go:92: error runtime error: invalid memory address or nil pointer dereference
+goroutine 41048 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/network.(*ApiBase).Route.func1()
+	C:/GOPATH/projects/RockGO/network/netapi.go:91 +0xd9
+panic(0xbfe660, 0x120b390)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+main.(*TestApi).CreateRoom(0xc00010c5a0, 0xc000332840, 0xc00058cc80)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/TestApi.go:85 +0x493
+reflect.Value.call(0xc00010c660, 0xc00011a0d8, 0x13, 0xcc929d, 0x4, 0xc00019fde8, 0x3, 0x3, 0x0, 0x0, ...)
+	C:/Go/src/reflect/value.go:447 +0xbbb
+reflect.Value.Call(0xc00010c660, 0xc00011a0d8, 0x13, 0xc00019fde8, 0x3, 0x3, 0x0, 0x0, 0x0)
+	C:/Go/src/reflect/value.go:308 +0xd1
+github.com/zllangct/RockGO/network.(*ApiBase).Route(0xc00010c5a0, 0xc000332840, 0x1, 0xc0002ec000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/netapi.go:107 +0x692
+github.com/zllangct/RockGO/network.(*Server).invoke(0xc000114d40, 0xde4aa0, 0xc00031cc30, 0x1, 0xc0002ec000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/server.go:109 +0x127
+github.com/zllangct/RockGO/network.(*websocketHandler).recv.func1()
+	C:/GOPATH/projects/RockGO/network/wshandler.go:120 +0x2e5
+created by github.com/zllangct/RockGO/network.(*websocketHandler).recv
+	C:/GOPATH/projects/RockGO/network/wshandler.go:138 +0x7cf
+
+2018/12/13 23:56:33 ActorComponent.go:146: error runtime error: invalid memory address or nil pointer dereference
+goroutine 61 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/actor.(*ActorComponent).Catch.func1()
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:145 +0xd9
+panic(0xbfe660, 0x120b390)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+main.(*RoomManagerComponent).NewRoom(0xc00010f620, 0xc0002e2400)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/RoomManagerComponent.go:34 +0x21c
+main.(*RoomManagerComponent).NewRoom-fm(0xc0002e2400)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/RoomManagerComponent.go:18 +0x40
+github.com/zllangct/RockGO/actor.(*ActorComponent).Catch(0xc00010ca20, 0xc000112cd0, 0xc0002e2400)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:149 +0x55
+github.com/zllangct/RockGO/actor.(*ActorComponent).dispatch.func1(0xc0002e2400)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:123 +0x276
+github.com/zllangct/RockGO/actor.(*ActorComponent).dispatch(0xc00010ca20)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:138 +0x1d3
+created by github.com/zllangct/RockGO/actor.(*ActorComponent).Awake
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:67 +0x2df
+
+2018/12/13 23:57:39 netapi.go:92: error runtime error: invalid memory address or nil pointer dereference
+goroutine 401706 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/network.(*ApiBase).Route.func1()
+	C:/GOPATH/projects/RockGO/network/netapi.go:91 +0xd9
+panic(0xbfe660, 0x120b390)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+main.(*TestApi).CreateRoom(0xc00010c5a0, 0xc000332840, 0xc0002b4360)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/TestApi.go:85 +0x493
+reflect.Value.call(0xc00010c660, 0xc00011a0d8, 0x13, 0xcc929d, 0x4, 0xc000083de8, 0x3, 0x3, 0x0, 0x0, ...)
+	C:/Go/src/reflect/value.go:447 +0xbbb
+reflect.Value.Call(0xc00010c660, 0xc00011a0d8, 0x13, 0xc000083de8, 0x3, 0x3, 0x0, 0x0, 0x0)
+	C:/Go/src/reflect/value.go:308 +0xd1
+github.com/zllangct/RockGO/network.(*ApiBase).Route(0xc00010c5a0, 0xc000332840, 0x1, 0xc00060a600, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/netapi.go:107 +0x692
+github.com/zllangct/RockGO/network.(*Server).invoke(0xc000114d40, 0xde4aa0, 0xc00060e1e0, 0x1, 0xc00060a600, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/server.go:109 +0x127
+github.com/zllangct/RockGO/network.(*websocketHandler).recv.func1()
+	C:/GOPATH/projects/RockGO/network/wshandler.go:120 +0x2e5
+created by github.com/zllangct/RockGO/network.(*websocketHandler).recv
+	C:/GOPATH/projects/RockGO/network/wshandler.go:138 +0x7cf
+
+2018/12/13 23:57:39 object.go:82: error rpc: service already defined: RoomComponent
+2018/12/13 23:57:39 ActorComponent.go:146: error runtime error: invalid memory address or nil pointer dereference
+goroutine 61 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/actor.(*ActorComponent).Catch.func1()
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:145 +0xd9
+panic(0xbfe660, 0x120b390)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+main.(*RoomManagerComponent).NewRoom(0xc00010f620, 0xc000430200)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/RoomManagerComponent.go:34 +0x21c
+main.(*RoomManagerComponent).NewRoom-fm(0xc000430200)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/RoomManagerComponent.go:18 +0x40
+github.com/zllangct/RockGO/actor.(*ActorComponent).Catch(0xc00010ca20, 0xc000112cd0, 0xc000430200)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:149 +0x55
+github.com/zllangct/RockGO/actor.(*ActorComponent).dispatch.func1(0xc000430200)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:123 +0x276
+github.com/zllangct/RockGO/actor.(*ActorComponent).dispatch(0xc00010ca20)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:138 +0x1d3
+created by github.com/zllangct/RockGO/actor.(*ActorComponent).Awake
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:67 +0x2df
+
+2018/12/13 23:59:18 RockGO.go:115: fatal ====== Server is closed ======
+2018/12/13 23:59:21 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/13 23:59:21 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/13 23:59:21 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/13 23:59:21 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/13 23:59:21 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/13 23:59:21 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/13 23:59:21 server.go:563: debug 127.0.0.1:60042
+2018/12/13 23:59:21 NodeComponent.go:278: info 2018-12-13T 23:59:21  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:59:21 ChildComponent.go:101: info 2018-12-13T 23:59:21  connected to master
+2018/12/13 23:59:21 NodeComponent.go:278: info 2018-12-13T 23:59:21  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/13 23:59:21 server.go:563: debug 127.0.0.1:60043
+2018/12/13 23:59:26 wshandler.go:63: debug TCP accept:127.0.0.1:60047
+2018/12/13 23:59:26 DefaultGateComponent.go:64: debug client 127.0.0.1:60047 connected,session id :SwCHpIrz00PLitXGZW9Osu
+2018/12/14 00:02:26 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:02:26 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:02:26 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:02:26 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:02:26 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:02:26 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:02:26 server.go:563: debug 127.0.0.1:60079
+2018/12/14 00:02:26 NodeComponent.go:278: info 2018-12-14T 00:02:26  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:02:26 NodeComponent.go:278: info 2018-12-14T 00:02:26  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:02:26 server.go:563: debug 127.0.0.1:60080
+2018/12/14 00:02:26 ChildComponent.go:101: info 2018-12-14T 00:02:26  connected to master
+2018/12/14 00:02:29 wshandler.go:63: debug TCP accept:127.0.0.1:60084
+2018/12/14 00:02:29 DefaultGateComponent.go:64: debug client 127.0.0.1:60084 connected,session id :Agc0QNR4r1bb0m5jAJIsKF
+2018/12/14 00:04:59 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:04:59 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:04:59 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:04:59 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:04:59 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:04:59 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:04:59 server.go:563: debug 127.0.0.1:60110
+2018/12/14 00:04:59 NodeComponent.go:278: info 2018-12-14T 00:04:59  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:04:59 NodeComponent.go:278: info 2018-12-14T 00:04:59  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:04:59 ChildComponent.go:101: info 2018-12-14T 00:04:59  connected to master
+2018/12/14 00:04:59 server.go:563: debug 127.0.0.1:60111
+2018/12/14 00:05:02 wshandler.go:63: debug TCP accept:127.0.0.1:60114
+2018/12/14 00:05:02 DefaultGateComponent.go:64: debug client 127.0.0.1:60114 connected,session id :O6hFfLqXDyljc3m4eSR5Cs
+2018/12/14 00:05:44 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:05:44 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:05:44 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:05:44 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:05:44 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:05:44 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:05:44 NodeComponent.go:278: info 2018-12-14T 00:05:44  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:05:44 server.go:563: debug 127.0.0.1:60121
+2018/12/14 00:05:44 NodeComponent.go:278: info 2018-12-14T 00:05:44  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:05:44 ChildComponent.go:101: info 2018-12-14T 00:05:44  connected to master
+2018/12/14 00:05:44 server.go:563: debug 127.0.0.1:60122
+2018/12/14 00:05:50 wshandler.go:63: debug TCP accept:127.0.0.1:60126
+2018/12/14 00:05:50 DefaultGateComponent.go:64: debug client 127.0.0.1:60126 connected,session id :etFQiZ4qps127OY45cZOug
+2018/12/14 00:05:58 netapi.go:92: error runtime error: invalid memory address or nil pointer dereference
+goroutine 71297 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/network.(*ApiBase).Route.func1()
+	C:/GOPATH/projects/RockGO/network/netapi.go:91 +0xd9
+panic(0xbfe600, 0x120b390)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+main.(*TestApi).CreateRoom(0xc0000284e0, 0xc0005b1700, 0xc0002ba320)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/TestApi.go:85 +0x493
+reflect.Value.call(0xc0000285a0, 0xc0000060d0, 0x13, 0xcc923d, 0x4, 0xc0005f7de8, 0x3, 0x3, 0x0, 0x0, ...)
+	C:/Go/src/reflect/value.go:447 +0xbbb
+reflect.Value.Call(0xc0000285a0, 0xc0000060d0, 0x13, 0xc0005f7de8, 0x3, 0x3, 0x0, 0x0, 0x0)
+	C:/Go/src/reflect/value.go:308 +0xd1
+github.com/zllangct/RockGO/network.(*ApiBase).Route(0xc0000284e0, 0xc0005b1700, 0x1, 0xc0005ea000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/netapi.go:107 +0x692
+github.com/zllangct/RockGO/network.(*Server).invoke(0xc000050cc0, 0xde4a60, 0xc00046fbf0, 0x1, 0xc0005ea000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/server.go:109 +0x127
+github.com/zllangct/RockGO/network.(*websocketHandler).recv.func1()
+	C:/GOPATH/projects/RockGO/network/wshandler.go:120 +0x2e5
+created by github.com/zllangct/RockGO/network.(*websocketHandler).recv
+	C:/GOPATH/projects/RockGO/network/wshandler.go:138 +0x7cf
+
+2018/12/14 00:11:51 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:11:51 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:11:51 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:11:51 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:11:51 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:11:51 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:11:51 server.go:563: debug 127.0.0.1:60186
+2018/12/14 00:11:51 NodeComponent.go:278: info 2018-12-14T 00:11:51  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:11:51 NodeComponent.go:278: info 2018-12-14T 00:11:51  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:11:51 ChildComponent.go:101: info 2018-12-14T 00:11:51  connected to master
+2018/12/14 00:11:51 server.go:563: debug 127.0.0.1:60187
+2018/12/14 00:11:51 wshandler.go:63: debug TCP accept:127.0.0.1:60191
+2018/12/14 00:11:51 DefaultGateComponent.go:64: debug client 127.0.0.1:60191 connected,session id :24tJsuBGdhU2LXpuBN6QeU
+2018/12/14 00:11:59 netapi.go:92: error runtime error: invalid memory address or nil pointer dereference
+goroutine 11679 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/network.(*ApiBase).Route.func1()
+	C:/GOPATH/projects/RockGO/network/netapi.go:91 +0xd9
+panic(0xbfe600, 0x120b390)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+main.(*TestApi).CreateRoom(0xc00010ede0, 0xc000118580, 0xc000105410)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/TestApi.go:85 +0x493
+reflect.Value.call(0xc00010eea0, 0xc0001141b0, 0x13, 0xcc923d, 0x4, 0xc000359de8, 0x3, 0x3, 0x0, 0x0, ...)
+	C:/Go/src/reflect/value.go:447 +0xbbb
+reflect.Value.Call(0xc00010eea0, 0xc0001141b0, 0x13, 0xc000359de8, 0x3, 0x3, 0x0, 0x0, 0x0)
+	C:/Go/src/reflect/value.go:308 +0xd1
+github.com/zllangct/RockGO/network.(*ApiBase).Route(0xc00010ede0, 0xc000118580, 0x1, 0xc00059c000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/netapi.go:107 +0x692
+github.com/zllangct/RockGO/network.(*Server).invoke(0xc0001e4a00, 0xde4a60, 0xc000608a50, 0x1, 0xc00059c000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/server.go:109 +0x127
+github.com/zllangct/RockGO/network.(*websocketHandler).recv.func1()
+	C:/GOPATH/projects/RockGO/network/wshandler.go:120 +0x2e5
+created by github.com/zllangct/RockGO/network.(*websocketHandler).recv
+	C:/GOPATH/projects/RockGO/network/wshandler.go:138 +0x7cf
+
+2018/12/14 00:12:45 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:12:45 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:12:45 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:12:45 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:12:45 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:12:45 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:12:45 NodeComponent.go:278: info 2018-12-14T 00:12:45  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:12:45 server.go:563: debug 127.0.0.1:60207
+2018/12/14 00:12:45 NodeComponent.go:278: info 2018-12-14T 00:12:45  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:12:45 ChildComponent.go:101: info 2018-12-14T 00:12:45  connected to master
+2018/12/14 00:12:45 server.go:563: debug 127.0.0.1:60208
+2018/12/14 00:12:54 wshandler.go:63: debug TCP accept:127.0.0.1:60213
+2018/12/14 00:12:54 DefaultGateComponent.go:64: debug client 127.0.0.1:60213 connected,session id :EhRgzOyIX4cGCI4ZElOYJi
+2018/12/14 00:14:31 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:14:31 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:14:31 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:14:31 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:14:31 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:14:31 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:14:31 NodeComponent.go:278: info 2018-12-14T 00:14:31  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:14:31 NodeComponent.go:278: info 2018-12-14T 00:14:31  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:14:31 ChildComponent.go:101: info 2018-12-14T 00:14:31  connected to master
+2018/12/14 00:14:31 server.go:563: debug 127.0.0.1:60227
+2018/12/14 00:14:31 server.go:563: debug 127.0.0.1:60228
+2018/12/14 00:14:32 wshandler.go:63: debug TCP accept:127.0.0.1:60231
+2018/12/14 00:14:32 DefaultGateComponent.go:64: debug client 127.0.0.1:60231 connected,session id :5PlmPNRgau1SuLasj8hUN8
+2018/12/14 00:19:38 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:19:38 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:19:38 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:19:38 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:19:38 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:19:38 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:19:38 server.go:563: debug 127.0.0.1:60293
+2018/12/14 00:19:38 NodeComponent.go:278: info 2018-12-14T 00:19:38  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:19:38 NodeComponent.go:278: info 2018-12-14T 00:19:38  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:19:38 server.go:563: debug 127.0.0.1:60292
+2018/12/14 00:19:38 ChildComponent.go:101: info 2018-12-14T 00:19:38  connected to master
+2018/12/14 00:19:42 wshandler.go:63: debug TCP accept:127.0.0.1:60297
+2018/12/14 00:19:42 DefaultGateComponent.go:64: debug client 127.0.0.1:60297 connected,session id :sviaZFuvjnPj0aV2CMWmVL
+2018/12/14 00:20:05 netapi.go:92: error runtime error: invalid memory address or nil pointer dereference
+goroutine 130424 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/network.(*ApiBase).Route.func1()
+	C:/GOPATH/projects/RockGO/network/netapi.go:91 +0xd9
+panic(0xbfe640, 0x120b390)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+main.(*TestApi).CreateRoom(0xc0001b83c0, 0xc00052cac0, 0xc00011b3f0)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/TestApi.go:85 +0x4c7
+reflect.Value.call(0xc0001b8480, 0xc0001c40c0, 0x13, 0xcc927d, 0x4, 0xc000415de8, 0x3, 0x3, 0x0, 0x0, ...)
+	C:/Go/src/reflect/value.go:447 +0xbbb
+reflect.Value.Call(0xc0001b8480, 0xc0001c40c0, 0x13, 0xc000415de8, 0x3, 0x3, 0x0, 0x0, 0x0)
+	C:/Go/src/reflect/value.go:308 +0xd1
+github.com/zllangct/RockGO/network.(*ApiBase).Route(0xc0001b83c0, 0xc00052cac0, 0x1, 0xc000130000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/netapi.go:107 +0x692
+github.com/zllangct/RockGO/network.(*Server).invoke(0xc0001c0c40, 0xde4aa0, 0xc0004624e0, 0x1, 0xc000130000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/server.go:109 +0x127
+github.com/zllangct/RockGO/network.(*websocketHandler).recv.func1()
+	C:/GOPATH/projects/RockGO/network/wshandler.go:120 +0x2e5
+created by github.com/zllangct/RockGO/network.(*websocketHandler).recv
+	C:/GOPATH/projects/RockGO/network/wshandler.go:138 +0x7cf
+
+2018/12/14 00:20:38 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:20:38 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:20:38 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:20:38 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:20:38 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:20:38 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:20:38 server.go:563: debug 127.0.0.1:60310
+2018/12/14 00:20:38 NodeComponent.go:278: info 2018-12-14T 00:20:38  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:20:38 NodeComponent.go:278: info 2018-12-14T 00:20:38  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:20:38 ChildComponent.go:101: info 2018-12-14T 00:20:38  connected to master
+2018/12/14 00:20:38 server.go:563: debug 127.0.0.1:60311
+2018/12/14 00:20:40 wshandler.go:63: debug TCP accept:127.0.0.1:60314
+2018/12/14 00:20:40 DefaultGateComponent.go:64: debug client 127.0.0.1:60314 connected,session id :ITSCoxOhe82r6jZpWM4wbF
+2018/12/14 00:26:38 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:26:38 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:26:38 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:26:38 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:26:38 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:26:38 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:26:38 NodeComponent.go:278: info 2018-12-14T 00:26:38  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:26:38 NodeComponent.go:278: info 2018-12-14T 00:26:38  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:26:38 ChildComponent.go:101: info 2018-12-14T 00:26:38  connected to master
+2018/12/14 00:26:38 server.go:563: debug 127.0.0.1:60373
+2018/12/14 00:26:38 server.go:563: debug 127.0.0.1:60372
+2018/12/14 00:26:41 wshandler.go:63: debug TCP accept:127.0.0.1:60377
+2018/12/14 00:26:41 DefaultGateComponent.go:64: debug client 127.0.0.1:60377 connected,session id :v2AIfP0RzwjqHSxnfbQ9iD
+2018/12/14 00:27:14 netapi.go:92: error runtime error: invalid memory address or nil pointer dereference
+goroutine 93604 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/network.(*ApiBase).Route.func1()
+	C:/GOPATH/projects/RockGO/network/netapi.go:91 +0xd9
+panic(0xbfe600, 0x120b390)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+main.(*TestApi).CreateRoom(0xc0000f6f00, 0xc00047e200, 0xc0001a1690)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/TestApi.go:85 +0x493
+reflect.Value.call(0xc0000f6fc0, 0xc00008e648, 0x13, 0xcc923d, 0x4, 0xc0003dfde8, 0x3, 0x3, 0x0, 0x0, ...)
+	C:/Go/src/reflect/value.go:447 +0xbbb
+reflect.Value.Call(0xc0000f6fc0, 0xc00008e648, 0x13, 0xc0003dfde8, 0x3, 0x3, 0x0, 0x0, 0x0)
+	C:/Go/src/reflect/value.go:308 +0xd1
+github.com/zllangct/RockGO/network.(*ApiBase).Route(0xc0000f6f00, 0xc00047e200, 0x1, 0xc000230000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/netapi.go:107 +0x692
+github.com/zllangct/RockGO/network.(*Server).invoke(0xc00017fe40, 0xde4a60, 0xc000638d50, 0x1, 0xc000230000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/server.go:109 +0x127
+github.com/zllangct/RockGO/network.(*websocketHandler).recv.func1()
+	C:/GOPATH/projects/RockGO/network/wshandler.go:120 +0x2e5
+created by github.com/zllangct/RockGO/network.(*websocketHandler).recv
+	C:/GOPATH/projects/RockGO/network/wshandler.go:138 +0x7cf
+
+2018/12/14 00:27:14 ActorComponent.go:146: error runtime error: invalid memory address or nil pointer dereference
+goroutine 33 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/actor.(*ActorComponent).Catch.func1()
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:145 +0xd9
+panic(0xbfe600, 0x120b390)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+main.(*RoomManagerComponent).NewRoom(0xc000165f80, 0xc000137380)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/RoomManagerComponent.go:34 +0x21c
+main.(*RoomManagerComponent).NewRoom-fm(0xc000137380)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/RoomManagerComponent.go:18 +0x40
+github.com/zllangct/RockGO/actor.(*ActorComponent).Catch(0xc0000f7380, 0xc00015f8f0, 0xc000137380)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:149 +0x55
+github.com/zllangct/RockGO/actor.(*ActorComponent).dispatch.func1(0xc000137380)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:123 +0x276
+github.com/zllangct/RockGO/actor.(*ActorComponent).dispatch(0xc0000f7380)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:138 +0x1d3
+created by github.com/zllangct/RockGO/actor.(*ActorComponent).Awake
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:67 +0x2df
+
+2018/12/14 00:27:33 RockGO.go:115: fatal ====== Server is closed ======
+2018/12/14 00:27:57 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:27:57 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:27:57 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:27:57 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:27:57 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:27:57 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:27:57 server.go:563: debug 127.0.0.1:60402
+2018/12/14 00:27:57 NodeComponent.go:278: info 2018-12-14T 00:27:57  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:27:57 ChildComponent.go:101: info 2018-12-14T 00:27:57  connected to master
+2018/12/14 00:27:57 NodeComponent.go:278: info 2018-12-14T 00:27:57  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:27:57 server.go:563: debug 127.0.0.1:60401
+2018/12/14 00:28:00 wshandler.go:63: debug TCP accept:127.0.0.1:60406
+2018/12/14 00:28:00 DefaultGateComponent.go:64: debug client 127.0.0.1:60406 connected,session id :6FGS810GsRLtrPf8rSGTSF
+2018/12/14 00:28:13 ActorComponent.go:146: error runtime error: invalid memory address or nil pointer dereference
+goroutine 31 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/actor.(*ActorComponent).Catch.func1()
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:145 +0xd9
+panic(0xbfe600, 0x120b390)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+main.(*RoomManagerComponent).NewRoom(0xc00021a510, 0xc00030d680)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/RoomManagerComponent.go:34 +0x21c
+main.(*RoomManagerComponent).NewRoom-fm(0xc00030d680)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/RoomManagerComponent.go:18 +0x40
+github.com/zllangct/RockGO/actor.(*ActorComponent).Catch(0xc000137140, 0xc000135e20, 0xc00030d680)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:149 +0x55
+github.com/zllangct/RockGO/actor.(*ActorComponent).dispatch.func1(0xc00030d680)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:123 +0x276
+github.com/zllangct/RockGO/actor.(*ActorComponent).dispatch(0xc000137140)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:138 +0x1d3
+created by github.com/zllangct/RockGO/actor.(*ActorComponent).Awake
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:67 +0x2df
+
+2018/12/14 00:28:47 RockGO.go:115: fatal ====== Server is closed ======
+2018/12/14 00:29:08 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:29:08 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:29:08 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:29:08 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:29:08 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:29:08 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:29:08 server.go:563: debug 127.0.0.1:60418
+2018/12/14 00:29:08 NodeComponent.go:278: info 2018-12-14T 00:29:08  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:29:08 NodeComponent.go:278: info 2018-12-14T 00:29:08  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:29:08 ChildComponent.go:101: info 2018-12-14T 00:29:08  connected to master
+2018/12/14 00:29:08 server.go:563: debug 127.0.0.1:60419
+2018/12/14 00:29:11 wshandler.go:63: debug TCP accept:127.0.0.1:60423
+2018/12/14 00:29:11 DefaultGateComponent.go:64: debug client 127.0.0.1:60423 connected,session id :qprubcV9fzMePJSPLxX1Hq
+2018/12/14 00:29:37 RockGO.go:115: fatal ====== Server is closed ======
+2018/12/14 00:30:01 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:30:01 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:30:01 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:30:01 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:30:01 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:30:01 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:30:01 NodeComponent.go:278: info 2018-12-14T 00:30:01  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:30:01 server.go:563: debug 127.0.0.1:60434
+2018/12/14 00:30:01 NodeComponent.go:278: info 2018-12-14T 00:30:01  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:30:01 ChildComponent.go:101: info 2018-12-14T 00:30:01  connected to master
+2018/12/14 00:30:01 server.go:563: debug 127.0.0.1:60435
+2018/12/14 00:30:05 wshandler.go:63: debug TCP accept:127.0.0.1:60438
+2018/12/14 00:30:05 DefaultGateComponent.go:64: debug client 127.0.0.1:60438 connected,session id :ZuCALB517vcjWuXDQHFVbK
+2018/12/14 00:30:31 netapi.go:92: error runtime error: invalid memory address or nil pointer dereference
+goroutine 43473 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/network.(*ApiBase).Route.func1()
+	C:/GOPATH/projects/RockGO/network/netapi.go:91 +0xd9
+panic(0xbfe600, 0x120b390)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+main.(*TestApi).CreateRoom(0xc000028420, 0xc00029d180, 0xc000387650)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/TestApi.go:85 +0x493
+reflect.Value.call(0xc0000284e0, 0xc0000060b8, 0x13, 0xcc923d, 0x4, 0xc0003dfde8, 0x3, 0x3, 0x0, 0x0, ...)
+	C:/Go/src/reflect/value.go:447 +0xbbb
+reflect.Value.Call(0xc0000284e0, 0xc0000060b8, 0x13, 0xc0003dfde8, 0x3, 0x3, 0x0, 0x0, 0x0)
+	C:/Go/src/reflect/value.go:308 +0xd1
+github.com/zllangct/RockGO/network.(*ApiBase).Route(0xc000028420, 0xc00029d180, 0x1, 0xc00031a000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/netapi.go:107 +0x692
+github.com/zllangct/RockGO/network.(*Server).invoke(0xc000050c80, 0xde4a40, 0xc0001ac8d0, 0x1, 0xc00031a000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/server.go:109 +0x127
+github.com/zllangct/RockGO/network.(*websocketHandler).recv.func1()
+	C:/GOPATH/projects/RockGO/network/wshandler.go:120 +0x2e5
+created by github.com/zllangct/RockGO/network.(*websocketHandler).recv
+	C:/GOPATH/projects/RockGO/network/wshandler.go:138 +0x7cf
+
+2018/12/14 00:31:48 RockGO.go:115: fatal ====== Server is closed ======
+2018/12/14 00:31:53 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:31:53 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:31:53 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:31:53 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:31:53 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:31:53 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:31:53 server.go:563: debug 127.0.0.1:60476
+2018/12/14 00:31:53 NodeComponent.go:278: info 2018-12-14T 00:31:53  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:31:53 server.go:563: debug 127.0.0.1:60477
+2018/12/14 00:31:53 NodeComponent.go:278: info 2018-12-14T 00:31:53  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:31:53 ChildComponent.go:101: info 2018-12-14T 00:31:53  connected to master
+2018/12/14 00:31:56 wshandler.go:63: debug TCP accept:127.0.0.1:60480
+2018/12/14 00:31:56 DefaultGateComponent.go:64: debug client 127.0.0.1:60480 connected,session id :JcCZqiWDm9RMSBlxfqjWvr
+2018/12/14 00:35:35 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:35:35 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:35:35 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:35:35 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:35:35 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:35:35 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:35:35 server.go:563: debug 127.0.0.1:60513
+2018/12/14 00:35:35 NodeComponent.go:278: info 2018-12-14T 00:35:35  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:35:35 ChildComponent.go:101: info 2018-12-14T 00:35:35  connected to master
+2018/12/14 00:35:35 server.go:563: debug 127.0.0.1:60514
+2018/12/14 00:35:35 NodeComponent.go:278: info 2018-12-14T 00:35:35  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:35:38 wshandler.go:63: debug TCP accept:127.0.0.1:60518
+2018/12/14 00:35:38 DefaultGateComponent.go:64: debug client 127.0.0.1:60518 connected,session id :ImKhAtxzd1MaJZ9eB4qhBO
+2018/12/14 00:37:28 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 00:37:28 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 00:37:28 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 00:37:28 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 00:37:28 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 00:37:28 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 00:37:28 server.go:563: debug 127.0.0.1:60542
+2018/12/14 00:37:28 server.go:563: debug 127.0.0.1:60543
+2018/12/14 00:37:28 NodeComponent.go:278: info 2018-12-14T 00:37:28  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:37:28 NodeComponent.go:278: info 2018-12-14T 00:37:28  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 00:37:28 ChildComponent.go:101: info 2018-12-14T 00:37:28  connected to master
+2018/12/14 13:34:42 RockGO.go:115: fatal ====== Server is closed ======
+2018/12/14 13:39:29 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 13:39:29 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 13:39:29 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 13:39:29 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 13:39:29 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 13:39:29 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 13:39:29 server.go:563: debug 127.0.0.1:52414
+2018/12/14 13:39:29 NodeComponent.go:278: info 2018-12-14T 13:39:29  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 13:39:29 NodeComponent.go:278: info 2018-12-14T 13:39:29  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 13:39:29 ChildComponent.go:101: info 2018-12-14T 13:39:29  connected to master
+2018/12/14 13:39:29 server.go:563: debug 127.0.0.1:52415
+2018/12/14 13:40:01 RockGO.go:115: fatal ====== Server is closed ======
+2018/12/14 13:45:10 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 13:45:10 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 13:45:10 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 13:45:10 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 13:45:10 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 13:45:10 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 13:45:10 NodeComponent.go:278: info 2018-12-14T 13:45:10  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 13:45:10 NodeComponent.go:278: info 2018-12-14T 13:45:10  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 13:45:10 ChildComponent.go:101: info 2018-12-14T 13:45:10  connected to master
+2018/12/14 13:45:10 server.go:563: debug 127.0.0.1:52510
+2018/12/14 13:45:10 server.go:563: debug 127.0.0.1:52511
+2018/12/14 13:45:11 RockGO.go:115: fatal ====== Server is closed ======
+2018/12/14 13:45:32 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 13:45:32 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 13:45:32 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 13:45:32 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 13:45:32 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 13:45:32 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 13:45:32 server.go:563: debug 127.0.0.1:52519
+2018/12/14 13:45:32 NodeComponent.go:278: info 2018-12-14T 13:45:32  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 13:45:32 NodeComponent.go:278: info 2018-12-14T 13:45:32  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 13:45:32 ChildComponent.go:101: info 2018-12-14T 13:45:32  connected to master
+2018/12/14 13:45:32 server.go:563: debug 127.0.0.1:52520
+2018/12/14 13:45:47 RockGO.go:115: fatal ====== Server is closed ======
+2018/12/14 13:47:14 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 13:47:14 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 13:47:14 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 13:47:14 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 13:47:14 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 13:47:14 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 13:47:14 NodeComponent.go:278: info 2018-12-14T 13:47:14  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 13:47:14 NodeComponent.go:278: info 2018-12-14T 13:47:14  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 13:47:14 ChildComponent.go:101: info 2018-12-14T 13:47:14  connected to master
+2018/12/14 13:47:14 server.go:563: debug 127.0.0.1:52552
+2018/12/14 13:47:14 server.go:563: debug 127.0.0.1:52553
+2018/12/14 13:53:25 NodeComponent.go:91: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 13:53:25 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 13:53:25 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 13:53:25 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 13:53:25 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 13:53:25 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 13:53:25 server.go:563: debug 127.0.0.1:52645
+2018/12/14 13:53:25 NodeComponent.go:278: info 2018-12-14T 13:53:25  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 13:53:25 ChildComponent.go:101: info 2018-12-14T 13:53:25  connected to master
+2018/12/14 13:53:25 server.go:563: debug 127.0.0.1:52646
+2018/12/14 13:53:25 NodeComponent.go:278: info 2018-12-14T 13:53:25  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 13:55:26 RockGO.go:115: fatal ====== Server is closed ======
+2018/12/14 13:58:01 NodeComponent.go:92: info Test RPC server listening on: 127.0.0.1:6666
+2018/12/14 13:58:01 netapi.go:138: info ====== start to register API group:TestApi ======
+2018/12/14 13:58:01 netapi.go:173: info Add api: TestCreateRoom, handler: TestApi.CreateRoom(*network.Session,*TestCreateRoom)
+2018/12/14 13:58:01 netapi.go:173: info Add api: TestMessage, handler: TestApi.Hello(*network.Session,*TestMessage)
+2018/12/14 13:58:01 netapi.go:176: info ======   register API group: TestApi end   ======
+2018/12/14 13:58:01 wshandler.go:81: info Listening and serving HTTP on 0.0.0.0:5555
+
+2018/12/14 13:58:01 server.go:563: debug 127.0.0.1:52709
+2018/12/14 13:58:01 NodeComponent.go:279: info 2018-12-14T 13:58:01  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 13:58:01 NodeComponent.go:279: info 2018-12-14T 13:58:01  connect to node: [ 127.0.0.1:6666 ] success
+2018/12/14 13:58:01 ChildComponent.go:101: info 2018-12-14T 13:58:01  connected to master
+2018/12/14 13:58:01 server.go:563: debug 127.0.0.1:52710
+2018/12/14 14:00:16 RockGO.go:115: fatal ====== Server is closed ======

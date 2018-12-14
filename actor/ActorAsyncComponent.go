@@ -6,6 +6,7 @@ import (
 	"github.com/zllangct/RockGO/configComponent"
 	"github.com/zllangct/RockGO/logger"
 	"reflect"
+	"runtime/debug"
 	"sync/atomic"
 )
 
@@ -18,6 +19,7 @@ type ActorAsyncComponent struct {
 	Component.Base
 	ActorID      ActorID                //Actor地址
 	Proxy        *ActorProxyComponent   //Actor代理
+	Role         string
 	close        chan bool              //关闭信号
 	active       int32                  //是否激活,0：未激活 1：激活
 }
@@ -36,22 +38,23 @@ func (this *ActorAsyncComponent) IsUnique() int {
 	return Component.UNIQUE_TYPE_LOCAL
 }
 
-func (this *ActorAsyncComponent) Awake() {
+func (this *ActorAsyncComponent) Awake()error {
 	this.close=       make(chan bool)
 	//初始化Actor代理
 	err := this.Parent.Runtime().Root().Find(&this.Proxy)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	//初始化ID
 	this.ActorID= EmptyActorID()
 	//注册Actor到ActorProxy
 	err = this.Proxy.Register(this)
 	if err!=nil {
-		logger.Error(err)
+		return err
 	}
 	//设置Actor状态为激活
 	atomic.StoreInt32(&this.active, 1)
+	return nil
 }
 
 func (this *ActorAsyncComponent) Destroy() {
@@ -60,7 +63,11 @@ func (this *ActorAsyncComponent) Destroy() {
 	this.Proxy.Unregister(this)
 }
 
-func (this *ActorAsyncComponent) Tell(messageInfo *ActorMessageInfo,reply ...*ActorMessage) error {
+func (this *ActorAsyncComponent) Tell(sender IActor,message *ActorMessage,reply ...*ActorMessage) error {
+	messageInfo:=&ActorMessageInfo{
+		Sender:sender,
+		Message:message,
+	}
 	if len(reply)>0 {
 		messageInfo.Reply = reply[0]
 	}
@@ -87,8 +94,17 @@ func (this *ActorAsyncComponent) handle(messageInfo *ActorMessageInfo) {
 	for val, err = cps.Next(); err == nil; val, err = cps.Next() {
 		if messageHandler, ok := val.(IActorMessageHandler); ok {
 			if handler, ok := messageHandler.MessageHandlers()[messageInfo.Message.Tittle]; ok {
-				handler(messageInfo)
+				this.Catch(handler,messageInfo)
 			}
 		}
 	}
+}
+func (this *ActorAsyncComponent) Catch(handler func(message *ActorMessageInfo),m *ActorMessageInfo) {
+	defer (func() {
+		if r := recover(); r != nil {
+			err := errors.New(r.(error).Error() + "\n" + string(debug.Stack()))
+			logger.Error(err)
+		}
+	})()
+	handler(m)
 }

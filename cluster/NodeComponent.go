@@ -19,9 +19,11 @@ type NodeComponent struct {
 	locker sync.RWMutex
 	AppName         string
 	isOnline       	bool
+	islocationMode bool
 	rpcClient      	sync.Map 				//RPC客户端集合
 	rpcServer      	*rpc.Server				//本节点RPC Server
-	locationClients *NodeIDGroup				//位置服务器集合
+	locationClients *NodeIDGroup			//位置服务器集合
+	lockers      	sync.Map 				//[nodeid,locker]
 }
 
 func (this *NodeComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
@@ -32,15 +34,17 @@ func (this *NodeComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
 	return requires
 }
 
-func(this *NodeComponent)Awake(){
+func(this *NodeComponent)Awake()error{
 	this.AppName = Config.Config.ClusterConfig.AppName
+	this.islocationMode =Config.Config.ClusterConfig.IsLocationMode
 	//开始本节点RPC服务
 	err:= this.StartRpcServer()
 	if err!=nil {
-		logger.Error(err)
+		return err
 	}
 	//查询位置服务器
 	go this.GetLocationServer()
+	return nil
 }
 
 func (this *NodeComponent)IsOnline() bool {
@@ -68,6 +72,7 @@ func (this *NodeComponent)GetLocationServer()  {
 		this.locker.Lock()
 		this.locationClients = g
 		this.locker.Unlock()
+		time.Sleep(time.Second)
 	}
 }
 
@@ -106,8 +111,13 @@ func (this *NodeComponent) GetNodeClient(addr string) (*rpc.TcpClient,error){
 	if v,ok:= this.rpcClient.Load(addr);ok {
 		return v.(*rpc.TcpClient),nil
 	}
+	this.locker.Lock()
+	defer this.locker.Unlock()
+	if v,ok:= this.rpcClient.Load(addr);ok {
+		return v.(*rpc.TcpClient),nil
+	}
 	client,err:= this.ConnectToNode(addr,this.clientCallback)
-	if err!=nil {
+		if err!=nil {
 		return nil,err
 	}
 	this.rpcClient.Store(addr,client)
@@ -116,17 +126,41 @@ func (this *NodeComponent) GetNodeClient(addr string) (*rpc.TcpClient,error){
 
 //查询并选择一个节点
 func (this *NodeComponent)GetNode(role string,selectorType ...SelectorType) (*NodeID,error) {
+	var nodeID *NodeID
+	var  err error
 	//优先查询位置服务器
-	nodeID,err:= this.GetNodeFromLocation(role,selectorType...)
-	if err==nil {
-		return nodeID,nil
+	if this.islocationMode {
+		nodeID, err = this.GetNodeFromLocation(role, selectorType...)
+		if err == nil {
+			return nodeID, nil
+		}
 	}
 	//位置服务器不存在或不可用时在master上查询
-	nodeID,err= this.GetNodeFromMaster(role,selectorType...)
+	nodeID,err = this.GetNodeFromMaster(role,selectorType...)
 	if err!=nil {
 		return nil,err
 	}
 	return nodeID,nil
+}
+
+//查询节点组
+func (this *NodeComponent)GetNodeGroup(role string) (*NodeIDGroup,error) {
+	var nodeIDGroup *NodeIDGroup
+	var err error
+	//优先查询位置服务器
+	if this.islocationMode {
+		nodeIDGroup,err = this.GetNodeGroupFromLocation(role)
+		if err==nil {
+			return nodeIDGroup,nil
+		}
+	}
+
+	//位置服务器不存在或不可用时在master上查询
+	nodeIDGroup,err= this.GetNodeGroupFromMaster(role)
+	if err!=nil {
+		return nil,err
+	}
+	return nodeIDGroup,nil
 }
 
 //从位置服务器查询并选择一个节点
@@ -211,7 +245,7 @@ func (this *NodeComponent)GetNodeGroupFromMaster(role string) (*NodeIDGroup,erro
 		return nil,err
 	}
 	var reply *[]*InquiryReply
-	err = client.Call("MasterService.NodeInquiryDetail",fmt.Sprintf("%s:%s",this.AppName,"location"),&reply)
+	err = client.Call("MasterService.NodeInquiry",fmt.Sprintf("%s:%s",this.AppName,"location"),&reply)
 	if err!=nil {
 		return nil,err
 	}

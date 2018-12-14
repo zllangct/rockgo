@@ -5,7 +5,6 @@ import (
 	"github.com/zllangct/RockGO/cluster"
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/configComponent"
-	"github.com/zllangct/RockGO/logger"
 	"reflect"
 	"sync"
 	"time"
@@ -26,12 +25,10 @@ func (this *LoginComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	return requires
 }
 
-func (this *LoginComponent) Awake() {
+func (this *LoginComponent) Awake() error{
 	err := this.Parent.Root().Find(&this.nodeComponent)
 	if err != nil {
-		logger.Fatal("get node component failed")
-		panic(err)
-		return
+		return err
 	}
 	//模拟已存在的用户
 	this.players.Store("zllang1",&PlayerInfo{Account:"zllang1",Password:"123456",Name:"zhaolei1",Age:11,Coin:100,LastLoginTime:time.Now()})
@@ -42,10 +39,9 @@ func (this *LoginComponent) Awake() {
 
 	err= this.nodeComponent.Register(this)
 	if err!=nil {
-		logger.Fatal("get node component failed")
-		panic(err)
-		return
+		return err
 	}
+	return nil
 }
 
 var ErrLoginPlayerNotExist =errors.New("this player doesnt exist")

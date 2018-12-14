@@ -7,6 +7,7 @@ import (
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils"
 	"reflect"
+	"runtime/debug"
 )
 
 
@@ -85,6 +86,12 @@ func (this *ApiBase)Init(subStruct interface{},id2mt map[reflect.Type]uint32,pro
 
 func (this *ApiBase)Route(sess *Session, messageID uint32,data []byte)  {
 	this.checkInit()
+	defer (func() {
+		if r := recover(); r != nil {
+			err := errors.New(r.(error).Error() + "\n" + string(debug.Stack()))
+			logger.Error(err)
+		}
+	})()
 	if mt,ok:= this.route[messageID];ok {
 		v:= reflect.New(mt.ArgsType)
 		err:= this.protoc.Unmarshal(data,v.Interface())

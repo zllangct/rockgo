@@ -560,6 +560,7 @@ func (server *Server) Accept(lis net.Listener) {
 			logger.Error("rpc.Serve: accept:", err.Error())
 			return
 		}
+		logger.Debug(conn.RemoteAddr())
 		go server.ServeConn(conn)
 	}
 }

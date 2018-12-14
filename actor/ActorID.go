@@ -26,6 +26,18 @@ func EmptyActorID() ActorID {
 	return make([]string,3)
 }
 
+func (this ActorID)Equal(target ActorID) bool {
+	if len(this)!=len(target) {
+		return false
+	}
+	for i, value := range this {
+		if value != target[i] {
+			return false
+		}
+	}
+	return true
+}
+
 func (this ActorID)String() string {
 	buf:=bytes.Buffer{}
 	for index, value := range this {

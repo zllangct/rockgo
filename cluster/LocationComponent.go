@@ -25,6 +25,7 @@ type LocationComponent struct {
 	locker *sync.RWMutex
 	nodeComponent  *NodeComponent
 	Nodes         map[string]*NodeInfo
+	NodesOffline	map[string]struct{}
 	master   *rpc.TcpClient
 }
 
@@ -37,11 +38,11 @@ func (this *LocationComponent) GetRequire() map[*Component.Object][]reflect.Type
 	return requires
 }
 
-func (this *LocationComponent) Awake() {
+func (this *LocationComponent) Awake()error {
+	this.locker=&sync.RWMutex{}
 	err := this.Parent.Root().Find(&this.nodeComponent)
 	if err != nil {
-		logger.Error("find node component failed", err)
-		return
+		return err
 	}
 
 	//注册位置服务节点RPC服务
@@ -49,15 +50,15 @@ func (this *LocationComponent) Awake() {
 	service.init(this)
 	err= this.nodeComponent.Register(service)
 	if err != nil {
-		logger.Error(err)
-		return
+		return err
 	}
 	go this.DoLocationSync()
+	return nil
 }
 
 //同步节点信息到位置服务组件
 func (this *LocationComponent)DoLocationSync()  {
-	var reply bool
+	var reply *NodeInfoSyncReply
 	var interval = time.Duration(Config.Config.ClusterConfig.ReportInterval)
 	for {
 		if this.master == nil {
@@ -69,7 +70,14 @@ func (this *LocationComponent)DoLocationSync()  {
 				continue
 			}
 		}
-		this.master.Call("MasterService.NodeInfoSync","sync",&reply)
+		err:=this.master.Call("MasterService.NodeInfoSync","sync",&reply)
+		if err!=nil {
+			continue
+		}
+		this.locker.Lock()
+		this.Nodes=reply.Nodes
+		this.NodesOffline=reply.NodesOffline
+		this.locker.Unlock()
 		time.Sleep(time.Millisecond * interval)
 	}
 }

@@ -28,7 +28,7 @@ func (this *ConfigComponent) IsUnique() int {
 	return Component.UNIQUE_TYPE_GLOBAL
 }
 
-func (this *ConfigComponent) Awake() {
+func (this *ConfigComponent) Awake() error{
 	this.commonConfigPath = "./config/CommonConfig.json"
 	this.clusterConfigPath = "./config/ClusterConfig.json"
 	//初始化默认配置
@@ -37,6 +37,7 @@ func (this *ConfigComponent) Awake() {
 	this.ReloadConfig()
 	//全局共享
 	Config = this
+	return nil
 }
 
 func (this *ConfigComponent) loadConfig(configpath string, cfg interface{}) error {
@@ -71,15 +72,24 @@ func (this *ConfigComponent) loadConfig(configpath string, cfg interface{}) erro
 
 //重新读取配置文件，包括自定义配置文件
 func (this *ConfigComponent) ReloadConfig() {
-	this.loadConfig(this.commonConfigPath, this.CommonConfig)
-	this.loadConfig(this.clusterConfigPath, this.ClusterConfig)
+	err:=this.loadConfig(this.commonConfigPath, this.CommonConfig)
+	if err!=nil {
+		panic(err)
+	}
+	err=this.loadConfig(this.clusterConfigPath, this.ClusterConfig)
+	if err!=nil {
+		panic(err)
+	}
 	for name, path := range this.customConfigPath {
-		this.loadConfig(path, this.CustomConfig[name])
+		err=this.loadConfig(path, this.CustomConfig[name])
+		if err!=nil {
+			panic(err)
+		}
 	}
 }
 
 // configComponent.CustomConfig[name] = structure
-func (this *ConfigComponent) LoadCoustomConfig(name string, path string, structure interface{}) (err error) {
+func (this *ConfigComponent) LoadCustomConfig(name string, path string, structure interface{}) (err error) {
 	if name == "" || path == "" {
 		return errors.New("config name or path can ont be empty")
 	}
@@ -88,10 +98,10 @@ func (this *ConfigComponent) LoadCoustomConfig(name string, path string, structu
 		err = errors.New("structure must be pointer or map")
 		return
 	}
-	this.loadConfig(path, structure)
+	err =this.loadConfig(path, structure)
 	this.CustomConfig[name] = structure
 	this.CustomConfig[name] = path
-	return
+	return err
 }
 
 func (this *ConfigComponent) SetDefault() {
@@ -111,19 +121,22 @@ func (this *ConfigComponent) SetDefault() {
 	}
 	this.CustomConfig = nil
 	this.ClusterConfig = &ClusterConfig{
-		MasterAddress: "127.0.0.1:8888",
+		MasterAddress: "127.0.0.1:6666",
 		LocalAddress:  "127.0.0.1:6666",
 		AppName:       "defaultApp",
 		Role:          []string{"master"},
 		Group:         []string{},
 
-		ReportInterval: 3000,
-		RpcTimeout: 9000,
-		RpcCallTimeout :5000,
+		ReportInterval:       3000,
+		RpcTimeout:           9000,
+		RpcCallTimeout :      5000,
 		RpcHeartBeatInterval: 3000,
+		IsLocationMode:       true,
 
 		NetConnTimeout: 9000,
 		NetListenAddress: "0.0.0.0:5555",
+
+		IsActorModel  :true,
 	}
 }
 
@@ -150,12 +163,16 @@ type ClusterConfig struct {
 	Role          []string //本节点拥有角色
 	Group         []string //本节点拥有组
 
-	ReportInterval int //子节点节点信息上报间隔，单位秒
-	RpcTimeout int 		//tcp链接超时，单位毫秒
-	RpcCallTimeout int //rpc调用超时
-	RpcHeartBeatInterval int //tcp心跳间隔
+	ReportInterval       int  //子节点节点信息上报间隔，单位秒
+	RpcTimeout           int  //tcp链接超时，单位毫秒
+	RpcCallTimeout       int  //rpc调用超时
+	RpcHeartBeatInterval int  //tcp心跳间隔
+	IsLocationMode       bool //是否启用位置服务器
 
 	//外网
 	NetConnTimeout   int	//外网链接超时
 	NetListenAddress string //网关对外服务地址
+
+	//actor
+	IsActorModel    bool
 }

@@ -27,19 +27,15 @@ func (this *ChildComponent) GetRequire() (map[*Component.Object][]reflect.Type) 
 	return requires
 }
 
-func(this *ChildComponent)Awake(){
+func(this *ChildComponent)Awake()error{
 	err:= this.Parent.Root().Find(&this.nodeComponent)
 	if err != nil {
-		logger.Fatal("get node component failed")
-		panic(err)
-		return
+		return err
 	}
 
-	err= this.ConnectToMaster()
-	if err!=nil {
-		logger.Error(err)
-	}
+	go this.ConnectToMaster()
 	go this.DoReport()
+	return nil
 }
 
 //上报节点信息
@@ -82,7 +78,7 @@ func (this *ChildComponent)AddReportInfo(field string,collectFunction func()(str
 }
 
 //连接到master
-func (this *ChildComponent) ConnectToMaster() error {
+func (this *ChildComponent) ConnectToMaster() {
 	addr:=Config.Config.ClusterConfig.MasterAddress
 	callback :=func(event string,data ...interface{}) {
 		switch event {
@@ -103,7 +99,6 @@ func (this *ChildComponent) ConnectToMaster() error {
 	this.nodeComponent.isOnline = true
 	this.locker.Unlock()
 	logger.Info(time.Now().Format("2006-01-02T 15:04:05"), "  connected to master")
-	return nil
 }
 
 //当节点掉线
@@ -111,15 +106,15 @@ func (this *ChildComponent)OnDropped()  {
 	//重新连接
 	for{
 		println(time.Now().Format("2006-01-02T 15:04:05"), "  reconnecting to master ......")
-		err :=this.ConnectToMaster()
-		if err ==nil {
-			this.locker.RLock()
-			if this.nodeComponent.isOnline {
-				this.locker.RUnlock()
-				return
-			}
+		this.ConnectToMaster()
+
+		this.locker.RLock()
+		if this.nodeComponent.isOnline {
 			this.locker.RUnlock()
+			return
 		}
+		this.locker.RUnlock()
+
 		time.Sleep(time.Second * 2)
 	}
 }

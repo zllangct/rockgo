@@ -6,7 +6,9 @@ import (
 	"github.com/zllangct/RockGO/configComponent"
 	"github.com/zllangct/RockGO/logger"
 	"reflect"
+	"runtime/debug"
 	"sync/atomic"
+	"time"
 )
 
 /*
@@ -24,6 +26,7 @@ type ActorComponent struct {
 	Component.Base
 	ActorID      ActorID                //Actor地址
 	Proxy        *ActorProxyComponent   //Actor代理
+	Role         string
 	queueReceive chan *ActorMessageInfo //接收消息队列
 	close        chan bool              //关闭信号
 	active       int32                  //是否激活,0：未激活 1：激活
@@ -43,25 +46,38 @@ func (this *ActorComponent) IsUnique() int {
 	return Component.UNIQUE_TYPE_LOCAL
 }
 
-func (this *ActorComponent) Awake() {
+func (this *ActorComponent) Awake()error {
 	this.queueReceive= make(chan *ActorMessageInfo, 10)
 	this.close=       make(chan bool)
 	//初始化Actor代理
 	err := this.Parent.Runtime().Root().Find(&this.Proxy)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	//初始化ID
 	this.ActorID= EmptyActorID()
 	//注册Actor到ActorProxy
 	err = this.Proxy.Register(this)
 	if err!=nil {
-		logger.Error(err)
+		return err
 	}
 	//设置Actor状态为激活
 	atomic.StoreInt32(&this.active, 1)
 	//初始化消息分发器
 	go this.dispatch()
+	//注册服务
+	go func() {
+		if this.Role !="" {
+			for  {
+				err=this.Proxy.RoleRegister(this.Role,this)
+				if err==nil {
+					break
+				}
+				time.Sleep(time.Second)
+			}
+		}
+	}()
+	return nil
 }
 
 func (this *ActorComponent) Destroy() {
@@ -70,7 +86,11 @@ func (this *ActorComponent) Destroy() {
 	this.Proxy.Unregister(this)
 }
 
-func (this *ActorComponent) Tell(messageInfo *ActorMessageInfo,reply ...*ActorMessage) error {
+func (this *ActorComponent) Tell(sender IActor,message *ActorMessage,reply ...*ActorMessage) error {
+	messageInfo:=&ActorMessageInfo{
+		Sender:sender,
+		Message:message,
+	}
 	if len(reply)>0 {
 		messageInfo.Reply = reply[0]
 	}
@@ -100,7 +120,7 @@ func (this *ActorComponent) dispatch() {
 		for val, err = cps.Next(); err == nil; val, err = cps.Next() {
 			if messageHandler, ok := val.(IActorMessageHandler); ok {
 				if handler, ok := messageHandler.MessageHandlers()[messageInfo.Message.Tittle]; ok {
-					handler(messageInfo)
+					this.Catch(handler,messageInfo)
 				}
 			}
 		}
@@ -118,4 +138,13 @@ func (this *ActorComponent) dispatch() {
 			handle(messageInfo)
 		}
 	}
+}
+func (this *ActorComponent) Catch(handler func(message *ActorMessageInfo),m *ActorMessageInfo) {
+	defer (func() {
+		if r := recover(); r != nil {
+			err := errors.New(r.(error).Error() + "\n" + string(debug.Stack()))
+			logger.Error(err)
+		}
+	})()
+	handler(m)
 }

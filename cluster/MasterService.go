@@ -40,11 +40,18 @@ func (this *MasterService) NodeInquiryDetail(args string, reply *[]*InquiryReply
 	return err
 }
 
-func (this *MasterService) NodeInfoSync(args string, reply *map[string]*NodeInfo) error {
+type NodeInfoSyncReply struct {
+	Nodes map[string]*NodeInfo
+	NodesOffline map[string]struct{}
+}
+
+func (this *MasterService) NodeInfoSync(args string, reply *NodeInfoSyncReply) error {
 	if args != "sync" {
 		return errors.New("call service [ NodeInfoSynchronous ],has wrong argument")
 	}
-	nodes := this.master.NodesCopy()
-	*reply=nodes
+	*reply=NodeInfoSyncReply{
+		Nodes:this.master.NodesCopy(),
+		NodesOffline:this.master.NodesOfflineCopy(),
+	}
 	return nil
 }
