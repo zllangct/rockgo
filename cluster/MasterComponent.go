@@ -1,10 +1,13 @@
 package Cluster
 
 import (
+	"fmt"
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils"
 	"reflect"
+	"strings"
 	"sync"
 	"time"
 )
@@ -15,7 +18,7 @@ type MasterComponent struct {
 	nodeComponent   *NodeComponent
 	Nodes           map[string]*NodeInfo
 	NodesOffline    map[string]struct{}
-	timeoutChecking map[string]*int
+	timeoutChecking map[string]int
 }
 
 func (this *MasterComponent) GetRequire() map[*Component.Object][]reflect.Type {
@@ -31,7 +34,7 @@ func (this *MasterComponent) Awake() error{
 	this.locker = &sync.RWMutex{}
 	this.Nodes = make(map[string]*NodeInfo)
 	this.NodesOffline =make(map[string]struct{})
-	this.timeoutChecking =make(map[string]*int)
+	this.timeoutChecking =make(map[string]int)
 
 	err := this.Parent.Root().Find(&this.nodeComponent)
 	if err != nil {
@@ -54,15 +57,35 @@ func (this *MasterComponent) Awake() error{
 //上报节点信息
 func (this *MasterComponent) UpdateNodeInfo(args *NodeInfo) {
 	this.locker.Lock()
+	if _,ok:=this.Nodes[args.Address];!ok {
+		s:= strings.Builder{}
+		for _, value := range args.Group {
+			s.WriteString(value)
+			s.WriteString("  ")
+		}
+		logger.Info(fmt.Sprintf("Node [ %s ] connected to this master, roles: [ %s]",args.Address,s.String()))
+	}
 	this.Nodes[args.Address] = args
 	delete(this.NodesOffline, args.Address)
-	c:=this.timeoutChecking[args.Address]
-	if c == nil {
-		c=new(int)
-	}
-	*c=0
+	this.timeoutChecking[args.Address]=0
 
 	this.locker.Unlock()
+}
+
+//节点主动关闭
+func (this *MasterComponent) NodeClose(addr string){
+	//非线程安全，外层注意加锁
+	if v,ok:=this.Nodes[addr];ok {
+		s:= strings.Builder{}
+		for _, value := range v.Group {
+			s.WriteString(value)
+			s.WriteString("  ")
+		}
+		logger.Info(fmt.Sprintf("Node [ %s ] disconnected, roles: [ %s]",addr,s.String()))
+	}
+	delete(this.Nodes, addr)
+	delete(this.timeoutChecking,addr)
+	this.NodesOffline[addr]= struct{}{}
 }
 
 //查询节点信息 args : "AppID:Role:SelectorType"
@@ -77,11 +100,9 @@ func (this *MasterComponent) TimeoutCheck() map[string]*NodeInfo {
 		time.Sleep(time.Millisecond* interval)
 		this.locker.Lock()
 		for addr, count := range this.timeoutChecking {
-			*count = *count + 1
-			if *count > 3 {
-				delete(this.Nodes, addr)
-				delete(this.timeoutChecking,addr)
-				this.NodesOffline[addr]= struct{}{}
+			this.timeoutChecking[addr]=count+1
+			if this.timeoutChecking[addr] > 3 {
+				this.NodeClose(addr)
 			}
 		}
 		this.locker.Unlock()

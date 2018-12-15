@@ -84,7 +84,7 @@ func (this *TestApi)CreateRoom(sess *network.Session,message *TestCreateRoom)  {
 		Result:true,
 		RoomID:res.Data[0].(int),
 	}
-	//reply 登录结果反馈到客户端
+	//reply 创建房间结果反馈到客户端
 	if _,m,err:=this.MessageEncode(r);err ==nil {
 		err=sess.Emit(1,m)
 	}else{

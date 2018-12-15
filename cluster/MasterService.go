@@ -22,6 +22,14 @@ func (this *MasterService)init(master *MasterComponent) {
 	this.master = master
 }
 
+func (this *MasterService) ReportNodeClose(addr string, reply *bool) error {
+	this.master.locker.Lock()
+	this.master.NodeClose(addr)
+	this.master.locker.Unlock()
+	*reply = true
+	return nil
+}
+
 func (this *MasterService) ReportNodeInfo(args *NodeInfo, reply *bool) error {
 	this.master.UpdateNodeInfo(args)
 	*reply = true

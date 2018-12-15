@@ -87,6 +87,12 @@ type ClientCodec interface {
 	Close() error
 }
 
+func (client *TcpClient) IsClosed()bool{
+	client.mutex.Lock()
+	defer client.mutex.Unlock()
+	return client.closing || client.shutdown
+}
+
 func (client *TcpClient) send(call *Call) {
 	client.reqMutex.Lock()
 	defer client.reqMutex.Unlock()

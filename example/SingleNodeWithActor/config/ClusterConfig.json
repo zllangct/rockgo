@@ -9,24 +9,28 @@
         "node_actor_location": {
             "LocalAddress": "0.0.0.0:6604",
             "Role": [
+                "child",
                 "actor_location"
             ]
         },
         "node_gate": {
             "LocalAddress": "0.0.0.0:6601",
             "Role": [
+                "child",
                 "gate"
             ]
         },
         "node_location": {
             "LocalAddress": "0.0.0.0:6603",
             "Role": [
+                "child",
                 "location"
             ]
         },
         "node_location_actor_location": {
             "LocalAddress": "0.0.0.0:6604",
             "Role": [
+                "child",
                 "location",
                 "actor_location"
             ]
@@ -34,6 +38,7 @@
         "node_login": {
             "LocalAddress": "0.0.0.0:6602",
             "Role": [
+                "child",
                 "login"
             ]
         },
@@ -46,6 +51,7 @@
         "node_room": {
             "LocalAddress": "0.0.0.0:6605",
             "Role": [
+                "child",
                 "room"
             ]
         },
@@ -53,6 +59,7 @@
             "LocalAddress": "0.0.0.0:6666",
             "Role": [
                 "master",
+                "child",
                 "gate",
                 "login",
                 "room"

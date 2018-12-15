@@ -42,7 +42,7 @@ type IUpdate interface {
 }
 
 type IDestroy interface {
-	Destroy()
+	Destroy()error
 }
 
 type Context struct {

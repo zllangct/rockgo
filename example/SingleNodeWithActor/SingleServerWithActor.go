@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"github.com/zllangct/RockGO"
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/gate"
@@ -14,10 +16,24 @@ import (
 */
 
 func main()  {
+	var nodeConfName string
+	flag.StringVar(&nodeConfName,"node", "", "node info")
+	flag.Parse()
+
 	go func() {
 		logger.Info(http.ListenAndServe("localhost:7070", nil))
 	}()
 	RockGO.Server = RockGO.DefaultNode()
+
+	//重选节点
+	if nodeConfName!=""{
+		err:=RockGO.Server.OverrideNodeDefine(nodeConfName)
+		if err!=nil {
+			logger.Fatal(err)
+		}
+		logger.Info(fmt.Sprintf("Override node info:[ %s ]",nodeConfName))
+	}
+
 	RockGO.Server.AddComponentGroup("gate",[]Component.IComponent{&gate.DefaultGateComponent{
 		NetAPI:NewTestApi(),
 	}})

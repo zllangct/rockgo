@@ -57,10 +57,11 @@ func (this *ActorAsyncComponent) Awake()error {
 	return nil
 }
 
-func (this *ActorAsyncComponent) Destroy() {
+func (this *ActorAsyncComponent) Destroy() error{
 	this.close <- true
 	//在ActorProxy取消注册
 	this.Proxy.Unregister(this)
+	return nil
 }
 
 func (this *ActorAsyncComponent) Tell(sender IActor,message *ActorMessage,reply ...**ActorMessage) error {

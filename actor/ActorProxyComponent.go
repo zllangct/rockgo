@@ -55,6 +55,11 @@ func (this *ActorProxyComponent) Awake() error{
 	return nil
 }
 
+func (this *ActorProxyComponent) Destroy() error{
+
+	return nil
+}
+
 //通过角色获取一个actor
 func (this *ActorProxyComponent)GetActorByRole(role string) (*ActorIDGroup,error) {
 	location,err:=this.GetActorLocation()
@@ -101,8 +106,27 @@ func (this *ActorProxyComponent) RoleRegister(role string,actor IActor) error {
 	return nil
 }
 
-//注册本地actor
-func (this *ActorProxyComponent) Register(actor IActor) error {
+//取消注册actor服务
+func (this *ActorProxyComponent) RoleUnregister(role string,actor IActor) error {
+	location,err:=this.GetActorLocation()
+	if err!=nil {
+		return err
+	}
+	var reply bool
+	args:= ActorService{
+		Role:role,
+		ActorID:actor.ID(),
+	}
+	err=location.Call("ActorLocationComponent.ServiceUnregister",args,&reply)
+	if err!=nil {
+		return err
+	}
+	return nil
+}
+
+
+//注册本地actor TODO 注册服务到actor位置服务器
+func (this *ActorProxyComponent) Register(actor IActor,role ...string) error {
 	id:=actor.ID()
 	id[2]=UUID.Next()
 	id, err := id.SetNodeID(this.nodeID)
@@ -112,6 +136,7 @@ func (this *ActorProxyComponent) Register(actor IActor) error {
 	this.localActors.LoadOrStore(id[2], actor)
 	return nil
 }
+
 //注销本地actor
 func (this *ActorProxyComponent) Unregister(actor IActor) {
 	if _, ok := this.localActors.Load(actor.ID()); ok {

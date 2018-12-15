@@ -53,12 +53,19 @@ func TestComponentsAreUpdated(T *testing.T) {
 			ThreadPoolSize: 50})
 
 		obj := Component.NewObject()
-		obj.AddComponent(&FakeComponent{})
-		obj.AddComponent(&FakeComponent{})
-		obj.AddComponent(&FakeComponent{})
+		obj.AddComponent(&FakeComponent{Id:"1"})
+		obj.AddComponent(&FakeComponent{Id:"2"})
+		obj.AddComponent(&FakeComponent{Id:"3"})
 
 		root := Component.NewObject()
+		root.AddComponent(&FakeComponent{Id:"4"})
+
 		root.AddObject(obj)
+
+		//obj1:=Component.NewObject()
+		//obj1.AddComponent(&FakeComponent{Id:"5"})
+		//
+		//obj.AddObject(obj1)
 
 		count, _ := iter.Count(root.ObjectsInChildren())
 		T.Assert(count == 1)
@@ -74,5 +81,7 @@ func TestComponentsAreUpdated(T *testing.T) {
 		for val, err := components.Next(); err == nil; val, err = components.Next() {
 			T.Assert(val.(*FakeComponent).Count == 2)
 		}
+
+		root.Destroy()
 	})
 }

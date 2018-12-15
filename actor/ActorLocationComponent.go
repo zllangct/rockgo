@@ -43,6 +43,10 @@ func (this *ActorLocationComponent) Awake() error {
 	return nil
 }
 
+func (this *ActorLocationComponent)ServiceInvalidChecking() {
+
+}
+
 func (this *ActorLocationComponent) ServiceInquiry(role string, reply *ActorIDGroup) error {
 	if g, ok := this.actors.Load(role); ok {
 		*reply = *(g.(*ActorIDGroup))
@@ -66,10 +70,12 @@ func (this *ActorLocationComponent) ServiceRegister(args ActorService, reply *bo
 	return nil
 }
 
-func (this *ActorLocationComponent) ServiceUnregister(actorID ActorID, reply *bool) error {
+func (this *ActorLocationComponent) ServiceUnregister(args ActorService, reply *bool) error {
 	this.actors.Range(func(key, value interface{}) bool {
-		value.(*ActorIDGroup).Sub(actorID)
+		value.(*ActorIDGroup).Sub(args.ActorID)
 		return true
 	})
 	return nil
 }
+
+

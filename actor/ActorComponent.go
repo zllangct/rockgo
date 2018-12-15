@@ -8,7 +8,6 @@ import (
 	"reflect"
 	"runtime/debug"
 	"sync/atomic"
-	"time"
 )
 
 /*
@@ -26,7 +25,7 @@ type ActorComponent struct {
 	Component.Base
 	ActorID      ActorID                //Actor地址
 	Proxy        *ActorProxyComponent   //Actor代理
-	Role         string
+	Role         []string
 	queueReceive chan *ActorMessageInfo //接收消息队列
 	close        chan bool              //关闭信号
 	active       int32                  //是否激活,0：未激活 1：激活
@@ -57,7 +56,7 @@ func (this *ActorComponent) Awake()error {
 	//初始化ID
 	this.ActorID= EmptyActorID()
 	//注册Actor到ActorProxy
-	err = this.Proxy.Register(this)
+	err = this.Proxy.Register(this,this.Role...)
 	if err!=nil {
 		return err
 	}
@@ -65,25 +64,14 @@ func (this *ActorComponent) Awake()error {
 	atomic.StoreInt32(&this.active, 1)
 	//初始化消息分发器
 	go this.dispatch()
-	//注册服务
-	go func() {
-		if this.Role !="" {
-			for  {
-				err=this.Proxy.RoleRegister(this.Role,this)
-				if err==nil {
-					break
-				}
-				time.Sleep(time.Second)
-			}
-		}
-	}()
-	return nil
+	return err
 }
 
-func (this *ActorComponent) Destroy() {
+func (this *ActorComponent) Destroy()error {
 	this.close <- true
 	//在ActorProxy取消注册
 	this.Proxy.Unregister(this)
+	return nil
 }
 
 func (this *ActorComponent) Tell(sender IActor,message *ActorMessage,reply ...**ActorMessage) error {

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/configComponent"
-	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
 	"reflect"
 	"sync"
@@ -65,13 +64,13 @@ func (this *LocationComponent)DoLocationSync()  {
 			var err error
 			this.master,err=this.nodeComponent.GetNodeClient(Config.Config.ClusterConfig.MasterAddress)
 			if err != nil {
-				logger.Error(err)
 				time.Sleep(time.Second * interval)
 				continue
 			}
 		}
 		err:=this.master.Call("MasterService.NodeInfoSync","sync",&reply)
 		if err!=nil {
+			this.master = nil
 			continue
 		}
 		this.locker.Lock()

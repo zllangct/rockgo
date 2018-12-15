@@ -161,6 +161,29 @@ func (o *Object) Move(parent *Object) (err error) {
 	return
 }
 
+func (o *Object) Destroy() (err error){
+	err= o.WithLock(func() error {
+		for _, cpt := range o.components {
+			if cpt.Destroy != nil {
+				err:=cpt.Destroy.Destroy()
+				if err!=nil {
+					logger.Error(err)
+				}
+			}
+		}
+		o.parent = nil
+		o.runtime = nil
+		for _, child := range o.children {
+			err:=child.Destroy()
+			if err!=nil {
+				logger.Error(err)
+			}
+		}
+		return nil
+	})
+	return err
+}
+
 // Remove a child object
 func (o *Object) RemoveObject(object *Object) (err error) {
 	if o == object {
@@ -178,17 +201,7 @@ func (o *Object) RemoveObject(object *Object) (err error) {
 		if offset >= 0 {
 			o.children = append(o.children[:offset], o.children[offset+1:]...)
 		}
-		err := object.WithLock(func() error {
-			for _, cpt := range object.components {
-				if cpt.Destroy != nil {
-					cpt.Destroy.Destroy()
-				}
-			}
-			object.parent = nil
-			object.runtime = nil
-			return nil
-		})
-
+		err=object.Destroy()
 		return err
 	})
 	return

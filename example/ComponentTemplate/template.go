@@ -59,8 +59,8 @@ func (this *TemplateComponent) Update(ctx *Component.Context) {
 }
 
 //Destroy 事件
-func (this *TemplateComponent) Destroy() {
-
+func (this *TemplateComponent) Destroy()error {
+	return nil
 }
 
 //组件的序列化
