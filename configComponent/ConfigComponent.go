@@ -120,7 +120,7 @@ func (this *ConfigComponent) SetDefault() {
 	this.CustomConfig = nil
 	this.ClusterConfig = &ClusterConfig{
 		MasterAddress: "127.0.0.1:6666",
-		LocalAddress:  "127.0.0.1:6666",
+		LocalAddress:  "0.0.0.0:6666",
 		AppName:       "defaultApp",
 		Role:          []string{"master"},
 		NodeDefine: map[string]Node{
@@ -132,9 +132,9 @@ func (this *ConfigComponent) SetDefault() {
 			//位置服务节点
 			"node_location": {LocalAddress: "0.0.0.0:6603", Role: []string{"location"}},
 			//actor位置服务节点
-			"node_actor_location": {LocalAddress: "0.0.0.0:6604", Role: []string{"actor_location"}},
+			"node_actor_service": {LocalAddress: "0.0.0.0:6604", Role: []string{"actor_service"}},
 			//位置服务+actor位置服务
-			"node_location_actor_location": {LocalAddress: "0.0.0.0:6604", Role: []string{"location", "actor_location"}},
+			"node_location_actor_service": {LocalAddress: "0.0.0.0:6604", Role: []string{"location", "actor_service"}},
 
 			//用户自定义
 			"node_gate":  {LocalAddress: "0.0.0.0:6601", Role: []string{"gate"}},
@@ -150,6 +150,7 @@ func (this *ConfigComponent) SetDefault() {
 		RpcCallTimeout:       5000,
 		RpcHeartBeatInterval: 3000,
 		IsLocationMode:       true,
+		LocationSyncInterval: 500,
 
 		NetConnTimeout:   9000,
 		NetListenAddress: "0.0.0.0:5555",
@@ -179,7 +180,7 @@ type Node struct {
 
 type ClusterConfig struct {
 	MasterAddress string   //Master 地址,例如:127.0.0.1:8888
-	LocalAddress  string   //本节点IP,注意配置文件时，填写正确的局域网地址或者外网地址，不可为0.0.0.0
+	LocalAddress     string   //本节点IP,注意配置文件时，填写正确的局域网地址或者外网地址，不可为0.0.0.0
 	AppName       string   //本节点拥有的app
 	Role          []string //本节点拥有角色
 	NodeDefine    map[string]Node
@@ -189,6 +190,7 @@ type ClusterConfig struct {
 	RpcCallTimeout       int  //rpc调用超时
 	RpcHeartBeatInterval int  //tcp心跳间隔
 	IsLocationMode       bool //是否启用位置服务器
+	LocationSyncInterval       int  //位置服务同步间隔，单位秒
 
 	//外网
 	NetConnTimeout   int    //外网链接超时

@@ -11,6 +11,7 @@ import (
 	"github.com/zllangct/RockGO/utils/UUID"
 	"reflect"
 	"sync"
+	"time"
 )
 
 var ErrNodeOffline = errors.New("this node is offline")
@@ -18,11 +19,14 @@ var ErrNoThisActor = errors.New("no this actor")
 
 type ActorProxyComponent struct {
 	Component.Base
+	locker        sync.RWMutex
 	nodeID        string
-	localActors   sync.Map //本地actor [Target,*actor]
+	localActors   sync.Map //本地actor [Target,actor]
+	service       sync.Map // [service,[]actor]
 	nodeComponent *Cluster.NodeComponent
 	location      *rpc.TcpClient
 	isActorMode    bool
+	isOnline       bool
 }
 
 func (this *ActorProxyComponent) GetRequire() map[*Component.Object][]reflect.Type {
@@ -52,8 +56,30 @@ func (this *ActorProxyComponent) Awake() error{
 	if err != nil {
 		return err
 	}
+	//等待actor 位置服务
+	go func() {
+		for {
+			_, err := this.nodeComponent.GetNode("actor_service")
+			if err != nil {
+				time.Sleep(time.Second)
+				continue
+			}
+			this.locker.Lock()
+			this.isOnline = true
+			this.locker.Unlock()
+			logger.Info("found actor service server ......,this actor proxy is online")
+			return
+		}
+	}()
 	return nil
 }
+
+func (this *ActorProxyComponent) IsOnline() bool{
+	this.locker.RLock()
+	defer  this.locker.RUnlock()
+	return this.isOnline
+}
+
 
 func (this *ActorProxyComponent) Destroy() error{
 
@@ -61,85 +87,124 @@ func (this *ActorProxyComponent) Destroy() error{
 }
 
 //通过角色获取一个actor
-func (this *ActorProxyComponent)GetActorByRole(role string) (*ActorIDGroup,error) {
-	location,err:=this.GetActorLocation()
+func (this *ActorProxyComponent)SearchService(service string) (*ActorIDGroup,error) {
+	//优先查询本地
+	g,ok:= this.service.LoadOrStore(service,&ActorIDGroup{})
+	if ok {
+		return g.(*ActorIDGroup),nil
+	}
+	//再从位置服务器上查询
+	node,err:=this.nodeComponent.GetNode("actor_service")
+	if err!=nil {
+		return nil, err
+	}
+	client,err:=node.GetClient()
 	if err!=nil {
 		return nil,err
 	}
 	var reply *ActorIDGroup
-	err=location.Call("ActorLocationComponent.ServiceInquiry",role,&reply)
+	err= client.Call("ActorServiceComponent.ServiceInquiry",service,&reply)
 	if err!=nil {
-		return nil, err
+		return nil,err
 	}
 	return reply,nil
 }
 
-//获取actor 位置服务器
-func (this *ActorProxyComponent) GetActorLocation() (*rpc.TcpClient,error) {
-	if this.location==nil {
-		nodeID,err := this.nodeComponent.GetNode("actorlocation")
-		if err!=nil {
-			return nil,err
+//注册服务
+func (this *ActorProxyComponent) RegisterServiceLocal(actor IActor,service ...string) error {
+	for _, value := range service {
+		g,_:= this.service.LoadOrStore(value,&ActorIDGroup{})
+		if !g.(*ActorIDGroup).Has(actor.ID()) {
+			g.(*ActorIDGroup).Add(actor.ID())
 		}
-		this.location,err=nodeID.GetClient()
-		if err!=nil {
-			return nil,err
-		}
-	}
-	return this.location,nil
-}
-//注册actor服务
-func (this *ActorProxyComponent) RoleRegister(role string,actor IActor) error {
-	location,err:=this.GetActorLocation()
-	if err!=nil {
-		return err
-	}
-	var reply bool
-	args:= ActorService{
-		Role:role,
-		ActorID:actor.ID(),
-	}
-	err=location.Call("ActorLocationComponent.ServiceRegister",args,&reply)
-	if err!=nil {
-		return err
 	}
 	return nil
 }
 
-//取消注册actor服务
-func (this *ActorProxyComponent) RoleUnregister(role string,actor IActor) error {
-	location,err:=this.GetActorLocation()
+//取消注册服务
+func (this *ActorProxyComponent) UnregisterServiceLocal(actor IActor,service ...string) error {
+	for _, value := range service {
+		g,ok:= this.service.Load(value)
+		if ok && !g.(*ActorIDGroup).Has(actor.ID()) {
+			g.(*ActorIDGroup).Sub(actor.ID())
+		}
+	}
+	return nil
+}
+
+//注册服务
+func (this *ActorProxyComponent) RegisterService(actor IActor,service ...string) error {
+	if !this.isOnline {
+		return errors.New("actor proxy is not online")
+	}
+	node,err:=this.nodeComponent.GetNode("actor_service")
 	if err!=nil {
 		return err
 	}
-	var reply bool
-	args:= ActorService{
-		Role:role,
-		ActorID:actor.ID(),
-	}
-	err=location.Call("ActorLocationComponent.ServiceUnregister",args,&reply)
+	client,err:=node.GetClient()
 	if err!=nil {
 		return err
+	}
+
+	for _, value := range service {
+
+		args:=ActorService{
+			Service:value,
+			ActorID:actor.ID(),
+		}
+		var reply bool
+		err= client.Call("ActorServiceComponent.ServiceRegister",args,&reply)
+		if err!=nil {
+			return err
+		}
+	}
+	return nil
+}
+
+//取消注册服务
+func (this *ActorProxyComponent) UnregisterService(actor IActor,service ...string) error {
+	if !this.isOnline {
+		return errors.New("actor proxy is not online")
+	}
+	node,err:=this.nodeComponent.GetNode("actor_service")
+	if err!=nil {
+		return err
+	}
+	client,err:=node.GetClient()
+	if err!=nil {
+		return err
+	}
+	for _, value := range service {
+		args:=ActorService{
+			Service:value,
+			ActorID:actor.ID(),
+		}
+		var reply bool
+		err= client.Call("ActorServiceComponent.ServiceUnregister",args,&reply)
+		if err!=nil {
+			return err
+		}
 	}
 	return nil
 }
 
 
-//注册本地actor TODO 注册服务到actor位置服务器
-func (this *ActorProxyComponent) Register(actor IActor,role ...string) error {
+//注册本地actor
+func (this *ActorProxyComponent) Register(actor IActor) error {
 	id:=actor.ID()
 	id[2]=UUID.Next()
 	id, err := id.SetNodeID(this.nodeID)
 	if err != nil {
 		return err
 	}
-	this.localActors.LoadOrStore(id[2], actor)
+	this.localActors.LoadOrStore(id.String(), actor)
 	return nil
 }
 
 //注销本地actor
 func (this *ActorProxyComponent) Unregister(actor IActor) {
-	if _, ok := this.localActors.Load(actor.ID()); ok {
+	if _, ok := this.localActors.Load(actor.ID().String()); ok {
+		this.localActors.Delete(actor.ID().String())
 		return
 	}
 }

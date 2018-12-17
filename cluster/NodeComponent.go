@@ -20,6 +20,8 @@ type NodeComponent struct {
 	Component.Base
 	locker sync.RWMutex
 	AppName         string
+	localIP         string
+	Addr string
 	isOnline       	bool
 	islocationMode  bool
 	rpcClient      	sync.Map 				//RPC客户端集合
@@ -200,10 +202,13 @@ func (this *NodeComponent)GetNodeFromLocation(role string,selectorType ...Select
 		return nil,err
 	}
 	var reply *[]*InquiryReply
-	args:=fmt.Sprintf("%s:%s",this.AppName,"location")
-	if len(selectorType)>0{
-		args=fmt.Sprintf("%s:%s",args,string(selectorType[0]))
+	args:=[]string{
+		SELECTOR_TYPE_DEFAULT,Config.Config.ClusterConfig.AppName,role,
 	}
+	if len(selectorType)>0{
+		args[0] = selectorType[0]
+	}
+
 	err = client.Call("LocationService.NodeInquiry",args,&reply)
 	if err!=nil {
 		this.locker.Lock()
@@ -231,7 +236,10 @@ func (this *NodeComponent)GetNodeGroupFromLocation(role string) (*NodeIDGroup,er
 		return nil,err
 	}
 	var reply *[]*InquiryReply
-	err = client.Call("LocationService.NodeInquiry",fmt.Sprintf("%s:%s",this.AppName,"location"),&reply)
+	args:=[]string{
+		SELECTOR_TYPE_GROUP,Config.Config.ClusterConfig.AppName,role,
+	}
+	err = client.Call("LocationService.NodeInquiry",args,&reply)
 	if err!=nil {
 		this.locker.Lock()
 		this.locationClients=nil
@@ -254,9 +262,11 @@ func (this *NodeComponent)GetNodeFromMaster(role string,selectorType ...Selector
 		return nil,err
 	}
 	var reply *[]*InquiryReply
-	args:=fmt.Sprintf("%s:%s",this.AppName,role)
+	args:=[]string{
+		SELECTOR_TYPE_DEFAULT,Config.Config.ClusterConfig.AppName,role,
+	}
 	if len(selectorType)>0{
-		args=fmt.Sprintf("%s:%s",args,string(selectorType[0]))
+		args[0] = selectorType[0]
 	}
 	err = client.Call("MasterService.NodeInquiry",args,&reply)
 	if err!=nil {
@@ -282,7 +292,10 @@ func (this *NodeComponent)GetNodeGroupFromMaster(role string) (*NodeIDGroup,erro
 		return nil,err
 	}
 	var reply *[]*InquiryReply
-	err = client.Call("MasterService.NodeInquiry",fmt.Sprintf("%s:%s",this.AppName,"location"),&reply)
+	args:=[]string{
+		SELECTOR_TYPE_GROUP,Config.Config.ClusterConfig.AppName,role,
+	}
+	err = client.Call("MasterService.NodeInquiry",args,&reply)
 	if err!=nil {
 		return nil,err
 	}

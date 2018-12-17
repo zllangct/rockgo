@@ -16,7 +16,7 @@ package main
 		"Role": [
 			"master","child","login","gate"
 		],
-		"Group": [],
+		"Role": [],
 		"ReportInterval": 3000,
 		"RpcTimeout": 9000,
 		"RpcCallTimeout": 5000,
@@ -32,7 +32,7 @@ package main
 		"Role": [
 			"master"
 		],
-		"Group": [],
+		"Role": [],
 		"ReportInterval": 3000,
 		"RpcTimeout": 9000,
 		"RpcCallTimeout": 5000,
@@ -48,7 +48,7 @@ package main
 		"Role": [
 			"child","gate"
 		],
-		"Group": [],
+		"Role": [],
 		"ReportInterval": 3000,
 		"RpcTimeout": 9000,
 		"RpcCallTimeout": 5000,
@@ -64,7 +64,7 @@ package main
 		"Role": [
 			"child","login"
 		],
-		"Group": [],
+		"Role": [],
 		"ReportInterval": 3000,
 		"RpcTimeout": 9000,
 		"RpcCallTimeout": 5000,

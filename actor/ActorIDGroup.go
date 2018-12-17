@@ -40,6 +40,17 @@ func (this *ActorIDGroup)Sub(id ActorID)  {
 	this.locker.Unlock()
 }
 
+func (this *ActorIDGroup)Has(id ActorID)bool  {
+	this.locker.Lock()
+	for _, value := range this.Actors {
+		if value.Equal(id) {
+			return true
+		}
+	}
+	this.locker.Unlock()
+	return false
+}
+
 func (this *ActorIDGroup)Get() []ActorID {
 	this.locker.Lock()
 	defer this.locker.Unlock()

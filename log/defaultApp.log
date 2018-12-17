@@ -2709,3 +2709,769 @@ main.main()
 2018/12/15 19:44:21 server.go:564: debug 127.0.0.1:63875
 2018/12/15 19:44:21 MasterComponent.go:66: info Node [ 0.0.0.0:6605 ] connected to this master, roles: [ child  room  ]
 2018/12/15 19:44:36 RockGO.go:125: fatal ====== Server is closed ======
+2018/12/16 13:17:29 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 13:17:29 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 13:17:29 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 13:17:29 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 13:17:29 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 13:17:29 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 13:17:29 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 13:17:29 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 13:17:29 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 13:17:29 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 13:17:29 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 13:18:07 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/16 13:18:07 object.go:179: error runtime error: hash of unhashable type Actor.ActorID
+goroutine 1 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/component.(*Object).WithLock.func1(0xc00008b900, 0xc0001eea80)
+	C:/GOPATH/projects/RockGO/component/object.go:468 +0xca
+panic(0xc2eee0, 0xc0001d8030)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+sync.(*Map).Load(0xc0001ee878, 0xc4dc60, 0xc00008b700, 0x0, 0x0, 0xc0001ea700)
+	C:/Go/src/sync/map.go:113 +0x401
+github.com/zllangct/RockGO/actor.(*ActorProxyComponent).Unregister(0xc0001ee850, 0xe1c400, 0xc0001ee770)
+	C:/GOPATH/projects/RockGO/actor/ActorProxyComponent.go:142 +0x9b
+github.com/zllangct/RockGO/actor.(*ActorComponent).Destroy(0xc0001ee770, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:73 +0x7b
+github.com/zllangct/RockGO/component.(*Object).Destroy.func1(0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:168 +0xe3
+github.com/zllangct/RockGO/component.(*Object).WithLock(0xc0001eea80, 0xc00008b918, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:479 +0x8b
+github.com/zllangct/RockGO/component.(*Object).Destroy(0xc0001eea80, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:165 +0x6b
+github.com/zllangct/RockGO/component.(*Object).Destroy.func1(0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:177 +0x28e
+github.com/zllangct/RockGO/component.(*Object).WithLock(0xc0001ee000, 0xc00008bae0, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:479 +0x8b
+github.com/zllangct/RockGO/component.(*Object).Destroy(0xc0001ee000, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:165 +0x6b
+github.com/zllangct/RockGO.(*ServerNode).Serve(0xc000112600)
+	C:/GOPATH/projects/RockGO/RockGO.go:123 +0xa6d
+main.main()
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/SingleServerWithActor.go:41 +0x607
+
+2018/12/16 13:18:07 RockGO.go:126: fatal ====== Server is closed ======
+2018/12/16 13:18:50 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 13:18:50 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 13:18:50 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 13:18:50 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 13:18:50 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 13:18:50 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 13:18:50 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 13:18:50 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 13:18:50 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 13:18:50 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 13:18:50 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 13:19:05 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/16 13:19:05 object.go:179: error runtime error: hash of unhashable type Actor.ActorID
+goroutine 1 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/component.(*Object).WithLock.func1(0xc000081900, 0xc00009ebd0)
+	C:/GOPATH/projects/RockGO/component/object.go:468 +0xca
+panic(0xc2eee0, 0xc000260110)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+sync.(*Map).Load(0xc00009e9c8, 0xc4dc60, 0xc000081700, 0x0, 0x0, 0xc000058900)
+	C:/Go/src/sync/map.go:113 +0x401
+github.com/zllangct/RockGO/actor.(*ActorProxyComponent).Unregister(0xc00009e9a0, 0xe1c400, 0xc00009e8c0)
+	C:/GOPATH/projects/RockGO/actor/ActorProxyComponent.go:142 +0x9b
+github.com/zllangct/RockGO/actor.(*ActorComponent).Destroy(0xc00009e8c0, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:73 +0x7b
+github.com/zllangct/RockGO/component.(*Object).Destroy.func1(0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:168 +0xe3
+github.com/zllangct/RockGO/component.(*Object).WithLock(0xc00009ebd0, 0xc000081918, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:479 +0x8b
+github.com/zllangct/RockGO/component.(*Object).Destroy(0xc00009ebd0, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:165 +0x6b
+github.com/zllangct/RockGO/component.(*Object).Destroy.func1(0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:177 +0x28e
+github.com/zllangct/RockGO/component.(*Object).WithLock(0xc00009e1c0, 0xc000081ae0, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:479 +0x8b
+github.com/zllangct/RockGO/component.(*Object).Destroy(0xc00009e1c0, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:165 +0x6b
+github.com/zllangct/RockGO.(*ServerNode).Serve(0xc0001e8450)
+	C:/GOPATH/projects/RockGO/RockGO.go:123 +0xa6d
+main.main()
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/SingleServerWithActor.go:41 +0x607
+
+2018/12/16 13:19:05 RockGO.go:126: fatal ====== Server is closed ======
+2018/12/16 13:20:25 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 13:20:25 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 13:20:25 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 13:20:25 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 13:20:25 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 13:20:25 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 13:20:25 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 13:20:25 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 13:20:25 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 13:20:25 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 13:20:25 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 13:22:40 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/16 13:22:40 object.go:179: error runtime error: hash of unhashable type Actor.ActorID
+goroutine 1 [running]:
+runtime/debug.Stack(0x0, 0x0, 0x0)
+	C:/Go/src/runtime/debug/stack.go:24 +0xb8
+github.com/zllangct/RockGO/component.(*Object).WithLock.func1(0xc00007b900, 0xc0001e7c00)
+	C:/GOPATH/projects/RockGO/component/object.go:468 +0xca
+panic(0xc2eee0, 0xc00010e500)
+	C:/Go/src/runtime/panic.go:513 +0x1f4
+sync.(*Map).Load(0xc0001e79f8, 0xc4dc60, 0xc00007b700, 0x0, 0x0, 0xc00026e100)
+	C:/Go/src/sync/map.go:113 +0x401
+github.com/zllangct/RockGO/actor.(*ActorProxyComponent).Unregister(0xc0001e79d0, 0xe1c400, 0xc0001e78f0)
+	C:/GOPATH/projects/RockGO/actor/ActorProxyComponent.go:142 +0x9b
+github.com/zllangct/RockGO/actor.(*ActorComponent).Destroy(0xc0001e78f0, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/actor/ActorComponent.go:73 +0x7b
+github.com/zllangct/RockGO/component.(*Object).Destroy.func1(0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:168 +0xe3
+github.com/zllangct/RockGO/component.(*Object).WithLock(0xc0001e7c00, 0xc00007b918, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:479 +0x8b
+github.com/zllangct/RockGO/component.(*Object).Destroy(0xc0001e7c00, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:165 +0x6b
+github.com/zllangct/RockGO/component.(*Object).Destroy.func1(0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:177 +0x28e
+github.com/zllangct/RockGO/component.(*Object).WithLock(0xc0001e71f0, 0xc00007bae0, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:479 +0x8b
+github.com/zllangct/RockGO/component.(*Object).Destroy(0xc0001e71f0, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:165 +0x6b
+github.com/zllangct/RockGO.(*ServerNode).Serve(0xc00011f860)
+	C:/GOPATH/projects/RockGO/RockGO.go:123 +0xa6d
+main.main()
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/SingleServerWithActor.go:41 +0x607
+
+2018/12/16 13:22:40 RockGO.go:126: fatal ====== Server is closed ======
+2018/12/16 14:25:53 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:25:53 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:25:53 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:25:53 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:25:53 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:25:53 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:25:53 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:25:53 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:25:53 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 14:25:53 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 14:25:53 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 14:30:39 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/16 14:30:39 RockGO.go:126: fatal ====== Server is closed ======
+2018/12/16 14:30:43 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:30:43 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:30:43 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:30:43 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:30:43 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:30:43 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:30:43 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:30:43 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:30:43 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 14:30:43 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 14:30:43 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 14:30:51 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/16 14:30:51 RockGO.go:126: fatal ====== Server is closed ======
+2018/12/16 14:30:54 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:30:54 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:30:54 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:30:54 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:30:54 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:30:54 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:30:54 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:30:54 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:30:54 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 14:30:54 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 14:30:54 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 14:31:04 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/16 14:31:04 RockGO.go:126: fatal ====== Server is closed ======
+2018/12/16 14:31:08 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:31:08 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:31:08 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:31:08 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:31:08 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:31:08 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:31:08 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:31:08 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:31:08 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 14:31:08 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 14:31:08 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 14:31:40 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/16 14:31:40 RockGO.go:126: fatal ====== Server is closed ======
+2018/12/16 14:31:44 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:31:44 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:31:44 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:31:44 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:31:44 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:31:44 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:31:44 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:31:44 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:31:44 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 14:31:44 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 14:31:44 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 14:32:03 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/16 14:32:03 RockGO.go:126: fatal ====== Server is closed ======
+2018/12/16 14:32:06 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:32:06 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:32:06 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:32:06 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:32:06 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:32:06 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:32:06 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:32:06 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:32:06 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 14:32:06 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 14:36:09 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:36:09 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:36:09 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:36:09 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:36:09 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:36:09 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:36:09 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:36:09 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:36:09 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 14:36:09 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 14:36:09 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 14:37:14 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/16 14:37:14 RockGO.go:126: fatal ====== Server is closed ======
+2018/12/16 14:37:17 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:37:17 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:37:17 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:37:17 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:37:17 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:37:17 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:37:17 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:37:17 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:37:32 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 14:38:24 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:38:24 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:38:24 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:38:24 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:38:24 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:38:24 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:38:24 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:38:24 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:38:42 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 14:38:56 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 14:39:15 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:39:15 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:39:15 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:39:15 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:39:15 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:39:15 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:39:15 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:39:15 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:39:22 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 14:39:37 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:39:37 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:39:37 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:39:37 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:39:37 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:39:37 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:39:37 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:39:37 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:40:40 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 14:40:46 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 14:40:40 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 14:40:55 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/16 14:40:55 RockGO.go:126: fatal ====== Server is closed ======
+2018/12/16 14:41:17 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:41:17 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:41:17 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:41:17 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:41:17 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:41:17 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:41:17 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:41:17 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:41:20 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 14:41:20 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 14:42:14 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:42:14 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:42:14 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:42:14 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:42:14 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:42:14 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:42:14 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:42:14 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:42:15 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 14:42:15 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 14:42:17 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 14:42:29 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/16 14:42:29 RockGO.go:126: fatal ====== Server is closed ======
+2018/12/16 14:42:33 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:42:33 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:42:33 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:42:33 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:42:33 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:42:33 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:42:33 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:42:33 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:42:33 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 14:42:35 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+
+2018/12/16 14:42:38 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 14:43:29 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/16 14:43:29 RockGO.go:126: fatal ====== Server is closed ======
+2018/12/16 14:45:29 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:45:29 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:45:29 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:45:29 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:45:29 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:45:29 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:45:29 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:45:29 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:45:32 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/16 14:45:32 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 14:45:32 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 14:45:37 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/16 14:45:37 RockGO.go:126: fatal ====== Server is closed ======
+2018/12/16 14:45:40 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 14:45:40 netapi.go:138: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 14:45:40 netapi.go:173: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 14:45:40 netapi.go:173: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 14:45:40 netapi.go:176: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 14:45:40 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 14:45:40 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 14:45:40 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 14:45:40 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 14:45:40 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/16 14:45:40 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 14:45:46 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/16 14:45:46 RockGO.go:126: fatal ====== Server is closed ======
+2018/12/16 18:54:53 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/16 18:54:53 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/16 18:54:53 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/16 18:54:53 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/16 18:54:53 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/16 18:54:53 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/16 18:54:53 NodeComponent.go:114: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/16 18:54:53 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/16 18:54:53 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/16 18:54:53 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/16 18:54:53 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/16 18:54:56 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 19:50:26 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:50:26 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:50:26 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:50:26 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:50:26 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:50:26 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:50:26 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:50:26 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:50:26 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:50:26 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:50:26 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:50:44 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 19:50:59 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:50:59 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:50:59 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:50:59 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:50:59 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:50:59 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:50:59 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:50:59 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:50:59 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:50:59 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:50:59 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:51:01 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 19:52:48 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:52:48 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:52:48 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:52:48 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:52:48 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:52:48 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:52:48 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:52:48 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:52:48 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:52:48 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:52:48 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:52:59 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:52:59 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:52:59 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:52:59 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:52:59 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:52:59 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:52:59 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:52:59 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:52:59 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:52:59 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:52:59 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:53:07 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:53:07 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:53:07 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:53:07 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:53:07 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:53:07 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:53:07 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:53:07 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:53:07 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:53:07 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:53:07 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:53:33 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:53:33 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:53:33 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:53:33 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:53:33 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:53:33 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:53:33 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:53:33 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:53:33 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:53:33 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:53:33 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:53:49 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:53:49 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:53:49 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:53:49 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:53:49 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:53:49 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:53:49 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:53:49 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:53:49 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:53:49 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:53:49 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:53:56 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:53:56 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:53:56 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:53:56 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:53:56 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:53:56 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:53:56 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:53:56 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:53:56 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:53:56 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:53:56 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:54:02 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:54:02 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:54:02 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:54:02 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:54:02 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:54:02 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:54:02 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:54:02 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:54:02 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:54:02 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:54:02 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:54:34 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:54:34 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:54:34 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:54:34 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:54:34 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:54:34 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:54:34 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:54:34 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:54:34 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:54:34 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:54:34 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:54:51 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:54:51 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:54:51 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:54:51 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:54:51 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:54:51 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:54:51 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:54:51 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:54:51 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:54:51 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:54:51 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:54:52 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 19:55:01 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:55:01 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:55:01 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:55:01 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:55:01 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:55:01 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:55:01 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:55:01 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:55:01 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:55:01 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:55:01 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:55:04 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 19:55:13 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:55:13 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:55:13 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:55:13 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:55:13 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:55:13 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:55:13 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:55:13 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:55:13 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:55:13 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:55:13 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:55:27 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:55:27 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:55:27 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:55:27 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:55:27 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:55:27 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:55:27 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:55:27 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:55:27 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:55:27 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:55:27 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:55:29 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 19:55:46 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:55:46 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:55:46 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:55:46 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:55:46 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:55:46 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:55:46 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:55:46 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:55:46 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:55:46 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:55:46 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:55:47 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 19:59:37 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:59:37 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:59:37 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:59:37 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:59:37 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:59:37 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:59:37 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:59:37 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:59:37 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:59:37 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:59:37 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:59:39 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 19:59:47 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 19:59:47 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:59:47 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:59:47 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:59:47 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:59:47 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:59:47 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 19:59:47 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:59:47 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 19:59:47 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 19:59:47 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:59:50 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:00:02 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:00:02 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:00:02 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:00:02 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:00:02 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:00:02 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:00:02 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:00:02 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:00:02 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:00:02 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:00:02 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:00:05 RockGO.go:123: info ====== Server is closed ======
+2018/12/17 20:00:48 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:00:48 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:00:48 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:00:48 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:00:48 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:00:48 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:00:48 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:00:48 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:00:48 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:00:48 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:00:48 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:00:51 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:05:24 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:05:24 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:05:24 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:05:24 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:05:24 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:05:24 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:05:24 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:05:24 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:05:24 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:05:24 wshandler.go:81: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:05:24 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:05:26 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:10:00 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:10:00 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:10:00 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:10:00 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:10:00 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:10:00 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:10:00 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:10:00 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:10:00 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:10:00 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:10:00 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:10:02 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:11:15 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:11:15 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:11:15 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:11:15 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:11:15 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:11:15 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:11:15 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:11:15 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:11:15 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:11:15 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:11:15 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:11:20 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:11:39 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:11:39 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:11:39 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:11:39 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:11:39 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:11:39 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:11:39 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:11:39 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:11:39 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:11:39 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:11:39 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:11:44 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:11:55 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:11:55 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:11:55 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:11:55 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:11:55 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:11:55 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:11:55 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:11:55 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:11:55 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:11:55 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:11:55 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:12:08 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:12:20 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:12:20 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:12:20 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:12:20 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:12:20 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:12:20 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:12:20 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:12:20 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:12:20 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:12:20 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:12:20 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:13:27 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:15:16 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:15:16 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:15:16 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:15:16 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:15:16 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:15:16 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:15:16 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:15:16 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:15:16 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:15:16 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:15:16 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:15:24 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:16:38 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:16:38 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:16:38 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:16:38 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:16:38 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:16:38 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:16:38 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:16:38 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:16:38 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:16:38 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:16:38 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:16:43 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:17:49 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:17:49 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:17:49 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:17:49 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:17:49 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:17:49 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:17:49 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:17:49 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:17:49 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:17:49 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:17:49 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:17:54 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:17:57 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:17:57 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:17:57 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:17:57 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:17:57 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:17:57 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:17:57 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:17:57 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:17:57 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:18:03 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:18:06 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:18:24 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:19:18 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:19:18 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:19:18 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:19:18 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:19:18 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:19:18 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:19:18 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:19:18 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:19:18 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:19:18 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:19:21 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:19:26 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:19:39 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:19:39 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:19:39 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:19:39 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:19:39 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:19:39 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:19:39 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:19:39 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:19:39 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:19:39 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:19:39 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:19:44 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:19:57 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:19:57 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:19:57 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:19:57 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:19:57 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:19:57 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:19:57 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:19:57 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:19:57 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:19:57 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:19:57 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:20:02 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:21:28 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:21:28 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:21:28 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:21:28 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:21:28 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:21:28 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:21:28 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:21:28 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:21:28 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:21:28 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:21:28 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:21:32 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:21:32 RockGO.go:129: info ====== Server is closed ======
+2018/12/17 20:21:38 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:21:38 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:21:38 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:21:38 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:21:38 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:21:38 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:21:38 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:21:38 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:21:38 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:21:38 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:21:38 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:21:41 RockGO.go:129: info ====== Server is closed ======
+2018/12/17 20:21:41 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:22:09 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/17 20:22:09 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:22:09 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:22:09 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:22:09 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:22:09 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:22:09 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/17 20:22:09 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:22:09 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/17 20:22:09 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:22:09 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/17 20:22:11 server.go:561: error rpc.Serve: accept:accept tcp [::]:6601: use of closed network connection
+2018/12/17 20:22:11 RockGO.go:125: info ====== Server is closed ======

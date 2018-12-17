@@ -38,8 +38,7 @@ func (this *TcpConn) WriteMessage(messageType uint32, data []byte) error  {
 }
 
 func (this *TcpConn)Close() error {
-	this.tcpConn.Close()
-	return nil
+	return this.tcpConn.Close()
 }
 
 type tcpHandler struct {

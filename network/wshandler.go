@@ -35,8 +35,7 @@ func (this *WsConn)WriteMessage(messageType uint32, data []byte) error{
 }
 
 func (this *WsConn)Close() error {
-	this.wsConn.Close()
-	return nil
+	return this.wsConn.Close()
 }
 
 type websocketHandler struct {
@@ -78,7 +77,7 @@ func (h *websocketHandler) Listen() error {
 	})
 
 	go func() {
-		logger.Info(fmt.Sprintf("Websocket server listening and serving HTTP on [ %s ]\n", cfg.Address))
+		logger.Info(fmt.Sprintf("Websocket server listening and serving HTTP on [ %s ]", cfg.Address))
 		err := router.Run(cfg.Address)
 		if err != nil {
 			logger.Fatal("ListenAndServe: ", err)

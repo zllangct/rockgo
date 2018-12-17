@@ -1,11 +1,14 @@
 package Cluster
 
-import "errors"
+import (
+	"errors"
+)
 
 type NodeInfo struct {
-	Address      string
-	Group   []string
-	AppName  string
+	Time    int64
+	Address string
+	Role    []string
+	AppName string
 	Info    map[string]float32
 }
 
@@ -36,21 +39,21 @@ func (this *MasterService) ReportNodeInfo(args *NodeInfo, reply *bool) error {
 	return nil
 }
 
-func (this *MasterService) NodeInquiry(args string, reply *[]*InquiryReply) error {
+func (this *MasterService) NodeInquiry(args []string, reply *[]*InquiryReply) error {
 	res,err:= this.master.NodeInquiry(args,false)
 	*reply =res
 	return err
 }
 
-func (this *MasterService) NodeInquiryDetail(args string, reply *[]*InquiryReply) error {
+func (this *MasterService) NodeInquiryDetail(args []string, reply *[]*InquiryReply) error {
 	res,err:= this.master.NodeInquiry(args,true)
 	*reply =res
 	return err
 }
 
 type NodeInfoSyncReply struct {
-	Nodes map[string]*NodeInfo
-	NodesOffline map[string]struct{}
+	Nodes   map[string]*NodeInfo
+	NodeLog *NodeLogs
 }
 
 func (this *MasterService) NodeInfoSync(args string, reply *NodeInfoSyncReply) error {
@@ -58,8 +61,37 @@ func (this *MasterService) NodeInfoSync(args string, reply *NodeInfoSyncReply) e
 		return errors.New("call service [ NodeInfoSynchronous ],has wrong argument")
 	}
 	*reply=NodeInfoSyncReply{
-		Nodes:this.master.NodesCopy(),
-		NodesOffline:this.master.NodesOfflineCopy(),
+		Nodes:   this.master.NodesCopy(),
+		NodeLog: this.master.NodesLogsCopy(),
 	}
 	return nil
 }
+
+type NodeLog struct {
+	Time int64
+	Log string
+	Type int
+}
+
+type NodeLogs struct {
+	BufferSize int
+	Logs []*NodeLog
+}
+
+func (this *NodeLogs)Add(log *NodeLog)  {
+	if len(this.Logs)< this.BufferSize{
+		this.Logs= append(this.Logs, log)
+	}else{
+		this.Logs= append(this.Logs[1:],log)
+	}
+}
+
+func (this *NodeLogs) Get(time int64) []*NodeLog {
+	for key, value := range this.Logs {
+		if value.Time > time {
+			return this.Logs[key:]
+		}
+	}
+	return []*NodeLog{}
+}
+

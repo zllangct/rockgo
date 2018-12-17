@@ -90,9 +90,6 @@ func (this *ServerNode) Serve(){
 	if Config.Config.ClusterConfig.IsLocationMode {
 		this.AddComponentGroup("location",[]Component.IComponent{&Cluster.LocationComponent{}})
 	}
-	if Config.Config.ClusterConfig.IsActorModel {
-		this.AddComponentGroup("actor_location",[]Component.IComponent{&Actor.ActorLocationComponent{}})
-	}
 
 	//添加基础组件组,一般通过组建组的定义决定服务器节点的服务角色
 	err:= this.componentGroup.AttachGroupsTo(Config.Config.ClusterConfig.Role, this.Runtime.Root())
@@ -106,7 +103,7 @@ func (this *ServerNode) Serve(){
 		for {
 			step++
 			this.Runtime.Update(step)
-			time.Sleep(time.Millisecond * 33)
+			time.Sleep(time.Millisecond * 100)
 		}
 	}()
 
@@ -120,10 +117,12 @@ func (this *ServerNode) Serve(){
 		}
 		//do something else
 
-		_=this.Runtime.Root().Destroy()
-
+		err=this.Runtime.Root().Destroy()
+		if err!=nil{
+			logger.Error(err)
+		}
 		//close success
-		logger.Fatal("====== Server is closed ======")
+		logger.Info("====== Server is closed ======")
 		return
 	}
 
@@ -155,7 +154,7 @@ func (this *ServerNode) AddComponentGroup(groupName string, group []Component.IC
 		panic(ErrServerNotInit)
 	}
 	if Config.Config.ClusterConfig.IsActorModel {
-		group= append(group, &Actor.ActorComponent{Role:Config.Config.ClusterConfig.NodeDefine[groupName].Role})
+		group= append(group, &Actor.ActorComponent{})
 	}
 	this.componentGroup.AddGroup(groupName, group)
 }
@@ -166,7 +165,7 @@ func (this *ServerNode) AddComponentGroups(groups map[string][]Component.ICompon
 	}
 	for groupName, group := range groups {
 		if Config.Config.ClusterConfig.IsActorModel {
-			group= append(group, &Actor.ActorComponent{Role:Config.Config.ClusterConfig.NodeDefine[groupName].Role})
+			group= append(group,&Actor.ActorComponent{})
 		}
 		this.componentGroup.AddGroup(groupName, group)
 	}
@@ -180,7 +179,7 @@ func (this *ServerNode) GetConfig() *Config.ConfigComponent {
 	if this.Config ==nil {
 		err := this.Runtime.Root().Find(&this.Config)
 		if err != nil {
-			println(err.Error())
+			logger.Error(err)
 		}
 	}
 	return this.Config

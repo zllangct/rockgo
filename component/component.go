@@ -3,6 +3,7 @@ package Component
 import (
 	"log"
 	"reflect"
+	"time"
 )
 
 const (
@@ -75,3 +76,19 @@ func (this *Base) Type() reflect.Type {
 	return this.t
 }
 
+//轮训条件阻塞
+func (this *Base)When(interval time.Duration,conditions ...func()bool)  {
+	for{
+		res:=true
+		for _, cond := range conditions {
+			if !cond() {
+				res=true
+				break
+			}
+		}
+		if res {
+			break
+		}
+		time.Sleep(interval)
+	}
+}

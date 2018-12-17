@@ -8,24 +8,28 @@ import (
 	"reflect"
 	"runtime/debug"
 	"sync/atomic"
+	"time"
 )
 
 /*
-	actor IComponent
-	actor内线程安全
+	actor component
+	添加了ActorConponent组件的object可视为actor，该object上挂载的所有其他Component都可以响应actor消息
+	默认状态下actor type 为 ACTOR_TYPE_ASYNC，在actor内是非线程安全的，需要有保证线程安全的措施
+	可设置type为 ACTOR_TYPE_SYNC 此时所有消息穿行化，actor内线程安全
 */
 const(
-	ACTOR_TYPE_LOCAL = ActorType(1)
-	ACTOR_TYPE_REMOTE = ActorType(2)
+	ACTOR_TYPE_DEFAULT ActorType =iota
+	ACTOR_TYPE_SYNC
+	ACTOR_TYPE_ASYNC
 )
 
 type ActorType int
 
 type ActorComponent struct {
 	Component.Base
+	ActorType    ActorType
 	ActorID      ActorID                //Actor地址
 	Proxy        *ActorProxyComponent   //Actor代理
-	Role         []string
 	queueReceive chan *ActorMessageInfo //接收消息队列
 	close        chan bool              //关闭信号
 	active       int32                  //是否激活,0：未激活 1：激活
@@ -47,7 +51,11 @@ func (this *ActorComponent) IsUnique() int {
 
 func (this *ActorComponent) Awake()error {
 	this.queueReceive= make(chan *ActorMessageInfo, 10)
-	this.close=       make(chan bool)
+	this.close =       make(chan bool)
+	//初始化actor类型
+	if this.ActorType == ACTOR_TYPE_DEFAULT {
+		this.ActorType = ACTOR_TYPE_ASYNC
+	}
 	//初始化Actor代理
 	err := this.Parent.Runtime().Root().Find(&this.Proxy)
 	if err != nil {
@@ -56,15 +64,34 @@ func (this *ActorComponent) Awake()error {
 	//初始化ID
 	this.ActorID= EmptyActorID()
 	//注册Actor到ActorProxy
-	err = this.Proxy.Register(this,this.Role...)
+	err = this.Proxy.Register(this)
 	if err!=nil {
 		return err
 	}
-	//设置Actor状态为激活
-	atomic.StoreInt32(&this.active, 1)
 	//初始化消息分发器
 	go this.dispatch()
+	//设置Actor状态为激活
+	atomic.StoreInt32(&this.active, 1)
 	return err
+}
+
+func (this *ActorComponent)RegisterService(service string) error {
+	this.When(time.Second, func() bool {
+		return this.Proxy.isOnline
+	})
+	return this.Proxy.RegisterService(this,service)
+}
+func (this *ActorComponent)UnregisterService(service string) error {
+	this.When(time.Second, func() bool {
+		return this.Proxy.isOnline
+	})
+	return this.Proxy.RegisterService(this,service)
+}
+func (this *ActorComponent)RegisterServiceLocal(service string) error {
+	return this.Proxy.RegisterServiceLocal(this,service)
+}
+func (this *ActorComponent)UnregisterServiceLocal(service string) error {
+	return this.Proxy.RegisterServiceLocal(this,service)
 }
 
 func (this *ActorComponent) Destroy()error {
@@ -91,7 +118,14 @@ func (this *ActorComponent) Tell(sender IActor,message *ActorMessage,reply ...**
 		messageInfo.NeedReply(false)
 	}
 
-	this.queueReceive <- messageInfo
+	switch this.ActorType {
+	case ACTOR_TYPE_SYNC:
+		this.queueReceive <- messageInfo
+	case ACTOR_TYPE_ASYNC:
+		go this.handle(messageInfo)
+	default:
+
+	}
 
 	if messageInfo.IsNeedReply() {
 		<-messageInfo.done
@@ -110,18 +144,6 @@ func (this *ActorComponent) ID() ActorID{
 func (this *ActorComponent) dispatch() {
 	var messageInfo *ActorMessageInfo
 	var ok bool
-	handle := func(messageInfo *ActorMessageInfo) {
-		cps := this.Parent.AllComponents()
-		var err error = nil
-		var val interface{}
-		for val, err = cps.Next(); err == nil; val, err = cps.Next() {
-			if messageHandler, ok := val.(IActorMessageHandler); ok {
-				if handler, ok := messageHandler.MessageHandlers()[messageInfo.Message.Tittle]; ok {
-					this.Catch(handler,messageInfo)
-				}
-			}
-		}
-	}
 	for {
 		select {
 		case <-this.close:
@@ -132,10 +154,24 @@ func (this *ActorComponent) dispatch() {
 			if !ok {
 				return
 			}
-			handle(messageInfo)
+			this.handle(messageInfo)
 		}
 	}
 }
+
+func (this *ActorComponent)handle(messageInfo *ActorMessageInfo) {
+	cps := this.Parent.AllComponents()
+	var err error = nil
+	var val interface{}
+	for val, err = cps.Next(); err == nil; val, err = cps.Next() {
+		if messageHandler, ok := val.(IActorMessageHandler); ok {
+			if handler, ok := messageHandler.MessageHandlers()[messageInfo.Message.Tittle]; ok {
+				this.Catch(handler,messageInfo)
+			}
+		}
+	}
+}
+
 func (this *ActorComponent) Catch(handler func(message *ActorMessageInfo),m *ActorMessageInfo) {
 	defer (func() {
 		if r := recover(); r != nil {

@@ -2,16 +2,16 @@ package Cluster
 
 import (
 	"errors"
-	"strings"
 	"sync"
 )
 
 const (
+	SELECTOR_TYPE_GROUP  SelectorType = "Group"
 	SELECTOR_TYPE_DEFAULT  SelectorType = "Default"
 	SELECTOR_TYPE_MIN_LOAD SelectorType = "MinLoad"
 )
 
-type SelectorType string
+type SelectorType = string
 
 type SourceGroup []*InquiryReply
 
@@ -37,25 +37,22 @@ func (this SourceGroup)SelectMinLoad() int {
 }
 
 type Selector map[string]*NodeInfo
-
-func (this Selector) Select(query string,detail bool,locker *sync.RWMutex) ([]*InquiryReply ,error){
-	args := strings.Split(query, ":")
-	length:=len(args)
-	if length < 2 || length>3 || args[0]=="" || args[1] ==""{
-		return nil, errors.New("query string wrong")
+var ErrNoAvailableNode = errors.New("query string wrong")
+// 0 选择模式 1 AppName 2 role
+func (this Selector) Select(query []string,detail bool,locker *sync.RWMutex) ([]*InquiryReply ,error){
+	length:=len(query)
+	if length !=3 || query[0]=="" {
+		return nil,ErrNoAvailableNode
 	}
 	selector := SELECTOR_TYPE_DEFAULT
-	if length==3 {
-		selector = SelectorType(args[2])
-	}
 
 	err := errors.New("no available node ")
 	var reply = make([]*InquiryReply,0)
 	locker.RLock()
 	for nodeName, nodeInfo := range this {
-		if nodeInfo.AppName == args[0] {
-			for _, role := range nodeInfo.Group {
-				if role == args[1] {
+		if nodeInfo.AppName == query[1] {
+			for _, role := range nodeInfo.Role {
+				if  role == query[2] {
 					if detail {
 						reply = append(reply, &InquiryReply{Node: nodeName,Info:nodeInfo.Info})
 					}else{
@@ -77,6 +74,8 @@ func (this Selector) Select(query string,detail bool,locker *sync.RWMutex) ([]*I
 		if index != -1{
 			reply = []*InquiryReply{ reply[index] }
 		}
+	case SELECTOR_TYPE_GROUP:
+
 	default:
 
 	}

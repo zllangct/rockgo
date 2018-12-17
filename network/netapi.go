@@ -21,6 +21,7 @@ type NetAPI interface {
 	Route(*Session, uint32, []byte)
 	MessageEncode(interface{})(uint32,[]byte,error)
 	SetParent(object *Component.Object)
+	Reply(session *Session,message interface{})error
 }
 
 type methodType struct {
@@ -60,6 +61,14 @@ func (this *ApiBase)GetParent() (*Component.Object,error)  {
 		err=errors.New("this api has not parent")
 	}
 	return this.parent,err
+}
+
+func (this *ApiBase)Reply(sess *Session,message interface{}) error {
+	t,m,err:=this.MessageEncode(message)
+	if err!=nil {
+		return err
+	}
+	return sess.Emit(t,m)
 }
 
 func (this *ApiBase)MessageEncode(message interface{}) (uint32,[]byte,error) {

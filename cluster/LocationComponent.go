@@ -24,7 +24,7 @@ type LocationComponent struct {
 	locker *sync.RWMutex
 	nodeComponent  *NodeComponent
 	Nodes         map[string]*NodeInfo
-	NodesOffline	map[string]struct{}
+	NodeLog	*NodeLogs
 	master   *rpc.TcpClient
 }
 
@@ -58,7 +58,7 @@ func (this *LocationComponent) Awake()error {
 //同步节点信息到位置服务组件
 func (this *LocationComponent)DoLocationSync()  {
 	var reply *NodeInfoSyncReply
-	var interval = time.Duration(Config.Config.ClusterConfig.ReportInterval)
+	var interval = time.Duration(Config.Config.ClusterConfig.LocationSyncInterval)
 	for {
 		if this.master == nil {
 			var err error
@@ -75,16 +75,27 @@ func (this *LocationComponent)DoLocationSync()  {
 		}
 		this.locker.Lock()
 		this.Nodes=reply.Nodes
-		this.NodesOffline=reply.NodesOffline
+		this.NodeLog=reply.NodeLog
 		this.locker.Unlock()
 		time.Sleep(time.Millisecond * interval)
 	}
 }
 
 //查询节点信息 args : "AppID:Role:SelectorType"
-func (this *LocationComponent) NodeInquiry(args string,detail bool) ([]*InquiryReply, error) {
+func (this *LocationComponent) NodeInquiry(args []string,detail bool) ([]*InquiryReply, error) {
 	if this.Nodes==nil {
 		return nil, errors.New("this location node is waiting to sync")
 	}
 	return Selector(this.Nodes).Select(args,detail,this.locker)
+}
+
+//日志获取
+func (this *LocationComponent) NodeLogInquiry(args int64) ([]*NodeLog, error) {
+	this.locker.RLock()
+	defer this.locker.RUnlock()
+
+	if this.NodeLog==nil {
+		return nil, errors.New("this location node is waiting to sync")
+	}
+	return this.NodeLog.Get(args),nil
 }

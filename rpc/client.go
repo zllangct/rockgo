@@ -223,7 +223,7 @@ func (client *TcpClient) input() {
 	client.mutex.Unlock()
 	client.reqMutex.Unlock()
 	if debugLog && err != io.EOF && !closing {
-		log.Println("rpc: client protocol error:", err)
+		logger.Error("rpc: client protocol error:", err)
 	}
 }
 
@@ -235,7 +235,7 @@ func (call *Call) done() {
 		// We don't want to block here. It is the caller's responsibility to make
 		// sure the channel has enough buffer space. See comment in Go().
 		if debugLog {
-			log.Println("rpc: discarding Call reply due to insufficient Done chan capacity")
+			logger.Debug("rpc: discarding Call reply due to insufficient Done chan capacity")
 		}
 	}
 }
@@ -266,6 +266,9 @@ func (client *TcpClient) StartHeartBeat() {
 	}
 }
 
+func (client *TcpClient) LocalAddr() string {
+	return client.conn.LocalAddr().String()
+}
 
 func (client *TcpClient) Reconnect() error {
 	if !client.closing && !client.shutdown {
@@ -444,6 +447,9 @@ func (client *TcpClient) Go(serviceMethod string, args interface{}, reply interf
 
 // Call invokes the named function, waits for it to complete, and returns its error status.
 func (client *TcpClient) Call(serviceMethod string, args interface{}, reply interface{}) error {
+	if client.IsClosed() {
+		return ErrShutdown
+	}
 	call := client.Go(serviceMethod, args, reply, make(chan *Call, 1))
 	select {
 	case <-timer.After(CallTimeout):

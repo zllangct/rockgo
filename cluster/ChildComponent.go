@@ -7,6 +7,7 @@ import (
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
 	"reflect"
+	"strings"
 	"sync"
 	"time"
 )
@@ -14,6 +15,7 @@ import (
 type ChildComponent struct {
 	Component.Base
 	locker          sync.RWMutex
+	localAddr		string
 	rpcMaster       *rpc.TcpClient //master节点
 	nodeComponent   *NodeComponent
 	reportCollecter []func() (string, float32)
@@ -40,15 +42,22 @@ func (this *ChildComponent) Awake() error {
 }
 
 func (this *ChildComponent) Destroy() error {
-	this.ReportClose(Config.Config.ClusterConfig.LocalAddress)
+	this.ReportClose(this.localAddr)
 	return nil
 }
 
 //上报节点信息
 func (this *ChildComponent) DoReport() {
+	this.When(time.Second,
+	func() bool {
+		return this.rpcMaster!=nil
+	},
+	func() bool {
+		return this.localAddr!=""
+	})
 	args := &NodeInfo{
-		Address: Config.Config.ClusterConfig.LocalAddress,
-		Group:   Config.Config.ClusterConfig.Role,
+		Address: this.localAddr,
+		Role:    Config.Config.ClusterConfig.Role,
 		AppName: Config.Config.ClusterConfig.AppName,
 	}
 	var reply bool
@@ -103,6 +112,9 @@ func (this *ChildComponent) ConnectToMaster() {
 		}
 		time.Sleep(time.Millisecond * 500)
 	}
+	ip:=strings.Split(this.rpcMaster.LocalAddr(),":")[0]
+	port:=strings.Split(Config.Config.ClusterConfig.LocalAddress,":")[1]
+	this.localAddr =fmt.Sprintf("%s:%s",ip,port)
 	this.nodeComponent.Locker().Lock()
 	this.nodeComponent.isOnline = true
 	this.nodeComponent.Locker().Unlock()

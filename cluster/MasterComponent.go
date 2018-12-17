@@ -12,12 +12,16 @@ import (
 	"time"
 )
 
+const(
+	LOG_TYPE_NODE_CLOSE =iota
+)
+
 type MasterComponent struct {
 	Component.Base
 	locker          *sync.RWMutex
 	nodeComponent   *NodeComponent
 	Nodes           map[string]*NodeInfo
-	NodesOffline    map[string]struct{}
+	NodeLog    		*NodeLogs
 	timeoutChecking map[string]int
 }
 
@@ -33,7 +37,7 @@ func (this *MasterComponent) GetRequire() map[*Component.Object][]reflect.Type {
 func (this *MasterComponent) Awake() error{
 	this.locker = &sync.RWMutex{}
 	this.Nodes = make(map[string]*NodeInfo)
-	this.NodesOffline =make(map[string]struct{})
+	this.NodeLog =&NodeLogs{BufferSize:20}
 	this.timeoutChecking =make(map[string]int)
 
 	err := this.Parent.Root().Find(&this.nodeComponent)
@@ -59,14 +63,14 @@ func (this *MasterComponent) UpdateNodeInfo(args *NodeInfo) {
 	this.locker.Lock()
 	if _,ok:=this.Nodes[args.Address];!ok {
 		s:= strings.Builder{}
-		for _, value := range args.Group {
+		for _, value := range args.Role {
 			s.WriteString(value)
 			s.WriteString("  ")
 		}
 		logger.Info(fmt.Sprintf("Node [ %s ] connected to this master, roles: [ %s]",args.Address,s.String()))
 	}
+	args.Time = time.Now().UnixNano()
 	this.Nodes[args.Address] = args
-	delete(this.NodesOffline, args.Address)
 	this.timeoutChecking[args.Address]=0
 
 	this.locker.Unlock()
@@ -77,7 +81,7 @@ func (this *MasterComponent) NodeClose(addr string){
 	//非线程安全，外层注意加锁
 	if v,ok:=this.Nodes[addr];ok {
 		s:= strings.Builder{}
-		for _, value := range v.Group {
+		for _, value := range v.Role {
 			s.WriteString(value)
 			s.WriteString("  ")
 		}
@@ -85,11 +89,15 @@ func (this *MasterComponent) NodeClose(addr string){
 	}
 	delete(this.Nodes, addr)
 	delete(this.timeoutChecking,addr)
-	this.NodesOffline[addr]= struct{}{}
+	this.NodeLog.Add(&NodeLog{
+		Time:time.Now().UnixNano(),
+		Type:LOG_TYPE_NODE_CLOSE,
+		Log:addr,
+	})
 }
 
 //查询节点信息 args : "AppID:Role:SelectorType"
-func (this *MasterComponent) NodeInquiry(args string,detail bool) ([]*InquiryReply, error) {
+func (this *MasterComponent) NodeInquiry(args []string,detail bool) ([]*InquiryReply, error) {
 	return Selector(this.Nodes).Select(args, detail,this.locker)
 }
 
@@ -115,9 +123,10 @@ func (this *MasterComponent) NodesCopy() map[string]*NodeInfo {
 	defer this.locker.RUnlock()
 	return utils.Copy(this.Nodes).(map[string]*NodeInfo)
 }
-func (this *MasterComponent) NodesOfflineCopy() map[string]struct{} {
+
+func (this *MasterComponent) NodesLogsCopy() *NodeLogs {
 	this.locker.RLock()
 	defer this.locker.RUnlock()
-	return utils.Copy(this.NodesOffline).(map[string]struct{})
+	return utils.Copy(this.NodeLog).(*NodeLogs)
 }
 

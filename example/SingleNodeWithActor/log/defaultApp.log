@@ -537,3 +537,39 @@
 2018/12/15 20:00:09 MasterComponent.go:66: info Node [ 0.0.0.0:6603 ] connected to this master, roles: [ child  location  ]
 2018/12/15 20:00:09 NodeComponent.go:289: info   connect to node: [ 0.0.0.0:6603 ] success
 2018/12/15 20:00:09 server.go:564: debug 127.0.0.1:64178
+2018/12/15 21:46:22 RockGO.go:125: fatal ====== Server is closed ======
+2018/12/15 21:46:22 ChildComponent.go:108: info Disconnected from master
+2018/12/15 21:46:22 ChildComponent.go:84: info  Looking for master ......
+2018/12/15 21:46:23 RockGO.go:125: fatal ====== Server is closed ======
+2018/12/17 19:58:51 SingleServerWithActor.go:34: info Override node info:[ node_location ]
+2018/12/17 19:58:51 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 19:58:51 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 19:58:51 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 19:58:51 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 19:58:51 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 19:58:51 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6603 ]
+2018/12/17 19:58:51 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 19:58:51 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ runtime ]
+2018/12/17 19:58:51 ChildComponent.go:106: info  Looking for master ......
+2018/12/17 19:58:51 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:58:51 server.go:240: info rpc.Register: service: [ LocationService ], method [ NodeInquiry ] is registed
+2018/12/17 19:58:51 server.go:240: info rpc.Register: service: [ LocationService ], method [ NodeInquiryDetail ] is registed
+2018/12/17 19:58:51 component_group.go:26: info Attach component [ location.*Cluster.LocationComponent ] to [ runtime ]
+2018/12/17 19:58:51 component_group.go:26: info Attach component [ location.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 19:58:55 server.go:561: error rpc.Serve: accept:accept tcp [::]:6603: use of closed network connection
+2018/12/17 20:10:13 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/17 20:10:13 netapi.go:147: info ====== start to register API group: [ TestApi ] ======
+2018/12/17 20:10:13 netapi.go:182: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/17 20:10:13 netapi.go:182: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/17 20:10:13 netapi.go:185: info ======   register API group: [ TestApi ] end   ======
+2018/12/17 20:10:13 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/17 20:10:13 NodeComponent.go:116: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/17 20:10:13 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/17 20:10:13 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/17 20:10:13 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/17 20:10:13 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/17 20:10:13 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/17 20:10:13 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/17 20:10:13 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ runtime ]
+2018/12/17 20:10:13 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ runtime ]
+2018/12/17 20:10:15 server.go:561: error rpc.Serve: accept:accept tcp [::]:6666: use of closed network connection

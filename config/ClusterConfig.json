@@ -28,7 +28,7 @@
             "LocalAddress": "0.0.0.0:6604",
             "Role": [
                 "location",
-                "actor_location"
+                "actor_service"
             ]
         },
         "node_login": {

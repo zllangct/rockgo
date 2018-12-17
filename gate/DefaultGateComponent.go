@@ -19,6 +19,7 @@ type DefaultGateComponent struct {
 	nodeComponent *Cluster.NodeComponent
 	clients       sync.Map // [sessionID,*session]
 	NetAPI        network.NetAPI
+	server        *network.Server
 }
 
 func (this *DefaultGateComponent)IsUnique()int  {
@@ -51,8 +52,8 @@ func (this *DefaultGateComponent) Awake()error {
 		NetAPI:               this.NetAPI,
 	}
 
-	svr := network.NewServer(conf)
-	err = svr.Serve()
+	this.server = network.NewServer(conf)
+	err = this.server.Serve()
 	if err != nil {
 		return err
 	}
@@ -66,6 +67,11 @@ func (this *DefaultGateComponent) OnConnected(sess *network.Session) {
 
 func (this *DefaultGateComponent) OnDropped(sess *network.Session) {
 	this.clients.Delete(sess.ID)
+}
+
+func (this *DefaultGateComponent)Destroy()error  {
+	this.server.Shutdown()
+	return nil
 }
 
 func (this *DefaultGateComponent) SendMessage(sid string, message interface{}) error {
