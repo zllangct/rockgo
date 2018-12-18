@@ -22,6 +22,8 @@ func (this *Session)RemoteAddr() string {
 }
 
 func (this *Session)Close() error {
+	this.locker.Lock()
+	defer this.locker.Unlock()
 	this.properties = nil
 	return this.conn.Close()
 }
@@ -42,3 +44,5 @@ func (this *Session)GetProperty(key string) (interface{},bool) {
 func (this *Session)Emit(messageType uint32,message []byte) error {
 	return this.conn.WriteMessage(messageType,message)
 }
+
+
