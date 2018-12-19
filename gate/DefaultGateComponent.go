@@ -42,7 +42,6 @@ func (this *DefaultGateComponent) Awake()error {
 	if this.NetAPI==nil {
 		panic(errors.New("NetAPI is necessity of defaultGateComponent"))
 	}
-	this.NetAPI.SetParent(this.Parent)
 	conf := &network.ServerConf{
 		Proto:                "ws",
 		Address:              Config.Config.ClusterConfig.NetListenAddress,
@@ -76,11 +75,7 @@ func (this *DefaultGateComponent)Destroy()error  {
 
 func (this *DefaultGateComponent) SendMessage(sid string, message interface{}) error {
 	if s, ok := this.clients.Load(sid); ok {
-		mid, b, err := this.NetAPI.MessageEncode(message)
-		if err != nil {
-			return err
-		}
-		err=s.(*network.Session).Emit(mid, b)
+		err:=this.NetAPI.Reply(s.(*network.Session),message)
 		if err != nil {
 			return err
 		}
@@ -89,9 +84,5 @@ func (this *DefaultGateComponent) SendMessage(sid string, message interface{}) e
 }
 
 func (this *DefaultGateComponent) Emit(sess *network.Session, message interface{}) error {
-	mid, b, err := this.NetAPI.MessageEncode(message)
-	if err != nil {
-		return err
-	}
-	return sess.Emit(mid, b)
+	return this.NetAPI.Reply(sess,message)
 }

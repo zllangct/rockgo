@@ -34,9 +34,10 @@ func main()  {
 		logger.Info(fmt.Sprintf("Override node info:[ %s ]",nodeConfName))
 	}
 
-	RockGO.Server.AddComponentGroup("gate",[]Component.IComponent{&gate.DefaultGateComponent{
-		NetAPI:NewTestApi(),
-	}})
+	g:=&gate.DefaultGateComponent{}
+	g.NetAPI=NewTestApi(g.Parent)  //非默认网关不必要这样初始化，在组件内初始化即可，此处是为了对默认网关注入
+
+	RockGO.Server.AddComponentGroup("gate",[]Component.IComponent{g})
 	RockGO.Server.AddComponentGroup("room",[]Component.IComponent{&RoomManagerComponent{}})
 	RockGO.Server.Serve()
 }

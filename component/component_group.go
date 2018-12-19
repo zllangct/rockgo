@@ -70,8 +70,8 @@ func (this *ComponentGroups) AttachGroupsTo(groupName []string, target *Object) 
 	if !other && !master && !child{
 		groupName= append(groupName, "master")
 	}
-	//master和其他角色是，需要child
-	if other && master && !child{
+	//有其他角色是，需要child
+	if other && !child{
 		groupName= append(groupName, "child")
 	}
 	//有master，没有其他的时候，不需要child

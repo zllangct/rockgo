@@ -25,8 +25,8 @@ func (this *ActorMessageInfo)IsNeedReply() bool {
 func (this *ActorMessageInfo)Reply(tittle string,args ...interface{})  {
 	if this.done!=nil {
 		*this.reply=&ActorMessage{
-			Tittle:tittle,
-			Data:args,
+			Service: tittle,
+			Data:    args,
 		}
 		this.done<- struct{}{}
 	}
@@ -43,6 +43,6 @@ type ActorRpcMessageInfo struct {
 	Target  ActorID
 	Sender ActorID
 	Message *ActorMessage
-	Reply *ActorMessage
+	//Reply *ActorMessage
 }
 

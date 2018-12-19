@@ -8,7 +8,6 @@ import (
 	"reflect"
 	"runtime/debug"
 	"sync/atomic"
-	"time"
 )
 
 /*
@@ -50,7 +49,7 @@ func (this *ActorComponent) IsUnique() int {
 }
 
 func (this *ActorComponent) Awake()error {
-	this.queueReceive= make(chan *ActorMessageInfo, 10)
+	this.queueReceive= make(chan *ActorMessageInfo, 20)
 	this.close =       make(chan bool)
 	//初始化actor类型
 	if this.ActorType == ACTOR_TYPE_DEFAULT {
@@ -76,22 +75,10 @@ func (this *ActorComponent) Awake()error {
 }
 
 func (this *ActorComponent)RegisterService(service string) error {
-	this.When(time.Second, func() bool {
-		return this.Proxy.isOnline
-	})
 	return this.Proxy.RegisterService(this,service)
 }
 func (this *ActorComponent)UnregisterService(service string) error {
-	this.When(time.Second, func() bool {
-		return this.Proxy.isOnline
-	})
-	return this.Proxy.RegisterService(this,service)
-}
-func (this *ActorComponent)RegisterServiceLocal(service string) error {
-	return this.Proxy.RegisterServiceLocal(this,service)
-}
-func (this *ActorComponent)UnregisterServiceLocal(service string) error {
-	return this.Proxy.RegisterServiceLocal(this,service)
+	return this.Proxy.UnregisterService(this,service)
 }
 
 func (this *ActorComponent) Destroy()error {
@@ -118,14 +105,7 @@ func (this *ActorComponent) Tell(sender IActor,message *ActorMessage,reply ...**
 		messageInfo.NeedReply(false)
 	}
 
-	switch this.ActorType {
-	case ACTOR_TYPE_SYNC:
-		this.queueReceive <- messageInfo
-	case ACTOR_TYPE_ASYNC:
-		go this.handle(messageInfo)
-	default:
-
-	}
+	this.queueReceive <- messageInfo
 
 	if messageInfo.IsNeedReply() {
 		<-messageInfo.done
@@ -154,7 +134,15 @@ func (this *ActorComponent) dispatch() {
 			if !ok {
 				return
 			}
-			this.handle(messageInfo)
+			switch this.ActorType {
+			case ACTOR_TYPE_SYNC:
+				this.handle(messageInfo)
+			case ACTOR_TYPE_ASYNC:
+				go this.handle(messageInfo)
+			default:
+
+			}
+
 		}
 	}
 }
@@ -165,7 +153,7 @@ func (this *ActorComponent)handle(messageInfo *ActorMessageInfo) {
 	var val interface{}
 	for val, err = cps.Next(); err == nil; val, err = cps.Next() {
 		if messageHandler, ok := val.(IActorMessageHandler); ok {
-			if handler, ok := messageHandler.MessageHandlers()[messageInfo.Message.Tittle]; ok {
+			if handler, ok := messageHandler.MessageHandlers()[messageInfo.Message.Service]; ok {
 				this.Catch(handler,messageInfo)
 			}
 		}

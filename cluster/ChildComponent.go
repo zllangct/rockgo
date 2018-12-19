@@ -19,6 +19,7 @@ type ChildComponent struct {
 	rpcMaster       *rpc.TcpClient //master节点
 	nodeComponent   *NodeComponent
 	reportCollecter []func() (string, float32)
+	close   bool
 }
 
 func (this *ChildComponent) GetRequire() map[*Component.Object][]reflect.Type {
@@ -42,6 +43,10 @@ func (this *ChildComponent) Awake() error {
 }
 
 func (this *ChildComponent) Destroy() error {
+	this.locker.Lock()
+	defer this.locker.Unlock()
+
+	this.close =true
 	this.ReportClose(this.localAddr)
 	return nil
 }
@@ -125,6 +130,12 @@ func (this *ChildComponent) ConnectToMaster() {
 //当节点掉线
 func (this *ChildComponent) OnDropped() {
 	//重新连接 time.Now().Format("2006-01-02T 15:04:05")
+	this.locker.RLock()
+	defer this.locker.RUnlock()
+
+	if this.close {
+		return
+	}
 
 	this.nodeComponent.Locker().Lock()
 	this.nodeComponent.isOnline = false

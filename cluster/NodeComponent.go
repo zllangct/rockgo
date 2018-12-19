@@ -51,17 +51,19 @@ func(this *NodeComponent)Awake()error{
 	go this.GetLocationServer()
 	return nil
 }
-func (this *NodeComponent)Destroy()error {
-	err:= this.serverListener.Close()
-	this.rpcClient.Range(func(key, value interface{}) bool {
-		err=value.(*rpc.TcpClient).Close()
-		if err!=nil {
-			logger.Error(err)
-		}
-		return true
-	})
-	return err
-}
+
+//网络模块不能立即做清理，其他模块清理过程中会进行通讯
+//func (this *NodeComponent)Destroy()error {
+//	err:= this.serverListener.Close()
+//	this.rpcClient.Range(func(key, value interface{}) bool {
+//		err=value.(*rpc.TcpClient).Close()
+//		if err!=nil {
+//			logger.Error(err)
+//		}
+//		return true
+//	})
+//	return err
+//}
 
 func (this *NodeComponent)Locker() *sync.RWMutex {
 	return &this.locker
@@ -218,8 +220,8 @@ func (this *NodeComponent)GetNodeFromLocation(role string,selectorType ...Select
 	}
 	if len(*reply)>0{
 		g:=&NodeID{
-			nodeComponent:this,
-			addr:(*reply)[0].Node,
+			nodeComponent: this,
+			Addr:          (*reply)[0].Node,
 		}
 		return g, nil
 	}
@@ -274,8 +276,8 @@ func (this *NodeComponent)GetNodeFromMaster(role string,selectorType ...Selector
 	}
 	if len(*reply)>0{
 		g:=&NodeID{
-			nodeComponent:this,
-			addr:(*reply)[0].Node,
+			nodeComponent: this,
+			Addr:          (*reply)[0].Node,
 		}
 		return g, nil
 	}

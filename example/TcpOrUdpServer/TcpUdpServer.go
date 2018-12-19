@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/network"
 	"github.com/zllangct/RockGO/network/messageProtocol"
@@ -25,7 +26,7 @@ type TestApi struct {
 
 func NewTestApi() *TestApi  {
 	r:=&TestApi{}
-	r.Init(r,Testid2mt,&MessageProtocol.JsonProtocol{})
+	r.Init(r,nil,Testid2mt,&MessageProtocol.JsonProtocol{})
 	return r
 }
 
@@ -47,7 +48,7 @@ func main() {
 		ReadTimeout:          time.Millisecond * 10000,
 		OnClientDisconnected: OnDropped,
 		OnClientConnected:    OnConnected,
-		NetAPI:               NewTestApi(),
+		NetAPI:               NewTestApi(nil),
 		WriteTimeout:  time.Millisecond * 1000,
 		IdleTimeout:   time.Millisecond * 600000,
 	}

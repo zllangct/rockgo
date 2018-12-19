@@ -15,6 +15,23 @@ type Session struct {
 	ID     		string
 	properties  map[string]interface{}
 	conn        Conn
+	postProcessing []func(sess *Session)
+}
+
+func (this *Session)AddPostProcessing(fn func(sess *Session))  {
+	this.locker.Lock()
+	defer this.locker.Unlock()
+
+	this.postProcessing= append(this.postProcessing, fn)
+}
+
+func (this *Session)PostProcessing()  {
+	this.locker.Lock()
+	defer this.locker.Unlock()
+
+	for _, fn := range this.postProcessing {
+		fn(this)
+	}
 }
 
 func (this *Session)RemoteAddr() string {
@@ -24,7 +41,7 @@ func (this *Session)RemoteAddr() string {
 func (this *Session)Close() error {
 	this.locker.Lock()
 	defer this.locker.Unlock()
-	this.properties = nil
+
 	return this.conn.Close()
 }
 

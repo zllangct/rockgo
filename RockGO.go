@@ -113,10 +113,10 @@ func (this *ServerNode) Serve(){
 	for  {
 		select {
 		case <-c:
+			logger.Info("====== Start to close this server, do some cleaning now ...... ======")
 		case <-this.Close:
 		}
 		//do something else
-
 		err=this.Runtime.Root().Destroy()
 		if err!=nil{
 			logger.Error(err)

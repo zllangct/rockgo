@@ -1,5 +1,5 @@
 {
-    "Debug": false,
+    "Debug":false,
     "RuntimeMaxWorker": 12,
     "LogLevel": 1,
     "LogPath": "./log",

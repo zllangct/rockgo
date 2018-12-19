@@ -1,7 +1,5 @@
 package Actor
 
-
-
 type IActor interface {
 	Tell(sender IActor,message *ActorMessage,reply ...**ActorMessage) error
 	ID() ActorID
@@ -37,3 +35,4 @@ func (this *Actor)Tell(sender IActor,message *ActorMessage,reply ...**ActorMessa
 	}
 	return this.proxy.Emit(this.ID(),messageInfo)
 }
+

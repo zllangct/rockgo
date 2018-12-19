@@ -7,15 +7,15 @@ import (
 )
 
 type NodeID struct {
-	addr string
+	Addr          string
 	nodeComponent *NodeComponent
 }
 
 func (this *NodeID) GetClient() (*rpc.TcpClient,error)  {
-	if this.addr == "" {
+	if this.Addr == "" {
 		return nil,errors.New("this node id is empty")
 	}
-	return this.nodeComponent.GetNodeClient(this.addr)
+	return this.nodeComponent.GetNodeClient(this.Addr)
 }
 
 type NodeIDGroup struct {

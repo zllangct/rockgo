@@ -17,10 +17,10 @@ type MessageProtocol interface {
 }
 
 type NetAPI interface {
-	Init(interface{}, map[reflect.Type]uint32,MessageProtocol)
-	Route(*Session, uint32, []byte)
-	MessageEncode(interface{})(uint32,[]byte,error)
-	SetParent(object *Component.Object)
+	Init(interface{},*Component.Object, map[reflect.Type]uint32,MessageProtocol)  //初始化
+	Route(*Session, uint32, []byte)	//反序列化并路由到api处理函数
+	//MessageEncode(interface{})(uint32,[]byte,error) //消息序列化
+	//SetParent(object *Component.Object)		//设置
 	Reply(session *Session,message interface{})error
 }
 
@@ -85,11 +85,12 @@ func (this *ApiBase)MessageEncode(message interface{}) (uint32,[]byte,error) {
 	}
 }
 
-func (this *ApiBase)Init(subStruct interface{},id2mt map[reflect.Type]uint32,protocol MessageProtocol)  {
+func (this *ApiBase)Init(subStruct interface{},parent *Component.Object,id2mt map[reflect.Type]uint32,protocol MessageProtocol)  {
 	this.route = map[uint32]*methodType{}
 	this.id2mt = id2mt
 	this.protoc = protocol
 	this.isInit = true
+	this.parent = parent
 	this.Register(subStruct)
 }
 
@@ -113,7 +114,11 @@ func (this *ApiBase)Route(sess *Session, messageID uint32,data []byte)  {
 			reflect.ValueOf(sess),
 			v.Elem(),
 		}
-		mt.method.Call(args)
+		re:=mt.method.Call(args)
+		err=re[0].Interface().(error)
+		if err!=nil {
+			logger.Error(err)
+		}
 		return
 	}
 	logger.Debug(fmt.Sprintf("this ApiBase:%d not found",messageID))
@@ -139,7 +144,7 @@ func (this *ApiBase)On(handler interface{})  {
 		}
 	}
 }
-
+var typeOfError = reflect.TypeOf((*error)(nil)).Elem()
 func (this *ApiBase)Register(api interface{})  {
 	this.checkInit()
 	this.resv = reflect.ValueOf(api)
@@ -167,6 +172,14 @@ func (this *ApiBase)Register(api interface{})  {
 
 		argsType := mtype.In(2)
 		if !utils.IsExportedOrBuiltinType(argsType) {
+			continue
+		}
+		// Method needs one out.
+		if mtype.NumOut() != 1 {
+			continue
+		}
+		// The return type of the method must be error.
+		if returnType := mtype.Out(0); returnType != typeOfError {
 			continue
 		}
 

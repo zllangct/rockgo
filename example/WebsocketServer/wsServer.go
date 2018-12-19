@@ -26,7 +26,7 @@ type TestApi struct {
 
 func NewTestApi() *TestApi  {
 	r:=&TestApi{}
-	r.Init(r,Testid2mt,&MessageProtocol.JsonProtocol{})
+	r.Init(r,nil,Testid2mt,&MessageProtocol.JsonProtocol{})
 	return r
 }
 

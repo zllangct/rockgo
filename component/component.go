@@ -82,7 +82,7 @@ func (this *Base)When(interval time.Duration,conditions ...func()bool)  {
 		res:=true
 		for _, cond := range conditions {
 			if !cond() {
-				res=true
+				res=false
 				break
 			}
 		}
