@@ -62,7 +62,9 @@ func (this Selector) Select(query []string,detail bool,locker *sync.RWMutex) ([]
 					break
 				}
 			}
-			break
+			if err==nil {
+				break
+			}
 		}
 	}
 	locker.RUnlock()

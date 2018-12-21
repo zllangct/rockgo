@@ -98,13 +98,19 @@ func (this *ApiBase)Route(sess *Session, messageID uint32,data []byte)  {
 	this.checkInit()
 	defer (func() {
 		if r := recover(); r != nil {
-			err := errors.New(r.(error).Error() + "\n" + string(debug.Stack()))
+			var str string
+			switch r.(type) {
+			case error:
+				str =r.(error).Error()
+			case string:
+				str = r.(string)
+			}
+			err := errors.New(str+ string(debug.Stack()))
 			logger.Error(err)
 		}
 	})()
 	if mt,ok:= this.route[messageID];ok {
 		v:= reflect.New(mt.ArgsType)
-		println(string(data))
 		err:= this.protoc.Unmarshal(data,v.Interface())
 		if err!=nil{
 			logger.Debug(fmt.Sprintf("unmarshal message failed :%s ,%s",mt.ArgsType.Elem().Name(),err))

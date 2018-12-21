@@ -111,10 +111,13 @@ func (this *ChildComponent) ConnectToMaster() {
 	logger.Info(" Looking for master ......")
 	var err error
 	for {
+		this.locker.Lock()
 		this.rpcMaster, err = this.nodeComponent.ConnectToNode(addr, callback)
 		if err == nil {
+			this.locker.Unlock()
 			break
 		}
+		this.locker.Unlock()
 		time.Sleep(time.Millisecond * 500)
 	}
 	ip:=strings.Split(this.rpcMaster.LocalAddr(),":")[0]
@@ -131,12 +134,11 @@ func (this *ChildComponent) ConnectToMaster() {
 func (this *ChildComponent) OnDropped() {
 	//重新连接 time.Now().Format("2006-01-02T 15:04:05")
 	this.locker.RLock()
-	defer this.locker.RUnlock()
-
 	if this.close {
+		this.locker.RUnlock()
 		return
 	}
-
+	this.locker.RUnlock()
 	this.nodeComponent.Locker().Lock()
 	this.nodeComponent.isOnline = false
 	this.nodeComponent.Locker().Unlock()

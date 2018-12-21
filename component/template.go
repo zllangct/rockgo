@@ -3,6 +3,7 @@ package Component
 import (
 	"encoding/json"
 	"github.com/zllangct/RockGO/3rd/errors"
+	"runtime/debug"
 )
 
 // ObjectTemplate is a simple, flat, serializable object structure that directly converts to and from ObjectsInChildren.
@@ -59,7 +60,15 @@ func SerializeState(state interface{}) (map[string]interface{}, error) {
 func DeserializeState(target interface{}, raw interface{}) (err error) {
 	defer (func() {
 		if r := recover(); r != nil {
-			err = r.(error)
+			var str string
+			switch r.(type) {
+			case error:
+				str =r.(error).Error()
+			case string:
+				str = r.(string)
+			}
+			err = errors.Data(str+ string(debug.Stack()))
+
 		}
 	})()
 	if raw == nil {

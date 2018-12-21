@@ -180,7 +180,14 @@ func (this *ActorComponent)handle(messageInfo *ActorMessageInfo) {
 func (this *ActorComponent) Catch(handler func(message *ActorMessageInfo),m *ActorMessageInfo) {
 	defer (func() {
 		if r := recover(); r != nil {
-			err := errors.New(r.(error).Error() + "\n" + string(debug.Stack()))
+			var str string
+			switch r.(type) {
+			case error:
+				str =r.(error).Error()
+			case string:
+				str = r.(string)
+			}
+			err := errors.New(str+ string(debug.Stack()))
 			logger.Error(err)
 			m.CallError(err)
 		}

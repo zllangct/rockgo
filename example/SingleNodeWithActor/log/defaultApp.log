@@ -1079,3 +1079,840 @@ created by github.com/zllangct/RockGO/network.(*websocketHandler).recv
 2018/12/20 18:49:57 RockGO.go:125: info ====== Server is closed ======
 2018/12/20 18:49:58 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
 2018/12/20 18:49:58 RockGO.go:125: info ====== Server is closed ======
+2018/12/21 23:43:39 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/21 23:43:39 netapi.go:153: info ====== start to register API group: [ TestApi ] ======
+2018/12/21 23:43:39 netapi.go:196: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/21 23:43:39 netapi.go:196: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/21 23:43:39 netapi.go:199: info ======   register API group: [ TestApi ] end   ======
+2018/12/21 23:43:39 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/21 23:43:39 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/21 23:43:39 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/21 23:43:39 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/21 23:43:39 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/21 23:43:39 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/21 23:43:39 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/21 23:43:39 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/21 23:43:39 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/21 23:43:39 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ master ]
+2018/12/21 23:43:39 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ master ]
+2018/12/21 23:43:49 SingleServerWithActor.go:34: info Override node info:[ node_room ]
+2018/12/21 23:43:49 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/21 23:43:49 netapi.go:153: info ====== start to register API group: [ TestApi ] ======
+2018/12/21 23:43:49 netapi.go:196: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/21 23:43:49 netapi.go:196: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/21 23:43:49 netapi.go:199: info ======   register API group: [ TestApi ] end   ======
+2018/12/21 23:43:49 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/21 23:43:49 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6605 ]
+2018/12/21 23:43:49 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/21 23:43:49 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/21 23:43:49 component_group.go:26: info Attach component [ room.*main.RoomManagerComponent ] to [ room ]
+2018/12/21 23:43:49 component_group.go:26: info Attach component [ room.*Actor.ActorComponent ] to [ room ]
+2018/12/21 23:43:49 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ child ]
+2018/12/21 23:43:49 ChildComponent.go:111: info  Looking for master ......
+2018/12/21 23:43:49 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ child ]
+2018/12/21 23:43:49 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/21 23:43:49 server.go:564: debug 127.0.0.1:64263
+2018/12/21 23:43:49 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/21 23:43:50 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/21 23:43:58 server.go:564: debug 127.0.0.1:64292
+2018/12/21 23:43:59 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/21 23:44:16 server.go:564: debug 127.0.0.1:64324
+2018/12/21 23:44:16 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:18 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:21 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:25 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:26 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:26 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:27 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:27 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:27 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:28 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:29 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:30 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:30 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:32 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:33 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:33 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:34 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:34 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:35 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:36 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:36 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:37 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:37 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:39 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:39 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:40 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:41 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:41 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:41 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:42 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:43 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:43 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:44 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:46 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:46 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:46 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:47 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:47 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:47 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:47 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:47 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:48 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:48 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:48 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:48 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:48 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:49 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:49 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:49 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:49 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:50 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:50 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:50 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:50 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:50 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:51 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:51 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:51 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:51 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:51 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:51 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:52 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:52 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:52 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:52 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:53 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:53 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:53 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:53 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:54 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:54 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:54 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:54 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:55 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:55 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:56 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:57 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:58 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:44:59 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:01 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:01 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:02 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:03 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:03 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:04 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:06 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:07 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:11 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:12 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:12 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:12 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:13 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:14 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:14 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:15 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:15 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:15 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:15 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:16 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:16 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:16 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:17 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:17 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:17 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:18 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:18 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:18 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:18 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:19 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:19 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:19 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:19 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:19 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:20 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:20 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:20 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:20 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:20 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:21 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:21 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:21 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:21 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:21 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:22 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:22 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:22 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:22 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:22 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:23 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:23 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:23 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:23 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:24 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:24 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:24 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:25 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:25 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:25 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:25 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:26 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:26 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:27 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:27 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:27 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:28 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:28 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:28 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:28 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:29 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:29 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:29 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:29 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:29 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:30 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:45:30 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:1ZrWAJTocavDun9szG500u ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:46:04 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/21 23:46:57 server.go:564: debug 127.0.0.1:64687
+2018/12/21 23:46:58 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/21 23:47:06 server.go:564: debug 127.0.0.1:64704
+2018/12/21 23:47:06 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:feXTUJT5UqLFDpMibVLDsn ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:47:08 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:feXTUJT5UqLFDpMibVLDsn ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:47:09 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:feXTUJT5UqLFDpMibVLDsn ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:47:09 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:feXTUJT5UqLFDpMibVLDsn ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:47:18 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/21 23:48:55 server.go:564: debug 127.0.0.1:64943
+2018/12/21 23:48:56 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/21 23:49:01 server.go:564: debug 127.0.0.1:64955
+2018/12/21 23:49:01 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:QGCJo9YFzrnzhNy924XBYf ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:49:02 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:QGCJo9YFzrnzhNy924XBYf ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:49:02 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:QGCJo9YFzrnzhNy924XBYf ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:49:12 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/21 23:54:23 server.go:564: debug 127.0.0.1:49247
+2018/12/21 23:54:24 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/21 23:55:06 server.go:564: debug 127.0.0.1:49338
+2018/12/21 23:55:06 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:y6gW4VVqz91Z0d0yKWZtIe ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:55:07 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:y6gW4VVqz91Z0d0yKWZtIe ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:55:07 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:y6gW4VVqz91Z0d0yKWZtIe ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:55:07 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:y6gW4VVqz91Z0d0yKWZtIe ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:55:07 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:y6gW4VVqz91Z0d0yKWZtIe ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:55:07 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:y6gW4VVqz91Z0d0yKWZtIe ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:55:07 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:y6gW4VVqz91Z0d0yKWZtIe ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:55:08 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:y6gW4VVqz91Z0d0yKWZtIe ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:55:08 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:y6gW4VVqz91Z0d0yKWZtIe ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:55:08 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:y6gW4VVqz91Z0d0yKWZtIe ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:55:08 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:y6gW4VVqz91Z0d0yKWZtIe ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:55:08 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:y6gW4VVqz91Z0d0yKWZtIe ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:55:15 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/21 23:56:46 server.go:564: debug 127.0.0.1:49543
+2018/12/21 23:56:47 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/21 23:56:50 server.go:564: debug 127.0.0.1:49552
+2018/12/21 23:56:50 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:5I2G6PnX5GIZxtyH0Jsemc ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:56:51 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:5I2G6PnX5GIZxtyH0Jsemc ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:56:51 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:5I2G6PnX5GIZxtyH0Jsemc ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:56:52 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:5I2G6PnX5GIZxtyH0Jsemc ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:56:52 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:5I2G6PnX5GIZxtyH0Jsemc ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:56:52 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:5I2G6PnX5GIZxtyH0Jsemc ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ifReenbhoZZ2bWJoPy0Ytd ]
+2018/12/21 23:57:00 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/21 23:57:05 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/21 23:57:05 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/21 23:57:05 RockGO.go:125: info ====== Server is closed ======
+2018/12/21 23:57:07 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/21 23:57:07 RockGO.go:125: info ====== Server is closed ======
+2018/12/21 23:57:39 SingleServerWithActor.go:34: info Override node info:[ node_room ]
+2018/12/21 23:57:39 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/21 23:57:39 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/21 23:57:39 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/21 23:57:39 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/21 23:57:39 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/21 23:57:39 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6605 ]
+2018/12/21 23:57:39 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/21 23:57:39 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/21 23:57:39 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/21 23:57:39 component_group.go:26: info Attach component [ room.*main.RoomManagerComponent ] to [ room ]
+2018/12/21 23:57:39 component_group.go:26: info Attach component [ room.*Actor.ActorComponent ] to [ room ]
+2018/12/21 23:57:39 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ child ]
+2018/12/21 23:57:39 ChildComponent.go:111: info  Looking for master ......
+2018/12/21 23:57:39 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ child ]
+2018/12/21 23:57:39 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/21 23:57:39 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/21 23:57:44 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/21 23:57:44 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/21 23:57:44 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/21 23:57:44 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/21 23:57:44 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/21 23:57:44 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/21 23:57:44 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/21 23:57:44 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/21 23:57:44 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/21 23:57:44 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/21 23:57:44 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ gate ]
+2018/12/21 23:57:44 wshandler.go:86: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/21 23:57:44 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ gate ]
+2018/12/21 23:57:44 ChildComponent.go:111: info  Looking for master ......
+2018/12/21 23:57:44 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ child ]
+2018/12/21 23:57:44 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/21 23:57:44 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ child ]
+2018/12/21 23:57:44 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/21 23:58:28 client.go:258: error tcp client timeout
+2018/12/21 23:58:28 ChildComponent.go:144: info Disconnected from master
+2018/12/21 23:58:28 ChildComponent.go:111: info  Looking for master ......
+2018/12/21 23:58:28 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/21 23:58:28 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/21 23:58:29 client.go:258: error tcp client timeout
+2018/12/21 23:58:29 ChildComponent.go:144: info Disconnected from master
+2018/12/21 23:58:29 ChildComponent.go:111: info  Looking for master ......
+2018/12/21 23:58:29 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/21 23:58:29 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/21 23:59:34 wshandler.go:68: debug TCP accept:127.0.0.1:49918
+2018/12/21 23:59:34 DefaultGateComponent.go:66: debug client [ 127.0.0.1:49918 ] connected,session id :[ ylrCAg7jUFkHyG9EAwMKwd ]
+2018/12/21 23:59:36 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6605 ] success
+2018/12/21 23:59:36 server.go:564: debug 127.0.0.1:49922
+2018/12/21 23:59:36 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:36 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:37 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:37 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:37 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:37 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:38 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:38 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:38 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:38 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:38 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:39 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:39 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:39 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:39 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:39 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:40 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:40 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:40 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:40 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:40 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:40 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:41 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:41 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:41 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:41 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:42 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:42 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:43 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:43 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:44 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:44 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:44 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:46 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:46 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:46 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:ylrCAg7jUFkHyG9EAwML0y ] send message [ newRoom ] to actor [ 0.0.0.0:6605:2MvR6DZfBby8aOshxtgL5f ]
+2018/12/21 23:59:52 ChildComponent.go:144: info Disconnected from master
+2018/12/21 23:59:52 ChildComponent.go:144: info Disconnected from master
+2018/12/21 23:59:52 ChildComponent.go:111: info  Looking for master ......
+2018/12/21 23:59:52 ChildComponent.go:111: info  Looking for master ......
+2018/12/21 23:59:57 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/21 23:59:57 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/21 23:59:57 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/21 23:59:57 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:00:37 client.go:258: error tcp client timeout
+2018/12/22 00:00:37 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:00:37 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:00:37 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:00:37 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:00:38 client.go:258: error tcp client timeout
+2018/12/22 00:00:38 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:00:38 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:00:38 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:00:38 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:01:00 client.go:258: error tcp client timeout
+2018/12/22 00:01:00 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:01:00 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:01:00 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:01:00 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:01:01 client.go:258: error tcp client timeout
+2018/12/22 00:01:01 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:01:01 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:01:01 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:01:01 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:01:23 client.go:258: error tcp client timeout
+2018/12/22 00:01:23 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:01:23 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:01:23 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:01:23 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:01:24 client.go:258: error tcp client timeout
+2018/12/22 00:01:24 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:01:24 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:01:24 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:01:24 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:02:31 client.go:258: error tcp client timeout
+2018/12/22 00:02:31 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:02:31 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:02:31 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:02:31 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:02:32 client.go:258: error tcp client timeout
+2018/12/22 00:02:32 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:02:32 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:02:32 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:02:32 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:02:54 client.go:258: error tcp client timeout
+2018/12/22 00:02:54 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:02:54 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:02:54 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:02:54 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:02:55 client.go:258: error tcp client timeout
+2018/12/22 00:02:55 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:02:55 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:02:55 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:02:55 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:03:46 wshandler.go:68: debug TCP accept:127.0.0.1:50459
+2018/12/22 00:03:46 DefaultGateComponent.go:66: debug client [ 127.0.0.1:50459 ] connected,session id :[ ylrCAg7jUFkHyG9EAwML5J ]
+2018/12/22 00:04:08 client.go:258: error tcp client timeout
+2018/12/22 00:04:08 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:04:08 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:04:08 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:04:08 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:04:31 client.go:258: error tcp client timeout
+2018/12/22 00:04:31 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:04:31 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:04:31 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:04:31 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:04:54 client.go:258: error tcp client timeout
+2018/12/22 00:04:54 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:04:54 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:04:54 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:04:54 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:05:17 client.go:258: error tcp client timeout
+2018/12/22 00:05:17 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:05:17 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:05:17 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:05:17 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:05:40 client.go:258: error tcp client timeout
+2018/12/22 00:05:40 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:05:40 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:05:40 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:05:40 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:06:03 client.go:258: error tcp client timeout
+2018/12/22 00:06:03 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:06:03 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:06:03 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:06:03 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:06:26 client.go:258: error tcp client timeout
+2018/12/22 00:06:26 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:06:26 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:06:26 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:06:26 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:06:49 client.go:258: error tcp client timeout
+2018/12/22 00:06:49 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:06:49 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:06:49 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:06:49 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:07:12 client.go:258: error tcp client timeout
+2018/12/22 00:07:12 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:07:12 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:07:12 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:07:12 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:07:35 client.go:258: error tcp client timeout
+2018/12/22 00:07:35 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:07:35 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:07:35 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:07:35 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:07:58 client.go:258: error tcp client timeout
+2018/12/22 00:07:58 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:07:58 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:07:58 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:07:58 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:08:21 client.go:258: error tcp client timeout
+2018/12/22 00:08:21 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:08:21 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:08:21 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:08:21 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:08:35 ChildComponent.go:144: info Disconnected from master
+2018/12/22 00:08:35 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:10:33 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:10:33 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:25:00 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/22 00:25:00 RockGO.go:125: info ====== Server is closed ======
+2018/12/22 00:27:13 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/22 00:27:13 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/22 00:27:13 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/22 00:27:13 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/22 00:27:13 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/22 00:27:13 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/22 00:27:13 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/22 00:27:13 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/22 00:27:13 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/22 00:27:13 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/22 00:27:13 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/22 00:27:13 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/22 00:27:13 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/22 00:27:13 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/22 00:27:13 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/22 00:27:13 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ master ]
+2018/12/22 00:27:13 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ master ]
+2018/12/22 00:27:14 server.go:564: debug 127.0.0.1:53080
+2018/12/22 00:27:14 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/22 00:27:18 SingleServerWithActor.go:34: info Override node info:[ node_room ]
+2018/12/22 00:27:18 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/22 00:27:18 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/22 00:27:18 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/22 00:27:18 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/22 00:27:18 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/22 00:27:18 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/22 00:27:18 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6605 ]
+2018/12/22 00:27:18 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/22 00:27:18 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/22 00:27:18 component_group.go:26: info Attach component [ room.*main.RoomManagerComponent ] to [ room ]
+2018/12/22 00:27:18 component_group.go:26: info Attach component [ room.*Actor.ActorComponent ] to [ room ]
+2018/12/22 00:27:18 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ child ]
+2018/12/22 00:27:18 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 00:27:18 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ child ]
+2018/12/22 00:27:18 server.go:564: debug 127.0.0.1:53089
+2018/12/22 00:27:18 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 00:27:18 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 00:27:19 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/22 00:27:27 server.go:564: debug 127.0.0.1:53110
+2018/12/22 00:27:27 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:28 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:28 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:29 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:29 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:29 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:29 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:29 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:30 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:30 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:30 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:30 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:30 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:31 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:31 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:31 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:31 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:31 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:31 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:32 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:32 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:32 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:32 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:32 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:33 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:33 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:33 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:33 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:33 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:33 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:34 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:34 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:34 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:34 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:35 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:35 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:35 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:35 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:35 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:35 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:36 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:36 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:36 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:36 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:36 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:37 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:37 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:37 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:37 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:38 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:38 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:38 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:39 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:39 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:39 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:39 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:39 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:39 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:39 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:40 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:40 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:40 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:40 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:40 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:40 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:41 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:41 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:41 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:41 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:41 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:41 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:42 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:42 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:42 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:42 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:42 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:42 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:43 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:43 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:43 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:43 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:43 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:44 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:46 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:46 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:46 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:46 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:47 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:47 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:47 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:47 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:47 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:47 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:47 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:48 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:48 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:48 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:48 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:48 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:48 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:49 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:49 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:51 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:52 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:53 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:54 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:55 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:56 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:57 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:58 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:58 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:58 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:58 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:58 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:59 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:59 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:59 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:59 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:59 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:27:59 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:00 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:00 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:00 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:00 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:00 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:01 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:01 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:01 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:01 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:01 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:01 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:03 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:04 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:04 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:04 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:04 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:04 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:28:05 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:GtVbtR9Huwi7RbovUUegdK ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:29:58 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/22 00:52:01 server.go:564: debug 127.0.0.1:55957
+2018/12/22 00:52:02 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/22 00:52:12 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/22 00:52:18 server.go:564: debug 127.0.0.1:55995
+2018/12/22 00:52:19 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/22 00:52:45 server.go:564: debug 127.0.0.1:56044
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:52:45 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:Q7UoNqbqqVhYXkCjChmm40 ] send message [ newRoom ] to actor [ 0.0.0.0:6605:ZKA3wU4qV5gH6dZetAWm4l ]
+2018/12/22 00:57:53 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/22 01:09:22 server.go:564: debug 127.0.0.1:58031
+2018/12/22 01:09:23 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/22 01:09:44 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/22 01:09:51 server.go:564: debug 127.0.0.1:58088
+2018/12/22 01:09:54 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/22 01:10:05 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/22 01:12:19 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/22 01:12:19 RockGO.go:125: info ====== Server is closed ======
+2018/12/22 01:12:19 ChildComponent.go:144: info Disconnected from master
+2018/12/22 01:12:19 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 01:12:24 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/22 01:12:43 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/22 01:12:43 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/22 01:12:43 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/22 01:12:43 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/22 01:12:43 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/22 01:12:43 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/22 01:12:43 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/22 01:12:43 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/22 01:12:43 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/22 01:12:43 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/22 01:12:43 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/22 01:12:43 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/22 01:12:43 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/22 01:12:43 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/22 01:12:43 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ master ]
+2018/12/22 01:12:43 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ master ]
+2018/12/22 01:12:43 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 01:12:43 server.go:564: debug 127.0.0.1:58406
+2018/12/22 01:12:43 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 01:12:43 RockGO.go:125: info ====== Server is closed ======
+2018/12/22 01:12:55 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/22 01:12:55 RockGO.go:125: info ====== Server is closed ======
+2018/12/22 01:13:06 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/22 01:13:06 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/22 01:13:06 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/22 01:13:06 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/22 01:13:06 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/22 01:13:06 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/22 01:13:06 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/22 01:13:06 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/22 01:13:06 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/22 01:13:06 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/22 01:13:06 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/22 01:13:06 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/22 01:13:06 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/22 01:13:06 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/22 01:13:06 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ master ]
+2018/12/22 01:13:06 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ master ]
+2018/12/22 01:13:08 SingleServerWithActor.go:34: info Override node info:[ node_room ]
+2018/12/22 01:13:08 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/22 01:13:08 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/22 01:13:08 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/22 01:13:08 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/22 01:13:08 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/22 01:13:08 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/22 01:13:08 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6605 ]
+2018/12/22 01:13:08 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/22 01:13:08 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/22 01:13:08 component_group.go:26: info Attach component [ room.*main.RoomManagerComponent ] to [ room ]
+2018/12/22 01:13:08 component_group.go:26: info Attach component [ room.*Actor.ActorComponent ] to [ room ]
+2018/12/22 01:13:08 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ child ]
+2018/12/22 01:13:08 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 01:13:08 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ child ]
+2018/12/22 01:13:08 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 01:13:08 server.go:564: debug 127.0.0.1:58451
+2018/12/22 01:13:08 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 01:13:09 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/22 01:13:12 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/22 01:13:12 RockGO.go:125: info ====== Server is closed ======
+2018/12/22 01:13:12 ChildComponent.go:144: info Disconnected from master
+2018/12/22 01:13:12 ChildComponent.go:111: info  Looking for master ......
+2018/12/22 01:13:18 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/22 01:13:27 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/22 01:13:27 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/22 01:13:27 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/22 01:13:27 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/22 01:13:27 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/22 01:13:27 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/22 01:13:27 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/22 01:13:27 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/22 01:13:27 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/22 01:13:27 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/22 01:13:27 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/22 01:13:27 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/22 01:13:27 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/22 01:13:27 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/22 01:13:27 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ master ]
+2018/12/22 01:13:27 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ master ]
+2018/12/22 01:13:27 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/22 01:13:27 server.go:564: debug 127.0.0.1:58495
+2018/12/22 01:13:27 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/22 01:13:27 RockGO.go:125: info ====== Server is closed ======
+2018/12/22 01:13:33 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/22 01:13:33 RockGO.go:125: info ====== Server is closed ======
+2018/12/22 01:15:01 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/22 01:15:01 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/22 01:15:01 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/22 01:15:01 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/22 01:15:01 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/22 01:15:01 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/22 01:15:01 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/22 01:15:01 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/22 01:15:01 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/22 01:15:01 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/22 01:15:01 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/22 01:15:01 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/22 01:15:01 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/22 01:15:01 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/22 01:15:01 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ master ]
+2018/12/22 01:15:01 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ master ]
+2018/12/22 01:15:09 server.go:564: debug 127.0.0.1:58676
+2018/12/22 01:15:10 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/22 01:15:17 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/22 01:15:17 RockGO.go:125: info ====== Server is closed ======
+2018/12/22 01:17:29 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/22 01:17:29 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/22 01:17:29 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/22 01:17:29 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/22 01:17:29 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/22 01:17:29 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/22 01:17:29 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/22 01:17:29 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/22 01:17:29 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/22 01:17:29 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/22 01:17:29 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/22 01:17:29 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/22 01:17:29 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/22 01:17:29 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/22 01:17:29 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ master ]
+2018/12/22 01:17:29 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ master ]
+2018/12/22 01:17:29 server.go:564: debug 127.0.0.1:58993
+2018/12/22 01:23:50 server.go:564: debug 127.0.0.1:59645
+2018/12/22 01:23:51 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/22 01:23:58 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/22 01:23:58 RockGO.go:125: info ====== Server is closed ======
+2018/12/22 01:25:02 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/22 01:25:02 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/22 01:25:02 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/22 01:25:02 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/22 01:25:02 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/22 01:25:02 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/22 01:25:02 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/22 01:25:02 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/22 01:25:02 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/22 01:25:02 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/22 01:25:02 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/22 01:25:02 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/22 01:25:02 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/22 01:25:02 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/22 01:25:02 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ master ]
+2018/12/22 01:25:02 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ master ]
+2018/12/22 01:25:22 server.go:564: debug 127.0.0.1:59877
+2018/12/22 01:25:23 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/22 01:25:32 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/22 01:25:50 server.go:564: debug 127.0.0.1:59924
+2018/12/22 01:25:51 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/22 01:25:52 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/22 01:25:59 server.go:564: debug 127.0.0.1:59949
+2018/12/22 01:26:00 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/22 01:26:05 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/22 01:26:17 server.go:564: debug 127.0.0.1:59986
+2018/12/22 01:26:18 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/22 01:26:44 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/22 01:26:53 server.go:564: debug 127.0.0.1:60048
+2018/12/22 01:26:54 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/22 01:26:57 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/22 01:26:57 RockGO.go:125: info ====== Server is closed ======

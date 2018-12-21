@@ -1,7 +1,9 @@
 package threadpool
 
 import (
-	"log"
+	"errors"
+	"github.com/zllangct/RockGO/logger"
+	"runtime/debug"
 	"sync"
 )
 
@@ -16,7 +18,15 @@ func (locker *Locker) Invoke() {
 	locker.lock.Lock()
 	defer (func() {
 		if r := recover(); r != nil {
-			log.Printf("%s", r)
+			var str string
+			switch r.(type) {
+			case error:
+				str =r.(error).Error()
+			case string:
+				str = r.(string)
+			}
+			err := errors.New(str+ string(debug.Stack()))
+			logger.Error(err)
 		}
 		locker.lock.Unlock()
 	})()
@@ -28,7 +38,15 @@ func (locker *Locker) InvokeWith(data interface{}) {
 	locker.lock.Lock()
 	defer (func() {
 		if r := recover(); r != nil {
-			log.Printf("%s", r)
+			var str string
+			switch r.(type) {
+			case error:
+				str =r.(error).Error()
+			case string:
+				str = r.(string)
+			}
+			err := errors.New(str+ string(debug.Stack()))
+			logger.Error(err)
 		}
 		locker.lock.Unlock()
 	})()

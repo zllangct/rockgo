@@ -68,9 +68,10 @@ export default class NetTest extends ui.test.mainUI{
         }
         else if (message instanceof ArrayBuffer) {
             var by:Byte=new Byte(message);
+            by.endian = Byte.BIG_ENDIAN;
             var messageID:number = by.readUint32();
-            var str:string = by.readUTFString();
-            this.Log('MessageID:${messageID} Message:${str}')
+            var str :string =by.getCustomString(by.bytesAvailable);
+            this.Log(str);
         }
         this.socket.input.clear();
     }

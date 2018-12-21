@@ -465,8 +465,14 @@ func (o *Object) Debug(indents ...int) string {
 func (o *Object) WithLock(action func() error) (err error) {
 	defer (func() {
 		if r := recover(); r != nil {
-			errs := r.(error).Error()
-			err = errors2.New(errs + "\n" + string(debug.Stack()))
+			var str string
+			switch r.(type) {
+			case error:
+				str =r.(error).Error()
+			case string:
+				str = r.(string)
+			}
+			err = errors2.New(str+ string(debug.Stack()))
 		}
 		o.locked = false
 		o.writeLock.Unlock()

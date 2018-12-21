@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/zllangct/RockGO/cluster"
 	"github.com/zllangct/RockGO/component"
-	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/network"
 	"github.com/zllangct/RockGO/network/messageProtocol"
 )
@@ -84,16 +83,9 @@ func (this *TestApi)Login(sess *network.Session,message *TestLogin) error {
 		return err
 	}
 	//reply 登录结果反馈到客户端
-
-	//if id,m,err:=this.MessageEncode(pInfo);err ==nil {
-	//	err=sess.Emit(id,m)
-	//}else{
-	//	logger.Error(err)
-	//}
-	if _,m,err:=this.MessageEncode(pInfo);err ==nil {
-		err=sess.Emit(1,m)
-	}else{
-		logger.Error(err)
+	err=this.Reply(sess,pInfo)
+	if err!=nil {
+		return err
 	}
 	return err
 }

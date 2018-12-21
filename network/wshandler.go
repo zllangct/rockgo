@@ -13,6 +13,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
 )
@@ -24,6 +25,7 @@ var upGrader = websocket.Upgrader{
 }
 
 type WsConn struct {
+	locker sync.Mutex
 	wsConn *websocket.Conn
 }
 
@@ -35,6 +37,9 @@ func (this *WsConn)WriteMessage(messageType uint32, data []byte) error{
 	msg := make([]byte, 4)
 	msg = append(msg, data...)
 	binary.BigEndian.PutUint32(msg[:4], messageType)
+	this.locker.Lock()
+	defer this.locker.Unlock()
+
 	return this.wsConn.WriteMessage(2,msg)
 }
 
