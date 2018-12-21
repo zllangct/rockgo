@@ -8,7 +8,7 @@ import "reflect"
 
 */
 var Testid2mt = map[reflect.Type]uint32{
-	reflect.TypeOf(&TestMessage{}):2,
-	reflect.TypeOf(&TestCreateRoom{}):1,
+	reflect.TypeOf(&TestMessage{}):1,
+	reflect.TypeOf(&TestCreateRoom{}):2,
 	reflect.TypeOf(&CreateResult{}):3,
 }

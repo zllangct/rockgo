@@ -23,7 +23,7 @@ func (this *ComponentGroup) attachGroupTo(target *Object) {
 	}
 	for _, component := range this.content {
 		o.AddComponent(component)
-		logger.Info(fmt.Sprintf("Attach component [ %s.%s ] to [ %s ]",this.Name,component.Type().String(),target.name))
+		logger.Info(fmt.Sprintf("Attach component [ %s.%s ] to [ %s ]",this.Name,component.Type().String(),o.name))
 	}
 }
 

@@ -74,6 +74,7 @@ func (o *Object) AddComponent(component IComponent) *Object {
 		}
 		o.components = append(o.components, info)
 		if info.Awake != nil {
+			info.Active += 1
 			return info.Awake.Awake()
 		}
 		return nil

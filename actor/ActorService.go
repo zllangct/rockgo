@@ -23,5 +23,11 @@ type ServiceCall struct {
 
 func (this *ActorProxyService) ServiceCall(args *ServiceCall, reply *ActorMessage) error {
 	sender:=&Actor{proxy: this.proxy, actorID: args.Sender}
-	return this.proxy.ServiceCall(sender,args.Message,&reply)
+	var r *ActorMessage
+	err:= this.proxy.ServiceCall(sender,args.Message,&r)
+	if err!=nil{
+		return err
+	}
+	*reply = *r
+	return nil
 }

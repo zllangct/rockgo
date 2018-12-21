@@ -129,6 +129,7 @@ func (this *NodeComponent)clientCallback(event string,data ...interface{}) {
 	case "close":
 		nodeAddr := data[0].(string)
 		this.rpcClient.Delete(nodeAddr)
+		logger.Info(fmt.Sprintf("  disconnect to remote node: [ %s ]",nodeAddr))
 	}
 }
 

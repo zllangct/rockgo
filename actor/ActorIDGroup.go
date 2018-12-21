@@ -11,8 +11,8 @@ type ActorIDGroup struct {
 }
 
 func (this ActorIDGroup)isRepeated(target ActorID) bool {
-	this.locker.RLock()
-	defer this.locker.RUnlock()
+	//外层注意加锁
+
 	for _, value := range this.Actors {
 		if value.Equal(target) {
 			return true
@@ -23,37 +23,41 @@ func (this ActorIDGroup)isRepeated(target ActorID) bool {
 
 func (this *ActorIDGroup)Add(id ActorID)  {
 	this.locker.Lock()
+	defer this.locker.Unlock()
+
 	if !this.isRepeated(id) {
 		this.Actors = append(this.Actors, id)
 	}
-	this.locker.Unlock()
 }
 
 func (this *ActorIDGroup)Sub(id ActorID)  {
 	this.locker.Lock()
+	defer this.locker.Unlock()
+
 	for i, value := range this.Actors {
 		if value.Equal(id) {
 			this.Actors = append(this.Actors[:i],this.Actors[i+1:]... )
 			return
 		}
 	}
-	this.locker.Unlock()
 }
 
 func (this *ActorIDGroup)Has(id ActorID)bool  {
-	this.locker.Lock()
+	this.locker.RLock()
+	defer this.locker.RUnlock()
+
 	for _, value := range this.Actors {
 		if value.Equal(id) {
 			return true
 		}
 	}
-	this.locker.Unlock()
 	return false
 }
 
 func (this *ActorIDGroup)Get() []ActorID {
-	this.locker.Lock()
-	defer this.locker.Unlock()
+	this.locker.RLock()
+	defer this.locker.RUnlock()
+
 	as:=make([]ActorID,0,len(this.Actors))
 	copy(as,this.Actors)
 	return as

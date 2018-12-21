@@ -2,6 +2,7 @@ package network
 
 import (
 	"context"
+	"encoding/binary"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -31,7 +32,10 @@ func (this *WsConn)Addr()string  {
 }
 
 func (this *WsConn)WriteMessage(messageType uint32, data []byte) error{
-	return this.wsConn.WriteMessage(int(messageType),data)
+	msg := make([]byte, 4)
+	msg = append(msg, data...)
+	binary.BigEndian.PutUint32(msg[:4], messageType)
+	return this.wsConn.WriteMessage(2,msg)
 }
 
 func (this *WsConn)Close() error {
@@ -51,7 +55,9 @@ type websocketHandler struct {
 func (h *websocketHandler) Listen() error {
 	cfg := h.conf
 	gin.SetMode(gin.ReleaseMode)
-	router:=gin.Default()
+	//router:=gin.Default()
+	router:=gin.New()
+	router.Use(gin.Recovery())
 	router.GET("/", serveHome)
 	router.GET("/ws", func(ctx *gin.Context) {
 		conn,err:=upGrader.Upgrade(ctx.Writer,ctx.Request,nil)
@@ -97,7 +103,7 @@ func (h *websocketHandler) recv(sess *Session,conn *websocket.Conn) {
 	sess.SetProperty("workerID",-1)
 
 	for !h.ts.isClosed {
-		mt, message, err := conn.ReadMessage()
+		_, message, err := conn.ReadMessage()
 		if err != nil {
 			logger.Error(fmt.Sprintf("Close connection %s: %v", h.conf.Address, err))
 			return
@@ -116,7 +122,8 @@ func (h *websocketHandler) recv(sess *Session,conn *websocket.Conn) {
 			if !ok {
 				logger.Error("Failed to set context with client port")
 			}
-			h.ts.invoke(ctx,uint32(mt),message)
+			mid,data:= h.conf.PackageProtocol.ParseMessage(ctx,message)
+			h.ts.invoke(ctx,mid[0],data)
 		}
 
 		cfg := h.conf

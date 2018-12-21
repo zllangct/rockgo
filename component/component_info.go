@@ -54,7 +54,7 @@ func newComponentInfo(cmp IComponent,root *Object) *componentInfo {
 
 // IUpdate a single component
 func (info *componentInfo) updateComponent(step float32, runtime *Runtime, context *Context) {
-	if info.Active == 0 && info.Start != nil {
+	if info.Active == 1 && info.Start != nil {
 		runtime.workers.Run(func() {
 			info.Active += 1
 			info.Start.Start(context)

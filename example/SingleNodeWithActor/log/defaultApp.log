@@ -447,3 +447,635 @@
 2018/12/19 22:00:12 server.go:564: debug 127.0.0.1:59429
 2018/12/19 22:00:15 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
 2018/12/19 22:00:27 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/19 22:20:23 server.go:564: debug 127.0.0.1:60013
+2018/12/19 22:20:24 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/19 22:20:46 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/19 22:20:53 server.go:564: debug 127.0.0.1:60024
+2018/12/19 22:20:56 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/19 22:21:10 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/19 22:21:39 server.go:564: debug 127.0.0.1:60052
+2018/12/19 22:21:40 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/19 22:22:49 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/19 22:22:52 server.go:564: debug 127.0.0.1:60079
+2018/12/19 22:22:55 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/19 22:23:16 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/19 22:23:47 server.go:564: debug 127.0.0.1:60109
+2018/12/19 22:23:48 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/19 22:24:07 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/19 22:24:15 server.go:564: debug 127.0.0.1:60120
+2018/12/19 22:24:18 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/19 22:24:49 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 15:04:53 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/20 15:04:53 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 15:04:53 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 15:04:53 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 15:04:53 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 15:04:53 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 15:04:53 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/20 15:04:53 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 15:04:53 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 15:04:53 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/20 15:04:53 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/20 15:04:53 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/20 15:04:53 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/20 15:04:53 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/20 15:04:53 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ runtime ]
+2018/12/20 15:04:53 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 15:05:02 SingleServerWithActor.go:34: info Override node info:[ node_room ]
+2018/12/20 15:05:02 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 15:05:02 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 15:05:02 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 15:05:02 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 15:05:02 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 15:05:02 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6605 ]
+2018/12/20 15:05:02 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 15:05:02 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 15:05:02 component_group.go:26: info Attach component [ room.*main.RoomManagerComponent ] to [ runtime ]
+2018/12/20 15:05:02 component_group.go:26: info Attach component [ room.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 15:05:02 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ runtime ]
+2018/12/20 15:05:02 ChildComponent.go:111: info  Looking for master ......
+2018/12/20 15:05:02 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 15:05:02 NodeComponent.go:331: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/20 15:05:02 server.go:564: debug 127.0.0.1:52803
+2018/12/20 15:05:02 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/20 15:05:02 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/20 15:05:03 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 15:05:08 server.go:564: debug 127.0.0.1:52808
+2018/12/20 15:05:09 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 15:05:44 server.go:564: debug 127.0.0.1:52822
+2018/12/20 15:05:44 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 15:06:04 server.go:564: debug 127.0.0.1:52831
+2018/12/20 15:06:05 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 15:07:32 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 15:07:59 server.go:564: debug 127.0.0.1:52872
+2018/12/20 15:08:02 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 15:08:35 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 15:08:56 server.go:564: debug 127.0.0.1:52905
+2018/12/20 15:08:57 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 15:09:14 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 15:09:29 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 15:09:29 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 15:09:29 ChildComponent.go:144: info Disconnected from master
+2018/12/20 15:09:29 ChildComponent.go:111: info  Looking for master ......
+2018/12/20 15:09:41 NodeComponent.go:331: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/20 15:09:41 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/20 15:10:15 client.go:258: error tcp client timeout
+2018/12/20 15:10:15 ChildComponent.go:144: info Disconnected from master
+2018/12/20 15:10:15 ChildComponent.go:111: info  Looking for master ......
+2018/12/20 15:10:45 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/20 15:10:45 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 15:10:45 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 15:10:45 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 15:10:45 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 15:10:45 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 15:10:45 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/20 15:10:45 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 15:10:45 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 15:10:45 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/20 15:10:45 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/20 15:10:45 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/20 15:10:45 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/20 15:10:45 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/20 15:10:45 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ runtime ]
+2018/12/20 15:10:45 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 15:10:45 NodeComponent.go:331: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/20 15:10:45 server.go:564: debug 127.0.0.1:52987
+2018/12/20 15:10:45 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/20 15:10:45 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 15:10:51 server.go:564: debug 127.0.0.1:52997
+2018/12/20 15:10:52 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 15:11:05 server.go:564: debug 127.0.0.1:53006
+2018/12/20 15:12:00 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 15:15:35 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 15:15:35 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 15:15:35 ChildComponent.go:144: info Disconnected from master
+2018/12/20 15:15:35 ChildComponent.go:111: info  Looking for master ......
+2018/12/20 15:15:37 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 15:49:03 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/20 15:49:03 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/20 15:49:03 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 15:49:03 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 15:49:03 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 15:49:03 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 15:49:03 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 15:49:03 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/20 15:49:03 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 15:49:03 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 15:49:03 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/20 15:49:03 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/20 15:49:03 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/20 15:49:03 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/20 15:49:03 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/20 15:49:03 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ runtime ]
+2018/12/20 15:49:03 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 15:49:03 NodeComponent.go:331: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/20 15:49:03 server.go:564: debug 127.0.0.1:55648
+2018/12/20 15:49:03 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/20 15:49:03 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 15:49:03 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 15:49:03 server.go:564: debug 127.0.0.1:55650
+2018/12/20 15:49:03 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 15:49:15 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 15:49:40 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 15:49:40 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 15:49:43 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/20 15:49:43 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 15:49:43 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 15:49:43 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 15:49:43 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 15:49:43 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 15:49:43 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/20 15:49:43 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 15:49:43 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 15:49:43 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/20 15:49:43 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/20 15:49:43 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/20 15:49:43 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/20 15:49:43 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/20 15:49:43 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/20 15:49:43 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ runtime ]
+2018/12/20 15:49:43 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 15:49:43 server.go:564: debug 127.0.0.1:55672
+2018/12/20 15:49:45 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 15:49:56 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 15:50:00 server.go:564: debug 127.0.0.1:55696
+2018/12/20 15:50:01 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 15:50:11 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 15:50:29 server.go:564: debug 127.0.0.1:55713
+2018/12/20 15:50:30 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 15:50:45 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 15:51:03 server.go:564: debug 127.0.0.1:55748
+2018/12/20 15:51:04 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 15:51:40 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 15:51:56 server.go:564: debug 127.0.0.1:55766
+2018/12/20 15:59:27 server.go:564: debug 127.0.0.1:55968
+2018/12/20 15:59:28 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 15:59:39 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 15:59:43 server.go:564: debug 127.0.0.1:55978
+2018/12/20 15:59:44 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 16:01:06 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 16:24:06 server.go:564: debug 127.0.0.1:56863
+2018/12/20 16:24:07 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 16:24:14 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 16:24:36 server.go:564: debug 127.0.0.1:56880
+2018/12/20 16:24:37 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 16:24:38 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 16:29:02 server.go:564: debug 127.0.0.1:57019
+2018/12/20 16:29:03 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 16:29:07 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 16:29:13 server.go:564: debug 127.0.0.1:57027
+2018/12/20 16:29:13 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 16:29:26 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 16:29:29 server.go:564: debug 127.0.0.1:57039
+2018/12/20 16:29:38 server.go:564: debug 127.0.0.1:57043
+2018/12/20 16:29:39 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 16:29:49 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 17:39:40 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 17:39:40 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 17:39:58 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/20 17:39:58 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 17:39:58 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 17:39:58 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 17:39:58 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 17:39:58 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 17:39:58 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/20 17:39:58 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 17:39:58 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 17:39:58 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/20 17:39:58 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/20 17:39:58 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/20 17:39:58 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/20 17:39:58 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/20 17:39:58 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ runtime ]
+2018/12/20 17:39:58 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 17:40:03 SingleServerWithActor.go:34: info Override node info:[ node_room ]
+2018/12/20 17:40:03 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/20 17:40:03 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 17:40:03 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 17:40:03 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 17:40:03 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 17:40:03 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 17:40:03 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6605 ]
+2018/12/20 17:40:03 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 17:40:03 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 17:40:03 component_group.go:26: info Attach component [ room.*main.RoomManagerComponent ] to [ runtime ]
+2018/12/20 17:40:03 component_group.go:26: info Attach component [ room.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 17:40:03 ChildComponent.go:111: info  Looking for master ......
+2018/12/20 17:40:03 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ runtime ]
+2018/12/20 17:40:03 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 17:40:03 NodeComponent.go:331: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/20 17:40:03 server.go:564: debug 127.0.0.1:59598
+2018/12/20 17:40:03 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/20 17:40:04 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 17:40:09 server.go:564: debug 127.0.0.1:59603
+2018/12/20 17:40:10 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 17:41:04 server.go:564: debug 127.0.0.1:59630
+2018/12/20 17:52:16 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 17:52:30 server.go:564: debug 127.0.0.1:59913
+2018/12/20 17:52:33 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 17:52:42 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 17:53:00 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 17:53:00 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 17:53:00 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 17:53:57 server.go:564: debug 127.0.0.1:59945
+2018/12/20 17:53:58 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 17:54:05 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 17:54:14 server.go:564: debug 127.0.0.1:59956
+2018/12/20 17:54:15 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 17:54:20 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 17:54:33 server.go:564: debug 127.0.0.1:59964
+2018/12/20 17:54:34 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 18:00:15 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 18:00:19 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 18:00:19 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 18:01:05 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/20 18:01:05 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 18:01:05 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 18:01:05 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 18:01:05 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 18:01:05 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 18:01:05 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/20 18:01:05 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 18:01:05 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 18:01:05 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/20 18:01:05 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/20 18:01:05 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/20 18:01:05 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/20 18:01:05 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/20 18:01:05 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ runtime ]
+2018/12/20 18:01:05 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:01:10 SingleServerWithActor.go:34: info Override node info:[ node_room ]
+2018/12/20 18:01:10 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/20 18:01:10 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 18:01:10 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 18:01:10 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 18:01:10 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 18:01:10 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 18:01:10 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6605 ]
+2018/12/20 18:01:10 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 18:01:10 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 18:01:10 component_group.go:26: info Attach component [ room.*main.RoomManagerComponent ] to [ runtime ]
+2018/12/20 18:01:10 component_group.go:26: info Attach component [ room.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:01:10 ChildComponent.go:111: info  Looking for master ......
+2018/12/20 18:01:10 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ runtime ]
+2018/12/20 18:01:10 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:01:10 NodeComponent.go:331: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/20 18:01:10 server.go:564: debug 127.0.0.1:60088
+2018/12/20 18:01:10 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/20 18:01:11 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 18:01:25 server.go:564: debug 127.0.0.1:60096
+2018/12/20 18:01:26 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 18:01:47 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 18:01:47 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 18:04:53 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 18:05:43 server.go:564: debug 127.0.0.1:60182
+2018/12/20 18:05:43 server.go:564: debug 127.0.0.1:60183
+2018/12/20 18:05:46 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 18:06:35 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 18:07:00 server.go:564: debug 127.0.0.1:60206
+2018/12/20 18:07:03 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 18:07:44 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 18:08:09 server.go:564: debug 127.0.0.1:60237
+2018/12/20 18:08:10 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 18:08:16 server.go:564: debug 127.0.0.1:60242
+2018/12/20 18:08:29 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 18:09:52 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 18:09:52 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 18:09:52 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 18:10:02 server.go:564: debug 127.0.0.1:60294
+2018/12/20 18:10:03 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 18:10:16 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/20 18:10:16 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/20 18:10:16 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 18:10:16 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 18:10:16 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 18:10:16 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 18:10:16 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 18:10:16 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/20 18:10:16 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 18:10:16 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 18:10:16 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/20 18:10:16 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/20 18:10:16 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:10:16 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ runtime ]
+2018/12/20 18:10:16 ChildComponent.go:111: info  Looking for master ......
+2018/12/20 18:10:16 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:10:16 NodeComponent.go:331: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/20 18:10:16 server.go:564: debug 127.0.0.1:60300
+2018/12/20 18:10:16 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/20 18:10:17 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 18:10:35 wshandler.go:62: debug TCP accept:127.0.0.1:60307
+2018/12/20 18:10:35 DefaultGateComponent.go:65: debug client [ 127.0.0.1:60307 ] connected,session id :[ jL9cKc9XGVGZzNgETzRy4G ]
+2018/12/20 18:10:38 NodeComponent.go:331: info   connect to node: [ 127.0.0.1:6605 ] success
+2018/12/20 18:10:43 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:11:14 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:11:40 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:11:47 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 18:13:23 server.go:564: debug 127.0.0.1:60369
+2018/12/20 18:13:24 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 18:13:41 NodeComponent.go:331: info   connect to node: [ 127.0.0.1:6605 ] success
+2018/12/20 18:13:46 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:14:03 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 18:16:29 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 18:16:29 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 18:16:29 ChildComponent.go:144: info Disconnected from master
+2018/12/20 18:16:29 ChildComponent.go:111: info  Looking for master ......
+2018/12/20 18:21:28 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/20 18:21:28 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/20 18:21:28 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 18:21:28 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 18:21:28 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 18:21:28 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 18:21:28 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 18:21:28 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/20 18:21:28 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 18:21:28 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 18:21:28 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/20 18:21:28 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/20 18:21:28 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/20 18:21:28 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/20 18:21:28 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/20 18:21:28 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ runtime ]
+2018/12/20 18:21:28 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:21:28 server.go:564: debug 127.0.0.1:60753
+2018/12/20 18:21:28 NodeComponent.go:331: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/20 18:21:28 server.go:564: debug 127.0.0.1:60756
+2018/12/20 18:21:28 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/20 18:21:28 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 18:21:30 SingleServerWithActor.go:34: info Override node info:[ node_room ]
+2018/12/20 18:21:30 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/20 18:21:30 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 18:21:30 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 18:21:30 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 18:21:30 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 18:21:30 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 18:21:30 object.go:83: error listen tcp 0.0.0.0:6605: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/20 18:21:30 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 18:21:30 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 18:21:30 object.go:83: error runtime error: invalid memory address or nil pointer dereference
+goroutine 1 [running]:
+runtime/debug.Stack(0xfeb400, 0xc0001491c0, 0x40)
+	C:/Go/src/runtime/debug/stack.go:24 +0xae
+github.com/zllangct/RockGO/component.(*Object).WithLock.func1(0xc00008bc40, 0xc000238000)
+	C:/GOPATH/projects/RockGO/component/object.go:469 +0x9e
+panic(0xa46600, 0xfeb400)
+	C:/Go/src/runtime/panic.go:513 +0x1c7
+github.com/zllangct/RockGO/rpc.(*Server).register(0x0, 0xa55d40, 0xc00013c2f0, 0x0, 0x0, 0xad8800, 0x1b13e0, 0xc000144dd0)
+	C:/GOPATH/projects/RockGO/rpc/server.go:172 +0x4c8
+github.com/zllangct/RockGO/rpc.(*Server).Register(0x0, 0xa55d40, 0xc00013c2f0, 0xad8801, 0xc00013c2f0)
+	C:/GOPATH/projects/RockGO/rpc/server.go:129 +0x53
+github.com/zllangct/RockGO/cluster.(*NodeComponent).Register(0xc000144dd0, 0xa55d40, 0xc00013c2f0, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/cluster/NodeComponent.go:124 +0x4d
+github.com/zllangct/RockGO/actor.(*ActorProxyComponent).Awake(0xc000274000, 0xc00012dbb0, 0x2)
+	C:/GOPATH/projects/RockGO/actor/ActorProxyComponent.go:54 +0x10f
+github.com/zllangct/RockGO/component.(*Object).AddComponent.func1(0xc0000180e8, 0xb3cd88)
+	C:/GOPATH/projects/RockGO/component/object.go:78 +0x257
+github.com/zllangct/RockGO/component.(*Object).WithLock(0xc000238000, 0xc00008bc60, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/component/object.go:480 +0x85
+github.com/zllangct/RockGO/component.(*Object).AddComponent(0xc000238000, 0xbdc0a0, 0xc000274000, 0xc000238000)
+	C:/GOPATH/projects/RockGO/component/object.go:52 +0xa7
+github.com/zllangct/RockGO.(*ServerNode).Serve(0xc00010a7e0)
+	C:/GOPATH/projects/RockGO/RockGO.go:85 +0xd31
+main.main()
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/SingleServerWithActor.go:42 +0x3f8
+
+2018/12/20 18:21:30 component_group.go:26: info Attach component [ room.*main.RoomManagerComponent ] to [ runtime ]
+2018/12/20 18:21:30 component_group.go:26: info Attach component [ room.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:21:30 ChildComponent.go:111: info  Looking for master ......
+2018/12/20 18:21:30 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ runtime ]
+2018/12/20 18:21:30 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:21:30 server.go:564: debug 127.0.0.1:60759
+2018/12/20 18:21:30 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/20 18:21:30 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/20 18:21:31 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 18:22:24 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 18:22:24 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 18:22:24 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 18:22:25 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 18:22:43 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 18:22:43 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 18:22:43 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 18:22:59 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 18:22:59 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 18:23:17 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/20 18:23:17 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 18:23:17 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 18:23:17 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 18:23:17 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 18:23:17 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 18:23:17 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/20 18:23:17 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 18:23:17 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 18:23:17 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/20 18:23:17 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/20 18:23:17 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/20 18:23:17 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/20 18:23:17 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/20 18:23:17 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/20 18:23:17 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ runtime ]
+2018/12/20 18:23:17 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:23:17 server.go:564: debug 127.0.0.1:60816
+2018/12/20 18:23:17 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 18:23:21 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/20 18:23:21 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 18:23:21 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 18:23:21 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 18:23:21 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 18:23:21 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 18:23:21 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/20 18:23:21 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 18:23:21 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 18:23:21 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/20 18:23:21 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/20 18:23:21 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:23:21 ChildComponent.go:111: info  Looking for master ......
+2018/12/20 18:23:21 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ runtime ]
+2018/12/20 18:23:21 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:23:21 server.go:564: debug 127.0.0.1:60822
+2018/12/20 18:23:21 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/20 18:23:21 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/20 18:23:22 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 18:23:27 server.go:564: debug 127.0.0.1:60828
+2018/12/20 18:23:36 wshandler.go:62: debug TCP accept:127.0.0.1:60836
+2018/12/20 18:23:36 DefaultGateComponent.go:65: debug client [ 127.0.0.1:60836 ] connected,session id :[ 8FVDMjtKRG2mnIIrjc3oa7 ]
+2018/12/20 18:23:44 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6605 ] success
+2018/12/20 18:23:49 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:23:59 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 18:24:07 client.go:258: error tcp client timeout
+2018/12/20 18:24:07 NodeComponent.go:132: info   disconnect to remote node: [ 127.0.0.1:6605 ]
+2018/12/20 18:26:25 server.go:564: debug 127.0.0.1:60964
+2018/12/20 18:26:26 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 18:26:34 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:26:50 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6605 ] success
+2018/12/20 18:26:55 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:27:02 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 18:27:13 client.go:258: error tcp client timeout
+2018/12/20 18:27:13 NodeComponent.go:132: info   disconnect to remote node: [ 127.0.0.1:6605 ]
+2018/12/20 18:29:35 server.go:564: debug 127.0.0.1:61048
+2018/12/20 18:29:36 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 18:29:39 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6605 ] success
+2018/12/20 18:29:44 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:29:53 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 18:30:02 client.go:258: error tcp client timeout
+2018/12/20 18:30:02 NodeComponent.go:132: info   disconnect to remote node: [ 127.0.0.1:6605 ]
+2018/12/20 18:30:58 server.go:564: debug 127.0.0.1:61072
+2018/12/20 18:31:01 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 18:31:28 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:31:35 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6605 ] success
+2018/12/20 18:31:39 netapi.go:102: error runtime error: index out of range
+goroutine 14688 [running]:
+runtime/debug.Stack(0xfeb3b0, 0xc0001e4330, 0x21)
+	C:/Go/src/runtime/debug/stack.go:24 +0xae
+github.com/zllangct/RockGO/network.(*ApiBase).Route.func1()
+	C:/GOPATH/projects/RockGO/network/netapi.go:101 +0x8e
+panic(0xa46600, 0xfeb3b0)
+	C:/Go/src/runtime/panic.go:513 +0x1c7
+main.(*TestApi).CreateRoom(0xc0001d8240, 0xc0001d9200, 0xc0002d10c8, 0x0, 0x0)
+	C:/GOPATH/projects/RockGO/example/SingleNodeWithActor/TestApi.go:85 +0x428
+reflect.Value.call(0xc0001d8300, 0xc0001e00b8, 0x13, 0xb15244, 0x4, 0xc0002b5e88, 0x3, 0x3, 0xc000006268, 0x0, ...)
+	C:/Go/src/reflect/value.go:447 +0x450
+reflect.Value.Call(0xc0001d8300, 0xc0001e00b8, 0x13, 0xc0002b5e88, 0x3, 0x3, 0x0, 0x0, 0x30001)
+	C:/Go/src/reflect/value.go:308 +0xab
+github.com/zllangct/RockGO/network.(*ApiBase).Route(0xc0001d8240, 0xc0001d9200, 0x1, 0xc00050e000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/netapi.go:117 +0x300
+github.com/zllangct/RockGO/network.(*Server).invoke(0xc00011a800, 0xbe0da0, 0xc0005249c0, 0x1, 0xc00050e000, 0xb, 0x600)
+	C:/GOPATH/projects/RockGO/network/server.go:109 +0xd6
+github.com/zllangct/RockGO/network.(*websocketHandler).recv.func1()
+	C:/GOPATH/projects/RockGO/network/wshandler.go:119 +0x234
+created by github.com/zllangct/RockGO/network.(*websocketHandler).recv
+	C:/GOPATH/projects/RockGO/network/wshandler.go:137 +0x357
+
+2018/12/20 18:32:04 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:32:38 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 18:32:38 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 18:32:38 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 18:32:43 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 18:32:48 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 18:32:48 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 18:32:55 SingleServerWithActor.go:34: info Override node info:[ node_master ]
+2018/12/20 18:32:55 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 18:32:55 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 18:32:55 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 18:32:55 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 18:32:55 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 18:32:55 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6666 ]
+2018/12/20 18:32:55 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 18:32:55 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 18:32:55 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInfoSync ] is registed
+2018/12/20 18:32:55 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiry ] is registed
+2018/12/20 18:32:55 server.go:240: info rpc.Register: service: [ MasterService ], method [ NodeInquiryDetail ] is registed
+2018/12/20 18:32:55 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeClose ] is registed
+2018/12/20 18:32:55 server.go:240: info rpc.Register: service: [ MasterService ], method [ ReportNodeInfo ] is registed
+2018/12/20 18:32:55 component_group.go:26: info Attach component [ master.*Cluster.MasterComponent ] to [ runtime ]
+2018/12/20 18:32:55 component_group.go:26: info Attach component [ master.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:32:57 SingleServerWithActor.go:34: info Override node info:[ node_room ]
+2018/12/20 18:32:57 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/20 18:32:57 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 18:32:57 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 18:32:57 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 18:32:57 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 18:32:57 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 18:32:57 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6605 ]
+2018/12/20 18:32:57 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 18:32:57 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 18:32:57 component_group.go:26: info Attach component [ room.*main.RoomManagerComponent ] to [ runtime ]
+2018/12/20 18:32:57 component_group.go:26: info Attach component [ room.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:32:57 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ runtime ]
+2018/12/20 18:32:57 ChildComponent.go:111: info  Looking for master ......
+2018/12/20 18:32:57 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:32:57 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/20 18:32:57 server.go:564: debug 127.0.0.1:61111
+2018/12/20 18:32:57 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/20 18:32:58 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 18:33:03 server.go:564: debug 127.0.0.1:61120
+2018/12/20 18:33:04 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 18:33:28 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 18:33:31 server.go:564: debug 127.0.0.1:61138
+2018/12/20 18:33:34 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 18:33:48 server.go:564: debug 127.0.0.1:61145
+2018/12/20 18:33:50 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:DcGSHqiz0SrFNhaQidMBAT ] send message [ newRoom ] to actor [ 0.0.0.0:6605:NV7fp1eImjawmvqqR6Ct2M ]
+2018/12/20 18:34:01 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 18:34:19 server.go:564: debug 127.0.0.1:61158
+2018/12/20 18:34:20 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 18:41:42 server.go:564: debug 127.0.0.1:61298
+2018/12/20 18:41:42 ActorProxyComponent.go:171: debug Actor: [ 0.0.0.0:6601:DcGSHqiz0SrFNhaQidMBAT ] send message [ newRoom ] to actor [ 0.0.0.0:6605:NV7fp1eImjawmvqqR6Ct2M ]
+2018/12/20 18:41:52 server.go:564: debug 127.0.0.1:61301
+2018/12/20 18:41:52 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 18:41:58 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 18:41:58 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 18:41:58 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 18:42:04 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/20 18:42:04 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 18:42:04 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 18:42:04 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 18:42:04 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 18:42:04 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 18:42:04 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/20 18:42:04 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 18:42:04 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 18:42:04 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/20 18:42:04 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/20 18:42:04 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:42:04 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/20 18:42:04 ChildComponent.go:111: info  Looking for master ......
+2018/12/20 18:42:04 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ runtime ]
+2018/12/20 18:42:04 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:42:04 server.go:564: debug 127.0.0.1:61310
+2018/12/20 18:42:04 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/20 18:42:04 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/20 18:42:05 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 18:42:33 server.go:564: debug 127.0.0.1:61334
+2018/12/20 18:42:34 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 18:43:21 wshandler.go:62: debug TCP accept:127.0.0.1:61364
+2018/12/20 18:43:21 DefaultGateComponent.go:65: debug client [ 127.0.0.1:61364 ] connected,session id :[ iNnmfvcacWcKgNXSGALtAx ]
+2018/12/20 18:43:25 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6605 ] success
+2018/12/20 18:43:30 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:43:43 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 18:43:48 client.go:258: error tcp client timeout
+2018/12/20 18:43:48 NodeComponent.go:132: info   disconnect to remote node: [ 127.0.0.1:6605 ]
+2018/12/20 18:48:13 server.go:564: debug 127.0.0.1:61456
+2018/12/20 18:48:14 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 18:48:15 wshandler.go:62: debug TCP accept:127.0.0.1:61457
+2018/12/20 18:48:15 DefaultGateComponent.go:65: debug client [ 127.0.0.1:61457 ] connected,session id :[ iNnmfvcacWcKgNXSGALtCL ]
+2018/12/20 18:48:20 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:48:29 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:48:36 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:48:49 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:49:03 MasterComponent.go:88: info Node [ 127.0.0.1:6605 ] disconnected, roles: [ room  ]
+2018/12/20 18:49:09 server.go:564: debug 127.0.0.1:61477
+2018/12/20 18:49:10 MasterComponent.go:70: info Node [ 127.0.0.1:6605 ] connected to this master, roles: [ room  ]
+2018/12/20 18:49:16 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:49:19 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:49:21 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:49:22 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:49:27 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 18:49:27 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 18:49:27 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 18:49:30 SingleServerWithActor.go:34: info Override node info:[ node_gate ]
+2018/12/20 18:49:30 netapi.go:152: info ====== start to register API group: [ TestApi ] ======
+2018/12/20 18:49:30 netapi.go:195: info Add api: [ TestCreateRoom ], handler: [ TestApi.CreateRoom(*network.Session,*TestCreateRoom) ]
+2018/12/20 18:49:30 netapi.go:195: info Add api: [ TestMessage ], handler: [ TestApi.Hello(*network.Session,*TestMessage) ]
+2018/12/20 18:49:30 netapi.go:198: info ======   register API group: [ TestApi ] end   ======
+2018/12/20 18:49:30 server.go:240: info rpc.Register: service: [ InnerResponse ], method [ HeartBeat ] is registed
+2018/12/20 18:49:30 NodeComponent.go:118: info NodeComponent RPC server listening on: [ 0.0.0.0:6601 ]
+2018/12/20 18:49:30 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ ServiceCall ] is registed
+2018/12/20 18:49:30 server.go:240: info rpc.Register: service: [ ActorProxyService ], method [ Tell ] is registed
+2018/12/20 18:49:30 SingleServerWithActor.go:24: info listen tcp 127.0.0.1:7070: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2018/12/20 18:49:30 component_group.go:26: info Attach component [ gate.*gate.DefaultGateComponent ] to [ runtime ]
+2018/12/20 18:49:30 component_group.go:26: info Attach component [ gate.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:49:30 wshandler.go:80: info Websocket server listening and serving HTTP on [ 0.0.0.0:5555 ]
+2018/12/20 18:49:30 ChildComponent.go:111: info  Looking for master ......
+2018/12/20 18:49:30 component_group.go:26: info Attach component [ child.*Cluster.ChildComponent ] to [ runtime ]
+2018/12/20 18:49:30 server.go:564: debug 127.0.0.1:61485
+2018/12/20 18:49:30 component_group.go:26: info Attach component [ child.*Actor.ActorComponent ] to [ runtime ]
+2018/12/20 18:49:30 NodeComponent.go:332: info   connect to node: [ 127.0.0.1:6666 ] success
+2018/12/20 18:49:30 ChildComponent.go:127: info Connected to master [ 127.0.0.1:6666 ]
+2018/12/20 18:49:31 MasterComponent.go:70: info Node [ 127.0.0.1:6601 ] connected to this master, roles: [ gate  ]
+2018/12/20 18:49:35 wshandler.go:62: debug TCP accept:127.0.0.1:61488
+2018/12/20 18:49:35 DefaultGateComponent.go:65: debug client [ 127.0.0.1:61488 ] connected,session id :[ UKmrfqkQqtj0cMCZphFCAT ]
+2018/12/20 18:49:37 netapi.go:120: error websocket: bad write message type
+2018/12/20 18:49:57 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 18:49:57 MasterComponent.go:88: info Node [ 127.0.0.1:6601 ] disconnected, roles: [ gate  ]
+2018/12/20 18:49:57 RockGO.go:125: info ====== Server is closed ======
+2018/12/20 18:49:58 RockGO.go:116: info ====== Start to close this server, do some cleaning now ...... ======
+2018/12/20 18:49:58 RockGO.go:125: info ====== Server is closed ======

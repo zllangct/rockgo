@@ -10,9 +10,10 @@ type RoomManagerComponent struct {
 	rooms map[int]*RoomComponent
 	messageHandler map[string]func(message *Actor.ActorMessageInfo)
 	increasing int   //实际运用不这样
+	actor   *Actor.ActorComponent
 }
 
-func (this *RoomManagerComponent)Awake()error{
+func (this *RoomManagerComponent)Awake() error{
 	this.rooms = make(map[int]*RoomComponent)
 	this.messageHandler=map[string]func(message *Actor.ActorMessageInfo){
 		"newRoom":this.NewRoom,

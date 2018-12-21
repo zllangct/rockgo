@@ -47,49 +47,41 @@ func (this *TestApi)nodeC()(*Cluster.NodeComponent,error){
 }
 
 //协议接口 1  Hello
-func (this *TestApi)Hello(sess *network.Session,message *TestMessage)  {
+func (this *TestApi)Hello(sess *network.Session,message *TestMessage) error {
 	println(fmt.Sprintf("Hello,%s",message.Name))
-	p,err:=this.GetParent()
-	if err==nil {
-		println(fmt.Sprintf("this api parent:%s",p.Name()))
-	}
 
 	//reply
-	err=sess.Emit(1,[]byte(fmt.Sprintf("hello client %s",message.Name)))
+	err:=sess.Emit(1,[]byte(fmt.Sprintf("hello client %s",message.Name)))
 	if err!=nil {
-		logger.Error(err)
+		return err
 	}
+	return nil
 }
 //协议接口 2 登录
-func (this *TestApi)Login(sess *network.Session,message *TestLogin)  {
+func (this *TestApi)Login(sess *network.Session,message *TestLogin) error {
 	println(fmt.Sprintf("received a client login request,%s ",message.Account))
-	p,err:=this.GetParent()
-	if err==nil {
-		println(fmt.Sprintf("this api parent:%s",p.Name()))
-	}
+
 	//获取node组件
 	nodec,err:=this.nodeC()
 	if err!=nil {
-		logger.Error(err)
-		return
+		return err
 	}
 	//选择一个该APP的角色节点，可选参数可设置selector，在多个同一角色的节点中选择符合条件的节点
 	//可使用随机选择器、最小负载选择器，同时可自定义其他选择器，比如 按地区选择
 	node,err:=nodec.GetNode("login")
 	if err != nil {
-		logger.Error(err)
-		return
+		return err
 	}
 	//通过节点获取rpc客户端
 	loginNode,err:= node.GetClient()
 	if err!=nil {
-		logger.Error(err)
+		return err
 	}
 	//调用登录服的登录接口
 	var pInfo *PlayerInfo
 	err= loginNode.Call("LoginComponent.Login",message.Account,&pInfo)
 	if err!=nil {
-		logger.Error(err)
+		return err
 	}
 	//reply 登录结果反馈到客户端
 
@@ -98,10 +90,10 @@ func (this *TestApi)Login(sess *network.Session,message *TestLogin)  {
 	//}else{
 	//	logger.Error(err)
 	//}
-	//网络测试工具，一般messageType仅为1
 	if _,m,err:=this.MessageEncode(pInfo);err ==nil {
 		err=sess.Emit(1,m)
 	}else{
 		logger.Error(err)
 	}
+	return err
 }

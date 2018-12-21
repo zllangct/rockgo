@@ -1,0 +1,4 @@
+<page>
+   <item name="main.scene" props="" ifExport="默认" aName=""/>
+   <item name="test/main.scene" props="" ifExport="分离模式" aName=""/>
+</page>

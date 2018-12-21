@@ -20,7 +20,7 @@ type NetAPI interface {
 	Init(interface{},*Component.Object, map[reflect.Type]uint32,MessageProtocol)  //初始化
 	Route(*Session, uint32, []byte)	//反序列化并路由到api处理函数
 	//MessageEncode(interface{})(uint32,[]byte,error) //消息序列化
-	//SetParent(object *Component.Object)		//设置
+	SetParent(object *Component.Object)		//设置
 	Reply(session *Session,message interface{})error
 }
 
@@ -104,6 +104,7 @@ func (this *ApiBase)Route(sess *Session, messageID uint32,data []byte)  {
 	})()
 	if mt,ok:= this.route[messageID];ok {
 		v:= reflect.New(mt.ArgsType)
+		println(string(data))
 		err:= this.protoc.Unmarshal(data,v.Interface())
 		if err!=nil{
 			logger.Debug(fmt.Sprintf("unmarshal message failed :%s ,%s",mt.ArgsType.Elem().Name(),err))
@@ -115,8 +116,8 @@ func (this *ApiBase)Route(sess *Session, messageID uint32,data []byte)  {
 			v.Elem(),
 		}
 		re:=mt.method.Call(args)
-		err=re[0].Interface().(error)
-		if err!=nil {
+		errinterface:=re[0].Interface()
+		if errinterface !=nil && errinterface.(error)!=nil {
 			logger.Error(err)
 		}
 		return

@@ -1,0 +1,51 @@
+<project version="2.0">
+   <asynRes>img,temp,sound                                       </asynRes>
+   <unDealRes>embed                                       </unDealRes>
+   <resTypes>png,jpg   </resTypes>
+   <resExportPath>bin/res/atlas   </resExportPath>
+   <asynResExportPath>bin   </asynResExportPath>
+   <codeExportPath>src/ui   </codeExportPath>
+   <codeImports><![CDATA[import laya.ui.*;]]>   </codeImports>
+   <codeImportsJS><![CDATA[var View=laya.ui.View;
+var Dialog=laya.ui.Dialog;]]>   </codeImportsJS>
+   <uiType>3   </uiType>
+   <uiExportPath>bin/ui.json   </uiExportPath>
+   <boxTypes>Sprite,Box,List,Tab,RadioGroup,ViewStack,Panel,HBox,VBox,Tree   </boxTypes>
+   <pageTypes>Scene,View,Dialog   </pageTypes>
+   <shareResPath/>
+   <codeType>1   </codeType>
+   <resCanCompress/>
+   <resPublishQuality>80                                       </resPublishQuality>
+   <langPath/>
+   <defaultFont/>
+   <codeImportsTS><![CDATA[import View=Laya.View;
+import Dialog=Laya.Dialog;
+import Scene=Laya.Scene;]]>   </codeImportsTS>
+   <textureWidth>2048   </textureWidth>
+   <textureHeight>2048   </textureHeight>
+   <picWidth>512   </picWidth>
+   <picHeight>512   </picHeight>
+   <power2>false   </power2>
+   <trimempty>false   </trimempty>
+   <startScene>test/main.scene   </startScene>
+   <engineType>2D   </engineType>
+   <scaleMode>showall   </scaleMode>
+   <screenMode>horizontal   </screenMode>
+   <alignV>top   </alignV>
+   <alignH>left   </alignH>
+   <designWidth>1136   </designWidth>
+   <designHeight>640   </designHeight>
+   <codeViewExportPath>src/view   </codeViewExportPath>
+   <picType>0   </picType>
+   <atlasType>1   </atlasType>
+   <atlasScale/>
+   <debugMode>false   </debugMode>
+   <copyRes>true   </copyRes>
+   <dataCompact>true   </dataCompact>
+   <isRemoteProject>false   </isRemoteProject>
+   <idePath/>
+   <ver>2.0   </ver>
+   <stat>true   </stat>
+   <physicsDebug>true   </physicsDebug>
+   <toJsonScene>true   </toJsonScene>
+</project>

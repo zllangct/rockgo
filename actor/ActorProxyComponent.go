@@ -141,7 +141,7 @@ func (this *ActorProxyComponent) Register(actor IActor) error {
 	if err != nil {
 		return err
 	}
-	this.localActors.LoadOrStore(id.String(), actor)
+	this.localActors.Store(id.String(), actor)
 	return nil
 }
 
@@ -155,7 +155,7 @@ func (this *ActorProxyComponent) Unregister(actor IActor) {
 
 //发送本地消息
 func (this *ActorProxyComponent) LocalTell(actorID ActorID, messageInfo *ActorMessageInfo) error {
-	v, ok := this.localActors.Load(actorID[2])
+	v, ok := this.localActors.Load(actorID.String())
 	if !ok {
 		return ErrNoThisActor
 	}

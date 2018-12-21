@@ -22,7 +22,7 @@ type DefaultGateComponent struct {
 	server        *network.Server
 }
 
-func (this *DefaultGateComponent)IsUnique()int  {
+func (this *DefaultGateComponent) IsUnique() int {
 	return Component.UNIQUE_TYPE_GLOBAL
 }
 
@@ -34,16 +34,18 @@ func (this *DefaultGateComponent) GetRequire() map[*Component.Object][]reflect.T
 	return requires
 }
 
-func (this *DefaultGateComponent) Awake()error {
+func (this *DefaultGateComponent) Awake() error {
 	err := this.Parent.Root().Find(&this.nodeComponent)
 	if err != nil {
 		return err
 	}
-	if this.NetAPI==nil {
+	if this.NetAPI == nil {
 		panic(errors.New("NetAPI is necessity of defaultGateComponent"))
 	}
+	this.NetAPI.SetParent(this.Parent)
 	conf := &network.ServerConf{
 		Proto:                "ws",
+		PackageProtocol:      &network.TdProtocol{},
 		Address:              Config.Config.ClusterConfig.NetListenAddress,
 		ReadTimeout:          time.Millisecond * time.Duration(Config.Config.ClusterConfig.NetConnTimeout),
 		OnClientDisconnected: this.OnDropped,
@@ -68,14 +70,14 @@ func (this *DefaultGateComponent) OnDropped(sess *network.Session) {
 	this.clients.Delete(sess.ID)
 }
 
-func (this *DefaultGateComponent)Destroy()error  {
+func (this *DefaultGateComponent) Destroy() error {
 	this.server.Shutdown()
 	return nil
 }
 
 func (this *DefaultGateComponent) SendMessage(sid string, message interface{}) error {
 	if s, ok := this.clients.Load(sid); ok {
-		err:=this.NetAPI.Reply(s.(*network.Session),message)
+		err := this.NetAPI.Reply(s.(*network.Session), message)
 		if err != nil {
 			return err
 		}
@@ -84,5 +86,5 @@ func (this *DefaultGateComponent) SendMessage(sid string, message interface{}) e
 }
 
 func (this *DefaultGateComponent) Emit(sess *network.Session, message interface{}) error {
-	return this.NetAPI.Reply(sess,message)
+	return this.NetAPI.Reply(sess, message)
 }

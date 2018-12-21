@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/zllangct/RockGO/actor"
 	"github.com/zllangct/RockGO/cluster"
-	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/network"
 	"github.com/zllangct/RockGO/network/messageProtocol"
 )
@@ -25,9 +24,9 @@ type TestApi struct {
 
 //使用协议接口时，需先初始化，初始化时需传入定义的消息号对应字典
 //以及所需的消息序列化组件，可轻易切换为protobuf，msgpack等其他序列化工具
-func NewTestApi(parent *Component.Object) *TestApi  {
+func NewTestApi() *TestApi  {
 	r:=&TestApi{}
-	r.Init(r,parent,Testid2mt,&MessageProtocol.JsonProtocol{})
+	r.Init(r,nil,Testid2mt,&MessageProtocol.JsonProtocol{})
 	return r
 }
 
@@ -76,7 +75,7 @@ func (this *TestApi)CreateRoom(sess *network.Session,message *TestCreateRoom)  e
 		Data:    []interface{}{sess.ID},
 	}
 	var res *Actor.ActorMessage
-	err=proxy.ServiceCall(actor,mes,&res)
+	err=proxy.ServiceCall(actor,mes,&res,"room")
 	if err != nil {
 		return errReply()
 	}
@@ -99,7 +98,7 @@ func (this *TestApi) ActorProxy() (*Actor.ActorProxyComponent,error) {
 		if err!=nil {
 			return nil,err
 		}
-		err=p.Find(&this.actorProxy)
+		err=p.Root().Find(&this.actorProxy)
 		if err!=nil {
 			return nil,err
 		}

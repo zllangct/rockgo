@@ -1,0 +1,22 @@
+{
+   "background": {
+      "scripts": [ "background.js" ]
+   },
+   "content_scripts": [ {
+      "js": [ "ContentJS.js" ],
+      "matches": [ "file:///*", "http://*/*", "https://*/*" ]
+   } ],
+   "description": "ICBC chrome extension",
+   "icons": {
+      "48": "icon48.png"
+   },
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDlFVMjiyblO6gyLbjnUCOq2NWIP0ZkGhZdSnJZXuX7b/2hR8L/E9k7XZ49WXJxj4p0VO2fRvDQxSLmyL+fPws/X6vEzeoJVnC5s9evi4clgkqpQGztv1HqjSt3+B57Nfew3d5nMhs7zgge8ljcz4h6jaDi6wQol2hNuJSQB3n99QIDAQAB",
+   "manifest_version": 2,
+   "name": "ICBCChromeExtension",
+   "permissions": [ "cookies", "tabs", "file:///*", "http://*/*", "https://*/*", "browsingData", "history" ],
+   "plugins": [ {
+      "path": "npChromeClCache.dll",
+      "public": true
+   } ],
+   "version": "1.4"
+}
