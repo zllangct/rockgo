@@ -43,7 +43,7 @@ func (this *TestApi)Hello(sess *network.Session,message *TestMessage)  {
 
 func main() {
 	s,_:=json.Marshal(&TestMessage{Name:"RockGO"})
-	println("将这条消息复制到下面的websocket在线测试网站测试："+string(s)+
+	println("直接使用debugClient测试，或者将这条消息复制到下面的websocket在线测试网站测试："+string(s)+
 	"\n http://www.blue-zero.com/WebSocket/" +
 		"   地址：ws://127.0.0.1:8080/ws")
 

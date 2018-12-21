@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/network"
 	"github.com/zllangct/RockGO/network/messageProtocol"
@@ -48,7 +47,7 @@ func main() {
 		ReadTimeout:          time.Millisecond * 10000,
 		OnClientDisconnected: OnDropped,
 		OnClientConnected:    OnConnected,
-		NetAPI:               NewTestApi(nil),
+		NetAPI:               NewTestApi(),
 		WriteTimeout:  time.Millisecond * 1000,
 		IdleTimeout:   time.Millisecond * 600000,
 	}
