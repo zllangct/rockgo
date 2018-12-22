@@ -78,7 +78,10 @@ func (this *ChildComponent) DoReport() {
 		args.Info = m
 		this.locker.RUnlock()
 		if this.rpcMaster != nil {
-			_ = this.rpcMaster.Call("MasterService.ReportNodeInfo", args, &reply)
+			err := this.rpcMaster.Call("MasterService.ReportNodeInfo", args, &reply)
+			if err!=nil {
+
+			}
 		}
 		time.Sleep(time.Millisecond * interval)
 	}

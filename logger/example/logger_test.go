@@ -1,6 +1,7 @@
 package example
 
 import (
+	"fmt"
 	"github.com/zllangct/RockGO/logger"
 	"strconv"
 	"testing"
@@ -57,4 +58,15 @@ func Test(t *testing.T) {
 
 	time.Sleep(2 * time.Second)
 
+}
+
+func Test1(t *testing.T) {
+	for i := 0; i < 1000; i++ {
+		go func() {
+			for j := 0; j<100;j++  {
+				logger.Debug(fmt.Sprintf("%s","sssssssss"))
+			}
+		}()
+	}
+	<-make(chan struct{})
 }

@@ -1,6 +1,7 @@
 package network
 
 import (
+	"errors"
 	"sync"
 )
 
@@ -35,6 +36,9 @@ func (this *Session)PostProcessing()  {
 }
 
 func (this *Session)RemoteAddr() string {
+	this.locker.RLock()
+	defer this.locker.RUnlock()
+
 	return this.conn.Addr()
 }
 
@@ -58,7 +62,11 @@ func (this *Session)GetProperty(key string) (interface{},bool) {
 	return p,ok
 }
 
+var ErrSessionDisconnected =errors.New("this session is broken")
 func (this *Session)Emit(messageType uint32,message []byte) error {
+	if this.conn==nil{
+		return ErrSessionDisconnected
+	}
 	return this.conn.WriteMessage(messageType,message)
 }
 

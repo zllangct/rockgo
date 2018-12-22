@@ -12,7 +12,8 @@ export default class NetTest extends ui.test.mainUI{
         this.btn_ConnectServer.on(Event.CLICK,this,this.connectToServer);
         this.btn_CloseConnect.on(Event.CLICK,this,this.Close);
         this.btn_Send.on(Event.CLICK,this,this.sendMessage);
-        
+        this.btn_requestn.on(Event.CLICK,this,this.onClickRequestn);
+
         this.btn_Login.on(Event.CLICK, this, function() {
             this.messageType.text ="2";
             this.onChangeInput('{"Account":"zllang1"}');
@@ -74,6 +75,13 @@ export default class NetTest extends ui.test.mainUI{
             this.Log(str);
         }
         this.socket.input.clear();
+    }
+
+    private onClickRequestn():void{
+        var count:number=parseInt(this.requestCount.text);
+        for (let index = 0; index < count; index++) {
+            this.sendMessage();
+        }
     }
 
     private onChangeInput(str:string){

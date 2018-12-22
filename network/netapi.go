@@ -124,7 +124,7 @@ func (this *ApiBase)Route(sess *Session, messageID uint32,data []byte)  {
 		re:=mt.method.Call(args)
 		errinterface:=re[0].Interface()
 		if errinterface !=nil && errinterface.(error)!=nil {
-			logger.Error(err)
+			logger.Error(errinterface)
 		}
 		return
 	}

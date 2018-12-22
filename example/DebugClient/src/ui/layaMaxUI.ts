@@ -15,6 +15,8 @@ export module ui.test {
 		public btn_Other:Laya.Button;
 		public btn_CloseConnect:Laya.Button;
 		public messageType:Laya.TextInput;
+		public requestCount:Laya.TextInput;
+		public btn_requestn:Laya.Button;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();

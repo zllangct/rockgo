@@ -65,17 +65,15 @@ func (this *TestApi)CreateRoom(sess *network.Session,message *TestCreateRoom)  e
 	if err!=nil {
 		return errReply()
 	}
-	//调用actor服务
-	proxy,err:=this.ActorProxy()
-	if err!=nil {
-		return errReply()
-	}
 	mes:=&Actor.ActorMessage{
 		Service: "newRoom",
 		Data:    []interface{}{sess.ID},
 	}
 	var res *Actor.ActorMessage
-	err=proxy.ServiceCall(actor,mes,&res,"room")
+	//直接调用，每次都会在位置服务器上查询
+	//err=proxy.ServiceCall(actor,mes,&res,"room")
+	//通过actor调用，优先缓存，有去中心化效果
+	err=actor.ServiceCall(mes,&res,"room")
 	if err != nil {
 		return errReply()
 	}
@@ -122,10 +120,10 @@ func (this *TestApi) NodeComponent()(*Cluster.NodeComponent,error){
 	return this.nodeComponent,nil
 }
 
-func (this *TestApi)Upgrade(sess *network.Session) (Actor.IActor,error) {
+func (this *TestApi)Upgrade(sess *network.Session) (*Actor.ActorWithSession,error) {
 	a,ok:=sess.GetProperty("actor")
 	if ok {
-		return a.(Actor.IActor), nil
+		return a.(*Actor.ActorWithSession), nil
 	}
 	proxy,err:=this.ActorProxy()
 	if err!=nil {

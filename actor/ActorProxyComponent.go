@@ -71,9 +71,15 @@ func (this *ActorProxyComponent) Destroy() error {
 
 //调用actor service
 func (this *ActorProxyComponent) ServiceCall(actor IActor,message *ActorMessage, reply **ActorMessage, role ...string) error {
+	_,err:=this.ServiceCallRetrunClient(actor,message,reply,role...)
+	return err
+}
+
+//调用actor service
+func (this *ActorProxyComponent) ServiceCallRetrunClient(actor IActor,message *ActorMessage, reply **ActorMessage, role ...string) (*rpc.TcpClient,error ){
 	var targetID ActorID
 	g, ok := this.service.Load(message.Service)
-	//无node参数时，本地调用
+	//优先尝试本地服务
 	if ok {
 		targetID = g.(*ActorIDGroup).RndOne()
 		messageInfo := &ActorMessageInfo{
@@ -81,32 +87,44 @@ func (this *ActorProxyComponent) ServiceCall(actor IActor,message *ActorMessage,
 			Message: message,
 			reply:   reply,
 		}
-		return this.Emit(targetID, messageInfo)
-	} else {
-		//非本地，走网络
-		if len(role) == 0 {
-			return ErrNoThisService
+		err:= this.Emit(targetID, messageInfo)
+		if err==nil {
+			return nil,err
 		}
-		nodeID, err := this.nodeComponent.GetNode(role[0])
-		if err != nil {
-			return err
-		}
-		//本地已经无此服务
-		if nodeID.Addr == this.nodeID {
-			return ErrNoThisService
-		}
-		client, err := nodeID.GetClient()
-		if err != nil {
-			return err
-		}
-		args := &ServiceCall{
-			Sender:  actor.ID(),
-			Message: message,
-		}
-		err = client.Call("ActorProxyService.ServiceCall", args, reply)
-		if err != nil {
-			return err
-		}
+	}
+	//本地无此服务，且有role参数时走网络途径
+	if len(role) == 0 {
+		return nil,ErrNoThisService
+	}
+	nodeID, err := this.nodeComponent.GetNode(role[0])
+	if err != nil {
+		return nil,err
+	}
+	//本地已经无此服务
+	if nodeID.Addr == this.nodeID {
+		return nil,ErrNoThisService
+	}
+	client, err := nodeID.GetClient()
+	if err != nil {
+		return nil,err
+	}
+	err =this.ServiceCallByRpcClient(actor,message,reply,client)
+	if err != nil {
+		return nil,err
+	}
+
+	return client, nil
+}
+
+//根据rpc客户端直接调用actor服务
+func (this *ActorProxyComponent) ServiceCallByRpcClient(actor IActor,message *ActorMessage, reply **ActorMessage, client *rpc.TcpClient)error  {
+	args := &ServiceCall{
+		Sender:  actor.ID(),
+		Message: message,
+	}
+	err := client.Call("ActorProxyService.ServiceCall", args, reply)
+	if err != nil {
+		return err
 	}
 	return nil
 }
@@ -168,7 +186,7 @@ func (this *ActorProxyComponent) LocalTell(actorID ActorID, messageInfo *ActorMe
 
 //通过actor id 发送消息
 func (this *ActorProxyComponent) Emit(actorID ActorID, messageInfo *ActorMessageInfo) error {
-	logger.Debug(fmt.Sprintf("Actor: [ %s ] send message [ %s ] to actor [ %s ]", messageInfo.Sender.ID(), messageInfo.Message.Service, actorID.String()))
+	logger.Debug(fmt.Sprintf("Actor: [ %s ] send message [ %s ] to actor [ %s ]", messageInfo.Sender.ID().String(), messageInfo.Message.Service, actorID.String()))
 	nodeID := actorID.GetNodeID()
 	//本地消息不走网络
 	if nodeID == this.nodeID {

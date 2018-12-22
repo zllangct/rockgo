@@ -29,6 +29,7 @@ type NodeComponent struct {
 	serverListener   *net.TCPListener
  	locationClients *NodeIDGroup			//位置服务器集合
 	lockers      	sync.Map 				//[nodeid,locker]
+	clentGetting    map[string]int
 }
 
 func (this *NodeComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
@@ -42,9 +43,12 @@ func (this *NodeComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
 func(this *NodeComponent)Awake()error{
 	this.AppName = Config.Config.ClusterConfig.AppName
 	this.islocationMode =Config.Config.ClusterConfig.IsLocationMode
+	this.clentGetting =make(map[string]int)
 	//开始本节点RPC服务
 	err:= this.StartRpcServer()
 	if err!=nil {
+		//地址占用，立即修改配置文件
+		panic(err)
 		return err
 	}
 	//查询位置服务器
@@ -135,16 +139,36 @@ func (this *NodeComponent)clientCallback(event string,data ...interface{}) {
 
 //获取节点客户端
 func (this *NodeComponent) GetNodeClient(addr string) (*rpc.TcpClient,error){
+	a:
 	if v,ok:= this.rpcClient.Load(addr);ok {
 		return v.(*rpc.TcpClient),nil
 	}
+
 	this.locker.Lock()
-	defer this.locker.Unlock()
-	if v,ok:= this.rpcClient.Load(addr);ok {
-		return v.(*rpc.TcpClient),nil
+	count,ok:=this.clentGetting[addr]
+	if ok {
+		if count > 100 {
+			this.locker.Unlock()
+			return nil,errors.New("init not complete")
+		}else{
+			this.clentGetting[addr]+=1
+		}
+		this.locker.Unlock()
+		time.Sleep(time.Millisecond*100)
+		goto a
+	}else{
+		this.clentGetting[addr]= 0
 	}
+	this.locker.Unlock()
+
+	defer func() {
+		this.locker.Lock()
+		delete(this.clentGetting, addr)
+		this.locker.Unlock()
+	}()
+
 	client,err:= this.ConnectToNode(addr,this.clientCallback)
-		if err!=nil {
+	if err!=nil {
 		return nil,err
 	}
 	this.rpcClient.Store(addr,client)

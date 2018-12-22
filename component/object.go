@@ -40,12 +40,6 @@ func NewObject(names ...string) *Object {
 		writeLock:  &sync.Mutex{}}
 }
 
-func NewObjectWithComponent(component IComponent, names ...string) *Object {
-	o := NewObject(names...)
-	return o.AddComponent(component)
-
-}
-
 // Add a behaviour to a node
 func (o *Object) AddComponent(component IComponent) *Object {
 	info := newComponentInfo(component, o)
@@ -118,6 +112,36 @@ func (o *Object) RemoveComponentsByType(t reflect.Type) {
 		return nil
 	})
 	logger.Error(err)
+}
+
+func (o *Object) AddObjectWithComponent(object *Object,component IComponent) error {
+ 	err:=o.AddObject(object)
+	if err!=nil {
+		return  err
+	}
+ 	object.AddComponent(component)
+	return nil
+}
+
+func (o *Object) AddObjectWithComponents(object *Object,components []IComponent) error {
+	err:=o.AddObject(object)
+	if err!=nil {
+		return  err
+	}
+	for _, component:= range components {
+		object.AddComponent(component)
+	}
+	return nil
+}
+
+func (o *Object) AddNewObjectWithComponent(component IComponent)(*Object,error) {
+	obj:=NewObject("")
+	return obj, o.AddObjectWithComponent(obj,component)
+}
+
+func (o *Object) AddNewbjectWithComponents(components []IComponent)(*Object,error){
+	obj:=NewObject("")
+	return obj, o.AddObjectWithComponents(obj,components)
 }
 
 // Add a child object

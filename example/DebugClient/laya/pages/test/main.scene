@@ -2,11 +2,11 @@
     "x":0,
     "type":"Scene",
     "selectedBox":26,
-    "selecteID":20,
+    "selecteID":31,
     "searchKey":"Scene,mainSecene",
     "props":{"width":1136,"sceneColor":"#000000","runtime":"script/NetTest.ts","name":"mainSecene","height":640},
     "nodeParent":-1,
-    "maxID":31,
+    "maxID":33,
     "label":"mainSecene",
     "isOpen":true,
     "isDirectory":true,
@@ -207,6 +207,37 @@
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":30,
+                    "child":[
+                        ],
+                    "$LOCKED":false
+                },
+                {
+                    "x":30,
+                    "type":"TextInput",
+                    "searchKey":"TextInput,textinput2,requestCount",
+                    "props":{"y":146,"x":972,"width":87,"var":"requestCount","text":"100","skin":"comp/textinput.png","name":"textinput2","height":37,"fontSize":18},
+                    "nodeParent":26,
+                    "label":"textinput2",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":31,
+                    "child":[
+                        ],
+                    "$LOCKED":false
+                },
+                {
+                    "x":30,
+                    "type":"Button",
+                    "searchKey":"Button,btn_requestn",
+                    "props":{"y":204,"x":972,"width":87,"var":"btn_requestn","skin":"comp/button.png","labelSize":18,"label":"连续请求","height":32},
+                    "nodeParent":26,
+                    "label":"btn_requestn",
+                    "isOpen":true,
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":32,
                     "child":[
                         ],
                     "$LOCKED":false

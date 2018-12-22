@@ -159,7 +159,6 @@ func (this *ActorComponent) dispatch() {
 			default:
 
 			}
-
 		}
 	}
 }

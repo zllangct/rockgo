@@ -81,6 +81,11 @@ func (h *websocketHandler) Listen() error {
 			h.conf.OnClientConnected(sess)
 		}
 		h.recv(sess, conn)
+
+		sess.locker.Lock()
+		sess.conn=nil
+		sess.locker.Unlock()
+
 		if h.conf.OnClientDisconnected!=nil{
 			h.conf.OnClientDisconnected(sess)
 		}
@@ -108,7 +113,7 @@ func (h *websocketHandler) recv(sess *Session,conn *websocket.Conn) {
 	sess.SetProperty("workerID",-1)
 
 	for !h.ts.isClosed {
-		_, message, err := conn.ReadMessage()
+		t, message, err := conn.ReadMessage()
 		if err != nil {
 			logger.Error(fmt.Sprintf("Close connection %s: %v", h.conf.Address, err))
 			return
@@ -130,7 +135,9 @@ func (h *websocketHandler) recv(sess *Session,conn *websocket.Conn) {
 			mid,data:= h.conf.PackageProtocol.ParseMessage(ctx,message)
 			h.ts.invoke(ctx,mid[0],data)
 		}
-
+		if message ==nil {
+			logger.Error(t)
+		}
 		cfg := h.conf
 		if cfg.MaxInvoke > 0 { // use goroutine pool
 			if h.gpool == nil {
