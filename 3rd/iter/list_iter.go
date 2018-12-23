@@ -2,7 +2,6 @@ package iter
 
 import (
 	"container/list"
-	"github.com/zllangct/RockGO/3rd/errors"
 )
 
 // ListIter implements Iterator for list.List
@@ -30,7 +29,7 @@ func (iterator *ListIter) Next() (interface{}, error) {
 	}
 
 	if iterator.cursor == nil {
-		iterator.err = errors.Fail(ErrEndIteration{}, nil, "No more values")
+		iterator.err = ErrEndIteration
 		return nil, iterator.err
 	}
 

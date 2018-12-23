@@ -2,7 +2,6 @@ package iter
 
 import (
 	"container/list"
-	"github.com/zllangct/RockGO/3rd/errors"
 )
 
 // JoinIter is a chained list of iterators that can be enumerated as a single sequence.
@@ -38,7 +37,7 @@ func (iterator *JoinIter) nextIterator() (Iter, error) {
 	}
 
 	if iterator.cursor == nil {
-		return nil, errors.Fail(ErrEndIteration{}, nil, "No more iterators")
+		return nil, ErrEndIteration
 	}
 
 	next := iterator.cursor.Value.(Iter)
@@ -59,7 +58,7 @@ func (iterator *JoinIter) nextValue() (interface{}, error) {
 
 	value, err := iterator.current.Next()
 	if err != nil {
-		if errors.Is(err, ErrEndIteration{}) {
+		if err == ErrEndIteration {
 			iterator.current = nil
 			value, err = iterator.nextValue()
 			if err != nil {

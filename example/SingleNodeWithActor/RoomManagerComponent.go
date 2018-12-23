@@ -30,7 +30,7 @@ func (this *RoomManagerComponent) MessageHandlers() map[string]func(message *Act
 func (this *RoomManagerComponent)NewRoom(message *Actor.ActorMessageInfo)  {
 	c:=&Actor.ActorComponent{}
 	r:=&RoomComponent{}
-	_,err:=this.Parent.AddNewbjectWithComponents([]Component.IComponent{c,r})
+	_,err:=this.Parent().AddNewbjectWithComponents([]Component.IComponent{c,r})
 	if err!=nil {
 		message.CallError(err)
 	}

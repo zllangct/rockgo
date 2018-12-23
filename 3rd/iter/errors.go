@@ -1,5 +1,6 @@
 package iter
 
+import "errors"
+
 // ErrEndIteration is raised when an iterator is out of values.
-type ErrEndIteration struct {
-}
+var ErrEndIteration =errors.New("iterator is out of values")

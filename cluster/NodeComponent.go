@@ -34,7 +34,7 @@ type NodeComponent struct {
 
 func (this *NodeComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
 	requires:=make(map[*Component.Object][]reflect.Type)
-	requires[this.Parent.Root()] = []reflect.Type{
+	requires[this.Parent().Root()] = []reflect.Type{
 		reflect.TypeOf(&Config.ConfigComponent{}),
 	}
 	return requires

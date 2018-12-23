@@ -4,7 +4,6 @@ import (
 	"reflect"
 	"fmt"
 	"strings"
-	"github.com/zllangct/RockGO/3rd/errors"
 )
 // ComponentProvider maps between component instances and component templates
 type ComponentProvider interface {
@@ -91,15 +90,15 @@ func (factory *ObjectFactory) deserializeComponent(template *ComponentTemplate) 
 			return component, nil
 		}
 	}
-	return nil, errors.Fail(ErrUnknownComponent{}, nil, fmt.Sprintf("IComponent type %s is not registered with the factory", template.Type))
+	return nil, ErrUnknownComponent
 }
 
 // serializeComponent converts a component into a template
-func (factory *ObjectFactory) serializeComponent(component *componentInfo) (*ComponentTemplate, error) {
+func (factory *ObjectFactory) serializeComponent(component IComponent) (*ComponentTemplate, error) {
 	template := &ComponentTemplate{
-		Type: typeName(component.Type)}
-	if component.Persist != nil {
-		data, err := component.Persist.Serialize()
+		Type: typeName(component.Type())}
+	if persist,ok:=component.(IPersist);ok{
+		data, err := persist.Serialize()
 		if err != nil {
 			return nil, err
 		}

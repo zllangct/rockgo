@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/zllangct/RockGO/logger"
 	"sync"
+	"time"
 
 	"github.com/zllangct/RockGO/3rd/iter"
 	"github.com/zllangct/RockGO/3rd/threadpool"
@@ -17,10 +18,13 @@ type Config struct {
 }
 
 type Runtime struct {
+	locker     *sync.RWMutex
 	root       *Object
 	workers    *threadpool.ThreadPool
 	updateLock *sync.Mutex
 	factory    *ObjectFactory
+	innerSystems    []ISystem
+	customSystems   []ISystem
 }
 
 func NewRuntime(config Config) *Runtime {
@@ -29,12 +33,107 @@ func NewRuntime(config Config) *Runtime {
 		root:       NewObject("runtime"),
 		updateLock: &sync.Mutex{},
 		workers:    threadpool.New(),
-		factory:    config.Factory}
+		factory:    config.Factory,
+		innerSystems:[]ISystem{&AwakeSystem{},&StartSystem{},&UpdateSystem{},&DestroySystem{}},
+		locker:&sync.RWMutex{},
+	}
 	runtime.root.runtime = runtime
 	runtime.workers.MaxThreads = config.ThreadPoolSize
+	for _, s := range runtime.innerSystems {
+		s.Init(runtime)
+	}
 	return runtime
 }
 
+func (this *Runtime)UpdateFrameByInterval(duration time.Duration) chan<- struct{} {
+	shutdown:=make(chan struct{})
+	c:=time.Tick(duration)
+	go func() {
+		ticking:=false
+		for{
+			select {
+			case <-shutdown:
+				return
+			case <-c:
+				if ticking {
+					continue
+				}
+				//上一帧还未执行完毕时，跳过一帧，避免帧滚雪球
+				ticking =true
+				this.UpdateFrame()
+				ticking =false
+			}
+		}
+	}()
+	return shutdown
+}
+
+func (this *Runtime)UpdateFrame()  {
+	this.locker.RLock()
+	defer this.locker.RUnlock()
+	//内部系统间是有序的,awake->start->update->destroy
+	for _, s := range this.innerSystems {
+		s.UpdateFrame()
+	}
+	//自定义系统整体顺序在内部系统之后,是否需要同系统独立执行，在updateFrame接口实现
+	for _, s := range this.customSystems {
+		s.UpdateFrame()
+	}
+}
+
+//注册自定义system
+func (this *Runtime)RegisterSystem(system ISystem)  {
+	this.locker.Lock()
+	defer this.locker.Unlock()
+	//过滤重复系统
+	for _, s := range this.customSystems {
+		if s.Name() == system.Name() {
+			return
+		}
+	}
+	this.customSystems= append(this.customSystems, system)
+}
+
+func (this *Runtime)SystemFilter(component IComponent)  {
+	this.locker.RLock()
+	defer this.locker.RUnlock()
+
+	for _, ss := range this.innerSystems {
+		ss.Filter(component)
+	}
+	for _, ss := range this.customSystems {
+		ss.Filter(component)
+	}
+}
+
+func (this *Runtime)SystemOperate(name string,op int,component IComponent)error{
+	this.locker.RLock()
+	defer this.locker.RUnlock()
+
+	var s ISystem
+	var ok bool
+	for _, value := range this.innerSystems {
+		if value.Name() == name {
+			s=value
+			ok=true
+		}
+	}
+	if !ok {
+		for _, value := range this.customSystems {
+			if value.Name() == name {
+				s= value
+				ok=true
+			}
+		}
+	}
+	if ok && s !=nil{
+		s.IndependentFilter(op,component)
+		return nil
+	}
+	return errors.New("system not found")
+}
+
+//----------------------------------------------------------------------------------------------------
 func validateConfig(config *Config) {
 	if config.ThreadPoolSize <= 0 {
 		config.ThreadPoolSize = 10
@@ -60,6 +159,7 @@ func (runtime *Runtime)SetMaxThread(maxThread int){
 	}
 }
 
+
 func (runtime *Runtime) Extract(object *Object) (*ObjectTemplate, error) {
 	rtn, err := runtime.factory.Serialize(object)
 	if err != nil {
@@ -72,6 +172,7 @@ func (runtime *Runtime) Extract(object *Object) (*ObjectTemplate, error) {
 	}
 	return rtn, nil
 }
+
 
 func (runtime *Runtime) Insert(template *ObjectTemplate, parent *Object) (*Object, error) {
 	rtn, err := runtime.factory.Deserialize(template)
@@ -105,29 +206,4 @@ func (runtime *Runtime) ScheduleTask(task func()) {
 		task()
 		defer runtime.updateLock.Unlock()
 	})()
-}
-
-func (runtime *Runtime) Update(step float32) {
-	runtime.updateLock.Lock()
-	defer runtime.updateLock.Unlock()
-	runtime.updateObject(step, runtime.root)
-	objects := runtime.Objects()
-	if objects != nil {
-		var val interface{}
-		var err error
-		for val, err = objects.Next(); err == nil; val, err = objects.Next() {
-			obj := val.(*Object)
-			runtime.updateObject(step, obj)
-		}
-		runtime.workers.Wait()
-	}
-}
-
-func (runtime *Runtime) updateObject(step float32, obj *Object) {
-	runtime.workers.Run(func() {
-		if obj.runtime == nil {
-			obj.runtime = runtime
-		}
-		obj.Update(step, runtime)
-	})
 }

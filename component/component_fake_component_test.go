@@ -1,21 +1,16 @@
 package Component_test
 
 import (
-	"reflect"
 	"fmt"
-	"strings"
+	"github.com/zllangct/RockGO"
 	"strconv"
-	"github.com/zllangct/RockGO/component"
-	"github.com/zllangct/RockGO/3rd/errors"
+	"strings"
 )
 
 type FakeComponent struct {
+	Component.Base
 	Id    string
 	Count int
-}
-
-func (fake *FakeComponent) Type() reflect.Type {
-	return reflect.TypeOf(fake)
 }
 
 func (fake *FakeComponent) Update(_ *Component.Context) {
@@ -43,7 +38,7 @@ func (fake *FakeComponent) Deserialize(raw interface{}) error {
 	if len(data) > 0 {
 		parts := strings.Split(data, ",")
 		if len(parts) != 2 {
-			return errors.Fail(Component.ErrBadValue{}, nil, "Bad component data")
+			return Component.ErrBadValue
 		}
 		fake.Id = parts[0]
 		count, err := strconv.Atoi(parts[1])

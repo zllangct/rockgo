@@ -1,9 +1,8 @@
 package Component
 
 import (
-	errors2 "errors"
+	"errors"
 	"fmt"
-	"github.com/zllangct/RockGO/3rd/errors"
 	"github.com/zllangct/RockGO/3rd/iter"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils/UUID"
@@ -13,19 +12,17 @@ import (
 	"sync"
 )
 
-// Node is a game object type.
 type Object struct {
 	id         string
 	name       string
 	runtime    *Runtime
-	components []*componentInfo // The set of components attached to this node
-	children   []*Object        // The set of child objects attached to this node
+	components []IComponent
+	children   []*Object
 	parent     *Object
-	writeLock  *sync.Mutex
-	locked     bool
+	locker     *sync.RWMutex
 }
 
-// New returns a new Node
+// 新建一个实体对象
 func NewObject(names ...string) *Object {
 	name := ""
 	if len(names) > 0 {
@@ -35,41 +32,43 @@ func NewObject(names ...string) *Object {
 		id:         UUID.Next(),
 		name:       name,
 		runtime:    nil,
-		components: make([]*componentInfo, 0),
+		components: make([]IComponent, 0),
 		children:   make([]*Object, 0),
-		writeLock:  &sync.Mutex{}}
+		locker:     &sync.RWMutex{}}
 }
 
-// Add a behaviour to a node
+
+
+//添加组件
 func (o *Object) AddComponent(component IComponent) *Object {
-	info := newComponentInfo(component, o)
+	component.Init(reflect.TypeOf(component),o.Runtime(),o)
 	err := o.WithLock(func() error {
-		if info.Unique != nil {
-			switch info.Unique.IsUnique() {
+		if unique,ok:=component.(IUnique);ok{
+			switch unique.IsUnique() {
 			case UNIQUE_TYPE_GLOBAL:
 				_, err := o.Root().GetComponentsInChildren(reflect.TypeOf(component)).Next()
 				if err == nil {
-					return errors.Fail(ErrUniqueComponent{}, nil, "This component is unique global,one object already has a same component")
+					return ErrUniqueComponent
 				}
 			case UNIQUE_TYPE_LOCAL:
 				if o.HasComponent(reflect.TypeOf(component)) {
-					return errors.Fail(ErrUniqueComponent{}, nil, "This component is unique,this object already has a same component")
+					return ErrUniqueComponent
 				}
 			}
 		}
-		if info.Require != nil {
-			for obj, requires := range info.Require.GetRequire() {
+		if require,ok:=component.(IRequire);ok{
+			for obj, requires := range require.GetRequire() {
 				for _, require := range requires {
 					if !obj.HasComponent(require) {
-						return errors.Fail(ErrMissingComponent{}, nil, "This component require other components,some are missing")
+						return ErrMissingComponent
 					}
 				}
 			}
 		}
-		o.components = append(o.components, info)
-		if info.Awake != nil {
-			info.Active += 1
-			return info.Awake.Awake()
+		o.components = append(o.components, component)
+		runtime:= o._runtime()
+		if runtime != nil{
+			runtime.SystemFilter(component)
 		}
 		return nil
 	})
@@ -79,12 +78,12 @@ func (o *Object) AddComponent(component IComponent) *Object {
 	return o
 }
 
-// remove the first component finded
+//移除找到的第一个对应组件
 func (o *Object) RemoveComponent(component IComponent) {
 	err := o.WithLock(func() error {
 		index := -1
 		for i, v := range o.components {
-			if v.Component == component {
+			if v == component {
 				index = i
 				break
 			}
@@ -92,20 +91,42 @@ func (o *Object) RemoveComponent(component IComponent) {
 		if index != -1 {
 			o.components = append(o.components[:index], o.components[index+1:]...)
 		}
+		runtime:=o.runtime
+		if runtime ==nil{
+			return errors.New("this object has no runtime")
+		}
+		err:=runtime.SystemOperate("update",SYSTEM_OP_UPDATE_REMOVE,component)
+		if err!=nil {
+			logger.Error(err)
+		}
+		err=runtime.SystemOperate("destroy",SYSTEM_OP_DESTROY_ADD,component)
+		if err!=nil {
+			logger.Error(err)
+		}
 		return nil
 	})
-	logger.Error(err)
+	if err!=nil{
+		logger.Error(err)
+	}
 }
 
-//remove all components
+//移除该类型的所有组件
 func (o *Object) RemoveComponentsByType(t reflect.Type) {
 	err := o.WithLock(func() error {
-		for i := 0; i < len(o.components); i++ {
-		A:
-			if o.components[i].Type == t {
-				o.components = append(o.components[:i], o.components[i+1:]...)
-				if i < len(o.components) {
-					goto A
+		for index, component := range o.components {
+			if component.Type() == t {
+				o.components = append(o.components[:index], o.components[index+1:]...)
+				runtime:=o.Runtime()
+				if runtime ==nil{
+					return errors.New("this object has no runtime")
+				}
+				err:=runtime.SystemOperate("update",SYSTEM_OP_UPDATE_REMOVE,component)
+				if err!=nil {
+					logger.Error(err)
+				}
+				err=runtime.SystemOperate("destroy",SYSTEM_OP_DESTROY_ADD,component)
+				if err!=nil {
+					logger.Error(err)
 				}
 			}
 		}
@@ -134,32 +155,29 @@ func (o *Object) AddObjectWithComponents(object *Object,components []IComponent)
 	return nil
 }
 
-func (o *Object) AddNewObjectWithComponent(component IComponent)(*Object,error) {
-	obj:=NewObject("")
+func (o *Object) AddNewObjectWithComponent(component IComponent,name ...string)(*Object,error) {
+	obj:=NewObject(name...)
 	return obj, o.AddObjectWithComponent(obj,component)
 }
 
-func (o *Object) AddNewbjectWithComponents(components []IComponent)(*Object,error){
-	obj:=NewObject("")
+func (o *Object) AddNewbjectWithComponents(components []IComponent,name ...string)(*Object,error){
+	obj:=NewObject(name...)
 	return obj, o.AddObjectWithComponents(obj,components)
 }
 
-// Add a child object
+//添加子对象
 func (o *Object) AddObject(object *Object) error {
 	var err error
-	err = object.Move(nil)
-	if err != nil {
-		return err
+	if object.Parent() != nil {
+		return ErrBadObject
 	}
 	err = o.WithLock(func() error {
 		if o == object || o.HasParent(object) {
-			return errors.Fail(ErrBadObject{}, nil, "Circular object references are not permitted")
+			return ErrBadObject
 		} else {
 			// Move the object into the new parent 'o'; this will lock the child and the old parent.
-			err := object.Move(o)
-			if err != nil {
-				return err
-			}
+			object.parent=o
+			object.runtime=o.runtime
 			// Now assign a new reference to this object
 			o.children = append(o.children, object)
 		}
@@ -167,52 +185,59 @@ func (o *Object) AddObject(object *Object) error {
 	})
 	return err
 }
-
-// Move the object into a new parent object, which may also be nil
-func (o *Object) Move(parent *Object) (err error) {
-	oldParent := o.Parent()
-	if oldParent != nil {
-		if err = oldParent.RemoveObject(o); err != nil {
-			return
-		}
-	}
-	err = o.WithLock(func() error {
-		o.parent = parent
-		if parent != nil {
-			o.runtime = parent.runtime // see Runtime()
-		}
-		return nil
-	})
-	return
+//释放所有引用
+func (o *Object) _dispose(){
+	o.name=""
+	o.runtime=nil
+	o.components=nil
+	o.children=nil
 }
 
-func (o *Object) Destroy() (err error){
-	err= o.WithLock(func() error {
-		for _, cpt := range o.components {
-			if cpt.Destroy != nil {
-				err:=cpt.Destroy.Destroy()
-				if err!=nil {
-					logger.Error(err)
-				}
+//销毁实体本身及其子对象，无法解除父对象对自己的引用
+func (o *Object) _destroy() {
+	err:= o.WithLock(func() error {
+		for _, component := range o.components {
+			runtime:=o.runtime
+			if runtime ==nil{
+				continue
 			}
-		}
-		o.parent = nil
-		o.runtime = nil
-		for _, child := range o.children {
-			err:=child.Destroy()
+			err:=runtime.SystemOperate("update",SYSTEM_OP_UPDATE_REMOVE,component)
+			if err!=nil {
+				logger.Error(err)
+			}
+			err=runtime.SystemOperate("destroy",SYSTEM_OP_DESTROY_ADD,component)
 			if err!=nil {
 				logger.Error(err)
 			}
 		}
+		for _, child := range o.children {
+			child._destroy()
+		}
+		o._dispose()
 		return nil
 	})
-	return err
+	if err!=nil {
+		logger.Error(err)
+	}
 }
 
-// Remove a child object
+// 销毁实体
+func (o *Object) Destroy() (err error) {
+	p:=o.Parent()
+	if  p!=nil {
+		err=p.RemoveObject(o)
+		if err != nil && err == ErrNoThisChild {}else{
+			return
+		}
+	}
+	o._destroy()
+	return
+}
+
+// 移除实体
 func (o *Object) RemoveObject(object *Object) (err error) {
 	if o == object {
-		err = errors.Fail(ErrBadObject{}, nil, "Cannot remove object from itself")
+		err = ErrBadObject
 		return
 	}
 	err = o.WithLock(func() error {
@@ -223,16 +248,17 @@ func (o *Object) RemoveObject(object *Object) (err error) {
 				break
 			}
 		}
-		if offset >= 0 {
-			o.children = append(o.children[:offset], o.children[offset+1:]...)
+		if offset < 0 {
+			return nil
 		}
-		err=object.Destroy()
-		return err
+		o.children = append(o.children[:offset], o.children[offset+1:]...)
+		object._destroy()
+		return nil
 	})
 	return
 }
 
-// Check if an object has a parent
+// 判断实体是否有父节点
 func (o *Object) HasParent(object *Object) bool {
 	root := o
 	for root != nil {
@@ -244,12 +270,12 @@ func (o *Object) HasParent(object *Object) bool {
 	return false
 }
 
-// Return the parent of this object
+// 获取实体父节点
 func (o *Object) Parent() *Object {
 	return o.parent
 }
 
-// Return the root object in the current object tree
+// 获取实体根节点
 func (o *Object) Root() *Object {
 	i := o
 	for {
@@ -272,16 +298,17 @@ func (o *Object) ObjectsInChildren() iter.Iter {
 	return fromObject(o, true)
 }
 
-// GetComponents returns an iterator of all components matching the given type.
+// 获取实体对应类型组件，当T为nil时匹配所有对象
 func (o *Object) GetComponents(T reflect.Type) iter.Iter {
 	return fromComponentArray(&o.components, T)
 }
 
+//获取所有组件
 func (o *Object) AllComponents() iter.Iter {
 	return fromComponentArray(&o.components, nil)
 }
 
-// GetComponentsInChildren returns an iterator of all components matching the given type in all children.
+//获取子对象中所对应的组件，当T为nil时匹配所有对象
 func (o *Object) GetComponentsInChildren(T reflect.Type) iter.Iter {
 	cIter := fromComponentArray(nil, T)
 	objIter := o.ObjectsInChildren()
@@ -296,45 +323,12 @@ func (o *Object) GetComponentsInChildren(T reflect.Type) iter.Iter {
 	return cIter
 }
 
-// IUpdate all components in this object
-func (o *Object) Update(step float32, runtime ...*Runtime) {
-	activeRuntime := o.runtime
-	if len(runtime) > 0 {
-		activeRuntime = runtime[0]
-	}
-	clone := o.components
-	context := o.NewContext(step, activeRuntime)
-	for i := 0; i < len(clone); i++ {
-		clone[i].updateComponent(step, activeRuntime, context)
-	}
-}
-
-// Return a context for an object
-func (o *Object) NewContext(delta float32, runtime ...*Runtime) *Context {
-	activeRuntime := o.runtime
-	if len(runtime) > 0 {
-		activeRuntime = runtime[0]
-	}
-	return &Context{
-		Object:    o,
-		DeltaTime: delta,
-		Runtime:   activeRuntime,
-	}
-}
-
-// Extend an existing iterator with more objects
-func (o *Object) addChildren(iterator *ObjectIter) {
-	if len(o.children) > 0 {
-		iterator.values.PushBack(&o.children)
-	}
-}
-
-// Return the name for this object.
 func (o *Object) Name() string {
+	o.locker.RLock()
+	defer o.locker.RUnlock()
 	return o.name
 }
 
-// Rename the object
 func (o *Object) Rename(name string) {
 	err := o.WithLock(func() error {
 		o.name = name
@@ -343,17 +337,15 @@ func (o *Object) Rename(name string) {
 	logger.Error(err)
 }
 
-// Return the unique id of this object.
 func (o *Object) ID() string {
+	o.locker.RLock()
+	defer o.locker.RUnlock()
 	return o.id
 }
 
-// Find returns the first matching component on the object tree given by the name sequence or nil
-// component should be a pointer to store the output component into.
-// eg. If *FakeComponent implements IComponent, pass **FakeComponent to Find.
+//查找组件，component为要查询组件的指针，query 查询条件为实体名
 func (o *Object) Find(component interface{}, query ...string) error {
 	componentType := reflect.TypeOf(component).Elem()
-
 	obj := o
 	var err error
 	if len(query) != 0 {
@@ -372,6 +364,7 @@ func (o *Object) Find(component interface{}, query ...string) error {
 	return nil
 }
 
+//实体是否拥有该组件
 func (o *Object) HasComponent(componentType reflect.Type) bool {
 	_, err := o.GetComponents(componentType).Next()
 	if err != nil {
@@ -380,7 +373,14 @@ func (o *Object) HasComponent(componentType reflect.Type) bool {
 	return true
 }
 
+//获取运行时
 func (o *Object) Runtime() *Runtime {
+	o.locker.RLock()
+	defer o.locker.RUnlock()
+
+	return o._runtime()
+}
+func (o *Object) _runtime() *Runtime {
 	if o.runtime != nil {
 		return o.runtime
 	}
@@ -395,10 +395,10 @@ func (o *Object) Runtime() *Runtime {
 	return nil
 }
 
-// FindObject returns the first matching child object on the object tree given by the name sequence or nil
+//查找实体
 func (o *Object) FindObject(query ...string) (*Object, error) {
 	if len(query) == 0 {
-		return nil, errors.Fail(ErrBadValue{}, nil, "Invalid query length of zero")
+		return nil,ErrBadValue
 	}
 
 	cursor := o
@@ -422,16 +422,17 @@ func (o *Object) FindObject(query ...string) (*Object, error) {
 	return rtn, nil
 }
 
+//获取实体，通过实体名
 func (o *Object) GetObject(name string) (*Object, error) {
 	for i := 0; i < len(o.children); i++ {
 		if o.children[i].name == name {
 			return o.children[i], nil
 		}
 	}
-	return nil, errors.Fail(ErrNoMatch{}, nil, fmt.Sprintf("No match for object '%s' on parent '%s'", name, o.name))
+	return nil, ErrNoMatch
 }
 
-// HasObject is a single return value test for named object existence.
+//判断是否有该实体
 func (o *Object) HasObject(name string) bool {
 	for i := 0; i < len(o.children); i++ {
 		if o.children[i].name == name {
@@ -441,7 +442,6 @@ func (o *Object) HasObject(name string) bool {
 	return false
 }
 
-// Debug prints out a summary of the object and its components
 func (o *Object) Debug(indents ...int) string {
 	indent := 0
 	if len(indents) > 0 {
@@ -456,7 +456,7 @@ func (o *Object) Debug(indents ...int) string {
 	rtn := fmt.Sprintf("object: %s (%d / %d)\n", name, len(o.children), len(o.components))
 	if len(o.components) > 0 {
 		for i := 0; i < len(o.components); i++ {
-			rtn += fmt.Sprintf("! %s\n", typeName(o.components[i].Type))
+			rtn += fmt.Sprintf("! %s\n", typeName(o.components[i].Type()))
 		}
 	}
 
@@ -485,7 +485,6 @@ func (o *Object) Debug(indents ...int) string {
 	return output
 }
 
-// Lock allows you to safely perform some action without worrying about sync issues.
 func (o *Object) WithLock(action func() error) (err error) {
 	defer (func() {
 		if r := recover(); r != nil {
@@ -496,17 +495,12 @@ func (o *Object) WithLock(action func() error) (err error) {
 			case string:
 				str = r.(string)
 			}
-			err = errors2.New(str+ string(debug.Stack()))
+			err = errors.New(str+ string(debug.Stack()))
 		}
-		o.locked = false
-		o.writeLock.Unlock()
+		o.locker.Unlock()
 	})()
 
-	// fmt.Printf("Lock: %s\n", o.name)
-	// debug.PrintStack()
-
-	o.writeLock.Lock()
-	o.locked = true
+	o.locker.Lock()
 	err = action()
 	return err
 }

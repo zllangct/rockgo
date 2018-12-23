@@ -1,7 +1,6 @@
 package Component
 
 import (
-	"log"
 	"reflect"
 )
 
@@ -13,7 +12,10 @@ const (
 )
 
 type IComponent interface {
+	Init(typ reflect.Type,runtime *Runtime,parent *Object)
 	Type() reflect.Type
+	Runtime()*Runtime
+	Parent()*Object
 }
 
 type IUnique interface {
@@ -29,48 +31,32 @@ type IPersist interface {
 	Deserialize(data interface{}) error
 }
 
-type IAwake interface {
-	Awake() error
-}
-
-type IStart interface {
-	Start(context *Context)
-}
-
-type IUpdate interface {
-	Update(context *Context)
-}
-
-type IDestroy interface {
-	Destroy()error
-}
-
 type Context struct {
-	Object    *Object     // The object the component is attached to.
-	DeltaTime float32     // The delta step in global time for the update.
-	Logger    *log.Logger // The runtime logger.
+	Object    *Object
+	DeltaTime float32
 	Runtime   *Runtime
 }
 
-
-type IComponentBase interface {
-	Init(parent *Object,t reflect.Type)
-}
-
 type Base struct {
-	Parent *Object
-	t reflect.Type
+	parent  *Object
+	runtime *Runtime
+	typ     reflect.Type
 }
 
-func (this *Base)Init(parent *Object,t reflect.Type)  {
-	this.Parent=parent
-	this.t=t
-}
-
-func (this *Base)GetParent()*Object  {
-	return this.Parent
+func (this *Base)Init(typ reflect.Type,runtime *Runtime,parent *Object)  {
+	this.typ =typ
+	this.runtime =runtime
+	this.parent=parent
 }
 
 func (this *Base) Type() reflect.Type {
-	return this.t
+	return this.typ
+}
+
+func (this *Base)Runtime()*Runtime  {
+	return this.runtime
+}
+
+func (this *Base)Parent()*Object  {
+	return this.parent
 }

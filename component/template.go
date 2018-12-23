@@ -2,7 +2,7 @@ package Component
 
 import (
 	"encoding/json"
-	"github.com/zllangct/RockGO/3rd/errors"
+	"errors"
 	"runtime/debug"
 )
 
@@ -43,13 +43,13 @@ func ObjectTemplateAsJson(template *ObjectTemplate) ([]byte, error) {
 func SerializeState(state interface{}) (map[string]interface{}, error) {
 	bytes, err := json.Marshal(state)
 	if err != nil {
-		return nil, errors.Fail(ErrBadValue{}, err, "Failed to re-encode data")
+		return nil, ErrBadValue
 	}
 
 	var placeholder interface{}
 	err = json.Unmarshal(bytes, &placeholder)
 	if err != nil {
-		return nil, errors.Fail(ErrBadValue{}, err, "Failed to decode data")
+		return nil, ErrBadValue
 	}
 
 	return placeholder.(map[string]interface{}), nil
@@ -67,27 +67,27 @@ func DeserializeState(target interface{}, raw interface{}) (err error) {
 			case string:
 				str = r.(string)
 			}
-			err = errors.Data(str+ string(debug.Stack()))
+			err = errors.New(str+ string(debug.Stack()))
 
 		}
 	})()
 	if raw == nil {
-		return errors.Fail(ErrNullValue{}, nil, "No data (null)")
+		return ErrNullValue
 	}
 	if target == nil {
-		return errors.Fail(ErrNullValue{}, nil, "No target (null)")
+		return ErrNullValue
 	}
 
 	value := raw.(map[string]interface{})
 
 	bytes, err := json.Marshal(value)
 	if err != nil {
-		return errors.Fail(ErrBadValue{}, err, "Failed to re-encode data")
+		return ErrBadValue
 	}
 
 	err = json.Unmarshal(bytes, target)
 	if err != nil {
-		return errors.Fail(ErrBadValue{}, err, "Failed to decode data")
+		return ErrBadValue
 	}
 
 	return nil

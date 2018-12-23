@@ -26,7 +26,7 @@ func (this *RoomComponent)Enter(player *Player) ([]interface{}, error) {
 
 func (this *RoomComponent)Actor() (Actor.IActor,error) {
 	if this.actor==nil{
-		err:= this.Parent.Find(this.actor)
+		err:= this.Parent().Find(this.actor)
 		if err!=nil {
 			return nil,err
 		}

@@ -37,7 +37,7 @@ type ActorComponent struct {
 func (this *ActorComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
 	requires:=make(map[*Component.Object][]reflect.Type)
 	//添加该组件需要根节点拥有ActorProxyComponent,ConfigComponent组件
-	requires[this.Parent.Root()] = []reflect.Type{
+	requires[this.Runtime().Root()] = []reflect.Type{
 		reflect.TypeOf(&Config.ConfigComponent{}),
 		reflect.TypeOf(&ActorProxyComponent{}),
 	}
@@ -56,7 +56,7 @@ func (this *ActorComponent) Awake()error {
 		this.ActorType = ACTOR_TYPE_ASYNC
 	}
 	//初始化Actor代理
-	err := this.Parent.Runtime().Root().Find(&this.Proxy)
+	err := this.Runtime().Root().Find(&this.Proxy)
 	if err != nil {
 		return err
 	}
@@ -81,15 +81,14 @@ func (this *ActorComponent)UnregisterService(service string) error {
 	return this.Proxy.UnregisterService(this,service)
 }
 
-func (this *ActorComponent) Destroy()error {
+func (this *ActorComponent) Destroy(ctx *Component.Context) {
 	this.close <- true
 	//在ActorProxy取消注册
 	this.Proxy.Unregister(this)
-	return nil
 }
 
 func (this *ActorComponent)Start(ctx *Component.Context)  {
-	cps := this.Parent.AllComponents()
+	cps := this.Parent().AllComponents()
 	var err error = nil
 	var val interface{}
 	for val, err = cps.Next(); err == nil; val, err = cps.Next() {
@@ -164,7 +163,7 @@ func (this *ActorComponent) dispatch() {
 }
 
 func (this *ActorComponent)handle(messageInfo *ActorMessageInfo) {
-	cps := this.Parent.AllComponents()
+	cps := this.Parent().AllComponents()
 	var err error = nil
 	var val interface{}
 	for val, err = cps.Next(); err == nil; val, err = cps.Next() {

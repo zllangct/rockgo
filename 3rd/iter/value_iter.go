@@ -1,8 +1,6 @@
 package iter
 
-import (
-	"github.com/zllangct/RockGO/3rd/errors"
-)
+
 
 // ValueIter implements Iterator for an arbitrary single value
 type ValueIter struct {
@@ -18,7 +16,7 @@ func FromValue(value interface{}) *ValueIter {
 // Return the single item or raise an error
 func (iterator *ValueIter) Next() (interface{}, error) {
 	if iterator.end {
-		return nil, errors.Fail(ErrEndIteration{}, nil, "No more values")
+		return nil, ErrEndIteration
 	}
 	iterator.end = true
 	return iterator.value, nil

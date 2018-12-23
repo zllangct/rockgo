@@ -31,7 +31,7 @@ type ActorProxyComponent struct {
 func (this *ActorProxyComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
 	//添加该组件需要根节点拥有ActorProxyComponent,ConfigComponent组件
-	requires[this.Parent.Root()] = []reflect.Type{
+	requires[this.Runtime().Root()] = []reflect.Type{
 		reflect.TypeOf(&Config.ConfigComponent{}),
 	}
 	return requires
@@ -44,7 +44,7 @@ func (this *ActorProxyComponent) IsUnique() int {
 func (this *ActorProxyComponent) Awake() error {
 	this.nodeID = Config.Config.ClusterConfig.LocalAddress
 	this.isActorMode = Config.Config.ClusterConfig.IsActorModel
-	err := this.Parent.Root().Find(&this.nodeComponent)
+	err := this.Runtime().Root().Find(&this.nodeComponent)
 	if err != nil {
 		return err
 	}

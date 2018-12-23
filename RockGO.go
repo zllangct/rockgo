@@ -98,14 +98,7 @@ func (this *ServerNode) Serve(){
 		panic(err)
 	}
 
-	go func() {
-		var step float32=0
-		for {
-			step++
-			this.Runtime.Update(step)
-			time.Sleep(time.Millisecond * 100)
-		}
-	}()
+	go this.Runtime.UpdateFrameByInterval(time.Millisecond * 100)
 
 	c := make(chan os.Signal)
 	signal.Notify(c,syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)

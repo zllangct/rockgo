@@ -30,7 +30,7 @@ type LocationComponent struct {
 
 func (this *LocationComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
-	requires[this.Parent.Root()] = []reflect.Type{
+	requires[this.Runtime().Root()] = []reflect.Type{
 		reflect.TypeOf(&Config.ConfigComponent{}),
 		reflect.TypeOf(&NodeComponent{}),
 	}
@@ -39,7 +39,7 @@ func (this *LocationComponent) GetRequire() map[*Component.Object][]reflect.Type
 
 func (this *LocationComponent) Awake()error {
 	this.locker=&sync.RWMutex{}
-	err := this.Parent.Root().Find(&this.nodeComponent)
+	err := this.Parent().Root().Find(&this.nodeComponent)
 	if err != nil {
 		return err
 	}

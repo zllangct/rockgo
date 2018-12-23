@@ -28,21 +28,21 @@ func (this *DefaultGateComponent) IsUnique() int {
 
 func (this *DefaultGateComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
-	requires[this.Parent.Root()] = []reflect.Type{
+	requires[this.Parent().Root()] = []reflect.Type{
 		reflect.TypeOf(&Config.ConfigComponent{}),
 	}
 	return requires
 }
 
 func (this *DefaultGateComponent) Awake() error {
-	err := this.Parent.Root().Find(&this.nodeComponent)
+	err := this.Parent().Root().Find(&this.nodeComponent)
 	if err != nil {
 		return err
 	}
 	if this.NetAPI == nil {
 		panic(errors.New("NetAPI is necessity of defaultGateComponent"))
 	}
-	this.NetAPI.SetParent(this.Parent)
+	this.NetAPI.SetParent(this.Parent())
 	conf := &network.ServerConf{
 		Proto:                "ws",
 		PackageProtocol:      &network.TdProtocol{},

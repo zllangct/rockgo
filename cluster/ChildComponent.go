@@ -25,7 +25,7 @@ type ChildComponent struct {
 
 func (this *ChildComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
-	requires[this.Parent.Root()] = []reflect.Type{
+	requires[this.Parent().Root()] = []reflect.Type{
 		reflect.TypeOf(&Config.ConfigComponent{}),
 		reflect.TypeOf(&NodeComponent{}),
 	}
@@ -33,7 +33,7 @@ func (this *ChildComponent) GetRequire() map[*Component.Object][]reflect.Type {
 }
 
 func (this *ChildComponent) Awake() error {
-	err := this.Parent.Root().Find(&this.nodeComponent)
+	err := this.Parent().Root().Find(&this.nodeComponent)
 	if err != nil {
 		return err
 	}

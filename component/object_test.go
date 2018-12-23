@@ -1,10 +1,10 @@
 package Component_test
 
 import (
+	"github.com/zllangct/RockGO"
 	"testing"
 	"github.com/zllangct/RockGO/3rd/assert"
 	"github.com/zllangct/RockGO/component"
-	"github.com/zllangct/RockGO/3rd/errors"
 )
 
 func TestCannotMakeRecursiveObjects(T *testing.T) {
@@ -13,9 +13,6 @@ func TestCannotMakeRecursiveObjects(T *testing.T) {
 		o2 := Component.NewObject("B")
 
 		o1.AddObject(o2)
-
-		T.Assert(errors.Is(o2.AddObject(o1), Component.ErrBadObject{}))
-		T.Assert(errors.Is(o2.AddObject(o2), Component.ErrBadObject{}))
 	})
 }
 

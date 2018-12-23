@@ -2,6 +2,7 @@ package Component_test
 
 import (
 	"fmt"
+	"github.com/zllangct/RockGO"
 	"log"
 	"os"
 	"reflect"
@@ -20,6 +21,7 @@ import (
 // Add remove child adds a new child every second.
 // When it has 10 children, it removes itself.
 type AddRemoveChild struct {
+	Component.Base
 	parent  *Component.Object
 	count   int
 	elapsed float32
@@ -29,16 +31,11 @@ func (c *AddRemoveChild) New() Component.IComponent {
 	return &AddRemoveChild{}
 }
 
-func (c *AddRemoveChild) Type() reflect.Type {
-	return reflect.TypeOf(c)
-}
-
 func (c *AddRemoveChild) Attach(parent *Component.Object) {
 	c.parent = parent
 }
 
 func (c *AddRemoveChild) Update(context *Component.Context) {
-	context.Logger.Printf("IUpdate: %s", c.parent.Name())
 	c.elapsed += context.DeltaTime
 	if c.elapsed > 1.0 {
 		c.count += 1
@@ -57,6 +54,7 @@ func (c *AddRemoveChild) Update(context *Component.Context) {
 
 // DumpState dumps an object tree of the runtime every 1/2 seconds
 type DumpState struct {
+	Component.Base
 	elapsed float32
 }
 
@@ -64,27 +62,17 @@ func (c *DumpState) New() Component.IComponent {
 	return &DumpState{}
 }
 
-func (c *DumpState) Type() reflect.Type {
-	return reflect.TypeOf(c)
-}
-
 func (c *DumpState) Update(context *Component.Context) {
 	c.elapsed += context.DeltaTime
-	context.Logger.Printf("DumpState: %f", c.elapsed)
+
 	if c.elapsed >= 0.5 {
 		c.elapsed = 0.0
-		root := context.Object.Root()
-		structure := root.Debug()
-		context.Logger.Printf("Tree: %s", structure)
+		_ := context.Object.Root()
 	}
 }
 
 type Hello struct {
-
-}
-
-func (this *Hello) Type() reflect.Type {
-	return reflect.TypeOf(this)
+	Component.Base
 }
 
 func (this *Hello)Start(context *Component.Context)  {
@@ -119,7 +107,7 @@ func TestLargeObjects(T *testing.T){
 
 	t1:=time.Now()
 	for i := 0; i<1000;i++  {
-		runtime.Update(float32(i))
+		runtime.UpdateFrame()
 	}
 	elapsed1:=time.Since(t1)
 	println("component:",elapsed1)
@@ -193,7 +181,7 @@ func TestComplexSerialization(T *testing.T) {
 			println(err.Error())
 		}
 
-		runtime.Update(0.1)
+		runtime.UpdateFrame()
 
 		// Serialize o2 as an object template
 		marker, err := runtime.Root().FindObject("Container One")
@@ -261,7 +249,7 @@ func TestComplexRuntime(T *testing.T) {
 		runtime.Root().AddObject(o2)
 
 		for i := 0; i < 50; i++ {
-			runtime.Update(0.25)
+			runtime.UpdateFrame()
 		}
 
 		expectedOutput := strings.Trim(`

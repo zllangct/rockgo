@@ -4,7 +4,6 @@ import (
 
 	"container/list"
 	"github.com/zllangct/RockGO/3rd/iter"
-	"github.com/zllangct/RockGO/3rd/errors"
 )
 
 // ObjectIter implements Iterator for []Object
@@ -18,9 +17,9 @@ type ObjectIter struct {
 func fromObject(root *Object, decend bool) *ObjectIter {
 	rtn := &ObjectIter{values: list.New(), decend: decend}
 	if root == nil {
-		rtn.err = errors.Fail(ErrNullValue{}, nil, "Invalid root object")
+		rtn.err = ErrNullValue
 	} else if len(root.children) == 0 {
-		rtn.err = errors.Fail(iter.ErrEndIteration{}, nil, "No more values")
+		rtn.err = iter.ErrEndIteration
 	} else {
 		for i := 0; i < len(root.children); i++ {
 			rtn.values.PushBack(root.children[i])
@@ -58,7 +57,7 @@ func (iterator *ObjectIter) nextObject() *Object {
 		}
 		return obj
 	} else {
-		iterator.err = errors.Fail(iter.ErrEndIteration{}, nil, "No more values")
+		iterator.err = iter.ErrEndIteration
 		return nil
 	}
 }

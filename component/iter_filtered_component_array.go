@@ -5,20 +5,19 @@ import (
 	"container/list"
 	"reflect"
 	"github.com/zllangct/RockGO/3rd/iter"
-	"github.com/zllangct/RockGO/3rd/errors"
 )
 
 // FilterComponentArrayIter implements Iterator for components with a type filter.
 type FilterComponentArrayIter struct {
 	target  reflect.Type
 	values  *list.List
-	current *[]*componentInfo
+	current *[]IComponent
 	offset  int
 	err     error
 }
 
 // fromComponentArray returns a new list iterator for a list
-func fromComponentArray(values *[]*componentInfo, T reflect.Type) *FilterComponentArrayIter {
+func fromComponentArray(values *[]IComponent, T reflect.Type) *FilterComponentArrayIter {
 	rtn := &FilterComponentArrayIter{values: list.New(), offset: -1, target: T}
 	rtn.Add(values)
 	return rtn
@@ -52,12 +51,13 @@ func (iterator *FilterComponentArrayIter) Next() (interface{}, error) {
 		}
 		value := (*iterator.current)[iterator.offset]
 		if iterator.target==nil {
-			cmp = value.Component
+			cmp = value
 			break
 		}
-		//支持，通过实现过的接口类型查询,接口查询效率低下，慎重使用。
-		if value.Type == iterator.target || ( value.Type.Kind()==reflect.Interface && value.Type.Implements(iterator.target.Elem())){
-			cmp = value.Component
+		//支持通过实现过的接口类型查询,接口查询效率低下，慎重使用。
+		cmpTye:=value.Type()
+		if  cmpTye == iterator.target || ( cmpTye.Kind()==reflect.Interface && cmpTye.Implements(iterator.target.Elem())){
+			cmp = value
 			break
 		}
 	}
@@ -65,7 +65,7 @@ func (iterator *FilterComponentArrayIter) Next() (interface{}, error) {
 }
 
 // Add another set of components to search through
-func (iterator *FilterComponentArrayIter) Add(values *[]*componentInfo) {
+func (iterator *FilterComponentArrayIter) Add(values *[]IComponent) {
 	if values != nil {
 		iterator.values.PushBack(values)
 	}
@@ -78,10 +78,10 @@ func (iterator *FilterComponentArrayIter) nextGroup() bool {
 	el := iterator.values.Front()
 	if el != nil {
 		iterator.values.Remove(el)
-		iterator.current = el.Value.(*[]*componentInfo)
+		iterator.current = el.Value.(*[]IComponent)
 		iterator.offset = 0
 	} else {
-		iterator.err = errors.Fail(iter.ErrEndIteration{}, nil, "No more values")
+		iterator.err = iter.ErrEndIteration
 		return true
 	}
 	return false

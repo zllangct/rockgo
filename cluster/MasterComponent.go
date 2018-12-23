@@ -27,7 +27,7 @@ type MasterComponent struct {
 
 func (this *MasterComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
-	requires[this.Parent.Root()] = []reflect.Type{
+	requires[this.Parent().Root()] = []reflect.Type{
 		reflect.TypeOf(&Config.ConfigComponent{}),
 		reflect.TypeOf(&NodeComponent{}),
 	}
@@ -40,7 +40,7 @@ func (this *MasterComponent) Awake() error{
 	this.NodeLog =&NodeLogs{BufferSize:20}
 	this.timeoutChecking =make(map[string]int)
 
-	err := this.Parent.Root().Find(&this.nodeComponent)
+	err := this.Parent().Root().Find(&this.nodeComponent)
 	if err != nil {
 		return err
 	}
