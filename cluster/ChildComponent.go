@@ -6,6 +6,7 @@ import (
 	"github.com/zllangct/RockGO/configComponent"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
+	"github.com/zllangct/RockGO/utils"
 	"reflect"
 	"strings"
 	"sync"
@@ -53,7 +54,7 @@ func (this *ChildComponent) Destroy() error {
 
 //上报节点信息
 func (this *ChildComponent) DoReport() {
-	this.When(time.Second,
+	utils.When(time.Second,
 	func() bool {
 		return this.rpcMaster!=nil
 	},

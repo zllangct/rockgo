@@ -3,7 +3,6 @@ package Component
 import (
 	"log"
 	"reflect"
-	"time"
 )
 
 const (
@@ -31,7 +30,7 @@ type IPersist interface {
 }
 
 type IAwake interface {
-	Awake()error
+	Awake() error
 }
 
 type IStart interface {
@@ -74,21 +73,4 @@ func (this *Base)GetParent()*Object  {
 
 func (this *Base) Type() reflect.Type {
 	return this.t
-}
-
-//轮训条件阻塞
-func (this *Base)When(interval time.Duration,conditions ...func()bool)  {
-	for{
-		res:=true
-		for _, cond := range conditions {
-			if !cond() {
-				res=false
-				break
-			}
-		}
-		if res {
-			break
-		}
-		time.Sleep(interval)
-	}
 }

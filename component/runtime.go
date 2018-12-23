@@ -10,22 +10,19 @@ import (
 	"github.com/zllangct/RockGO/3rd/threadpool"
 )
 
-// configComponent configures a runtime.
+
 type Config struct {
 	ThreadPoolSize int
 	Factory        *ObjectFactory
 }
 
-// Runtime is the basic operating unit of the mud.
-// A Runtime executes the main game loop on objects.
 type Runtime struct {
-	root       *Object                // The root object for this runtime.
-	workers    *threadpool.ThreadPool // The thread ConnPool for updating objects
-	updateLock *sync.Mutex            // The thread safe lock for updates.
-	factory    *ObjectFactory         // The serialization factory
+	root       *Object
+	workers    *threadpool.ThreadPool
+	updateLock *sync.Mutex
+	factory    *ObjectFactory
 }
 
-// New returns a new Runtime instance
 func NewRuntime(config Config) *Runtime {
 	validateConfig(&config)
 	runtime := &Runtime{
@@ -38,7 +35,6 @@ func NewRuntime(config Config) *Runtime {
 	return runtime
 }
 
-// Configure sensible defaults if none are provided
 func validateConfig(config *Config) {
 	if config.ThreadPoolSize <= 0 {
 		config.ThreadPoolSize = 10
@@ -48,12 +44,10 @@ func validateConfig(config *Config) {
 	}
 }
 
-// Return a reference to the root object for the runtime
 func (runtime *Runtime) Root() *Object {
 	return runtime.root
 }
 
-// Factory returns the object factory for the runtime
 func (runtime *Runtime) Factory() *ObjectFactory {
 	return runtime.factory
 }
@@ -66,7 +60,6 @@ func (runtime *Runtime)SetMaxThread(maxThread int){
 	}
 }
 
-// Extract creates a deep copy of the object and then removes it from the runtime.
 func (runtime *Runtime) Extract(object *Object) (*ObjectTemplate, error) {
 	rtn, err := runtime.factory.Serialize(object)
 	if err != nil {
@@ -80,7 +73,6 @@ func (runtime *Runtime) Extract(object *Object) (*ObjectTemplate, error) {
 	return rtn, nil
 }
 
-// Insert converts the template into an object and attaches it as a child of the given parent.
 func (runtime *Runtime) Insert(template *ObjectTemplate, parent *Object) (*Object, error) {
 	rtn, err := runtime.factory.Deserialize(template)
 	if err != nil {
@@ -92,16 +84,10 @@ func (runtime *Runtime) Insert(template *ObjectTemplate, parent *Object) (*Objec
 	return rtn, nil
 }
 
-// Return the set of objects as an iterator, including root.
 func (runtime *Runtime) Objects() iter.Iter {
 	return runtime.root.ObjectsInChildren()
 }
 
-// Schedules a task to execute between the next update loops.
-// Return immediately, but the task will only be executed after
-// the current IUpdate() loop finishes.
-// This effectively blocks until the current loop ends, then runs; then
-// finally returns.
 func (runtime *Runtime) ScheduleTask(task func()) {
 	go (func() {
 		defer (func() {
@@ -121,7 +107,6 @@ func (runtime *Runtime) ScheduleTask(task func()) {
 	})()
 }
 
-// Execute the update step of all components on all objects in worker threads
 func (runtime *Runtime) Update(step float32) {
 	runtime.updateLock.Lock()
 	defer runtime.updateLock.Unlock()
@@ -138,7 +123,6 @@ func (runtime *Runtime) Update(step float32) {
 	}
 }
 
-// Execute a single object update
 func (runtime *Runtime) updateObject(step float32, obj *Object) {
 	runtime.workers.Run(func() {
 		if obj.runtime == nil {
