@@ -41,7 +41,7 @@ func (this *ActorProxyComponent) IsUnique() int {
 	return Component.UNIQUE_TYPE_GLOBAL
 }
 
-func (this *ActorProxyComponent) Awake() error {
+func (this *ActorProxyComponent) Initialize() error {
 	this.nodeID = Config.Config.ClusterConfig.LocalAddress
 	this.isActorMode = Config.Config.ClusterConfig.IsActorModel
 	err := this.Runtime().Root().Find(&this.nodeComponent)
@@ -64,9 +64,8 @@ func (this *ActorProxyComponent) IsOnline() bool {
 	return this.isOnline
 }
 
-func (this *ActorProxyComponent) Destroy() error {
+func (this *ActorProxyComponent) Destroy(ctx *Component.Context)  {
 
-	return nil
 }
 
 //调用actor service

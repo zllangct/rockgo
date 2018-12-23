@@ -34,10 +34,10 @@ func (this *DefaultGateComponent) GetRequire() map[*Component.Object][]reflect.T
 	return requires
 }
 
-func (this *DefaultGateComponent) Awake() error {
+func (this *DefaultGateComponent) Awake(ctx *Component.Context)  {
 	err := this.Parent().Root().Find(&this.nodeComponent)
 	if err != nil {
-		return err
+		panic(err)
 	}
 	if this.NetAPI == nil {
 		panic(errors.New("NetAPI is necessity of defaultGateComponent"))
@@ -56,9 +56,8 @@ func (this *DefaultGateComponent) Awake() error {
 	this.server = network.NewServer(conf)
 	err = this.server.Serve()
 	if err != nil {
-		return err
+		panic(err)
 	}
-	return nil
 }
 
 func (this *DefaultGateComponent) OnConnected(sess *network.Session) {

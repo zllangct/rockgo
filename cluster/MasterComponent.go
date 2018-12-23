@@ -34,7 +34,7 @@ func (this *MasterComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	return requires
 }
 
-func (this *MasterComponent) Awake() error{
+func (this *MasterComponent) Awake(ctx *Component.Context){
 	this.locker = &sync.RWMutex{}
 	this.Nodes = make(map[string]*NodeInfo)
 	this.NodeLog =&NodeLogs{BufferSize:20}
@@ -42,7 +42,7 @@ func (this *MasterComponent) Awake() error{
 
 	err := this.Parent().Root().Find(&this.nodeComponent)
 	if err != nil {
-		return err
+		panic(err)
 	}
 
 	//注册Master服务
@@ -50,12 +50,11 @@ func (this *MasterComponent) Awake() error{
 	s.init(this)
 	err=this.nodeComponent.Register(s)
 	if err != nil {
-		return err
+		panic(err)
 	}
 	if !Config.Config.CommonConfig.Debug || false{
 		go this.TimeoutCheck()
 	}
-	return nil
 }
 
 //上报节点信息

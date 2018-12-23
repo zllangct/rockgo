@@ -12,17 +12,18 @@ import (
 	单服、多角色实例，本实例包括 网关角色和登录角色，诸如，大厅角色、房间角色同理配置。
 	使用component，传统方式搭建。
 */
+var Server *RockGO.Server
 
 func main()  {
 	var nodeConfName string
 	flag.StringVar(&nodeConfName,"node", "", "node info")
 	flag.Parse()
 
-	RockGO.Server = RockGO.DefaultNode()
+	Server = RockGO.DefaultServer()
 
 	//重选节点
 	if nodeConfName!=""{
-		err:=RockGO.Server.OverrideNodeDefine(nodeConfName)
+		err:=Server.OverrideNodeDefine(nodeConfName)
 		if err!=nil {
 			logger.Fatal(err)
 		}
@@ -30,8 +31,8 @@ func main()  {
 	}
 
 	g:=&gate.DefaultGateComponent{}
-	g.NetAPI=NewTestApi(g.Parent)  //非默认网关不必要这样初始化，在组件内初始化即可，此处是为了对默认网关注入
-	RockGO.Server.AddComponentGroup("gate",[]Component.IComponent{g})
-	RockGO.Server.AddComponentGroup("login",[]Component.IComponent{&LoginComponent{}})
-	RockGO.Server.Serve()
+	g.NetAPI=NewTestApi(g.Parent())  //非默认网关不必要这样初始化，在组件内初始化即可，此处是为了对默认网关注入
+	Server.AddComponentGroup("gate",[]Component.IComponent{g})
+	Server.AddComponentGroup("login",[]Component.IComponent{&LoginComponent{}})
+	Server.Serve()
 }

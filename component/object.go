@@ -66,6 +66,9 @@ func (o *Object) AddComponent(component IComponent) *Object {
 			}
 		}
 		o.components = append(o.components, component)
+		if init,ok:=component.(IInit);ok{
+			return init.Initialize()
+		}
 		runtime:= o._runtime()
 		if runtime != nil{
 			runtime.SystemFilter(component)

@@ -16,19 +16,28 @@ type IComponent interface {
 	Type() reflect.Type
 	Runtime()*Runtime
 	Parent()*Object
+	Root()*Object
 }
 
+//组件唯一性
 type IUnique interface {
 	IsUnique() int
 }
 
+//组件依赖检查
 type IRequire interface {
 	GetRequire()(requires map[*Object][]reflect.Type)
 }
 
+//持久化接口
 type IPersist interface {
 	Serialize() (interface{}, error)
 	Deserialize(data interface{}) error
+}
+
+//Init 会立即执行，等同于构造函数，用于保证顺序
+type IInit interface {
+	Initialize() error
 }
 
 type Context struct {
@@ -37,6 +46,7 @@ type Context struct {
 	Runtime   *Runtime
 }
 
+//组件基类
 type Base struct {
 	parent  *Object
 	runtime *Runtime
@@ -59,4 +69,8 @@ func (this *Base)Runtime()*Runtime  {
 
 func (this *Base)Parent()*Object  {
 	return this.parent
+}
+
+func (this *Base)Root()*Object  {
+	return this.runtime.Root()
 }

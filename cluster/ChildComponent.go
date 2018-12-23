@@ -32,15 +32,14 @@ func (this *ChildComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	return requires
 }
 
-func (this *ChildComponent) Awake() error {
+func (this *ChildComponent) Awake() {
 	err := this.Parent().Root().Find(&this.nodeComponent)
 	if err != nil {
-		return err
+		panic(err)
 	}
 
 	go this.ConnectToMaster()
 	go this.DoReport()
-	return nil
 }
 
 func (this *ChildComponent) Destroy() error {

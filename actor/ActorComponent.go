@@ -48,7 +48,7 @@ func (this *ActorComponent) IsUnique() int {
 	return Component.UNIQUE_TYPE_LOCAL
 }
 
-func (this *ActorComponent) Awake()error {
+func (this *ActorComponent) Awake() {
 	this.queueReceive= make(chan *ActorMessageInfo, 20)
 	this.close =       make(chan bool)
 	//初始化actor类型
@@ -58,20 +58,22 @@ func (this *ActorComponent) Awake()error {
 	//初始化Actor代理
 	err := this.Runtime().Root().Find(&this.Proxy)
 	if err != nil {
-		return err
+		logger.Error(err)
+		return
 	}
 	//初始化ID
 	this.ActorID= EmptyActorID()
 	//注册Actor到ActorProxy
 	err = this.Proxy.Register(this)
 	if err!=nil {
-		return err
+		logger.Error(err)
+		return
 	}
 	//初始化消息分发器
 	go this.dispatch()
 	//设置Actor状态为激活
 	atomic.StoreInt32(&this.active, 1)
-	return err
+	return
 }
 
 func (this *ActorComponent)RegisterService(service string) error {

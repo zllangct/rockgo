@@ -18,18 +18,18 @@ var ErrNodeOffline =errors.New("this node is offline")
 
 type NodeComponent struct {
 	Component.Base
-	locker sync.RWMutex
+	locker          sync.RWMutex
 	AppName         string
 	localIP         string
-	Addr string
-	isOnline       	bool
+	Addr            string
+	isOnline        bool
 	islocationMode  bool
-	rpcClient      	sync.Map 				//RPC客户端集合
-	rpcServer      	*rpc.Server				//本节点RPC Server
-	serverListener   *net.TCPListener
+	rpcClient       sync.Map 				//RPC客户端集合
+	rpcServer       *rpc.Server				//本节点RPC Server
+	serverListener  *net.TCPListener
  	locationClients *NodeIDGroup			//位置服务器集合
-	lockers      	sync.Map 				//[nodeid,locker]
-	clentGetting    map[string]int
+	lockers         sync.Map 				//[nodeid,locker]
+	clientGetting   map[string]int
 }
 
 func (this *NodeComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
@@ -40,15 +40,14 @@ func (this *NodeComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
 	return requires
 }
 
-func(this *NodeComponent)Awake()error{
+func(this *NodeComponent)Initialize()error{
 	this.AppName = Config.Config.ClusterConfig.AppName
 	this.islocationMode =Config.Config.ClusterConfig.IsLocationMode
-	this.clentGetting =make(map[string]int)
+	this.clientGetting =make(map[string]int)
 	//开始本节点RPC服务
 	err:= this.StartRpcServer()
 	if err!=nil {
 		//地址占用，立即修改配置文件
-		panic(err)
 		return err
 	}
 	//查询位置服务器
@@ -57,7 +56,7 @@ func(this *NodeComponent)Awake()error{
 }
 
 //网络模块不能立即做清理，其他模块清理过程中会进行通讯
-//func (this *NodeComponent)Destroy()error {
+//func (this *NodeComponent)Destroy(ctx Component.Context) {
 //	err:= this.serverListener.Close()
 //	this.rpcClient.Range(func(key, value interface{}) bool {
 //		err=value.(*rpc.TcpClient).Close()
@@ -145,25 +144,25 @@ func (this *NodeComponent) GetNodeClient(addr string) (*rpc.TcpClient,error){
 	}
 
 	this.locker.Lock()
-	count,ok:=this.clentGetting[addr]
+	count,ok:=this.clientGetting[addr]
 	if ok {
 		if count > 100 {
 			this.locker.Unlock()
 			return nil,errors.New("init not complete")
 		}else{
-			this.clentGetting[addr]+=1
+			this.clientGetting[addr]+=1
 		}
 		this.locker.Unlock()
 		time.Sleep(time.Millisecond*100)
 		goto a
 	}else{
-		this.clentGetting[addr]= 0
+		this.clientGetting[addr]= 0
 	}
 	this.locker.Unlock()
 
 	defer func() {
 		this.locker.Lock()
-		delete(this.clentGetting, addr)
+		delete(this.clientGetting, addr)
 		this.locker.Unlock()
 	}()
 

@@ -37,11 +37,11 @@ func (this *LocationComponent) GetRequire() map[*Component.Object][]reflect.Type
 	return requires
 }
 
-func (this *LocationComponent) Awake()error {
+func (this *LocationComponent) Awake(ctx *Component.Context) {
 	this.locker=&sync.RWMutex{}
 	err := this.Parent().Root().Find(&this.nodeComponent)
 	if err != nil {
-		return err
+		panic(err)
 	}
 
 	//注册位置服务节点RPC服务
@@ -49,10 +49,9 @@ func (this *LocationComponent) Awake()error {
 	service.init(this)
 	err= this.nodeComponent.Register(service)
 	if err != nil {
-		return err
+		panic(err)
 	}
 	go this.DoLocationSync()
-	return nil
 }
 
 //同步节点信息到位置服务组件

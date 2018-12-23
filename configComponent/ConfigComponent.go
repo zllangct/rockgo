@@ -28,7 +28,7 @@ func (this *ConfigComponent) IsUnique() int {
 	return Component.UNIQUE_TYPE_GLOBAL
 }
 
-func (this *ConfigComponent) Awake() error {
+func (this *ConfigComponent) Initialize() error {
 	this.commonConfigPath = "./config/CommonConfig.json"
 	this.clusterConfigPath = "./config/ClusterConfig.json"
 	//初始化默认配置
