@@ -23,7 +23,7 @@ var ErrServerNotInit =errors.New("server is not initialize")
 
 type ServerNode struct {
 	Runtime        *Component.Runtime
-	componentGroup *Component.ComponentGroups
+	componentGroup *Cluster.ComponentGroups
 	Config         *Config.ConfigComponent
 	initialized         bool
 	Close          chan struct{}
@@ -33,7 +33,7 @@ type ServerNode struct {
 func NewServerNode() *ServerNode {
 	s:= &ServerNode{
 		Close:make(chan struct{}),
-		componentGroup: &Component.ComponentGroups{},
+		componentGroup: &Cluster.ComponentGroups{},
 		Runtime:        Component.NewRuntime(Component.Config{ThreadPoolSize: runtime.NumCPU()}),
 	}
 	s.Init()

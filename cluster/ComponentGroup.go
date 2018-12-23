@@ -1,7 +1,8 @@
-package Component
+package Cluster
 
 import (
 	"fmt"
+	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/logger"
 )
 
@@ -12,18 +13,18 @@ import (
 */
 type ComponentGroup struct {
 	Name    string
-	content []IComponent
+	content []Component.IComponent
 }
 
-func (this *ComponentGroup) attachGroupTo(target *Object) {
-	o := NewObject(this.Name)
+func (this *ComponentGroup) attachGroupTo(target *Component.Object) {
+	o := Component.NewObject(this.Name)
 	err:=target.AddObject(o)
 	if err!=nil {
 		logger.Error(err)
 	}
 	for _, component := range this.content {
 		o.AddComponent(component)
-		logger.Info(fmt.Sprintf("Attach component [ %s.%s ] to [ %s ]",this.Name,component.Type().String(),o.name))
+		logger.Info(fmt.Sprintf("Attach component [ %s.%s ] to [ %s ]",this.Name,component.Type().String(),o.Name()))
 	}
 }
 
@@ -34,7 +35,7 @@ type ComponentGroups struct {
 	group map[string]*ComponentGroup //key:group name , value:component group
 }
 
-func (this *ComponentGroups) AddGroup(groupName string, group []IComponent) {
+func (this *ComponentGroups) AddGroup(groupName string, group []Component.IComponent) {
 	if this.group ==nil{
 		this.group = make(map[string]*ComponentGroup)
 	}
@@ -44,7 +45,7 @@ func (this *ComponentGroups) AddGroup(groupName string, group []IComponent) {
 	}
 }
 
-func (this *ComponentGroups) AttachGroupsTo(groupName []string, target *Object) error {
+func (this *ComponentGroups) AttachGroupsTo(groupName []string, target *Component.Object) error {
 	child,master,other := false,false,false
 
 	if len(groupName)==0 || (len(groupName)==1 && groupName[0]=="single") {
