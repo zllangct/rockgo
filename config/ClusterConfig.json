@@ -18,17 +18,22 @@
                 "gate"
             ]
         },
+        "node_gate_1": {
+            "LocalAddress": "0.0.0.0:6611",
+            "Role": [
+                "gate"
+            ]
+        },
         "node_location": {
             "LocalAddress": "0.0.0.0:6603",
             "Role": [
                 "location"
             ]
         },
-        "node_location_actor_location": {
-            "LocalAddress": "0.0.0.0:6604",
+        "node_location_1": {
+            "LocalAddress": "0.0.0.0:6613",
             "Role": [
-                "location",
-                "actor_service"
+                "location"
             ]
         },
         "node_login": {
@@ -45,6 +50,12 @@
         },
         "node_room": {
             "LocalAddress": "0.0.0.0:6605",
+            "Role": [
+                "room"
+            ]
+        },
+        "node_room_1": {
+            "LocalAddress": "0.0.0.0:6615",
             "Role": [
                 "room"
             ]

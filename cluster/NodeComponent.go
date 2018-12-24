@@ -118,6 +118,13 @@ func (this *NodeComponent)InitLocationServerGetter()  {
 	this.locationGetter = func() {
 		go getter()
 	}
+	//非频繁更新
+	go func() {
+		for{
+			time.Sleep(time.Second*30)
+			this.locationGetter()
+		}
+	}()
 }
 
 func (this *NodeComponent)locationBroken()  {

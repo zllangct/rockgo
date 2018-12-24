@@ -1,5 +1,7 @@
 package Cluster
 
+import "github.com/zllangct/RockGO/logger"
+
 type LocationService struct{
 	location *LocationComponent
 }
@@ -9,6 +11,7 @@ func (this *LocationService)init(mlocation *LocationComponent) {
 }
 
 func (this *LocationService) NodeInquiry(args []string, reply *[]*InquiryReply) error {
+	logger.Debug("Inquiry :",args)
 	res,err:= this.location.NodeInquiry(args,false)
 	*reply =res
 	return err

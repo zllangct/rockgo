@@ -44,7 +44,6 @@ func (this Selector) Select(query []string,detail bool,locker *sync.RWMutex) ([]
 	if length !=3 || query[0]=="" {
 		return nil,ErrNoAvailableNode
 	}
-	selector := SELECTOR_TYPE_DEFAULT
 
 	err := errors.New("no available node ")
 	var reply = make([]*InquiryReply,0)
@@ -62,14 +61,14 @@ func (this Selector) Select(query []string,detail bool,locker *sync.RWMutex) ([]
 					break
 				}
 			}
-			if err==nil {
+			if err==nil && query[0]!=SELECTOR_TYPE_GROUP{
 				break
 			}
 		}
 	}
 	locker.RUnlock()
 
-	switch selector {
+	switch query[0] {
 	case SELECTOR_TYPE_DEFAULT, SELECTOR_TYPE_MIN_LOAD:
 		var index  = -1
 		index = SourceGroup(reply).SelectMinLoad()
