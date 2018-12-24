@@ -9,13 +9,11 @@ import (
 */
 type LtdProtocol struct{}
 
-//ParseMessage recv request and make response.
 func (s *LtdProtocol) ParseMessage(ctx context.Context,data []byte)([]uint32,[]byte){
 	mt := binary.BigEndian.Uint32(data[:4])
 	return []uint32{mt}, data[4:]
 }
 
-//ParsePackage parse package from buff,check if tars package finished.
 func (s *LtdProtocol) ParsePackage(buff []byte) (pkgLen, status int) {
 	if len(buff) < 4 {
 		return 0, PACKAGE_LESS

@@ -77,7 +77,7 @@ Client：
 ```
 ### Feature：
 
-#### 1. ECS（Entity Component System）构架：    
+#### 1. ECS（Entity Component System）构架    
 
 &emsp;&emsp;ECS全称Entity-Component-System（实体-组件-系统），是基于组合优于继承，即将不变的部分使用继承以方便复用， 
 将多变的部分用组合来方便拓展，是按照这种原则的一种设计模式。当然这种设计模式带来了许多比OOP更容易容实现
@@ -86,7 +86,7 @@ Client：
 讨论  [（继续戳）](https://blog.codingnow.com/2017/06/overwatch_ecs.html)，此处都不赘述了。在服务端程序中
 的优势，这里简要概括几点：    
  
-##### (1). 自由组合：
+##### 1.1 自由组合
         Component尽量按照原子性原则设计，只要有合适的功能拆分粒度，服务端可以随性所欲的组合，这在分布式构架
     中至关重要，关系到服务端节点间功能的拆分组合。比如中心服务节点担任了游戏大厅和注册登录两项服务，随着用户
     规模的扩大，中心节点需要把注册登录拆分出来单独成为节点。在ECS构架中，这将是非常容易的一件事，很少或者
@@ -94,50 +94,198 @@ Client：
     次。这也微服务的思想走在了一起，微服务往往在服务间的调用走的是网络调用，但ECS构架下可以轻松的实现网络本地
     调用的自主切换。单服就是真正的单服，本地调用，减少不必要的网络消耗，而不是多个服务部署在了同一台物理机上。
         
-##### (2). 热插拔：
+##### 1.2 热插拔
         ECS构架下，实体和组件都能运行时添加删除，框架提供了Initialize、Awake、Start、Update、Destroy 内置系统，
     这些内置系统能保证每一个功能组件，或者组件组合所需的完整生命周期。
-##### (3). 易拓展：
+##### 1.3 易拓展
         功能的拓展，大多情况是新组件，新系统的设计，耦合性极低。
-##### (4). 更优雅的停机：
+##### 1.4 更优雅的停机
         所以对象都有完整的生命周期，Destroy系统可以保证每个对象在销毁时，得到正确的处理，实现更优雅的停机处理。
-##### (5). 序列化：
+##### 1.5 序列化
         所有组件，实现持久化接口之后，都具备序列化的能力。配合优雅的停机，很容易实现停机后的恢复。
-##### (7). 高性能
+##### 1.7 高性能
         每个系统都不会遍历所有的对象，只会过滤出感兴趣的组件，专人专事，效率集中，减少调用，例如不需要Update处理的组件，便
     不用实现Update接口，Update系统将不会遍历此组件。 
-##### (8). 方便调试
+##### 1.8 方便调试
         分布式调试的麻烦，这里并不存在，单机开发，随心大胆的断点，最后仅仅是一个配置参数完成分布式部署。
-##### (9). 想到了再添加 ... ...      
+##### 1.9 想到了再添加 ... ...      
  
-#### 2. Actor 模式：
+#### 2. Actor 模式
 &emsp;&emsp;有空再详细写，反正知道对方的ActorID，无论他在哪儿，无论活在那个节点，Tell() 都能告诉他。框架内自主实现本地调用和RPC
-调用的分流。Actor模式的特性与优势，看官自行G或者B。
-#### 3. RPC：
+调用的分流。Actor模式的特性与优势，看官自行G或者B。千万别问为什么有了ECS还能有Actor，并不冲突，ECS也是基于OOP实现的，所以Actor基于
+ECS实现，而且比OOP实现Actor更简单。
+#### 3. RPC
 &emsp;&emsp;RPC的性能与可靠性是分布式系统中最重要的一环，游戏要的是效率，服务治理方面够用就行，所以并未选择市面上流行的服务治理型
 的RPC调用框架，并且游戏构架本身就具备了服务治理的能力，但RPC框架自带的治理能力又不足以支撑游戏需求，所以略显多余，大体量的框架
 复杂的环境配置大大的增加了维护、定制、学习、部署、迁移的难度，尤其对中小型开发者不友好。既要满足中小型项目需要的简易性，
 又具有大型项目的扩展性，框架选用了go自带的rpc框架，其性能有目共睹，测评参照这里（[戳我就行](https://github.com/smallnest/rpcx)）,
 基于net/rpc作了轻量化定制，添加了必要的功能特性：
-###### &emsp;&emsp;&emsp;&emsp;(1). 超时机制 
-###### &emsp;&emsp;&emsp;&emsp;(2). 心跳检测
-###### &emsp;&emsp;&emsp;&emsp;(3). 断线重连
-###### &emsp;&emsp;&emsp;&emsp;(4). 单向调用
-###### &emsp;&emsp;&emsp;&emsp;(5). 客户端回调
+###### &emsp;&emsp;&emsp;(1). 超时机制 &emsp;(2). 心跳检测&emsp;(3). 断线重连&emsp;(4). 单向调用&emsp;(5). 客户端回调
 
-#### 4. 网络协议：
-&emsp;&emsp;框架支持的网络协议有：TCP、UDP、Websocket，封包格式如下：     
+#### 4. 网络协议
+##### 4.1 框架支持的网络协议
+框架支持的网络协议有：TCP、UDP、Websocket、http，封包格式如下：     
 
-| 协议名称 | 协议格式 | 数据类型 |
-| :------:| :------: | :------: |
-| TCP | Length-[Type-Data] | 二进制 |
-| UDP | Length-[Session-Type-Data] | 二进制 |
-| Websocket | Type-Data | 二进制 |
-#### 5. Actor 模式：
+| 协议名称 | 协议格式 | 长度  |  数据类型 |
+| :------:| :------: | :------: |:------: |
+| TCP | Length-[Type-Data] |4 - [ 4 - n ]| 二进制 |
+| UDP | Length-[Session-Type-Data] |4 - [ 4 - 4 - n ]| 二进制 |
+| Http | Session-Type-Data | 4 - 4 - n | 二进制 |
+| Websocket | Type-Data |4 - n| 二进制 |    
 
-#### 6. 计划任务：
+##### 4.2 自定义网络协议
+&emsp;&emsp;框架内可以很轻松的实现自定义协议的扩展，对原有协议都是非侵入的依赖，只需要简单封装，比如各种可靠UDP协议，KCP、UDT、
+ENET等，只需要实现以下述接口：
+```
+    //网络协议
+    type ServerHandler interface {
+        Listen() error                      //监听
+        Handle() error                      //处理
+    }
+    //链接对象
+    type Conn interface {
+    	WriteMessage(messageType uint32, data []byte) error   //消息发送
+    	Addr() string                                         //目标地址
+    	Close() error                                         //关闭
+    }
+    //解包协议
+    type Protocol interface {
+        ParsePackage( []byte) (int, int)                            //包处理
+    	ParseMessage( context.Context,  []byte)([]uint32,[]byte)    //消息处理
+    }
+   
+```
+&emsp;&emsp;网络协议的实现可参照TCP、UDP和Websocket。各种网络协议所提供链接对象可不相同，
+需要实现连接对象接口进行统一，供Session使用。网络协议和链接对象接口的实现相对简单，不容
+易产生歧义，其中解包协议参照TCP和Websocket用法：
+```
+/* TCP LTD protocol 
+	Length—（Type—Data） ，数据长度—（消息类型—消息体） 大小：  4 — （4 — n）
+*/
+type LtdProtocol struct{}
 
-#### 7. 写在后面：
+//完整包中解析出消息ID和数据部分
+func (s *LtdProtocol) ParseMessage(ctx context.Context,data []byte)([]uint32,[]byte){
+	mt := binary.BigEndian.Uint32(data[:4])
+	return []uint32{mt}, data[4:]
+}
+
+//检查包是否接受完整
+func (s *LtdProtocol) ParsePackage(buff []byte) (pkgLen, status int) {
+	if len(buff) < 4 {
+		return 0, PACKAGE_LESS
+	}
+	length := binary.BigEndian.Uint32(buff[:4])
+
+	if length > 1048576000 || len(buff) > 1048576000 { // 1000MB
+		return 0, PACKAGE_ERROR
+	}
+	if len(buff) < int(length) {
+		return 0, PACKAGE_LESS
+	}
+	return int(length), PACKAGE_FULL
+}
+
+
+/* Websocket TD protocol
+	Type—Data ，消息类型—消息体 大小：  4 — n
+*/
+type TdProtocol struct{}
+
+//解析消息ID和消息数据
+func (s *TdProtocol) ParseMessage(ctx context.Context,data []byte)([]uint32,[]byte){
+	mt := binary.BigEndian.Uint32(data[:4])
+	return []uint32{mt}, data[4:]
+}
+
+//websocket 自带粘包处理，此处无需手动处理
+func (s *TdProtocol) ParsePackage(buff []byte) (pkgLen, status int) {
+	return 0,0
+}
+```
+#### 5. 消息序列化协议
+##### 5.1 支持的序列化协议
+###### &emsp;&emsp;&emsp;(1). Json &emsp;(2). ProtoBuf
+##### 5.2 自定义序列化协议
+&emsp;&emsp;自定义序列化协议需要实现以下接口：
+```
+//消息解析协议
+type MessageProtocol interface {
+	Marshal( interface{})([]byte,error)         //序列化
+	Unmarshal( []byte, interface{})error        //反序列化
+}
+```
+#### 7. 业务接口
+##### 5.1 支持的序列化协议 
+&emsp;&emsp;框架提供消息的路由，无需用户手动对应消息的处理方法，框架根据函数自动判断是否为消息处理函数。需要满足以下条件
+： 
+###### &emsp;&emsp;(1). 结构体继承 ApiBase 
+###### &emsp;&emsp;(2). 函数必须为结构体导出函数
+###### &emsp;&emsp;(3). 函数必须为以下结构：func (this *XXX) FunctionName(sess *network.Session,message *MessageStruct)
+###### &emsp;&emsp; 第一参数为 会话Session，第二参数为消息对应的结构体，框架会更加第二参数去判断处理哪里一条消息。
+&emsp;&emsp;参见:
+```
+//协议对应字典
+var Testid2mt = map[reflect.Type]uint32{
+	reflect.TypeOf(&TestMessage{}):1,
+	reflect.TypeOf(&TestLogin{}):2,
+	reflect.TypeOf(&PlayerInfo{}):3,
+}
+//消息定义
+type TestMessage struct {
+	Name string
+}
+type TestReply struct {
+	Result bool
+}
+
+//接口组定义
+type TestApi struct {
+	network.ApiBase         //继承ApiBase
+}
+
+/*
+    使用协议接口时，需先初始化，初始化时需传入定义的消息号对应字典
+    以及所需的消息序列化组件，可轻易切换为protobuf，msgpack等其他序列化工具
+*/
+func NewTestApi() *TestApi  {
+	r:=&TestApi{}
+	r.Init(r,nil,Testid2mt,&MessageProtocol.JsonProtocol{})
+	return r
+}
+
+//协议接口1  Hello
+func (this *TestApi)Hello(sess *network.Session,message *TestMessage) error {
+	//打印消息
+	println(fmt.Sprintf("this api parent:%s",p.Name()))
+
+	//回复消息
+	res:=&TestReply{
+    		Result:true,
+    }
+    err=this.Reply(sess,res)
+    if err!=nil {
+        return err
+    }
+}
+
+//协议接口2  other
+func (this *TestApi) Other(sess *network.Session,message *Other) error {
+	......
+}
+```
+&emsp;&emsp;当然用户可以不用使用框架自带的消息路由方法，可以实现NetAPI接口自定义消息路由规则：
+```
+type NetAPI interface {
+	Init(interface{},*Component.Object, map[reflect.Type]uint32,MessageProtocol)  //初始化
+	Route(*Session, uint32, []byte)	                                              //反序列化并路由到api处理函数
+        SetParent(object *Component.Object)		                              //设置父对象
+	Reply(session *Session,message interface{})error                              //序列化消息并发送至客户端
+}
+```
+#### 8. 计划任务
+
+#### 9. 写在后面
 &emsp;&emsp;  致谢：  [gin — gin-gonic](https://github.com/gin-gonic/gin)、[websocket—gorilla](https://github.com/gorilla/websocket)
 、[go-component—shadowmint](https://github.com/shadowmint/go-component)、[TarsGo—TarsCloud](https://github.com/TarsCloud/TarsGo)   
 &emsp;&emsp;  喜欢的朋友给个星星~  
