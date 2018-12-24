@@ -130,7 +130,8 @@ ECS实现，而且比OOP实现Actor更简单。
 | :------:| :------: | :------: |:------: |
 | TCP | Length-[Type-Data] |4 - [ 4 - n ]| 二进制 |
 | UDP | Length-[Session-Type-Data] |4 - [ 4 - 4 - n ]| 二进制 |
-| Websocket | Type-Data |4 - n| 二进制 |    
+| Websocket | Type-Data |4 - n| 二进制 |       
+
 &emsp;&emsp;http建议直接在网关组件中使用gin、fasthttp等http处理框架对应路由处理函数，http使用途中极有可能与页面有关，虽然
 集成到上述方式路由中十分简单，但不建议这样处理，这样僵化了http的灵活性和丰富的功能特性。
 ##### 4.2 自定义网络协议
