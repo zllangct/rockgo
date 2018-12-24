@@ -28,10 +28,7 @@ func main()  {
 
 	//重选节点
 	if nodeConfName!=""{
-		err:=Server.OverrideNodeDefine(nodeConfName)
-		if err!=nil {
-			logger.Fatal(err)
-		}
+		Server.OverrideNodeDefine(nodeConfName)
 		logger.Info(fmt.Sprintf("Override node info:[ %s ]",nodeConfName))
 	}
 

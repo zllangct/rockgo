@@ -10,6 +10,7 @@ import (
 	"github.com/zllangct/RockGO/logger"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 )
@@ -75,7 +76,7 @@ func (this *ServerNode) Root() *Component.Object {
 }
 
 //覆盖节点信息
-func (this *ServerNode) OverrideNodeDefine(nodeConfName string)error{
+func (this *ServerNode) OverrideNodeDefine(nodeConfName string){
 	if this.Config==nil {
 		panic(ErrServerNotInit)
 	}
@@ -83,9 +84,24 @@ func (this *ServerNode) OverrideNodeDefine(nodeConfName string)error{
 		this.Config.ClusterConfig.LocalAddress = s.LocalAddress
 		this.Config.ClusterConfig.Role =s.Role
 	}else{
-		return errors.New(fmt.Sprintf("this config name [ %s ] not defined",nodeConfName))
+		panic(errors.New(fmt.Sprintf("this config name [ %s ] not defined",nodeConfName)))
 	}
-	return nil
+}
+//覆盖节点端口
+func (this *ServerNode) OverrideNodePort(port string){
+	if this.Config==nil {
+		panic(ErrServerNotInit)
+	}
+	ip:=strings.Split(this.Config.ClusterConfig.LocalAddress,":")[0]
+	this.Config.ClusterConfig.LocalAddress=fmt.Sprintf("%s:%s",ip,port)
+}
+
+//覆盖节点角色
+func (this *ServerNode) OverrideNodeRoles(roles []string){
+	if this.Config==nil {
+		panic(ErrServerNotInit)
+	}
+	this.Config.ClusterConfig.Role =roles
 }
 
 //添加一个组件组到组建组列表，不会立即添加到对象
