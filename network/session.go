@@ -58,8 +58,15 @@ func (this *Session)SetProperty(key string,value interface{})  {
 func (this *Session)GetProperty(key string) (interface{},bool) {
 	this.locker.RLock()
 	defer this.locker.RUnlock()
+
 	p,ok:= this.properties[key]
 	return p,ok
+}
+
+func (this *Session)RemoveProperty(key string){
+	this.locker.RLock()
+	defer this.locker.RUnlock()
+	delete(this.properties, key)
 }
 
 var ErrSessionDisconnected =errors.New("this session is broken")

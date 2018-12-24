@@ -48,7 +48,7 @@ func (this *ActorComponent) IsUnique() int {
 	return Component.UNIQUE_TYPE_LOCAL
 }
 
-func (this *ActorComponent) Awake() {
+func (this *ActorComponent) Awake(ctx *Component.Context) {
 	this.queueReceive= make(chan *ActorMessageInfo, 20)
 	this.close =       make(chan bool)
 	//初始化actor类型

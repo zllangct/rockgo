@@ -2,7 +2,6 @@ package launcher
 
 import (
 	"errors"
-	"github.com/zllangct/RockGO/actor"
 	"github.com/zllangct/RockGO/cluster"
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/configComponent"
@@ -54,14 +53,6 @@ func (this *LauncherComponent) Awake(context *Component.Context) {
 			1000, Config.Config.CommonConfig.LogFileMax, Config.Config.CommonConfig.LogFileUnit)
 	}
 	logger.SetLevel(Config.Config.CommonConfig.LogLevel)
-
-	//添加NodeComponent组件，使对象成为分布式节点
-	this.Root().AddComponent(&Cluster.NodeComponent{})
-
-	//添加ActorProxy组件，组织节点间的通信
-	if Config.Config.ClusterConfig.IsActorModel {
-		this.Root().AddComponent(&Actor.ActorProxyComponent{})
-	}
 
 	this.Active<-this.server
 }

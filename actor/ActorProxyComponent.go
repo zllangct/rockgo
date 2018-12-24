@@ -42,6 +42,7 @@ func (this *ActorProxyComponent) IsUnique() int {
 }
 
 func (this *ActorProxyComponent) Initialize() error {
+	logger.Info("ActorProxyComponent init .....")
 	this.nodeID = Config.Config.ClusterConfig.LocalAddress
 	this.isActorMode = Config.Config.ClusterConfig.IsActorModel
 	err := this.Runtime().Root().Find(&this.nodeComponent)
@@ -55,6 +56,7 @@ func (this *ActorProxyComponent) Initialize() error {
 	if err != nil {
 		return err
 	}
+	logger.Info("ActorProxyComponent initialized.")
 	return nil
 }
 
@@ -99,7 +101,6 @@ func (this *ActorProxyComponent) ServiceCallRetrunClient(actor IActor,message *A
 	if err != nil {
 		return nil,err
 	}
-	//本地已经无此服务
 	if nodeID.Addr == this.nodeID {
 		return nil,ErrNoThisService
 	}

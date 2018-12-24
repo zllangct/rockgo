@@ -15,12 +15,11 @@ type RoomManagerComponent struct {
 	actor   *Actor.ActorComponent
 }
 
-func (this *RoomManagerComponent)Awake() error{
+func (this *RoomManagerComponent)Awake(ctx *Component.Context){
 	this.rooms = make(map[int]Actor.IActor)
 	this.messageHandler=map[string]func(message *Actor.ActorMessageInfo){
 		"newRoom":this.NewRoom,
 	}
-	return nil
 }
 
 func (this *RoomManagerComponent) MessageHandlers() map[string]func(message *Actor.ActorMessageInfo) {

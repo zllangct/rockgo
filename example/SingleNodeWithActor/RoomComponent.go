@@ -13,8 +13,8 @@ type RoomComponent struct {
 	actor         Actor.IActor
 }
 
-func (this *RoomComponent) Awake() error{
-	return nil
+func (this *RoomComponent) Awake(ctx *Component.Context) {
+
 }
 
 var ErrLoginPlayerNotExist =errors.New("this player doesnt exist")

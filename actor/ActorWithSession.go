@@ -37,13 +37,15 @@ type ActorWithSession struct {
 //调用actor服务
 func (this *ActorWithSession)ServiceCall(message *ActorMessage, reply **ActorMessage, role ...string) error  {
 	var err error
+	service:="service_" + message.Service
 	//优先尝试缓存客户端，避免反复查询，尽量去中心化
-	g,ok:=this.sess.GetProperty("service_"+message.Service)
+	g,ok:=this.sess.GetProperty(service)
 	if ok {
 		err=this.proxy.ServiceCallByRpcClient(this,message,reply,g.(*rpc.TcpClient))
 		if err==nil {
 			return nil
 		}
+		this.sess.RemoveProperty(service)
 	}
 	//无缓存，或者通过缓存调用失败，重新查询调用
    	client,err:= this.proxy.ServiceCallRetrunClient(this,message,reply,role...)
@@ -51,7 +53,7 @@ func (this *ActorWithSession)ServiceCall(message *ActorMessage, reply **ActorMes
 		return err
 	}
 	if client!=nil {
-		this.sess.SetProperty("service_"+message.Service,client)
+		this.sess.SetProperty(service,client)
 	}
    	return err
 }

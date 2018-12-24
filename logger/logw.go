@@ -353,6 +353,9 @@ func (this *fileBean) rename(rolltype ROLLTYPE) {
 }
 
 func (this *fileBean) addsize(size int64) {
+	this.mu.Lock()
+	defer this.mu.Unlock()
+
 	atomic.AddInt64(&this.filesize, size)
 }
 
@@ -370,6 +373,8 @@ func (this *fileBean) writef(format string, v ...interface{}) {
 }
 
 func (this *fileBean) isOverSize() bool {
+	this.mu.RLock()
+	defer this.mu.RUnlock()
 	return this.filesize >= this.maxFileSize
 }
 

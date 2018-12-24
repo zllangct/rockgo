@@ -42,7 +42,9 @@ func (this *AwakeSystem)UpdateFrame()  {
 		}
 
 		v:=c.Value.(IAwake)
+		//name:=c.Value.(IComponent).Type().String()
 		this.runtime.workers.Run(func() {
+			//logger.Debug("awake: "+name)
 			v.Awake(ctx)
 		}, func() {
 			this.wg.Done()

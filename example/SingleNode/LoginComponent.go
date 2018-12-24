@@ -19,16 +19,16 @@ type LoginComponent struct {
 
 func (this *LoginComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
-	requires[this.Parent.Root()] = []reflect.Type{
+	requires[this.Root()] = []reflect.Type{
 		reflect.TypeOf(&Config.ConfigComponent{}),
 	}
 	return requires
 }
 
-func (this *LoginComponent) Awake() error{
-	err := this.Parent.Root().Find(&this.nodeComponent)
+func (this *LoginComponent) Awake(ctx *Component.Context) {
+	err := this.Root().Find(&this.nodeComponent)
 	if err != nil {
-		return err
+		panic(err)
 	}
 	//模拟已存在的用户
 	this.players.Store("zllang1",&PlayerInfo{Account:"zllang1",Password:"123456",Name:"zhaolei1",Age:11,Coin:100,LastLoginTime:time.Now()})
@@ -39,9 +39,8 @@ func (this *LoginComponent) Awake() error{
 
 	err= this.nodeComponent.Register(this)
 	if err!=nil {
-		return err
+		panic(err)
 	}
-	return nil
 }
 
 var ErrLoginPlayerNotExist =errors.New("this player doesnt exist")

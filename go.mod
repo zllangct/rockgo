@@ -9,6 +9,7 @@ require (
 	github.com/gorilla/websocket v1.4.0
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
+	github.com/qianlnk/pgbar v0.0.0-20171216154057-0f21738f04a2
 	github.com/ugorji/go/codec v0.0.0-20181206144755-e72634d4d386 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/eapache/queue.v1 v1.1.0

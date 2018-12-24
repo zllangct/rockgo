@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 type ServerNode struct {
@@ -20,6 +21,14 @@ type ServerNode struct {
 	Close          chan struct{}
 }
 func (this *ServerNode) Serve(){
+	//添加NodeComponent组件，使对象成为分布式节点
+	this.Root().AddComponent(&Cluster.NodeComponent{})
+
+	//添加ActorProxy组件，组织节点间的通信
+	if Config.Config.ClusterConfig.IsActorModel {
+		this.Root().AddComponent(&Actor.ActorProxyComponent{})
+	}
+
 	//添加组件到待选组件列表，默认添加master,child组件
 	this.AddComponentGroup("master",[]Component.IComponent{&Cluster.MasterComponent{}})
 	this.AddComponentGroup("child",[]Component.IComponent{&Cluster.ChildComponent{}})
@@ -36,18 +45,22 @@ func (this *ServerNode) Serve(){
 
 	c := make(chan os.Signal)
 	signal.Notify(c,syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
-
+	//go func() {
+	//	time.Sleep(time.Second*2)
+	//	this.Close<- struct {}{}
+	//}()
 	for  {
 		select {
 		case <-c:
-			logger.Info("====== Start to close this server, do some cleaning now ...... ======")
 		case <-this.Close:
 		}
+		logger.Info("====== Start to close this server, do some cleaning now ...... ======")
 		//do something else
 		err=this.Root().Destroy()
 		if err!=nil{
 			logger.Error(err)
 		}
+		time.Sleep(time.Second*2)
 		//close success
 		logger.Info("====== Server is closed ======")
 		return

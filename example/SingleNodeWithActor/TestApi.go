@@ -71,6 +71,10 @@ func (this *TestApi)CreateRoom(sess *network.Session,message *TestCreateRoom)  e
 	}
 	var res *Actor.ActorMessage
 	//直接调用，每次都会在位置服务器上查询
+	//proxy,err:=this.ActorProxy()
+	//if err!=nil {
+	//	return errReply()
+	//}
 	//err=proxy.ServiceCall(actor,mes,&res,"room")
 	//通过actor调用，优先缓存，有去中心化效果
 	err=actor.ServiceCall(mes,&res,"room")

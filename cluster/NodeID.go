@@ -18,6 +18,7 @@ func (this *NodeID) GetClient() (*rpc.TcpClient,error)  {
 	return this.nodeComponent.GetNodeClient(this.Addr)
 }
 
+//无需加锁，只读
 type NodeIDGroup struct {
 	nodeComponent *NodeComponent
 	nodes []*InquiryReply
@@ -46,6 +47,27 @@ func (this *NodeIDGroup)RandClient() (*rpc.TcpClient,error) {
 	index:=rand.Intn(length)
 
 	return this.nodeComponent.GetNodeClient(this.nodes[index].Node)
+}
+
+//所有客户端
+func (this *NodeIDGroup)Clients() ([]*rpc.TcpClient,error) {
+	length:=len(this.nodes)
+	if length == 0 {
+		return nil,errors.New("this node id group is empty")
+	}
+	clients:=[]*rpc.TcpClient{}
+	for _, nodeID := range this.nodes {
+		client,err:=this.nodeComponent.GetNodeClient(nodeID.Node)
+		if err!=nil {
+			continue
+		}
+		clients= append(clients,client)
+
+	}
+	if len(clients)<=0{
+		return nil, errors.New("this node id group is empty")
+	}
+	return clients,nil
 }
 
 //选择一个负载最低的节点

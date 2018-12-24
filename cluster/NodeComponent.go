@@ -7,6 +7,7 @@ import (
 	"github.com/zllangct/RockGO/configComponent"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
+	"math/rand"
 	"net"
 	"reflect"
 	"sync"
@@ -27,7 +28,8 @@ type NodeComponent struct {
 	rpcClient       sync.Map 				//RPC客户端集合
 	rpcServer       *rpc.Server				//本节点RPC Server
 	serverListener  *net.TCPListener
- 	locationClients *NodeIDGroup			//位置服务器集合
+ 	locationClients []*rpc.TcpClient			//位置服务器集合
+ 	locationGetter  func()
 	lockers         sync.Map 				//[nodeid,locker]
 	clientGetting   map[string]int
 }
@@ -41,6 +43,7 @@ func (this *NodeComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
 }
 
 func(this *NodeComponent)Initialize()error{
+	logger.Info("NodeComponent init .....")
 	this.AppName = Config.Config.ClusterConfig.AppName
 	this.islocationMode =Config.Config.ClusterConfig.IsLocationMode
 	this.clientGetting =make(map[string]int)
@@ -50,23 +53,12 @@ func(this *NodeComponent)Initialize()error{
 		//地址占用，立即修改配置文件
 		return err
 	}
-	//查询位置服务器
-	go this.GetLocationServer()
+	//初始化位置服务器搜索
+	this.InitLocationServerGetter()
+	this.locationGetter()
+	logger.Info("NodeComponent initialized.")
 	return nil
 }
-
-//网络模块不能立即做清理，其他模块清理过程中会进行通讯
-//func (this *NodeComponent)Destroy(ctx Component.Context) {
-//	err:= this.serverListener.Close()
-//	this.rpcClient.Range(func(key, value interface{}) bool {
-//		err=value.(*rpc.TcpClient).Close()
-//		if err!=nil {
-//			logger.Error(err)
-//		}
-//		return true
-//	})
-//	return err
-//}
 
 func (this *NodeComponent)Locker() *sync.RWMutex {
 	return &this.locker
@@ -80,30 +72,59 @@ func (this *NodeComponent)IsOnline() bool {
 }
 
 //获取位置服务器
-func (this *NodeComponent)GetLocationServer()  {
-	for {
-		if !this.IsOnline() {
-			time.Sleep(time.Second)
-			continue
-		}
-		this.locker.Lock()
-		if this.locationClients != nil {
-			this.locker.Unlock()
-			time.Sleep(time.Second)
-			continue
-		}
-		this.locker.Unlock()
-		g,err:= this.GetNodeGroupFromMaster("location")
-		if err!=nil || len(g.Nodes())==0{
-			//logger.Debug(err)
-			time.Sleep(time.Second)
-			continue
-		}
-		this.locker.Lock()
-		this.locationClients = g
-		this.locker.Unlock()
-		continue
+func (this *NodeComponent)InitLocationServerGetter()  {
+	if !Config.Config.ClusterConfig.IsLocationMode {
+		return
 	}
+	locker := sync.RWMutex{}
+	isGetting:=false
+	//保证同时只有一个在执行
+	getter:= func()  {
+		locker.RLock()
+		if isGetting {
+			locker.RUnlock()
+			return
+		}
+		locker.RUnlock()
+
+		locker.Lock()
+		isGetting=true
+		locker.Unlock()
+
+		for  {
+			if !this.IsOnline() {
+				time.Sleep(time.Second)
+				continue
+			}
+			g,err:= this.GetNodeGroupFromMaster("location")
+			if err!=nil || len(g.Nodes())==0{
+				time.Sleep(time.Second)
+				continue
+			}
+			cs,err:=g.Clients()
+			if err!=nil {
+				time.Sleep(time.Second)
+				continue
+			}
+			this.locker.Lock()
+			this.locationClients = cs
+			this.locker.Unlock()
+			locker.Lock()
+			isGetting=false
+			locker.Unlock()
+			break
+		}
+	}
+	this.locationGetter = func() {
+		go getter()
+	}
+}
+
+func (this *NodeComponent)locationBroken()  {
+	this.locker.Lock()
+	this.locationClients=nil
+	this.locker.Unlock()
+	this.locationGetter()
 }
 
 //RPC服务
@@ -157,8 +178,9 @@ func (this *NodeComponent) GetNodeClient(addr string) (*rpc.TcpClient,error){
 		goto a
 	}else{
 		this.clientGetting[addr]= 0
+		this.locker.Unlock()
 	}
-	this.locker.Unlock()
+
 
 	defer func() {
 		this.locker.Lock()
@@ -217,16 +239,17 @@ func (this *NodeComponent)GetNodeGroup(role string) (*NodeIDGroup,error) {
 func (this *NodeComponent)GetNodeFromLocation(role string,selectorType ...SelectorType) (*NodeID,error) {
 	var client *rpc.TcpClient
 	var err error
-	this.locker.Lock()
+
+	this.locker.RLock()
 	if this.locationClients==nil{
-		this.locker.Unlock()
+		this.locker.RUnlock()
 		return nil, errors.New("location server not found")
 	}
-	client,err= this.locationClients.RandClient()
-	this.locker.Unlock()
-	if err!=nil {
-		return nil,err
-	}
+	//随机一个节点
+	rnd:=rand.Intn(len(this.locationClients))
+	client=this.locationClients[rnd]
+	this.locker.RUnlock()
+
 	var reply *[]*InquiryReply
 	args:=[]string{
 		SELECTOR_TYPE_DEFAULT,Config.Config.ClusterConfig.AppName,role,
@@ -237,9 +260,7 @@ func (this *NodeComponent)GetNodeFromLocation(role string,selectorType ...Select
 
 	err = client.Call("LocationService.NodeInquiry",args,&reply)
 	if err!=nil {
-		this.locker.Lock()
-		this.locationClients=nil
-		this.locker.Unlock()
+		this.locationBroken()
 		return nil,err
 	}
 	if len(*reply)>0{
@@ -255,21 +276,26 @@ func (this *NodeComponent)GetNodeFromLocation(role string,selectorType ...Select
 
 //从位置服务器查询
 func (this *NodeComponent)GetNodeGroupFromLocation(role string) (*NodeIDGroup,error) {
-	this.locker.Lock()
-	client,err:= this.locationClients.RandClient()
-	this.locker.Unlock()
-	if err!=nil {
-		return nil,err
+	var client *rpc.TcpClient
+	var err error
+
+	this.locker.RLock()
+	if this.locationClients==nil{
+		this.locker.RUnlock()
+		return nil, errors.New("location server not found")
 	}
+	//随机一个节点
+	rnd:=rand.Intn(len(this.locationClients))
+	client=this.locationClients[rnd]
+	this.locker.RUnlock()
+
 	var reply *[]*InquiryReply
 	args:=[]string{
 		SELECTOR_TYPE_GROUP,Config.Config.ClusterConfig.AppName,role,
 	}
 	err = client.Call("LocationService.NodeInquiry",args,&reply)
 	if err!=nil {
-		this.locker.Lock()
-		this.locationClients=nil
-		this.locker.Unlock()
+		this.locationBroken()
 		return nil,err
 	}
 	g:=&NodeIDGroup{
@@ -340,7 +366,7 @@ func (this *NodeComponent) ConnectToNode(addr string,callback func(event string,
 	}
 	count:=0
 	for err!=nil {
-		time.Sleep(time.Millisecond * 500)
+		//time.Sleep(time.Millisecond * 500)
 		err = client.Reconnect()
 
 		if err!=nil  {
