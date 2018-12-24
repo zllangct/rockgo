@@ -73,7 +73,7 @@ Server：
 ```
 Client：
 ```
-//默认网关采用websocket协议，可以使用任务websocket客户点连接测试。example中提供一个laya客户端供测试使用。
+//默认网关采用websocket协议，可以使用任意websocket客户点连接测试。example中提供一个laya客户端供测试使用。
 ```
 ### Feature：
 
