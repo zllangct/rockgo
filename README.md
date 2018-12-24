@@ -304,6 +304,7 @@ type NetAPI interface {
 ###### &emsp;&emsp;(6). 后台管理页面、数据统计页面
 ###### &emsp;&emsp;(7). 节点平滑升级
 ###### &emsp;&emsp;(8). 提供具有单点登录模型
+###### &emsp;&emsp;(9). 提供protobuf 前后端协议自动化对应工具
 ###### &emsp;&emsp;。。。。。。
 #### 9. 写在后面
 &emsp;&emsp;  致谢：  [gin — gin-gonic](https://github.com/gin-gonic/gin)、[websocket—gorilla](https://github.com/gorilla/websocket)
