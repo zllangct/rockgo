@@ -217,7 +217,7 @@ type MessageProtocol interface {
 }
 ```
 #### 7. 业务接口
-##### 5.1 支持的序列化协议 
+##### 7.1 路由规则 
 &emsp;&emsp;框架提供消息的路由，无需用户手动对应消息的处理方法，框架根据函数自动判断是否为消息处理函数。需要满足以下条件
 ： 
 ###### &emsp;&emsp;(1). 结构体继承 ApiBase 
@@ -275,6 +275,7 @@ func (this *TestApi) Other(sess *network.Session,message *Other) error {
 	......
 }
 ```
+##### 7.1 自定义路由 
 &emsp;&emsp;当然用户可以不用使用框架自带的消息路由方法，可以实现NetAPI接口自定义消息路由规则：
 ```
 type NetAPI interface {
