@@ -29,12 +29,12 @@ type methodType struct {
 	ArgsType  reflect.Type
 }
 
-/*  仅初始化route id2mt 会写入，运行过程中并无竞态 */
+/*  仅初始化route mt2id 会写入，运行过程中并无竞态 */
 type ApiBase struct {
-	route map[uint32]*methodType
-	id2mt map[reflect.Type]uint32
+	route  map[uint32]*methodType
+	mt2id  map[reflect.Type]uint32
 	protoc MessageProtocol
-	parent  *Component.Object
+	parent *Component.Object
 	resv   reflect.Value
 	isInit bool
 }
@@ -78,7 +78,7 @@ func (this *ApiBase)MessageEncode(message interface{}) (uint32,[]byte,error) {
 		return 0, nil, err
 	}
 	t:=reflect.TypeOf(message)
-	if id,ok:=this.id2mt[t];ok {
+	if id,ok:=this.mt2id[t];ok {
 		return id, b, nil
 	}else{
 		return 0, nil,errors.New(fmt.Sprintf("this message type: %s not be registered",t.Name()))
@@ -87,7 +87,7 @@ func (this *ApiBase)MessageEncode(message interface{}) (uint32,[]byte,error) {
 
 func (this *ApiBase)Init(subStruct interface{},parent *Component.Object,id2mt map[reflect.Type]uint32,protocol MessageProtocol)  {
 	this.route = map[uint32]*methodType{}
-	this.id2mt = id2mt
+	this.mt2id = id2mt
 	this.protoc = protocol
 	this.isInit = true
 	this.parent = parent
@@ -105,12 +105,12 @@ func (this *ApiBase)Route(sess *Session, messageID uint32,data []byte)  {
 			case string:
 				str = r.(string)
 			}
-			err := errors.New(str+ string(debug.Stack()))
+			err := errors.New(str+"\n"+ string(debug.Stack()))
 			logger.Error(err)
 		}
 	})()
 	if mt,ok:= this.route[messageID];ok {
-		v:= reflect.New(mt.ArgsType)
+		v:= reflect.New(mt.ArgsType.Elem())
 		err:= this.protoc.Unmarshal(data,v.Interface())
 		if err!=nil{
 			logger.Debug(fmt.Sprintf("unmarshal message failed :%s ,%s",mt.ArgsType.Elem().Name(),err))
@@ -119,7 +119,7 @@ func (this *ApiBase)Route(sess *Session, messageID uint32,data []byte)  {
 		args:=[]reflect.Value{
 			this.resv,
 			reflect.ValueOf(sess),
-			v.Elem(),
+			v,
 		}
 		re:=mt.method.Call(args)
 		errinterface:=re[0].Interface()
@@ -140,7 +140,7 @@ func (this *ApiBase)On(handler interface{})  {
 		panic(ErrApiHandlerParamWrong)
 	}
 	argsType:=mType.In(2)
-	if index,ok:=this.id2mt[argsType];ok {
+	if index,ok:=this.mt2id[argsType];ok {
 		if _,exist:= this.route[index];exist{
 			panic(ErrApiRepeated)
 		}else{
@@ -190,7 +190,7 @@ func (this *ApiBase)Register(api interface{})  {
 			continue
 		}
 
-		if index,ok:=this.id2mt[argsType];ok {
+		if index,ok:=this.mt2id[argsType];ok {
 			if _,exist:= this.route[index];exist{
 				panic(ErrApiRepeated)
 			}else{
@@ -206,6 +206,6 @@ func (this *ApiBase)Register(api interface{})  {
 }
 
 func (this *ApiBase)GetMessageType(message interface{}) (uint32,bool) {
-	id,ok:=this.id2mt[reflect.TypeOf(message)]
+	id,ok:=this.mt2id[reflect.TypeOf(message)]
 	return id,ok
 }

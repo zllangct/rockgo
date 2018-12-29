@@ -15,5 +15,5 @@ func (this *JsonProtocol)Marshal(message interface{})([]byte,error)  {
 }
 
 func (this *JsonProtocol)Unmarshal(data []byte, messageType interface{}) error {
-	return json.Unmarshal(data,messageType)
+	return json.Unmarshal(data,&messageType)
 }

@@ -2,7 +2,6 @@ package Cluster
 
 import (
 	"errors"
-	"github.com/zllangct/RockGO/logger"
 )
 
 type NodeInfo struct {
@@ -41,7 +40,7 @@ func (this *MasterService) ReportNodeInfo(args *NodeInfo, reply *bool) error {
 }
 
 func (this *MasterService) NodeInquiry(args []string, reply *[]*InquiryReply) error {
-	logger.Debug("Inquiry :",args)
+	//logger.Debug("Inquiry :",args)
 	res,err:= this.master.NodeInquiry(args,false)
 	*reply =res
 	return err
