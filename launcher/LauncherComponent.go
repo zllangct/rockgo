@@ -9,6 +9,7 @@ import (
 	"github.com/zllangct/RockGO/configComponent"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
+	"github.com/zllangct/RockGO/timer"
 	"os"
 	"os/signal"
 	"strings"
@@ -19,7 +20,7 @@ import (
 var ErrServerNotInit =errors.New("server is not initialize")
 
 /* 服务端启动组件 */
-type LauncherComponent struct { 
+type LauncherComponent struct {
 	Component.Base
 	componentGroup *Cluster.ComponentGroups
 	Config         *Config.ConfigComponent
@@ -87,26 +88,27 @@ func (this *LauncherComponent) Serve(){
 
 	c := make(chan os.Signal)
 	signal.Notify(c,syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+
+	/* 清理测试代码,ide关闭信号无法命中断点 */
 	//go func() {
 	//	time.Sleep(time.Second*2)
 	//	this.Close<- struct {}{}
 	//}()
-	for  {
-		select {
-		case <-c:
-		case <-this.Close:
-		}
-		logger.Info("====== Start to close this server, do some cleaning now ...... ======")
-		//do something else
-		err=this.Root().Destroy()
-		if err!=nil{
-			logger.Error(err)
-		}
-		time.Sleep(time.Second*2)
-		//close success
-		logger.Info("====== Server is closed ======")
-		return
+
+	//等待服务器关闭，并执行停机处理
+	select {
+	case <-c:
+	case <-this.Close:
 	}
+
+	logger.Info("====== Start to close this server, do some cleaning now ...... ======")
+	//do something else
+	err=this.Root().Destroy()
+	if err!=nil{
+		logger.Error(err)
+	}
+	<-timer.After(time.Second)
+	logger.Info("====== Server is closed ======")
 }
 
 //覆盖节点信息

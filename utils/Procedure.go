@@ -1,9 +1,6 @@
 package utils
 
 import (
-	"errors"
-	"github.com/zllangct/RockGO/logger"
-	"runtime/debug"
 	"time"
 )
 
@@ -21,18 +18,3 @@ func StartProcedure(checkInterval time.Duration,tasks ...*Procedure)  {
 	}
 }
 
-func Try(task func())  {
-	defer (func() {
-		if r := recover(); r != nil {
-			var str string
-			switch r.(type) {
-			case error:
-				str =r.(error).Error()
-			case string:
-				str = r.(string)
-			}
-			logger.Error(errors.New(str+"\n"+ string(debug.Stack())))
-		}
-	})()
-	task()
-}
