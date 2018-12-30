@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/zllangct/RockGO/3rd/iter"
 	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/RockGO/utils"
 	"github.com/zllangct/RockGO/utils/UUID"
 	"reflect"
 	"runtime/debug"
@@ -17,7 +18,7 @@ type Object struct {
 	name       string
 	runtime    *Runtime
 	components []IComponent
-	children   []*Object
+	children   []*Object 
 	parent     *Object
 	locker     *sync.RWMutex
 }
@@ -66,9 +67,7 @@ func (o *Object) AddComponent(component IComponent) *Object {
 			}
 		}
 		o.components = append(o.components, component)
-		if init,ok:=component.(IInit);ok{
-			return init.Initialize()
-		}
+
 		runtime:= o._runtime()
 		if runtime != nil{
 			runtime.SystemFilter(component)
@@ -78,6 +77,11 @@ func (o *Object) AddComponent(component IComponent) *Object {
 	if err != nil {
 		logger.Error(err)
 	}
+	utils.Try(func() {
+		if init,ok:=component.(IInit);ok{
+			init.Initialize()
+		}
+	})
 	return o
 }
 

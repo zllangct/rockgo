@@ -5,9 +5,11 @@ import (
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/configComponent"
 	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/RockGO/timer"
 	"reflect"
 	"runtime/debug"
 	"sync/atomic"
+	"time"
 )
 
 /*
@@ -126,7 +128,10 @@ func (this *ActorComponent) Tell(sender IActor,message *ActorMessage,reply ...**
 	this.queueReceive <- messageInfo
 
 	if messageInfo.IsNeedReply() {
-		<-messageInfo.done
+		select {
+		case <-timer.After(time.Duration(Config.Config.ClusterConfig.RpcCallTimeout)* time.Millisecond):
+		case <-messageInfo.done:
+		}
 	}
 	return messageInfo.err
 }

@@ -18,10 +18,10 @@ type ConfigComponent struct {
 	Component.Base
 	commonConfigPath  string
 	clusterConfigPath string
-	customConfigPath  map[string]string
+	customConfigPath  string
 	CommonConfig      *CommonConfig
 	ClusterConfig     *ClusterConfig
-	CustomConfig      map[string]interface{}
+	CustomConfig      interface{}
 }
 
 func (this *ConfigComponent) IsUnique() int {
@@ -80,8 +80,8 @@ func (this *ConfigComponent) ReloadConfig() {
 	if err != nil {
 		panic(err)
 	}
-	for name, path := range this.customConfigPath {
-		err = this.loadConfig(path, this.CustomConfig[name])
+	if this.customConfigPath!="" {
+		err = this.loadConfig(this.customConfigPath, this.CustomConfig)
 		if err != nil {
 			panic(err)
 		}
@@ -89,18 +89,15 @@ func (this *ConfigComponent) ReloadConfig() {
 }
 
 // configComponent.CustomConfig[name] = structure
-func (this *ConfigComponent) LoadCustomConfig(name string, path string, structure interface{}) (err error) {
-	if name == "" || path == "" {
-		return errors.New("config name or path can ont be empty")
-	}
+func (this *ConfigComponent) LoadCustomConfig(path string, structure interface{}) (err error) {
 	kind := reflect.TypeOf(structure).Kind()
 	if kind != reflect.Ptr && kind != reflect.Map {
 		err = errors.New("structure must be pointer or map")
 		return
 	}
 	err = this.loadConfig(path, structure)
-	this.CustomConfig[name] = structure
-	this.CustomConfig[name] = path
+	this.CustomConfig = structure 
+	this.customConfigPath = path
 	return err
 }
 
@@ -131,10 +128,6 @@ func (this *ConfigComponent) SetDefault() {
 			"node_master": {LocalAddress: "0.0.0.0:6666", Role: []string{"master"}},
 			//位置服务节点
 			"node_location": {LocalAddress: "0.0.0.0:6603", Role: []string{"location"}},
-			//actor位置服务节点
-			"node_actor_service": {LocalAddress: "0.0.0.0:6604", Role: []string{"actor_service"}},
-			//位置服务+actor位置服务
-			"node_location_actor_service": {LocalAddress: "0.0.0.0:6604", Role: []string{"location", "actor_service"}},
 
 			//用户自定义
 			"node_gate":  {LocalAddress: "0.0.0.0:6601", Role: []string{"gate"}},

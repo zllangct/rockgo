@@ -9,16 +9,18 @@ import (
 
 var defaultNode *Server
 
-type Server = launcher.ServerNode
+type Server = launcher.LauncherComponent
 
 //新建一个服务节点
 func NewServerNode() *Server {
-	active:=make(chan *Server)
 	//构造运行时
 	runtime:=Component.NewRuntime(Component.Config{ThreadPoolSize: runtime.NumCPU()})
-	runtime.Root().AddComponent(&launcher.LauncherComponent{Active:active})
 	runtime.UpdateFrameByInterval(time.Millisecond*100)
-	return <-active
+
+	//构造启动器
+	launcher:=&launcher.LauncherComponent{}
+	runtime.Root().AddComponent(launcher)
+	return launcher
 }
 
 //获取默认节点

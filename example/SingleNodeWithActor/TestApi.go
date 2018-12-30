@@ -65,10 +65,7 @@ func (this *TestApi)CreateRoom(sess *network.Session,message *TestCreateRoom)  e
 	if err!=nil {
 		return errReply()
 	}
-	mes:=&Actor.ActorMessage{
-		Service: "newRoom",
-		Data:    []interface{}{sess.ID},
-	}
+	mes:=Actor.NewActorMessage("newRoom",sess.ID)
 	var res *Actor.ActorMessage
 	//直接调用，每次都会在位置服务器上查询
 	//proxy,err:=this.ActorProxy()

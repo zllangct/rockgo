@@ -24,6 +24,10 @@ type NodeIDGroup struct {
 	nodes []*InquiryReply
 }
 
+func NewNodeIDGrop()*NodeIDGroup  {
+	return &NodeIDGroup{nodes:[]*InquiryReply{}}
+}
+
 //所有节点，仅地址
 func (this *NodeIDGroup) Nodes() []string {
 	nodes:=make([]string,len(this.nodes))
@@ -36,6 +40,16 @@ func (this *NodeIDGroup) Nodes() []string {
 //所有节点，详细信息
 func (this *NodeIDGroup) NodesDetail() []*InquiryReply {
 	return this.nodes
+}
+
+//随机选择一个
+func (this *NodeIDGroup)RandOne() (string,error) {
+	length:=len(this.nodes)
+	if length == 0 {
+		return "",errors.New("this node id group is empty")
+	}
+	index:=rand.Intn(length)
+	return this.nodes[index].Node,nil
 }
 
 //随机选择一个

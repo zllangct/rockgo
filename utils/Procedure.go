@@ -31,7 +31,7 @@ func Try(task func())  {
 			case string:
 				str = r.(string)
 			}
-			logger.Error(errors.New(str+ string(debug.Stack())))
+			logger.Error(errors.New(str+"\n"+ string(debug.Stack())))
 		}
 	})()
 	task()
