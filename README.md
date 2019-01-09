@@ -42,7 +42,7 @@ Config：
     }
 ```
 Server：  
-```
+```go
     package main
     
     import (
@@ -137,7 +137,7 @@ ECS实现，而且比OOP实现Actor更简单。
 ##### 4.2 自定义网络协议
 &emsp;&emsp;框架内可以很轻松的实现自定义协议的扩展，对原有协议都是非侵入的依赖，只需要简单封装，比如各种可靠UDP协议，KCP、UDT、
 ENET等，只需要实现以下述接口：
-```
+```go
     //网络协议
     type ServerHandler interface {
         Listen() error                      //监听
@@ -159,7 +159,7 @@ ENET等，只需要实现以下述接口：
 &emsp;&emsp;网络协议的实现可参照TCP、UDP和Websocket。各种网络协议所提供链接对象可不相同，
 需要实现连接对象接口进行统一，供Session使用。网络协议和链接对象接口的实现相对简单，不容
 易产生歧义，其中解包协议参照TCP和Websocket用法：
-```
+```go
 /* TCP LTD protocol 
 	Length—（Type—Data） ，数据长度—（消息类型—消息体） 大小：  4 — （4 — n）
 */
@@ -209,7 +209,7 @@ func (s *TdProtocol) ParsePackage(buff []byte) (pkgLen, status int) {
 ###### &emsp;&emsp;&emsp;(1). Json &emsp;(2). ProtoBuf
 ##### 5.2 自定义序列化协议
 &emsp;&emsp;自定义序列化协议需要实现以下接口：
-```
+```go
 //消息解析协议
 type MessageProtocol interface {
 	Marshal( interface{})([]byte,error)         //序列化
@@ -225,7 +225,7 @@ type MessageProtocol interface {
 ###### &emsp;&emsp;(3). 函数必须为以下结构：func (this *XXX) FunctionName(sess *network.Session,message *MessageStruct)
 ###### &emsp;&emsp; 第一参数为 会话Session，第二参数为消息对应的结构体，框架会更加第二参数去判断处理哪里一条消息。
 &emsp;&emsp;参见:
-```
+```go
 //协议对应字典
 var Testid2mt = map[reflect.Type]uint32{
 	reflect.TypeOf(&TestMessage{}):1,
@@ -277,7 +277,7 @@ func (this *TestApi) Other(sess *network.Session,message *Other) error {
 ```
 ##### 7.1 自定义路由 
 &emsp;&emsp;当然用户可以不用使用框架自带的消息路由方法，可以实现NetAPI接口自定义消息路由规则：
-```
+```go
 type NetAPI interface {
 	Init(interface{},*Component.Object, map[reflect.Type]uint32,MessageProtocol)  //初始化
 	Route(*Session, uint32, []byte)	                                              //反序列化并路由到api处理函数
