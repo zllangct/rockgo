@@ -12,3 +12,4 @@ func MD5(str string)string  {
 	return hex.EncodeToString(cipherStr)
 }
 
+ 

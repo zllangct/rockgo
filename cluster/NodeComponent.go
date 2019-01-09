@@ -239,6 +239,10 @@ func (this *NodeComponent)GetNodeGroup(role string) (*NodeIDGroup,error) {
 	if err!=nil {
 		return nil,err
 	}
+
+	if nodeIDGroup == nil{
+		nodeIDGroup = NewNodeIDGrop()
+	}
 	return nodeIDGroup,nil
 }
 

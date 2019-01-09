@@ -44,6 +44,9 @@ func (this *NodeIDGroup) NodesDetail() []*InquiryReply {
 
 //随机选择一个
 func (this *NodeIDGroup)RandOne() (string,error) {
+	if this.nodes ==nil{
+		return "",errors.New("this node id group is empty")
+	}
 	length:=len(this.nodes)
 	if length == 0 {
 		return "",errors.New("this node id group is empty")
