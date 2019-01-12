@@ -79,7 +79,7 @@ func (this *ActorComponent) Awake(ctx *Component.Context) {
 }
 
 func (this *ActorComponent)RegisterService(service string) error {
-	return this.Proxy.RegisterService(this,service)
+	return this.Proxy.RegisterServiceUnique(this,service)
 }
 func (this *ActorComponent)UnregisterService(service string) error {
 	return this.Proxy.UnregisterService(this,service)
@@ -91,22 +91,23 @@ func (this *ActorComponent) Destroy(ctx *Component.Context) {
 	this.Proxy.Unregister(this)
 }
 
-func (this *ActorComponent)Start(ctx *Component.Context)  {
-	cps := this.Parent().AllComponents()
-	var err error = nil
-	var val interface{}
-	for val, err = cps.Next(); err == nil; val, err = cps.Next() {
-		if messageHandler, ok := val.(IActorMessageHandler); ok {
-			services:= messageHandler.MessageHandlers()
-			for key, _ := range services {
-				err:=this.RegisterService(key)
-				if err!=nil {
-					logger.Error(err)
-				}
-			}
-		}
-	}
-}
+//此处不需要自动注册所有处理方法为service
+//func (this *ActorComponent)Start(ctx *Component.Context)  {
+//	cps := this.Parent().AllComponents()
+//	var err error = nil
+//	var val interface{}
+//	for val, err = cps.Next(); err == nil; val, err = cps.Next() {
+//		if messageHandler, ok := val.(IActorMessageHandler); ok {
+//			services:= messageHandler.MessageHandlers()
+//			for key, _ := range services {
+//				err:=this.RegisterService(key)
+//				if err!=nil {
+//					logger.Error(err)
+//				}
+//			}
+//		}
+//	}
+//}
 
 func (this *ActorComponent) Tell(sender IActor,message *ActorMessage,reply ...**ActorMessage) error {
 	if atomic.LoadInt32(&this.active) == 0 {

@@ -74,3 +74,7 @@ func (this *Base)Parent()*Object  {
 func (this *Base)Root()*Object  {
 	return this.runtime.Root()
 }
+
+func (this *Base)GetComponent(cpt interface{}) error {
+	return this.Parent().Find(cpt)
+}

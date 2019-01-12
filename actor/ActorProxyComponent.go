@@ -72,12 +72,12 @@ func (this *ActorProxyComponent) Destroy(ctx *Component.Context)  {
 
 //调用actor service
 func (this *ActorProxyComponent) ServiceCall(actor IActor,message *ActorMessage, reply **ActorMessage, role ...string) error {
-	_,err:=this.ServiceCallRetrunClient(actor,message,reply,role...)
+	_,err:=this.ServiceCallReturnClient(actor,message,reply,role...)
 	return err
 }
 
 //调用actor service
-func (this *ActorProxyComponent) ServiceCallRetrunClient(actor IActor,message *ActorMessage, reply **ActorMessage, role ...string) (*rpc.TcpClient,error ){
+func (this *ActorProxyComponent) ServiceCallReturnClient(actor IActor,message *ActorMessage, reply **ActorMessage, role ...string) (*rpc.TcpClient,error ){
 	var targetID ActorID
 	g, ok := this.service.Load(message.Service)
 	//优先尝试本地服务
@@ -130,7 +130,16 @@ func (this *ActorProxyComponent) ServiceCallByRpcClient(actor IActor,message *Ac
 }
 
 //注册服务
-func (this *ActorProxyComponent) RegisterService(actor IActor, service ...string) error {
+func (this *ActorProxyComponent) RegisterServiceUnique(actor IActor, service string) error {
+	g, _ := this.service.LoadOrStore(service, &ActorIDGroup{})
+	if !g.(*ActorIDGroup).Has(actor.ID()) {
+		g.(*ActorIDGroup).Add(actor.ID())
+	}else{
+		return errors.New("this service is repeated")
+	}
+	return nil
+}
+func (this *ActorProxyComponent) RegisterServices(actor IActor, service ...string) error {
 	for _, value := range service {
 		g, _ := this.service.LoadOrStore(value, &ActorIDGroup{})
 		if !g.(*ActorIDGroup).Has(actor.ID()) {

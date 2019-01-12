@@ -8,22 +8,19 @@ import (
 
 type RoomManagerComponent struct {
 	Component.Base
+	Actor.ActorBase
 	locker sync.RWMutex
 	rooms map[int]Actor.IActor
-	messageHandler map[string]func(message *Actor.ActorMessageInfo)
 	increasing int   //实际运用不这样,此处便宜行事
-	actor   *Actor.ActorComponent
 }
 
 func (this *RoomManagerComponent)Awake(ctx *Component.Context){
+	//初始化actor
+	this.ActorInit(this.Parent())
+	//初始化房间
 	this.rooms = make(map[int]Actor.IActor)
-	this.messageHandler=map[string]func(message *Actor.ActorMessageInfo){
-		"newRoom":this.NewRoom,
-	}
-}
-
-func (this *RoomManagerComponent) MessageHandlers() map[string]func(message *Actor.ActorMessageInfo) {
-	return this.messageHandler
+	//注册actor消息
+	this.AddHandler("newRoom",this.NewRoom,true)
 }
 
 func (this *RoomManagerComponent)NewRoom(message *Actor.ActorMessageInfo)  {

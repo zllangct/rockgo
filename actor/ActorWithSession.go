@@ -48,7 +48,7 @@ func (this *ActorWithSession)ServiceCall(message *ActorMessage, reply **ActorMes
 		this.sess.RemoveProperty(service)
 	}
 	//无缓存，或者通过缓存调用失败，重新查询调用
-   	client,err:= this.proxy.ServiceCallRetrunClient(this,message,reply,role...)
+   	client,err:= this.proxy.ServiceCallReturnClient(this,message,reply,role...)
 	if err!=nil {
 		return err
 	}

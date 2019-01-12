@@ -79,6 +79,11 @@ func (this *LauncherComponent) Serve(){
 		this.AddComponentGroup("location",[]Component.IComponent{&Cluster.LocationComponent{}})
 	}
 
+	//处理single模式
+	//if Config.Config.ClusterConfig.Role[0] == "single" {
+	//
+	//}
+
 	//添加基础组件组,一般通过组建组的定义决定服务器节点的服务角色
 	err:= this.componentGroup.AttachGroupsTo(Config.Config.ClusterConfig.Role, this.Root())
 	if err!=nil {

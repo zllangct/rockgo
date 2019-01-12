@@ -52,7 +52,7 @@ func (this *ChildComponent) Destroy(ctx *Component.Context) {
 
 //上报节点信息
 func (this *ChildComponent) DoReport() {
-	utils.When(time.Second,
+	utils.When(time.Millisecond*50,
 	func() bool {
 		this.locker.RLock()
 		defer this.locker.RUnlock()
