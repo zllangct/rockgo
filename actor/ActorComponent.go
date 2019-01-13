@@ -36,6 +36,10 @@ type ActorComponent struct {
 	active       int32                  //是否激活,0：未激活 1：激活
 }
 
+func NewActorComponent(actorType ActorType) *ActorComponent {
+	return &ActorComponent{ActorType: actorType}
+}
+
 func (this *ActorComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
 	requires:=make(map[*Component.Object][]reflect.Type)
 	//添加该组件需要根节点拥有ActorProxyComponent,ConfigComponent组件
@@ -50,7 +54,7 @@ func (this *ActorComponent) IsUnique() int {
 	return Component.UNIQUE_TYPE_LOCAL
 }
 
-func (this *ActorComponent) Awake(ctx *Component.Context) {
+func (this *ActorComponent) Initialize() error {
 	this.queueReceive= make(chan *ActorMessageInfo, 20)
 	this.close =       make(chan bool)
 	//初始化actor类型
@@ -61,7 +65,7 @@ func (this *ActorComponent) Awake(ctx *Component.Context) {
 	err := this.Runtime().Root().Find(&this.Proxy)
 	if err != nil {
 		logger.Error(err)
-		return
+		return err
 	}
 	//初始化ID
 	this.ActorID= EmptyActorID()
@@ -69,19 +73,25 @@ func (this *ActorComponent) Awake(ctx *Component.Context) {
 	err = this.Proxy.Register(this)
 	if err!=nil {
 		logger.Error(err)
-		return
+		return err
 	}
 	//初始化消息分发器
 	go this.dispatch()
 	//设置Actor状态为激活
 	atomic.StoreInt32(&this.active, 1)
-	return
+	return nil
 }
 
 func (this *ActorComponent)RegisterService(service string) error {
+	//utils.When(time.Millisecond *50, func() bool {
+	//	return this.Proxy!=nil
+	//})
 	return this.Proxy.RegisterServiceUnique(this,service)
 }
 func (this *ActorComponent)UnregisterService(service string) error {
+	//utils.When(time.Millisecond *50, func() bool {
+	//	return this.Proxy!=nil
+	//})
 	return this.Proxy.UnregisterService(this,service)
 }
 

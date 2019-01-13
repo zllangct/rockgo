@@ -8,9 +8,14 @@ import (
 
 type RoomComponent struct {
 	Component.Base
+	Actor.ActorBase
 	players       map[int]*Player
 	RoomID        int
-	actor         Actor.IActor
+}
+
+func (this *RoomComponent) Initialize() error {
+	this.ActorInit(this.Parent(),Actor.ACTOR_TYPE_SYNC)
+	return nil
 }
 
 func (this *RoomComponent) Awake(ctx *Component.Context) {
@@ -22,14 +27,4 @@ var ErrLoginPlayerNotExist =errors.New("this player doesnt exist")
 func (this *RoomComponent)Enter(player *Player) ([]interface{}, error) {
 	this.players[player.UID]=player
 	return []interface{}{"hello,welcome to enter this room."},nil
-}
-
-func (this *RoomComponent)Actor() (Actor.IActor,error) {
-	if this.actor==nil{
-		err:= this.Parent().Find(this.actor)
-		if err!=nil {
-			return nil,err
-		}
-	}
-	return this.actor,nil
 }

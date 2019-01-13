@@ -148,7 +148,7 @@ func (this *ConfigComponent) SetDefault() {
 		NetConnTimeout:   9000,
 		NetListenAddress: "0.0.0.0:5555",
 
-		IsActorModel: true,
+		//IsActorModel: true,
 	}
 }
 
@@ -188,7 +188,4 @@ type ClusterConfig struct {
 	//外网
 	NetConnTimeout   int    //外网链接超时
 	NetListenAddress string //网关对外服务地址
-
-	//actor
-	IsActorModel bool
 }

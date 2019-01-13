@@ -24,7 +24,7 @@ type ActorProxyComponent struct {
 	service       sync.Map // [service,[]actor]
 	nodeComponent *Cluster.NodeComponent
 	location      *rpc.TcpClient
-	isActorMode   bool
+	//isActorMode   bool
 	isOnline      bool
 }
 
@@ -44,7 +44,7 @@ func (this *ActorProxyComponent) IsUnique() int {
 func (this *ActorProxyComponent) Initialize() error {
 	logger.Info("ActorProxyComponent init .....")
 	this.nodeID = Config.Config.ClusterConfig.LocalAddress
-	this.isActorMode = Config.Config.ClusterConfig.IsActorModel
+	//this.isActorMode = Config.Config.ClusterConfig.IsActorModel
 	err := this.Runtime().Root().Find(&this.nodeComponent)
 	if err != nil {
 		return err

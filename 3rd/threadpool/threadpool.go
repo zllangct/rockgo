@@ -59,8 +59,7 @@ func (pool *ThreadPool) run(task func(), requireLock bool,postprocessing ...func
 			defer func() {
 				pool.lock.Lock()
 				if r := recover(); r != nil {
-					logger.Error(fmt.Sprintf("%s", r))
-					logger.Error(string(debug.Stack()))
+					logger.Error(fmt.Sprintf("%s\n%s", r,string(debug.Stack())))
 				}
 				pool.activeDown()
 				if len(postprocessing)>0 {

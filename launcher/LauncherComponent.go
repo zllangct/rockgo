@@ -68,9 +68,8 @@ func (this *LauncherComponent) Serve(){
 	this.Root().AddComponent(&Cluster.NodeComponent{})
 
 	//添加ActorProxy组件，组织节点间的通信
-	if Config.Config.ClusterConfig.IsActorModel {
-		this.Root().AddComponent(&Actor.ActorProxyComponent{})
-	}
+	this.Root().AddComponent(&Actor.ActorProxyComponent{})
+
 
 	//添加组件到待选组件列表，默认添加master,child组件
 	this.AddComponentGroup("master",[]Component.IComponent{&Cluster.MasterComponent{}})
@@ -151,9 +150,6 @@ func (this *LauncherComponent) AddComponentGroup(groupName string, group []Compo
 	if this.Config==nil {
 		panic(ErrServerNotInit)
 	}
-	if Config.Config.ClusterConfig.IsActorModel {
-		group= append(group, &Actor.ActorComponent{})
-	}
 	this.componentGroup.AddGroup(groupName, group)
 }
 
@@ -163,9 +159,6 @@ func (this *LauncherComponent) AddComponentGroups(groups map[string][]Component.
 		panic(ErrServerNotInit)
 	}
 	for groupName, group := range groups {
-		if Config.Config.ClusterConfig.IsActorModel {
-			group= append(group,&Actor.ActorComponent{})
-		}
 		this.componentGroup.AddGroup(groupName, group)
 	}
 	return nil
