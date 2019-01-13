@@ -3,7 +3,7 @@
     "LocalAddress": "0.0.0.0:6666",
     "AppName": "defaultApp",
     "Role": [
-        "master"
+        "single"
     ],
     "NodeDefine": {
         "node_actor_service": {
@@ -24,13 +24,6 @@
                 "location"
             ]
         },
-        "node_location_actor_service": {
-            "LocalAddress": "0.0.0.0:6604",
-            "Role": [
-                "location",
-                "actor_service"
-            ]
-        },
         "node_login": {
             "LocalAddress": "0.0.0.0:6602",
             "Role": [
@@ -47,16 +40,6 @@
             "LocalAddress": "0.0.0.0:6605",
             "Role": [
                 "room"
-            ]
-        },
-        "node_single": {
-            "LocalAddress": "0.0.0.0:6666",
-            "Role": [
-                "master",
-                "gate",
-                "login",
-                "room",
-                "location"
             ]
         }
     },

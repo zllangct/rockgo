@@ -48,10 +48,9 @@ func (this *ComponentGroups) AddGroup(groupName string, group []Component.ICompo
 func (this *ComponentGroups) AttachGroupsTo(groupName []string, target *Component.Object) error {
 	child,master,other := false,false,false
 
-	if len(groupName)==0 || (len(groupName)==1 && groupName[0]=="single") {
-		if len(this.group)== 2{
-			delete(this.group, "child")
-		}
+	if len(groupName)==1 && groupName[0]=="single" {
+		delete(this.group,"location")
+
 		for _, value := range this.group {
 			value.attachGroupTo(target)
 		}

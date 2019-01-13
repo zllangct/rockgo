@@ -125,7 +125,7 @@ func (this *ConfigComponent) SetDefault() {
 				内置角色：master、child、location、actor_location
 			*/
 			//master节点
-			"node_master": {LocalAddress: "0.0.0.0:6666", Role: []string{"master"}},
+			"node_master": {LocalAddress: "0.0.0.0:6666", Role: []string{"single"}},
 			//位置服务节点
 			"node_location": {LocalAddress: "0.0.0.0:6603", Role: []string{"location"}},
 
