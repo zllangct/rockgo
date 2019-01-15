@@ -1,6 +1,7 @@
 package Actor
 
 import (
+	"errors"
 	"math/rand"
 	"sync"
 )
@@ -63,11 +64,13 @@ func (this *ActorIDGroup)Get() []ActorID {
 	return as
 }
 
-func (this *ActorIDGroup) RndOne()ActorID  {
+func (this *ActorIDGroup) RndOne()(ActorID,error)  {
 	this.locker.RLock()
 	defer this.locker.RUnlock()
-
-	r:=rand.Intn(len(this.Actors))
-
-	return this.Actors[r]
+	l:=len(this.Actors)
+	if l==0 {
+		return nil, errors.New("this actor id group is empty")
+	}
+	r:=rand.Intn(l)
+	return this.Actors[r],nil
 }

@@ -83,16 +83,10 @@ func (this *ActorComponent) Initialize() error {
 }
 
 func (this *ActorComponent)RegisterService(service string) error {
-	//utils.When(time.Millisecond *50, func() bool {
-	//	return this.Proxy!=nil
-	//})
-	return this.Proxy.RegisterServiceUnique(this,service)
+	return this.Proxy.RegisterService(this,service)
 }
-func (this *ActorComponent)UnregisterService(service string) error {
-	//utils.When(time.Millisecond *50, func() bool {
-	//	return this.Proxy!=nil
-	//})
-	return this.Proxy.UnregisterService(this,service)
+func (this *ActorComponent)UnregisterService(service string) {
+	this.Proxy.UnregisterService(service)
 }
 
 func (this *ActorComponent) Destroy(ctx *Component.Context) {
@@ -141,6 +135,7 @@ func (this *ActorComponent) Tell(sender IActor,message *ActorMessage,reply ...**
 	if messageInfo.IsNeedReply() {
 		select {
 		case <-timer.After(time.Duration(Config.Config.ClusterConfig.RpcCallTimeout)* time.Millisecond):
+			messageInfo.err = ErrTimeout
 		case <-messageInfo.done:
 		}
 	}

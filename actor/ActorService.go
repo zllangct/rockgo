@@ -1,33 +1,20 @@
 package Actor
 
-type ActorProxyService struct {
-	proxy *ActorProxyComponent
+type ActorService struct {
+	actor   IActor
+	Service string
 }
 
-func (this *ActorProxyService) init(proxy *ActorProxyComponent) {
-	this.proxy = proxy
+func NewActorService(actor IActor, service string) *ActorService {
+	return &ActorService{actor: actor, Service: service}
 }
-func (this *ActorProxyService) Tell(args *ActorRpcMessageInfo, reply *ActorMessage) error {
-	minfo := &ActorMessageInfo{
-		Sender: NewActor(args.Sender,this.proxy),
-		Message: args.Message,
-		reply:   &reply,
+
+func (this *ActorService) Call(args ...interface{})([]interface{},error){
+	mes:=NewActorMessage(this.Service,args)
+	reply:=&ActorMessage{}
+	err:= this.actor.Tell(nil,mes,&reply)
+	if err!=nil {
+		return nil,err
 	}
-	return this.proxy.Emit(args.Target, minfo)
-}
-
-type ServiceCall struct {
-	Sender  ActorID
-	Message *ActorMessage
-}
-
-func (this *ActorProxyService) ServiceCall(args *ServiceCall, reply *ActorMessage) error {
-	sender:=NewActor(args.Sender,this.proxy)
-	var r *ActorMessage
-	err:= this.proxy.ServiceCall(sender,args.Message,&r)
-	if err!=nil{
-		return err
-	}
-	*reply = *r
-	return nil
+	return reply.Data,nil
 }

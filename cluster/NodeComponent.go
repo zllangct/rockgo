@@ -222,6 +222,19 @@ func (this *NodeComponent)GetNode(role string,selectorType ...SelectorType) (*No
 	return nodeID,nil
 }
 
+//查询获取客户端
+func (this *NodeComponent)GetNodeClientByRole(role string,selectorType ...SelectorType) (*rpc.TcpClient,error) {
+	nodeID, err := this.GetNode(role,selectorType...)
+	if err != nil {
+		return nil,err
+	}
+	client, err := nodeID.GetClient()
+	if err != nil {
+		return nil,err
+	}
+	return client,nil
+}
+
 //查询节点组
 func (this *NodeComponent)GetNodeGroup(role string) (*NodeIDGroup,error) {
 	var nodeIDGroup *NodeIDGroup

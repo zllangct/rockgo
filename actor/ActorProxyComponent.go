@@ -70,94 +70,60 @@ func (this *ActorProxyComponent) Destroy(ctx *Component.Context)  {
 
 }
 
-//调用actor service
-func (this *ActorProxyComponent) ServiceCall(actor IActor,message *ActorMessage, reply **ActorMessage, role ...string) error {
-	_,err:=this.ServiceCallReturnClient(actor,message,reply,role...)
-	return err
+//获取本地actor服务
+func (this *ActorProxyComponent)GetLocalActorService(serviceName string) (*ActorService,error){
+	var service *ActorService
+	var err error
+	s, ok := this.service.Load(serviceName)
+	if !ok {
+		return nil, ErrNoThisService
+	}
+	service = s.(*ActorService)
+	if err!=nil{
+		return nil, err
+	}
+	return service,nil
 }
 
-//调用actor service
-func (this *ActorProxyComponent) ServiceCallReturnClient(actor IActor,message *ActorMessage, reply **ActorMessage, role ...string) (*rpc.TcpClient,error ){
-	var targetID ActorID
-	g, ok := this.service.Load(message.Service)
+//获取actor服务
+func (this *ActorProxyComponent)GetActorService(role string,serviceName string) (*ActorService,error) {
+	var service *ActorService
+	var err error
 	//优先尝试本地服务
-	if ok {
-		targetID = g.(*ActorIDGroup).RndOne()
-		messageInfo := &ActorMessageInfo{
-			Sender:  actor,
-			Message: message,
-			reply:   reply,
-		}
-		err:= this.Emit(targetID, messageInfo)
-		if err==nil {
-			return nil,err
-		}
-	}
-	//本地无此服务，且有role参数时走网络途径
-	if len(role) == 0 {
-		return nil,ErrNoThisService
-	}
-	nodeID, err := this.nodeComponent.GetNode(role[0])
-	if err != nil {
-		return nil,err
-	}
-	if nodeID.Addr == this.nodeID {
-		return nil,ErrNoThisService
-	}
-	client, err := nodeID.GetClient()
-	if err != nil {
-		return nil,err
-	}
-	err =this.ServiceCallByRpcClient(actor,message,reply,client)
-	if err != nil {
-		return nil,err
+	service ,err = this.GetLocalActorService(serviceName)
+	if err==nil{
+		return service,nil
 	}
 
-	return client, nil
-}
-
-//根据rpc客户端直接调用actor服务
-func (this *ActorProxyComponent) ServiceCallByRpcClient(actor IActor,message *ActorMessage, reply **ActorMessage, client *rpc.TcpClient)error  {
-	args := &ServiceCall{
-		Sender:  actor.ID(),
-		Message: message,
+	//获取远程服务
+	if role == LOCAL_SERVICE {
+		return nil, errors.New("role is empty")
 	}
-	err := client.Call("ActorProxyService.ServiceCall", args, reply)
+	client, err := this.nodeComponent.GetNodeClientByRole(role)
 	if err != nil {
-		return err
+		return nil,err
 	}
-	return nil
+	var reply ActorID
+	err = client.Call("ActorProxyService.ServiceInquiry", service, &reply)
+	if err != nil {
+		return nil,err
+	}
+	return NewActorService(NewActor(reply,this),serviceName), nil
 }
 
 //注册服务
-func (this *ActorProxyComponent) RegisterServiceUnique(actor IActor, service string) error {
-	g, _ := this.service.LoadOrStore(service, &ActorIDGroup{})
-	if !g.(*ActorIDGroup).Has(actor.ID()) {
-		g.(*ActorIDGroup).Add(actor.ID())
-	}else{
+func (this *ActorProxyComponent) RegisterService(actor IActor, service string) error {
+	_,ok := this.service.Load(service)
+	if ok {
 		return errors.New("this service is repeated")
 	}
-	return nil
-}
-func (this *ActorProxyComponent) RegisterServices(actor IActor, service ...string) error {
-	for _, value := range service {
-		g, _ := this.service.LoadOrStore(value, &ActorIDGroup{})
-		if !g.(*ActorIDGroup).Has(actor.ID()) {
-			g.(*ActorIDGroup).Add(actor.ID())
-		}
-	}
+	this.service.Store(service,NewActorService(actor,service))
 	return nil
 }
 
 //取消注册服务
-func (this *ActorProxyComponent) UnregisterService(actor IActor, service ...string) error {
-	for _, value := range service {
-		g, ok := this.service.Load(value)
-		if ok && !g.(*ActorIDGroup).Has(actor.ID()) {
-			g.(*ActorIDGroup).Sub(actor.ID())
-		}
-	}
-	return nil
+func (this *ActorProxyComponent) UnregisterService(service string){
+	this.service.Delete(service)
 }
 
 //注册本地actor
@@ -195,7 +161,7 @@ func (this *ActorProxyComponent) LocalTell(actorID ActorID, messageInfo *ActorMe
 
 //通过actor id 发送消息
 func (this *ActorProxyComponent) Emit(actorID ActorID, messageInfo *ActorMessageInfo) error {
-	logger.Debug(fmt.Sprintf("Actor: [ %s ] send message [ %s ] to actor [ %s ]", messageInfo.Sender.ID().String(), messageInfo.Message.Service, actorID.String()))
+	logger.Debug(fmt.Sprintf("actor: [ %s ] send message [ %s ] to actor [ %s ]", messageInfo.Sender.ID().String(), messageInfo.Message.Service, actorID.String()))
 	nodeID := actorID.GetNodeID()
 	//本地消息不走网络
 	if nodeID == this.nodeID {

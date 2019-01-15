@@ -1,8 +1,12 @@
 package Actor
 
+import "errors"
+
 /*
 	ActorMessage Information
 */
+
+var ErrTimeout =errors.New("actor tell time out")
 
 type ActorMessageInfo struct {
 	Sender  IActor
@@ -43,6 +47,5 @@ type ActorRpcMessageInfo struct {
 	Target  ActorID
 	Sender ActorID
 	Message *ActorMessage
-	//Reply *ActorMessage
 }
 
