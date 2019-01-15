@@ -83,7 +83,7 @@ func (h *tcpHandler) handleConn(sess *Session, conn *net.TCPConn, pkg []byte) {
 		mid,data:= h.conf.PackageProtocol.ParseMessage(ctx, pkg)
 		h.ts.invoke(ctx, mid[0],data)
 	}
-
+	//TODO 添加TCP频率控制
 	workerID,ok:=sess.GetProperty("workerID")
 	if !ok {
 		workerID = -1
