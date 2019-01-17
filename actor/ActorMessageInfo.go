@@ -13,6 +13,7 @@ type ActorMessageInfo struct {
 	Message *ActorMessage
 	reply   **ActorMessage
 	done    chan struct{}
+	isDone  bool
 	err     error
 }
 
@@ -33,13 +34,22 @@ func (this *ActorMessageInfo)Reply(tittle string,args ...interface{})  {
 			Data:    args,
 		}
 		this.done<- struct{}{}
+		this.isDone =true
 	}
 }
 
-func (this *ActorMessageInfo)CallError(err error)  {
+func (this *ActorMessageInfo) ReplyError(err error)  {
 	this.err=err
 	if this.done!=nil {
 		this.done<- struct{}{}
+		this.isDone =true
+	}
+}
+
+func (this *ActorMessageInfo) ReplyVoid()  {
+	if this.done!=nil && !this.isDone{
+		this.done<- struct{}{}
+		this.isDone=true
 	}
 }
 

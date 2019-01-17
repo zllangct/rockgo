@@ -31,7 +31,7 @@ func (this *RoomManagerComponent)NewRoom(message *Actor.ActorMessageInfo)  {
 	r:=&RoomComponent{}
 	_,err:=this.Parent().AddNewbjectWithComponents([]Component.IComponent{r})
 	if err!=nil {
-		message.CallError(err)
+		message.ReplyError(err)
 	}
 
 	this.locker.Lock()

@@ -182,8 +182,9 @@ func (this *ActorComponent) Catch(handler func(message *ActorMessageInfo),m *Act
 			}
 			err := errors.New(str+ string(debug.Stack()))
 			logger.Error(err)
-			m.CallError(err)
+			m.ReplyError(err)
 		}
 	})()
 	handler(m)
+	m.ReplyVoid()
 }

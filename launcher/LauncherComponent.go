@@ -74,14 +74,14 @@ func (this *LauncherComponent) Serve(){
 	//添加组件到待选组件列表，默认添加master,child组件
 	this.AddComponentGroup("master",[]Component.IComponent{&Cluster.MasterComponent{}})
 	this.AddComponentGroup("child",[]Component.IComponent{&Cluster.ChildComponent{}})
-	if Config.Config.ClusterConfig.IsLocationMode {
+	if Config.Config.ClusterConfig.IsLocationMode && Config.Config.ClusterConfig.Role[0] != "single" {
 		this.AddComponentGroup("location",[]Component.IComponent{&Cluster.LocationComponent{}})
 	}
 
 	//处理single模式
-	//if Config.Config.ClusterConfig.Role[0] == "single" {
-	//
-	//}
+	if len(Config.Config.ClusterConfig.Role)==0 || Config.Config.ClusterConfig.Role[0] == "single" {
+		Config.Config.ClusterConfig.Role=this.componentGroup.AllGroupsName()
+	}
 
 	//添加基础组件组,一般通过组建组的定义决定服务器节点的服务角色
 	err:= this.componentGroup.AttachGroupsTo(Config.Config.ClusterConfig.Role, this.Root())

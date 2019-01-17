@@ -35,6 +35,24 @@ type ComponentGroups struct {
 	group map[string]*ComponentGroup //key:group name , value:component group
 }
 
+func (this *ComponentGroups) AllGroups()map[string]*ComponentGroup {
+	if this.group ==nil{
+		this.group = make(map[string]*ComponentGroup)
+	}
+	return this.group
+}
+
+func (this *ComponentGroups) AllGroupsName()[]string {
+	if this.group ==nil{
+		this.group = make(map[string]*ComponentGroup)
+	}
+	arr:=make([]string,0)
+	for role, _:= range this.group {
+		arr= append(arr, role)
+	}
+	return arr
+}
+
 func (this *ComponentGroups) AddGroup(groupName string, group []Component.IComponent) {
 	if this.group ==nil{
 		this.group = make(map[string]*ComponentGroup)
@@ -47,15 +65,6 @@ func (this *ComponentGroups) AddGroup(groupName string, group []Component.ICompo
 
 func (this *ComponentGroups) AttachGroupsTo(groupName []string, target *Component.Object) error {
 	child,master,other := false,false,false
-
-	if len(groupName)==1 && groupName[0]=="single" {
-		delete(this.group,"location")
-
-		for _, value := range this.group {
-			value.attachGroupTo(target)
-		}
-		return nil
-	}
 	for _, name := range groupName {
 		switch name {
 		case"master"  :

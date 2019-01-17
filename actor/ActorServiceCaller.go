@@ -34,7 +34,7 @@ func (this *ActorServiceCaller)Call(role string,serviceName string,args ...inter
 	//优先尝试缓存客户端，避免反复查询，尽量去中心化
 	service,ok:=this.services[serviceName]
 	if ok {
-		res,err := service.Call(args)
+		res,err := service.Call(args...)
 		if err!=nil {
 			delete(this.services, serviceName)
 		}else {
@@ -47,7 +47,7 @@ func (this *ActorServiceCaller)Call(role string,serviceName string,args ...inter
 		return nil,err
 	}
 	this.services[serviceName] = service
-	res,err := service.Call(args)
+	res,err := service.Call(args...)
 	if err!=nil {
 		delete(this.services, serviceName)
 	}

@@ -10,7 +10,7 @@ func NewActorService(actor IActor, service string) *ActorService {
 }
 
 func (this *ActorService) Call(args ...interface{})([]interface{},error){
-	mes:=NewActorMessage(this.Service,args)
+	mes:=NewActorMessage(this.Service,args...)
 	reply:=&ActorMessage{}
 	err:= this.actor.Tell(nil,mes,&reply)
 	if err!=nil {
