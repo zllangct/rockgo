@@ -27,26 +27,31 @@ func (this *ActorMessageInfo)IsNeedReply() bool {
 	return this.done != nil
 }
 
-func (this *ActorMessageInfo)Reply(tittle string,args ...interface{})  {
+func (this *ActorMessageInfo) Reply(args ...interface{}) error  {
+	return this.ReplyWithTittle("",args...)
+}
+
+func (this *ActorMessageInfo) ReplyWithTittle(tittle string,args ...interface{}) error  {
 	if this.done!=nil {
 		*this.reply=&ActorMessage{
 			Service: tittle,
 			Data:    args,
 		}
-		this.done<- struct{}{}
-		this.isDone =true
+		return nil
+	}else{
+		return errors.New("this message invalid")
 	}
 }
 
-func (this *ActorMessageInfo) ReplyError(err error)  {
+func (this *ActorMessageInfo) replyError(err error)  {
 	this.err=err
-	if this.done!=nil {
+	if this.done!=nil && !this.isDone{
 		this.done<- struct{}{}
 		this.isDone =true
 	}
 }
 
-func (this *ActorMessageInfo) ReplyVoid()  {
+func (this *ActorMessageInfo) replySuccess()  {
 	if this.done!=nil && !this.isDone{
 		this.done<- struct{}{}
 		this.isDone=true

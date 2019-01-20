@@ -6,7 +6,7 @@ type IActor interface {
 }
 
 type IActorMessageHandler interface {
-	MessageHandlers()map[string]func(message *ActorMessageInfo)
+	MessageHandlers()map[string]func(message *ActorMessageInfo)error
 }
 
 type Actor struct {

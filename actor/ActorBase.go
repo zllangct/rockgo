@@ -6,7 +6,7 @@ import (
 )
 
 type ActorBase struct {
-	MessageHandler map[string]func(message *ActorMessageInfo)
+	MessageHandler map[string]func(message *ActorMessageInfo)error
 	actor   *ActorComponent
 	actorType ActorType
 	parent  *Component.Object
@@ -34,15 +34,15 @@ func (this *ActorBase)Actor() *ActorComponent {
 	return this.actor
 }
 
-func (this *ActorBase) MessageHandlers() map[string]func(message *ActorMessageInfo) {
+func (this *ActorBase) MessageHandlers() map[string]func(message *ActorMessageInfo) error{
 	this.panic()
 	return this.MessageHandler
 }
 
-func (this *ActorBase)AddHandler(service string,handler func(message *ActorMessageInfo),isService ...bool)  {
+func (this *ActorBase)AddHandler(service string,handler func(message *ActorMessageInfo)error,isService ...bool)  {
 	this.panic()
 	if this.MessageHandler == nil{
-		this.MessageHandler = map[string]func(message *ActorMessageInfo){}
+		this.MessageHandler = map[string]func(message *ActorMessageInfo)error{}
 	}
 	this.MessageHandler[service]=handler
 	actor:=this.Actor()

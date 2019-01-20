@@ -66,7 +66,7 @@ func (this *TestApi)CreateRoom(sess *network.Session,message *TestCreateRoom)  e
 		return errReply()
 	}
 	//调用创建房间服务
-	reply,err:=serviceCaller.Call("room","newRoom",sess.ID)
+	reply,err:=serviceCaller.Call("room",Service_RoomMgr_NewRoom,sess.ID)
 	if err != nil {
 		return errReply()
 	}

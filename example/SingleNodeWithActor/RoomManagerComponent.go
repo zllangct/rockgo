@@ -24,14 +24,15 @@ func (this *RoomManagerComponent)Awake(ctx *Component.Context){
 	//初始化房间
 	this.rooms = make(map[int]*RoomComponent)
 	//注册actor消息
-	this.AddHandler("newRoom",this.NewRoom,true)
+	this.AddHandler(Service_RoomMgr_NewRoom,this.NewRoom,true)
 }
 
-func (this *RoomManagerComponent)NewRoom(message *Actor.ActorMessageInfo)  {
+var Service_RoomMgr_NewRoom ="NewRoom"
+func (this *RoomManagerComponent)NewRoom(message *Actor.ActorMessageInfo)error  {
 	r:=&RoomComponent{}
 	_,err:=this.Parent().AddNewbjectWithComponents([]Component.IComponent{r})
 	if err!=nil {
-		message.ReplyError(err)
+		return err
 	}
 
 	this.locker.Lock()
@@ -40,5 +41,5 @@ func (this *RoomManagerComponent)NewRoom(message *Actor.ActorMessageInfo)  {
 	this.rooms[r.RoomID]=r
 	this.locker.Unlock()
 
-	message.Reply("",r.RoomID)
+	return message.Reply(r.RoomID)
 }

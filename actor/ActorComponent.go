@@ -170,7 +170,7 @@ func (this *ActorComponent)handle(messageInfo *ActorMessageInfo) {
 	}
 }
 
-func (this *ActorComponent) Catch(handler func(message *ActorMessageInfo),m *ActorMessageInfo) {
+func (this *ActorComponent) Catch(handler func(message *ActorMessageInfo)error,m *ActorMessageInfo) {
 	defer (func() {
 		if r := recover(); r != nil {
 			var str string
@@ -182,9 +182,13 @@ func (this *ActorComponent) Catch(handler func(message *ActorMessageInfo),m *Act
 			}
 			err := errors.New(str+ string(debug.Stack()))
 			logger.Error(err)
-			m.ReplyError(err)
+			m.replyError(err)
 		}
 	})()
-	handler(m)
-	m.ReplyVoid()
+	err:=handler(m)
+	if err!=nil {
+		m.replyError(err)
+	}else{
+		m.replySuccess()
+	}
 }
