@@ -30,15 +30,14 @@ func NewTestApi() *TestApi  {
 	return r
 }
 
-func (this *TestApi)Hello(sess *network.Session,message *TestMessage)  {
+func (this *TestApi)Hello(sess *network.Session,message *TestMessage) error {
+	//显示消息内容
 	println(fmt.Sprintf("Hello,%s",message.Name))
-	p,err:=this.GetParent()
-	if err==nil {
-		println(fmt.Sprintf("this api parent:%s",p.Name()))
-	}
 
 	//reply
-	_=sess.Emit(1,[]byte("hello client"))
+	return this.Reply(sess,&TestMessage{Name:"reply"})
+	//或者直接
+	//return sess.Emit(1,[]byte("hello client"))
 }
 
 func main() {

@@ -9,6 +9,7 @@ const (
 	SELECTOR_TYPE_GROUP  SelectorType = "Group"
 	SELECTOR_TYPE_DEFAULT  SelectorType = "Default"
 	SELECTOR_TYPE_MIN_LOAD SelectorType = "MinLoad"
+	SELECTOR_TYPE_CUSTOM SelectorType = "Custom"
 )
 
 type SelectorType = string
@@ -37,9 +38,10 @@ func (this SourceGroup)SelectMinLoad() int {
 }
 
 type Selector map[string]*NodeInfo
+
 var ErrNoAvailableNode = errors.New("query string wrong")
 // 0 选择模式 1 AppName 2 role
-func (this Selector) Select(query []string,detail bool,locker *sync.RWMutex) ([]*InquiryReply ,error){
+func (this Selector) DoQuery(query []string,detail bool,locker *sync.RWMutex,selector ...func(SourceGroup)int) ([]*InquiryReply ,error){
 	length:=len(query)
 	if length !=3 || query[0]=="" {
 		return nil,ErrNoAvailableNode
@@ -76,7 +78,13 @@ func (this Selector) Select(query []string,detail bool,locker *sync.RWMutex) ([]
 			reply = []*InquiryReply{ reply[index] }
 		}
 	case SELECTOR_TYPE_GROUP:
-
+	case SELECTOR_TYPE_CUSTOM:
+		var index =-1
+		if len(selector)==0 {
+			err=errors.New("custom selector is empty")
+		}
+		index = selector[0](SourceGroup(reply))
+		reply = []*InquiryReply{ reply[index] }
 	default:
 
 	}

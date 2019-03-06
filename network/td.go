@@ -17,4 +17,4 @@ func (s *TdProtocol) ParseMessage(ctx context.Context,data []byte)([]uint32,[]by
 //不会用到
 func (s *TdProtocol) ParsePackage(buff []byte) (pkgLen, status int) {
 	return 0,0
-}
+} 

@@ -1,8 +1,8 @@
 package main
 
 /*
+	1、
 	1、不同节点部署在不同的物理机上面，
-
 	{
 		"MasterAddress": "127.0.0.1:6666",     // master节点地址，内网填写局域网地址，非局域网需要填写完整外网地址
 		"LocalAddress": "0.0.0.0:6666",		   // 任意可用端口
@@ -30,7 +30,7 @@ package main
 		"LocalAddress": "127.0.0.1:6666",
 		"AppName": "defaultApp",
 		"Role": [
-			"master"
+			"single"
 		],
 		"NodeDefine": {
 			"node_actor_location": {
@@ -69,16 +69,6 @@ package main
 					"room"
 				]
 			},
-			"node_single": {
-				"LocalAddress": "0.0.0.0:6666",
-				"Role": [
-					"master",
-					"gate",
-					"login",
-					"room",
-					"location"
-				]
-			}
 		},
 		"ReportInterval": 3000,
 		"RpcTimeout": 9000,

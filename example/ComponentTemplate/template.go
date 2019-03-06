@@ -5,12 +5,14 @@ import (
 	"github.com/zllangct/RockGO/cluster"
 	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/logger"
 	"reflect"
 	"sync"
 )
 
 type TemplateComponent struct {
 	Component.Base 					//Component 基类 必须继承
+	Actor.ActorBase					//继承Actor基类，不使用actor模式时，不必继承
 	locker        sync.RWMutex		//锁
 	member1			int				//成员变量1
 	member2	        string			//成员变量2
@@ -27,7 +29,7 @@ func (this *TemplateComponent) IsUnique() int {
 //指定该组件的依赖组件
 func (this *TemplateComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
-	requires[this.Parent.Root()] = []reflect.Type{
+	requires[this.Root()] = []reflect.Type{
 		reflect.TypeOf(&Config.ConfigComponent{}),		//依赖根对象拥有ConfigComponent组件
 		reflect.TypeOf(&Cluster.NodeComponent{}),		//依赖根对象拥有NodeComponent组件
 	}
@@ -44,8 +46,9 @@ func (this *TemplateComponent) GetRequire() map[*Component.Object][]reflect.Type
 */
 
 //Awake 事件
-func (this *TemplateComponent) Awake()error {
-	return nil
+func (this *TemplateComponent) Awake(context *Component.Context) {
+	//注册actor 消息处理函数
+	this.AddHandler("HelloMessage",this.onHello)
 }
 
 //Start 事件
@@ -59,8 +62,8 @@ func (this *TemplateComponent) Update(ctx *Component.Context) {
 }
 
 //Destroy 事件
-func (this *TemplateComponent) Destroy()error {
-	return nil
+func (this *TemplateComponent) Destroy(ctx *Component.Context) {
+
 }
 
 //组件的序列化
@@ -78,23 +81,9 @@ func (this *TemplateComponent)CustomFunction(role string,reply bool)error  {
 	return nil
 }
 
-/*
-	扩充，当有其他组件配合时，可扩充功能，同时，组件本身的扩展，可依赖于其他组件，或者继承其他基类
-		比如，可继承network.ApiBase基类，使之拥有协议API解析能力，开发者可开发自定义功能类，也可配合
-		其他依赖组件，完成功能，比如下方的，配合Actor组件处理actor事件，配合nodeComponent组件完成rpc
-		的直接调用。
-*/
-
-//父对象有ActorComponent时，可以定义Actor消息处理函数
-func (this *TemplateComponent)GetMessageHandler()map[string]func(message *Actor.ActorMessageInfo)  {
-	//该map建议在Awake中初始化，避免反复创建，此处仅便宜行事
-	return  map[string]func(message *Actor.ActorMessageInfo){
-		"hello":this.onHello,
-	}
-}
-
-func (this *TemplateComponent)onHello(message *Actor.ActorMessageInfo) {
-
+func (this *TemplateComponent)onHello(message *Actor.ActorMessageInfo) error{
+	logger.Debug(message.Message.Service)
+	return nil
 }
 
 //根对象有nodeComponent 时，可定义RPC 调用函数，reply参数必须为指针

@@ -97,7 +97,7 @@ func (this *MasterComponent) NodeClose(addr string){
 
 //查询节点信息 args : "AppID:Role:SelectorType"
 func (this *MasterComponent) NodeInquiry(args []string,detail bool) ([]*InquiryReply, error) {
-	return Selector(this.Nodes).Select(args, detail,this.locker)
+	return Selector(this.Nodes).DoQuery(args, detail,this.locker)
 }
 
 //检查超时节点

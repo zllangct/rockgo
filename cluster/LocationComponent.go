@@ -85,7 +85,7 @@ func (this *LocationComponent) NodeInquiry(args []string,detail bool) ([]*Inquir
 	if this.Nodes==nil {
 		return nil, errors.New("this location node is waiting to sync")
 	}
-	return Selector(this.Nodes).Select(args,detail,this.locker)
+	return Selector(this.Nodes).DoQuery(args,detail,this.locker)
 }
 
 //日志获取

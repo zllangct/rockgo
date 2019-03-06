@@ -30,8 +30,6 @@ func NewTestApi() *TestApi  {
 	return r
 }
 
-
-
 //协议接口 1  Hello
 func (this *TestApi)Hello(sess *network.Session,message *TestMessage) error {
 	println(fmt.Sprintf("Hello,%s",message.Name))

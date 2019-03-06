@@ -30,7 +30,7 @@ func NewTestApi(parent *Component.Object) *TestApi  {
 }
 
 //获取node组件
-func (this *TestApi)nodeC()(*Cluster.NodeComponent,error){
+func (this *TestApi) getNodeComponent()(*Cluster.NodeComponent,error){
 	if this.nodeComponent == nil{
 		o,err:= this.GetParent()
 		if err!=nil {
@@ -56,18 +56,19 @@ func (this *TestApi)Hello(sess *network.Session,message *TestMessage) error {
 	}
 	return nil
 }
+
 //协议接口 2 登录
 func (this *TestApi)Login(sess *network.Session,message *TestLogin) error {
 	println(fmt.Sprintf("received a client login request,%s ",message.Account))
 
 	//获取node组件
-	nodec,err:=this.nodeC()
+	nodec,err:=this.getNodeComponent()
 	if err!=nil {
 		return err
 	}
 	//选择一个该APP的角色节点，可选参数可设置selector，在多个同一角色的节点中选择符合条件的节点
 	//可使用随机选择器、最小负载选择器，同时可自定义其他选择器，比如 按地区选择
-	node,err:=nodec.GetNode("login")
+	node,err:=nodec.GetNode("login",Cluster.SELECTOR_TYPE_MIN_LOAD)
 	if err != nil {
 		return err
 	}
