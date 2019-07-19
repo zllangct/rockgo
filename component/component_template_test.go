@@ -7,6 +7,7 @@ import (
 )
 
 type ComponentTemplate struct {
+	Component.Base
 	parent *Component.Object
 }
 

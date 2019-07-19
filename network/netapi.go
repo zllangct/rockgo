@@ -77,10 +77,15 @@ func (this *ApiBase)MessageEncode(message interface{}) (uint32,[]byte,error) {
 	if err!=nil {
 		return 0, nil, err
 	}
-	t:=reflect.TypeOf(message)
+	t :=reflect.TypeOf(message)
 	if id,ok:=this.mt2id[t];ok {
 		return id, b, nil
 	}else{
+		switch t.Kind(){
+		case reflect.Interface:
+		case reflect.Struct:
+			return 0, nil,errors.New(fmt.Sprintf("this message %s must be pointer,stead of &%s.",t.Name(),t.Name()))
+		}
 		return 0, nil,errors.New(fmt.Sprintf("this message type: %s not be registered",t.Name()))
 	}
 }

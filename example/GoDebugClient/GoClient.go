@@ -47,7 +47,7 @@ func main() {
 	ticker := time.NewTicker(time.Second)
 	defer ticker.Stop()
 
-	var message = "{\"UID\":123}"
+	var message = "{\"Account\":\"zllang1\"}"
 	messageType:=uint32(2)
 	msg := make([]byte, 4)
 	msg = append(msg,[]byte(message)...)
@@ -58,7 +58,7 @@ func main() {
 		case <-done:
 			return
 		case _ = <-ticker.C:
-			for i := 0; i < 1000; i++ {
+			for i := 0; i < 1; i++ {
 				err := c.WriteMessage(websocket.TextMessage, msg)
 				if err != nil {
 					log.Println("write:", err)

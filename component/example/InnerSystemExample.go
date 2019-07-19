@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/zllangct/RockGO"
+	"github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/logger"
 	"strconv"
 	"sync"

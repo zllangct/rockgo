@@ -3,6 +3,7 @@ package Component_test
 import (
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/zllangct/RockGO/3rd/assert"
 	"github.com/zllangct/RockGO/3rd/iter"
@@ -37,8 +38,7 @@ func TestUpdate(T *testing.T) {
 
 		runtime.Root().AddObject(obj)
 
-		runtime.Update(1.0)
-		runtime.Update(1.0)
+		runtime.UpdateFrameByInterval(time.Second*1)
 
 		components = obj.GetComponents(reflect.TypeOf((*FakeComponent)(nil)))
 		for val, err := components.Next(); err == nil; val, err = components.Next() {
@@ -74,8 +74,7 @@ func TestComponentsAreUpdated(T *testing.T) {
 		T.Assert(err == nil)
 		T.Assert(count == 3)
 
-		runtime.Update(1.0)
-		runtime.Update(1.0)
+		runtime.UpdateFrameByInterval(time.Second*1)
 
 		components := root.GetComponentsInChildren(reflect.TypeOf((*FakeComponent)(nil)).Elem())
 		for val, err := components.Next(); err == nil; val, err = components.Next() {

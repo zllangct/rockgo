@@ -15,6 +15,7 @@ type FakeConfiguredComponentItem struct {
 }
 
 type FakeConfiguredComponent struct {
+	Component.Base
 	Data FakeConfiguredComponentData
 }
 

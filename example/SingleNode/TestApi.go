@@ -78,13 +78,13 @@ func (this *TestApi)Login(sess *network.Session,message *TestLogin) error {
 		return err
 	}
 	//调用登录服的登录接口
-	var pInfo *PlayerInfo
+	var pInfo PlayerInfo
 	err= loginNode.Call("LoginComponent.Login",message.Account,&pInfo)
 	if err!=nil {
 		return err
 	}
 	//reply 登录结果反馈到客户端
-	err=this.Reply(sess,pInfo)
+	err=this.Reply(sess,&pInfo)
 	if err!=nil {
 		return err
 	}

@@ -1,6 +1,7 @@
 package network
 
 import (
+	"context"
 	"github.com/zllangct/RockGO/logger"
 	"io"
 	"net"
@@ -11,7 +12,7 @@ import (
 
 //ClientProtocol interface for handling tars client package.
 type ClientProtocol interface {
-	Recv(pkg []byte)
+	ParseMessage( context.Context,  []byte)([]uint32,[]byte)
 	ParsePackage(buff []byte) (int, int)
 }
 
@@ -23,6 +24,7 @@ type ClientConf struct {
 	IdleTimeout  time.Duration
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
+	Handler         func(sess context.Context,mid uint32,data []byte)
 }
 
 //Client is struct for tars client.
@@ -150,7 +152,14 @@ func (c *connection) recv(conn net.Conn) {
 				pkg := make([]byte, pkgLen-4)
 				copy(pkg, currBuffer[4:pkgLen])
 				currBuffer = currBuffer[pkgLen:]
-				go c.tc.cp.Recv(pkg)
+				if c.tc.conf.Handler !=nil{
+					go func([]byte) {
+						ctx := context.Background()
+						ctx =context.WithValue(ctx,"conn",c)
+						mid,data:= c.tc.conf.ClientProto.ParseMessage(ctx,pkg)
+						c.tc.conf.Handler(ctx,mid[0],data)
+					}(pkg)
+				}
 				if len(currBuffer) > 0 {
 					continue
 				}

@@ -450,6 +450,10 @@ func (client *TcpClient) Call(serviceMethod string, args interface{}, reply inte
 	if client.IsClosed() {
 		return ErrShutdown
 	}
+	//check the reply type
+	//if t:=reflect.TypeOf(reply);t.Kind() != 54 {
+	//	return errors.New(fmt.Sprintf("%s is not pointer,stead of &%s",t.Name(),t.Name()))
+	//}
 	call := client.Go(serviceMethod, args, reply, make(chan *Call, 1))
 	select {
 	case <-timer.After(CallTimeout):

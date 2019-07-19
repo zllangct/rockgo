@@ -2,7 +2,7 @@ package Component_test
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO"
+	"github.com/zllangct/RockGO/component"
 	"strconv"
 	"strings"
 )
@@ -13,13 +13,12 @@ type FakeComponent struct {
 	Count int
 }
 
-func (fake *FakeComponent) Update(_ *Component.Context) {
+func (fake *FakeComponent) Update(context *Component.Context) {
 	fake.Count += 1
 }
 
-func (fake *FakeComponent) Destroy()error {
+func (fake *FakeComponent) Destroy(context *Component.Context) {
 	println(fake.Id)
-	return nil
 }
 
 func (fake *FakeComponent) New() Component.IComponent {

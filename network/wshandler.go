@@ -8,11 +8,9 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils/UUID"
-	"github.com/zllangct/RockGO/utils/current"
 	"github.com/zllangct/RockGO/utils/gpool"
 	"log"
 	"net/http"
-	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -58,7 +56,13 @@ type websocketHandler struct {
 }
 
 func (h *websocketHandler) Listen() error {
-	cfg := h.conf
+	conf := h.conf
+	//对象池模式下，初始pool大小为20
+	if conf.PoolMode && conf.MaxInvoke == 0{
+		conf.MaxInvoke = 20
+	}
+	h.gpool = gpool.GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
+
 	gin.SetMode(gin.ReleaseMode)
 	//router:=gin.Default()
 	router:=gin.New()
@@ -78,28 +82,29 @@ func (h *websocketHandler) Listen() error {
 			conn:&WsConn{wsConn:conn},
 		}
 		if h.conf.OnClientConnected!=nil {
+			//TODO 异常处理
 			h.conf.OnClientConnected(sess)
 		}
 		h.recv(sess, conn)
-
 		sess.locker.Lock()
 		sess.conn=nil
 		sess.locker.Unlock()
-
 		if h.conf.OnClientDisconnected!=nil{
 			h.conf.OnClientDisconnected(sess)
 		}
 		atomic.AddInt32(&h.acceptNum, -1)
+		if h.gpool != nil {
+			h.gpool.Release()
+		}
 	})
 
 	go func() {
-		logger.Info(fmt.Sprintf("Websocket server listening and serving HTTP on [ %s ]", cfg.Address))
-		err := router.Run(cfg.Address)
+		logger.Info(fmt.Sprintf("Websocket server listening and serving HTTP on [ %s ]", conf.Address))
+		err := router.Run(conf.Address)
 		if err != nil {
 			logger.Fatal("ListenAndServe: ", err)
 		}
 	}()
-
 	return nil
 }
 
@@ -110,58 +115,40 @@ func (h *websocketHandler) Handle() error {
 func (h *websocketHandler) recv(sess *Session,conn *websocket.Conn) {
 	defer conn.Close()
 
-	sess.SetProperty("workerID",-1)
+	sess.SetProperty("workerID",int32(-1))
 
+	handler := func(args ...interface{}) {
+		ctx := context.Background()
+		ctx =context.WithValue(ctx,"sess",args[0])
+		if h.conf.Handler != nil {
+			h.conf.Handler(args[0].(*Session), args[1].([]byte))
+		}else{
+			mid, mes := h.conf.PackageProtocol.ParseMessage(ctx,args[1].([]byte))
+			if h.conf.NetAPI !=nil && mid != nil{
+				h.ts.invoke(ctx, mid[0], mes)
+			}else{
+				logger.Error("no message handler")
+				return
+			}
+		}
+	}
+	wid :=int32(-1)
 	for !h.ts.isClosed {
-		t, message, err := conn.ReadMessage()
-		if err != nil {
+		_, pkg, err := conn.ReadMessage()
+		if err != nil || pkg ==nil{
 			logger.Error(fmt.Sprintf("Close connection %s: %v", h.conf.Address, err))
 			return
 		}
-		handler := func() {
-			ctx := context.Background()
-			remoteAddr := conn.RemoteAddr().String()
-			ipPort := strings.Split(remoteAddr, ":")
-			ctx = current.ContextWithCurrent(ctx)
-			ok := current.SetClientIPWithContext(ctx, ipPort[0])
-			ctx =context.WithValue(ctx,"sess",sess)
-			if !ok {
-				logger.Error("Failed to set context with client ip")
-			}
-			ok = current.SetClientPortWithContext(ctx, ipPort[1])
-			if !ok {
-				logger.Error("Failed to set context with client port")
-			}
-			mid,data:= h.conf.PackageProtocol.ParseMessage(ctx,message)
-			h.ts.invoke(ctx,mid[0],data)
-		}
-		if message ==nil {
-			logger.Error(t)
-		}
-		cfg := h.conf
-		if cfg.MaxInvoke > 0 { // use goroutine pool
-			if h.gpool == nil {
-				h.gpool = gpool.NewPool(int(cfg.MaxInvoke), cfg.QueueCap)
-			}
-			job:=h.gpool.JobPool.Get().(*gpool.Job)
-			if id,ok:= sess.GetProperty("workerID");ok{
-				job.WorkerID =id.(int32)
-			}
-			job.Job = handler
-			job.Callback= func(w int32){
-				sess.SetProperty("workerID",w)
-			}
-			h.gpool.JobQueue <-job
+		// use goroutine pool
+		if h.conf.PoolMode {
+			h.gpool.AddJob(handler,[]interface{}{sess, pkg},wid,func(workerID int32) {
+				wid=workerID
+			})
 		}else{
-			go handler()
+			go handler(sess, pkg)
 		}
-
-	}
-	if h.gpool != nil {
-		h.gpool.Release()
 	}
 }
-
 
 func serveHome(ctx *gin.Context) {
 	r:=ctx.Request

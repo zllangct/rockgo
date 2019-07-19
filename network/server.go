@@ -33,7 +33,9 @@ type ServerConf struct {
 	Proto           string
 	PackageProtocol Protocol
 	NetAPI          NetAPI
+	Handler         func(sess *Session,data []byte)
 	Address         string
+	PoolMode        bool
 	MaxInvoke       int32
 	AcceptTimeout   time.Duration
 	ReadTimeout     time.Duration

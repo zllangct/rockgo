@@ -2,10 +2,8 @@ package Component_test
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO"
 	"log"
 	"os"
-	"reflect"
 	"strconv"
 	"sync"
 	"testing"
@@ -67,7 +65,7 @@ func (c *DumpState) Update(context *Component.Context) {
 
 	if c.elapsed >= 0.5 {
 		c.elapsed = 0.0
-		_ := context.Object.Root()
+		_ = context.Object.Root()
 	}
 }
 

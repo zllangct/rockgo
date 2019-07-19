@@ -10,7 +10,6 @@ import (
 	"github.com/zllangct/RockGO/utils/UUID"
 	"github.com/zllangct/RockGO/utils/gpool"
 	"net"
-	"reflect"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -73,8 +72,14 @@ type udpHandler struct {
 }
 
 func (h *udpHandler) Listen() error {
-	cfg := h.conf
-	addr, err := net.ResolveUDPAddr("udp4", cfg.Address)
+	conf := h.conf
+	//对象池模式下，初始pool大小为20
+	if conf.PoolMode && conf.MaxInvoke == 0{
+		conf.MaxInvoke = 20
+	}
+	h.gpool = gpool.GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
+
+	addr, err := net.ResolveUDPAddr("udp4", conf.Address)
 	if err != nil {
 		return err
 	}
@@ -87,29 +92,42 @@ func (h *udpHandler) Listen() error {
 }
 
 func (h *udpHandler) Handle() error {
-	buffer := make([]byte, 65535)
-	for !h.ts.isClosed {
-		n, udpAddr, err := h.conn.ReadFromUDP(buffer)
-		if err != nil {
-			if isNoDataError(err) {
-				continue
-			} else {
-				logger.Error(fmt.Sprintf("Close connection %s: %v", h.conf.Address, err))
-				return err
-			}
-		}
-		pkg := make([]byte, n)
-		copy(pkg, buffer[0:n])
-		cfg := h.conf
-		ctx := context.Background()
-		mid,data:= h.conf.PackageProtocol.ParseMessage(ctx, pkg)
 
-		handler:= func() {
-			if len(mid)!=2 {
-				h.ts.Shutdown()
-				panic(errors.New(fmt.Sprintf("this package protoc %s doesnt fit",reflect.TypeOf(h.conf.PackageProtocol).Name())))
+	wg:=sync.WaitGroup{}
+	buffer := make([]byte, 65535)
+	for {
+		wg.Wait()
+		if h.ts.isClosed {
+			return nil
+		}
+		wg.Add(1)
+		go func() {
+			n, udpAddr, err := h.conn.ReadFromUDP(buffer)
+			if err != nil {
+				if !isNoDataError(err) {
+					logger.Error(fmt.Sprintf("Close connection %s: %v", h.conf.Address, err))
+					return
+				}
 			}
+			data := make([]byte, n)
+			copy(data, buffer[0:n])
+			wg.Done()
+
+			if h.conf.Handler != nil {
+				h.conf.Handler(nil, data)
+				return
+			}
+
 			var new bool
+			cfg := h.conf
+			ctx := context.Background()
+			mid,pkg:= h.conf.PackageProtocol.ParseMessage(ctx, data)
+
+			if len(mid)!=2 {
+				logger.Warn("udp data fmt incorrect")
+				return
+			}
+
 			cid :=mid[0]
 			if cid ==0 {
 				cid = atomic.AddUint32(&h.cid,1)
@@ -124,30 +142,51 @@ func (h *udpHandler) Handle() error {
 			sess:=s.(*Session)
 			sess.conn.(*UdpConn).SetReadDeadline(cfg.ReadTimeout)
 
+			wid := int32(-1)
+			item,ok:=sess.GetProperty("workerID")
+			if ok {
+				wid=item.(int32)
+				sess.SetProperty("workerID",int32(-1))
+			}
+
 			if new {
+				//异常处理
 				h.ts.conf.OnClientConnected(sess)
 				sess.conn.(*UdpConn).closeCallback= func() {
 					h.ts.conf.OnClientDisconnected(sess)
 				}
 			}
 
-			ctx=context.WithValue(ctx,"sess",sess)
-			h.ts.invoke(ctx,mid[1],data)
-		}
-
-		if cfg.MaxInvoke > 0 { // use goroutine pool
-			go func() {
-				if h.gpool == nil {
-					h.gpool = gpool.NewPool(int(cfg.MaxInvoke), cfg.QueueCap)
+			if h.conf.NetAPI !=nil && mid != nil{
+				// use goroutine pool
+				if h.conf.PoolMode {
+					h.gpool.AddJob(h.handler,[]interface{}{sess, pkg},wid,func(workerID int32) {
+						wid=workerID
+					})
+				}else{
+					go h.handler(sess, pkg)
 				}
-				job:=h.gpool.JobPool.Get().(*gpool.Job)
-				job.Job = handler
-				job.Callback= nil
-				h.gpool.JobQueue <-job
-			}()
-		}else {
-			go handler()
+			}else{
+				logger.Error("no message handler")
+				return
+			}
+		}()
+
+	}
+}
+
+func (h *udpHandler)handler(args ...interface{}) {
+	ctx := context.Background()
+	ctx =context.WithValue(ctx,"sess",args[0])
+	if h.conf.Handler != nil {
+		h.conf.Handler(args[1].(*Session), args[1].([]byte))
+	}else{
+		mid, mes := h.conf.PackageProtocol.ParseMessage(ctx,args[1].([]byte))
+		if h.conf.NetAPI !=nil && mid != nil{
+			h.ts.invoke(ctx, mid[0], mes)
+		}else{
+			logger.Error("no message handler")
+			return
 		}
 	}
-	return nil
 }

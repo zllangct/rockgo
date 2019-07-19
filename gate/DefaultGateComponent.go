@@ -51,6 +51,7 @@ func (this *DefaultGateComponent) Awake(ctx *Component.Context)  {
 		OnClientDisconnected: this.OnDropped,
 		OnClientConnected:    this.OnConnected,
 		NetAPI:               this.NetAPI,
+		MaxInvoke:20,
 	}
 
 	this.server = network.NewServer(conf)
