@@ -20,8 +20,7 @@ var ErrUdpConnClosed = errors.New("this udp conn is closed")
 type UdpConn struct {
 	udpConn       *net.UDPConn
 	remoteAddr    *net.UDPAddr
-	sess          uint32
-	lock          sync.Mutex
+	cid           uint32
 	timeout       <-chan struct{}
 	closeCallback func()
 	m             *sync.Map
@@ -36,7 +35,7 @@ func (this *UdpConn) Init() {
 	go func() {
 		<-this.timeout
 		this.Close()
-		this.m.Delete(this.sess)
+		this.m.Delete(this.cid)
 	}()
 }
 
@@ -49,7 +48,7 @@ func (this *UdpConn) WriteMessage(messageType uint32, data []byte) error {
 	msg := make([]byte, 12)
 	msg = append(msg, data...)
 	binary.BigEndian.PutUint32(msg[:4], uint32(len(msg)))
-	binary.BigEndian.PutUint32(msg[4:8], this.sess)
+	binary.BigEndian.PutUint32(msg[4:8], this.cid)
 	binary.BigEndian.PutUint32(msg[8:12], messageType)
 	if _, err := this.udpConn.WriteToUDP(msg, this.remoteAddr); err != nil {
 		logger.Error(fmt.Sprintf("send pkg to %v failed %v", this.remoteAddr, err))
@@ -80,14 +79,15 @@ func (h *udpHandler) Listen() error {
 	}
 	h.gpool = gpool.GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
 
-	addr, err := net.ResolveUDPAddr("udp4", conf.Address)
+	addr, err := net.ResolveUDPAddr("udp", conf.Address)
 	if err != nil {
 		return err
 	}
-	h.conn, err = net.ListenUDP("udp4", addr)
+	h.conn, err = net.ListenUDP("udp", addr)
 	if err != nil {
 		return err
 	}
+
 	logger.Info(fmt.Sprintf("UDP server listening and serving UDP on: [ %s ]", h.conn.LocalAddr()))
 	return nil
 }
@@ -115,7 +115,9 @@ func (h *udpHandler) Handle() error {
 			wg.Done()
 
 			if h.conf.Handler != nil {
-				h.conf.Handler(nil, data)
+				h.conf.Handler( &Session{
+					conn:       &UdpConn{remoteAddr: udpAddr, udpConn: h.conn,m:h.conns},
+				}, data)
 				return
 			}
 
@@ -138,7 +140,7 @@ func (h *udpHandler) Handle() error {
 			s, _ := h.conns.LoadOrStore(cid, &Session{
 				ID:         UUID.Next(),
 				properties: make(map[string]interface{}),
-				conn:       &UdpConn{remoteAddr: udpAddr, udpConn: h.conn},
+				conn:       &UdpConn{remoteAddr: udpAddr, udpConn: h.conn,m:h.conns},
 			})
 			sess := s.(*Session)
 			sess.conn.(*UdpConn).SetReadDeadline(cfg.ReadTimeout)
@@ -178,7 +180,7 @@ func (h *udpHandler) Handle() error {
 
 func (h *udpHandler) handler(args ...interface{}) {
 	ctx := context.Background()
-	ctx = context.WithValue(ctx, "sess", args[0])
+	ctx = context.WithValue(ctx, "cid", args[0])
 	if h.conf.Handler != nil {
 		h.conf.Handler(args[1].(*Session), args[1].([]byte))
 	} else {

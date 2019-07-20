@@ -119,7 +119,7 @@ func (h *websocketHandler) recv(sess *Session, conn *websocket.Conn) {
 
 	handler := func(args ...interface{}) {
 		ctx := context.Background()
-		ctx = context.WithValue(ctx, "sess", args[0])
+		ctx = context.WithValue(ctx, "cid", args[0])
 		if h.conf.Handler != nil {
 			h.conf.Handler(args[0].(*Session), args[1].([]byte))
 		} else {

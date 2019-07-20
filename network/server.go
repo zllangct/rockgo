@@ -106,7 +106,7 @@ func (ts *Server) IsZombie(timeout time.Duration) bool {
 //消息分发
 func (ts *Server) invoke(ctx context.Context, mid uint32, data []byte) {
 	atomic.AddInt32(&ts.numInvoke, 1)
-	if sess, ok := ctx.Value("sess").(*Session); ok {
+	if sess, ok := ctx.Value("cid").(*Session); ok {
 		ts.conf.NetAPI.Route(sess, mid, data)
 	}
 	atomic.AddInt32(&ts.numInvoke, -1)
