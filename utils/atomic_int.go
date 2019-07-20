@@ -53,7 +53,6 @@ func (ai *AtomicInt32) Load() int32 {
 	return atomic.LoadInt32((*int32)(ai))
 }
 
-
 type AtomicBool AtomicInt
 
 // Store bool value atomically

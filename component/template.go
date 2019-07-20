@@ -63,11 +63,11 @@ func DeserializeState(target interface{}, raw interface{}) (err error) {
 			var str string
 			switch r.(type) {
 			case error:
-				str =r.(error).Error()
+				str = r.(error).Error()
 			case string:
 				str = r.(string)
 			}
-			err = errors.New(str+ string(debug.Stack()))
+			err = errors.New(str + string(debug.Stack()))
 
 		}
 	})()

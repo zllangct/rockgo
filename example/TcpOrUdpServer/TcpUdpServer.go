@@ -8,9 +8,10 @@ import (
 	"reflect"
 	"time"
 )
+
 //协议对应
 var Testid2mt = map[reflect.Type]uint32{
-	reflect.TypeOf(&TestMessage{}):1,
+	reflect.TypeOf(&TestMessage{}): 1,
 }
 
 //消息定义
@@ -23,32 +24,32 @@ type TestApi struct {
 	network.ApiBase
 }
 
-func NewTestApi() *TestApi  {
-	r:=&TestApi{}
-	r.Init(r,nil,Testid2mt,&MessageProtocol.JsonProtocol{})
+func NewTestApi() *TestApi {
+	r := &TestApi{}
+	r.Init(r, nil, Testid2mt, &MessageProtocol.JsonProtocol{})
 	return r
 }
 
-func (this *TestApi)Hello(sess *network.Session,message *TestMessage) error {
+func (this *TestApi) Hello(sess *network.Session, message *TestMessage) error {
 	//显示收到消息内容
-	println(fmt.Sprintf("Hello,%s",message.Name))
+	println(fmt.Sprintf("Hello,%s", message.Name))
 
 	//reply
-	return this.Reply(sess,&TestMessage{Name:"reply"})
+	return this.Reply(sess, &TestMessage{Name: "reply"})
 	//或者直接
 	//return sess.Emit(1,[]byte("hello client"))
 }
 
 func main() {
 	conf := &network.ServerConf{
-		Proto:                "tcp",  // 或者为udp
+		Proto:                "tcp", // 或者为udp
 		Address:              "0.0.0.0:8080",
 		ReadTimeout:          time.Millisecond * 10000,
 		OnClientDisconnected: OnDropped,
 		OnClientConnected:    OnConnected,
 		NetAPI:               NewTestApi(),
-		WriteTimeout:  time.Millisecond * 1000,
-		IdleTimeout:   time.Millisecond * 600000,
+		WriteTimeout:         time.Millisecond * 1000,
+		IdleTimeout:          time.Millisecond * 600000,
 	}
 
 	svr := network.NewServer(conf)

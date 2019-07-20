@@ -2,9 +2,9 @@ package Component_test
 
 import (
 	"github.com/zllangct/RockGO"
-	"testing"
 	"github.com/zllangct/RockGO/3rd/assert"
 	"github.com/zllangct/RockGO/component"
+	"testing"
 )
 
 func TestCannotMakeRecursiveObjects(T *testing.T) {
@@ -53,20 +53,20 @@ func TestFindObject(T *testing.T) {
 }
 
 func TestFindComponent(T *testing.T) {
-		o1 := Component.NewObject("A")
-		o2 := Component.NewObject("B")
-		o3 := Component.NewObject("C")
-		o4 := Component.NewObject("D")
-		c1 := &FakeComponent{Id: "IComponent"}
+	o1 := Component.NewObject("A")
+	o2 := Component.NewObject("B")
+	o3 := Component.NewObject("C")
+	o4 := Component.NewObject("D")
+	c1 := &FakeComponent{Id: "IComponent"}
 
-		o1.AddObject(o2)
-		o2.AddObject(o3)
-		o3.AddObject(o4)
-		o4.AddComponent(c1)
+	o1.AddObject(o2)
+	o2.AddObject(o3)
+	o3.AddObject(o4)
+	o4.AddComponent(c1)
 
-		var c2 *FakeComponent
-		err := o1.Find(&c2, "B", "C", "D")
-		_=err
+	var c2 *FakeComponent
+	err := o1.Find(&c2, "B", "C", "D")
+	_ = err
 }
 
 func TestFindComponentOnRoot(T *testing.T) {

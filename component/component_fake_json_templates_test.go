@@ -1,6 +1,6 @@
 package Component_test
 
-var objectTemplateSimple  = `
+var objectTemplateSimple = `
 {
 	"Name": "Sample Object",
 	"Components": [
@@ -18,7 +18,7 @@ var objectTemplateSimple  = `
 }
 `
 
-var objectTemplateNested  = `
+var objectTemplateNested = `
 {
 	"Name": "Sample Object",
 	"Components": [{

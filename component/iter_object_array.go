@@ -1,7 +1,6 @@
 package Component
 
 import (
-
 	"container/list"
 	"github.com/zllangct/RockGO/3rd/iter"
 )

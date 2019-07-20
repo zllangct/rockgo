@@ -18,7 +18,7 @@ type Object struct {
 	name       string
 	runtime    *Runtime
 	components []IComponent
-	children   []*Object 
+	children   []*Object
 	parent     *Object
 	locker     *sync.RWMutex
 }
@@ -38,13 +38,11 @@ func NewObject(names ...string) *Object {
 		locker:     &sync.RWMutex{}}
 }
 
-
-
 //添加组件
 func (o *Object) AddComponent(component IComponent) *Object {
-	component.Init(reflect.TypeOf(component),o.Runtime(),o)
+	component.Init(reflect.TypeOf(component), o.Runtime(), o)
 	err := o.WithLock(func() error {
-		if unique,ok:=component.(IUnique);ok{
+		if unique, ok := component.(IUnique); ok {
 			switch unique.IsUnique() {
 			case UNIQUE_TYPE_GLOBAL:
 				_, err := o.Root().GetComponentsInChildren(reflect.TypeOf(component)).Next()
@@ -57,7 +55,7 @@ func (o *Object) AddComponent(component IComponent) *Object {
 				}
 			}
 		}
-		if require,ok:=component.(IRequire);ok{
+		if require, ok := component.(IRequire); ok {
 			for obj, requires := range require.GetRequire() {
 				for _, require := range requires {
 					if !obj.HasComponent(require) {
@@ -68,8 +66,8 @@ func (o *Object) AddComponent(component IComponent) *Object {
 		}
 		o.components = append(o.components, component)
 
-		runtime:= o._runtime()
-		if runtime != nil{
+		runtime := o._runtime()
+		if runtime != nil {
 			runtime.SystemFilter(component)
 		}
 		return nil
@@ -78,7 +76,7 @@ func (o *Object) AddComponent(component IComponent) *Object {
 		logger.Error(err)
 	}
 	utils.Try(func() {
-		if init,ok:=component.(IInit);ok{
+		if init, ok := component.(IInit); ok {
 			init.Initialize()
 		}
 	})
@@ -98,21 +96,21 @@ func (o *Object) RemoveComponent(component IComponent) {
 		if index != -1 {
 			o.components = append(o.components[:index], o.components[index+1:]...)
 		}
-		runtime:=o.runtime
-		if runtime ==nil{
+		runtime := o.runtime
+		if runtime == nil {
 			return errors.New("this object has no runtime")
 		}
-		err:=runtime.SystemOperate("update",SYSTEM_OP_UPDATE_REMOVE,component)
-		if err!=nil {
+		err := runtime.SystemOperate("update", SYSTEM_OP_UPDATE_REMOVE, component)
+		if err != nil {
 			logger.Error(err)
 		}
-		err=runtime.SystemOperate("destroy",SYSTEM_OP_DESTROY_ADD,component)
-		if err!=nil {
+		err = runtime.SystemOperate("destroy", SYSTEM_OP_DESTROY_ADD, component)
+		if err != nil {
 			logger.Error(err)
 		}
 		return nil
 	})
-	if err!=nil{
+	if err != nil {
 		logger.Error(err)
 	}
 }
@@ -123,16 +121,16 @@ func (o *Object) RemoveComponentsByType(t reflect.Type) {
 		for index, component := range o.components {
 			if component.Type() == t {
 				o.components = append(o.components[:index], o.components[index+1:]...)
-				runtime:=o.Runtime()
-				if runtime ==nil{
+				runtime := o.Runtime()
+				if runtime == nil {
 					return errors.New("this object has no runtime")
 				}
-				err:=runtime.SystemOperate("update",SYSTEM_OP_UPDATE_REMOVE,component)
-				if err!=nil {
+				err := runtime.SystemOperate("update", SYSTEM_OP_UPDATE_REMOVE, component)
+				if err != nil {
 					logger.Error(err)
 				}
-				err=runtime.SystemOperate("destroy",SYSTEM_OP_DESTROY_ADD,component)
-				if err!=nil {
+				err = runtime.SystemOperate("destroy", SYSTEM_OP_DESTROY_ADD, component)
+				if err != nil {
 					logger.Error(err)
 				}
 			}
@@ -142,34 +140,34 @@ func (o *Object) RemoveComponentsByType(t reflect.Type) {
 	logger.Error(err)
 }
 
-func (o *Object) AddObjectWithComponent(object *Object,component IComponent) error {
- 	err:=o.AddObject(object)
-	if err!=nil {
-		return  err
+func (o *Object) AddObjectWithComponent(object *Object, component IComponent) error {
+	err := o.AddObject(object)
+	if err != nil {
+		return err
 	}
- 	object.AddComponent(component)
+	object.AddComponent(component)
 	return nil
 }
 
-func (o *Object) AddObjectWithComponents(object *Object,components []IComponent) error {
-	err:=o.AddObject(object)
-	if err!=nil {
-		return  err
+func (o *Object) AddObjectWithComponents(object *Object, components []IComponent) error {
+	err := o.AddObject(object)
+	if err != nil {
+		return err
 	}
-	for _, component:= range components {
+	for _, component := range components {
 		object.AddComponent(component)
 	}
 	return nil
 }
 
-func (o *Object) AddNewObjectWithComponent(component IComponent,name ...string)(*Object,error) {
-	obj:=NewObject(name...)
-	return obj, o.AddObjectWithComponent(obj,component)
+func (o *Object) AddNewObjectWithComponent(component IComponent, name ...string) (*Object, error) {
+	obj := NewObject(name...)
+	return obj, o.AddObjectWithComponent(obj, component)
 }
 
-func (o *Object) AddNewbjectWithComponents(components []IComponent,name ...string)(*Object,error){
-	obj:=NewObject(name...)
-	return obj, o.AddObjectWithComponents(obj,components)
+func (o *Object) AddNewbjectWithComponents(components []IComponent, name ...string) (*Object, error) {
+	obj := NewObject(name...)
+	return obj, o.AddObjectWithComponents(obj, components)
 }
 
 //添加子对象
@@ -183,8 +181,8 @@ func (o *Object) AddObject(object *Object) error {
 			return ErrBadObject
 		} else {
 			// Move the object into the new parent 'o'; this will lock the child and the old parent.
-			object.parent=o
-			object.runtime=o.runtime
+			object.parent = o
+			object.runtime = o.runtime
 			// Now assign a new reference to this object
 			o.children = append(o.children, object)
 		}
@@ -192,28 +190,29 @@ func (o *Object) AddObject(object *Object) error {
 	})
 	return err
 }
+
 //释放所有引用
-func (o *Object) _dispose(){
-	o.name=""
-	o.runtime=nil
-	o.components=nil
-	o.children=nil
+func (o *Object) _dispose() {
+	o.name = ""
+	o.runtime = nil
+	o.components = nil
+	o.children = nil
 }
 
 //销毁实体本身及其子对象，无法解除父对象对自己的引用
 func (o *Object) _destroy() {
-	err:= o.WithLock(func() error {
+	err := o.WithLock(func() error {
 		for _, component := range o.components {
-			runtime:=o.runtime
-			if runtime ==nil{
+			runtime := o.runtime
+			if runtime == nil {
 				continue
 			}
-			err:=runtime.SystemOperate("update",SYSTEM_OP_UPDATE_REMOVE,component)
-			if err!=nil {
+			err := runtime.SystemOperate("update", SYSTEM_OP_UPDATE_REMOVE, component)
+			if err != nil {
 				logger.Error(err)
 			}
-			err=runtime.SystemOperate("destroy",SYSTEM_OP_DESTROY_ADD,component)
-			if err!=nil {
+			err = runtime.SystemOperate("destroy", SYSTEM_OP_DESTROY_ADD, component)
+			if err != nil {
 				logger.Error(err)
 			}
 		}
@@ -223,17 +222,18 @@ func (o *Object) _destroy() {
 		o._dispose()
 		return nil
 	})
-	if err!=nil {
+	if err != nil {
 		logger.Error(err)
 	}
 }
 
 // 销毁实体
 func (o *Object) Destroy() (err error) {
-	p:=o.Parent()
-	if  p!=nil {
-		err=p.RemoveObject(o)
-		if err != nil && err == ErrNoThisChild {}else{
+	p := o.Parent()
+	if p != nil {
+		err = p.RemoveObject(o)
+		if err != nil && err == ErrNoThisChild {
+		} else {
 			return
 		}
 	}
@@ -405,7 +405,7 @@ func (o *Object) _runtime() *Runtime {
 //查找实体
 func (o *Object) FindObject(query ...string) (*Object, error) {
 	if len(query) == 0 {
-		return nil,ErrBadValue
+		return nil, ErrBadValue
 	}
 
 	cursor := o
@@ -498,11 +498,11 @@ func (o *Object) WithLock(action func() error) (err error) {
 			var str string
 			switch r.(type) {
 			case error:
-				str =r.(error).Error()
+				str = r.(error).Error()
 			case string:
 				str = r.(string)
 			}
-			err = errors.New(str+ string(debug.Stack()))
+			err = errors.New(str + string(debug.Stack()))
 		}
 		o.locker.Unlock()
 	})()

@@ -73,63 +73,63 @@ type Hello struct {
 	Component.Base
 }
 
-func (this *Hello)Start(context *Component.Context)  {
+func (this *Hello) Start(context *Component.Context) {
 	this.Hello("my name is zhaolei.")
 
 }
 
-func (this *Hello)Hello(str string)  {
-	sum:=0
-	for i:=0;i<10000 ;i++  {
-		sum=sum+i
+func (this *Hello) Hello(str string) {
+	sum := 0
+	for i := 0; i < 10000; i++ {
+		sum = sum + i
 	}
 	//println("sum:",sum,str)
 }
 
-func (this *Hello)Update(context *Component.Context) {
+func (this *Hello) Update(context *Component.Context) {
 	this.Hello(strconv.Itoa(1))
 }
-func TestLargeObjects(T *testing.T){
+func TestLargeObjects(T *testing.T) {
 	//====================== IComponent
 	runtime := Component.NewRuntime(Component.Config{
 		ThreadPoolSize: 50,
 	})
 
-	root:=Component.NewObject("root")
+	root := Component.NewObject("root")
 	runtime.Root().AddObject(root)
-	for i := 0; i<1000;i++  {
-		o1:= Component.NewObject(strconv.Itoa(i))
+	for i := 0; i < 1000; i++ {
+		o1 := Component.NewObject(strconv.Itoa(i))
 		o1.AddComponent(&Hello{})
 		root.AddObject(o1)
 	}
 
-	t1:=time.Now()
-	for i := 0; i<1000;i++  {
+	t1 := time.Now()
+	for i := 0; i < 1000; i++ {
 		runtime.UpdateFrame()
 	}
-	elapsed1:=time.Since(t1)
-	println("component:",elapsed1)
+	elapsed1 := time.Since(t1)
+	println("component:", elapsed1)
 
 	//========================== traditional
-	tasklist:=make([]*Hello,1000)
-	for i := 0; i<1000;i++  {
-		tasklist=append(tasklist, &Hello{})
+	tasklist := make([]*Hello, 1000)
+	for i := 0; i < 1000; i++ {
+		tasklist = append(tasklist, &Hello{})
 	}
-	t2:=time.Now()
-	wg:=sync.WaitGroup{}
+	t2 := time.Now()
+	wg := sync.WaitGroup{}
 
-	for j:=0;j<50 ; j++ {
+	for j := 0; j < 50; j++ {
 		wg.Add(1)
 		go func() {
-			for i := 0; i<20;i++  {
+			for i := 0; i < 20; i++ {
 				tasklist[i].Hello(strconv.Itoa(i))
 			}
 			wg.Done()
 		}()
 	}
 	wg.Wait()
-	elapsed2:=time.Since(t2)
-	println("traditional:",elapsed2)
+	elapsed2 := time.Since(t2)
+	println("traditional:", elapsed2)
 }
 
 func TestComplexSerialization(T *testing.T) {
@@ -142,7 +142,7 @@ func TestComplexSerialization(T *testing.T) {
 
 		runtime.Factory().Register(&AddRemoveChild{})
 
-		runtime.Root().AddComponent(&DumpState{elapsed:11})
+		runtime.Root().AddComponent(&DumpState{elapsed: 11})
 
 		o1 := Component.NewObject("Container One")
 		w1 := Component.NewObject("Worker 1")
@@ -166,16 +166,15 @@ func TestComplexSerialization(T *testing.T) {
 		w4.AddObject(o3)
 		o3.AddObject(w4)
 
-
 		w1.AddComponent(&AddRemoveChild{})
 		w2.AddComponent(&AddRemoveChild{})
 		w3.AddComponent(&AddRemoveChild{})
 		w4.AddComponent(&AddRemoveChild{})
 		o3.AddComponent(&Hello{})
 		runtime.Root().AddObject(o1)
-		t:=&DumpState{}
-		err:=runtime.Root().Find(t)
-		if err!=nil{
+		t := &DumpState{}
+		err := runtime.Root().Find(t)
+		if err != nil {
 			println(err.Error())
 		}
 

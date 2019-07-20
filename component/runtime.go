@@ -11,31 +11,30 @@ import (
 	"github.com/zllangct/RockGO/3rd/threadpool"
 )
 
-
 type Config struct {
 	ThreadPoolSize int
 	Factory        *ObjectFactory
 }
 
 type Runtime struct {
-	locker     *sync.RWMutex
-	root       *Object
-	workers    *threadpool.ThreadPool
-	updateLock *sync.Mutex
-	factory    *ObjectFactory
-	innerSystems    []ISystem
-	customSystems   []ISystem
+	locker        *sync.RWMutex
+	root          *Object
+	workers       *threadpool.ThreadPool
+	updateLock    *sync.Mutex
+	factory       *ObjectFactory
+	innerSystems  []ISystem
+	customSystems []ISystem
 }
 
 func NewRuntime(config Config) *Runtime {
 	validateConfig(&config)
 	runtime := &Runtime{
-		root:       NewObject("runtime"),
-		updateLock: &sync.Mutex{},
-		workers:    threadpool.New(),
-		factory:    config.Factory,
-		innerSystems:[]ISystem{&AwakeSystem{},&StartSystem{},&UpdateSystem{},&DestroySystem{}},
-		locker:&sync.RWMutex{},
+		root:         NewObject("runtime"),
+		updateLock:   &sync.Mutex{},
+		workers:      threadpool.New(),
+		factory:      config.Factory,
+		innerSystems: []ISystem{&AwakeSystem{}, &StartSystem{}, &UpdateSystem{}, &DestroySystem{}},
+		locker:       &sync.RWMutex{},
 	}
 	runtime.root.runtime = runtime
 	runtime.workers.MaxThreads = config.ThreadPoolSize
@@ -45,12 +44,12 @@ func NewRuntime(config Config) *Runtime {
 	return runtime
 }
 
-func (this *Runtime)UpdateFrameByInterval(duration time.Duration) chan<- struct{} {
-	shutdown:=make(chan struct{})
-	c:=time.Tick(duration)
+func (this *Runtime) UpdateFrameByInterval(duration time.Duration) chan<- struct{} {
+	shutdown := make(chan struct{})
+	c := time.Tick(duration)
 	go func() {
-		ticking:=false
-		for{
+		ticking := false
+		for {
 			select {
 			case <-shutdown:
 				return
@@ -59,16 +58,16 @@ func (this *Runtime)UpdateFrameByInterval(duration time.Duration) chan<- struct{
 					continue
 				}
 				//上一帧还未执行完毕时，跳过一帧，避免帧滚雪球
-				ticking =true
+				ticking = true
 				this.UpdateFrame()
-				ticking =false
+				ticking = false
 			}
 		}
 	}()
 	return shutdown
 }
 
-func (this *Runtime)UpdateFrame()  {
+func (this *Runtime) UpdateFrame() {
 	this.locker.RLock()
 	defer this.locker.RUnlock()
 	//内部系统间是有序的,awake->start->update->destroy
@@ -82,7 +81,7 @@ func (this *Runtime)UpdateFrame()  {
 }
 
 //注册自定义system
-func (this *Runtime)RegisterSystem(system ISystem)  {
+func (this *Runtime) RegisterSystem(system ISystem) {
 	this.locker.Lock()
 	defer this.locker.Unlock()
 	//过滤重复系统
@@ -91,10 +90,10 @@ func (this *Runtime)RegisterSystem(system ISystem)  {
 			return
 		}
 	}
-	this.customSystems= append(this.customSystems, system)
+	this.customSystems = append(this.customSystems, system)
 }
 
-func (this *Runtime)SystemFilter(component IComponent)  {
+func (this *Runtime) SystemFilter(component IComponent) {
 	this.locker.RLock()
 	defer this.locker.RUnlock()
 
@@ -106,7 +105,7 @@ func (this *Runtime)SystemFilter(component IComponent)  {
 	}
 }
 
-func (this *Runtime)SystemOperate(name string,op int,component IComponent)error{
+func (this *Runtime) SystemOperate(name string, op int, component IComponent) error {
 	this.locker.RLock()
 	defer this.locker.RUnlock()
 
@@ -114,20 +113,20 @@ func (this *Runtime)SystemOperate(name string,op int,component IComponent)error{
 	var ok bool
 	for _, value := range this.innerSystems {
 		if value.Name() == name {
-			s=value
-			ok=true
+			s = value
+			ok = true
 		}
 	}
 	if !ok {
 		for _, value := range this.customSystems {
 			if value.Name() == name {
-				s= value
-				ok=true
+				s = value
+				ok = true
 			}
 		}
 	}
-	if ok && s !=nil{
-		s.IndependentFilter(op,component)
+	if ok && s != nil {
+		s.IndependentFilter(op, component)
 		return nil
 	}
 	return errors.New("system not found")
@@ -151,14 +150,13 @@ func (runtime *Runtime) Factory() *ObjectFactory {
 	return runtime.factory
 }
 
-func (runtime *Runtime)SetMaxThread(maxThread int){
-	if runtime.workers!=nil && maxThread > 0{
-		runtime.workers.MaxThreads =maxThread
-	}else{
+func (runtime *Runtime) SetMaxThread(maxThread int) {
+	if runtime.workers != nil && maxThread > 0 {
+		runtime.workers.MaxThreads = maxThread
+	} else {
 		logger.Error(errors.New("max thread must > 0"))
 	}
 }
-
 
 func (runtime *Runtime) Extract(object *Object) (*ObjectTemplate, error) {
 	rtn, err := runtime.factory.Serialize(object)
@@ -172,7 +170,6 @@ func (runtime *Runtime) Extract(object *Object) (*ObjectTemplate, error) {
 	}
 	return rtn, nil
 }
-
 
 func (runtime *Runtime) Insert(template *ObjectTemplate, parent *Object) (*Object, error) {
 	rtn, err := runtime.factory.Deserialize(template)

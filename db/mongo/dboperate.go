@@ -3,14 +3,14 @@ package mongo
 import (
 	"errors"
 	"fmt"
+	"github.com/zllangct/RockGO/logger"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"time"
-	"github.com/zllangct/RockGO/logger"
 )
 
 const (
-	Strong = 1
+	Strong    = 1
 	Monotonic = 2
 )
 
@@ -18,9 +18,9 @@ var (
 	MONGODB_SESSION_NIL_ERR    = errors.New("DbOperate session nil.")
 	MONGODB_NOTFOUND_ERR       = errors.New("not found!")
 	MONGODB_DBFINDALL_ERR      = errors.New("DBFindAll failed,q is nil!")
-	MONGODB_OPENGRIDFILE_ERR   =  errors.New("OpenGridFile failed!")
-	MONGODB_READGRIDFILE_ERR   =  errors.New("ReadGridFile failed!")
-	MONGODB_CREATEGRIDFILE_ERR =  errors.New("CreateGridFile is nil")
+	MONGODB_OPENGRIDFILE_ERR   = errors.New("OpenGridFile failed!")
+	MONGODB_READGRIDFILE_ERR   = errors.New("ReadGridFile failed!")
+	MONGODB_CREATEGRIDFILE_ERR = errors.New("CreateGridFile is nil")
 )
 
 type DbCfg struct {
@@ -31,7 +31,7 @@ type DbCfg struct {
 	DbPass string
 }
 
-func NewDbCfg(host string, port int, name , user, pass string) *DbCfg{
+func NewDbCfg(host string, port int, name, user, pass string) *DbCfg {
 	return &DbCfg{
 		DbHost: host,
 		DbPort: port,
@@ -41,7 +41,7 @@ func NewDbCfg(host string, port int, name , user, pass string) *DbCfg{
 	}
 }
 
-func (this *DbCfg)String() string{
+func (this *DbCfg) String() string {
 	url := fmt.Sprintf("mongodb://%s:%s@%s:%d/%s",
 		this.DbUser, this.DbPass, this.DbHost, this.DbPort, this.DbName)
 	if this.DbUser == "" || this.DbPass == "" {
@@ -51,12 +51,12 @@ func (this *DbCfg)String() string{
 }
 
 type DbOperate struct {
-	session      *mgo.Session
-	timeout      time.Duration
-	dbcfg        *DbCfg
+	session *mgo.Session
+	timeout time.Duration
+	dbcfg   *DbCfg
 }
 
-func NewDbOperate(dbcfg *DbCfg, timeout time.Duration) *DbOperate{
+func NewDbOperate(dbcfg *DbCfg, timeout time.Duration) *DbOperate {
 	return &DbOperate{nil, timeout, dbcfg}
 }
 
@@ -86,7 +86,7 @@ func (this *DbOperate) OpenDB(set_index_func func(ms *mgo.Session)) error {
 
 	this.session.SetMode(mgo.Monotonic, true)
 	//set index
-	if set_index_func != nil{
+	if set_index_func != nil {
 		set_index_func(this.session)
 	}
 	logger.Info(fmt.Sprintf("DbOperate connect %v mongodb...OK", this.dbcfg.String()))
@@ -508,7 +508,7 @@ func (this *DbOperate) DeleteAll(collection string, cond interface{}) (int, erro
 	local_session.SetMode(mgo.Strong, true)
 	c := local_session.DB("").C(collection)
 	changeInfo, err := c.RemoveAll(cond)
-	if err != nil{
+	if err != nil {
 		return 0, err
 	}
 	return changeInfo.Removed, nil
@@ -568,7 +568,7 @@ func (this *DbOperate) CreateGridFile(collection string, filename string, resHan
 	if file == nil {
 		return MONGODB_CREATEGRIDFILE_ERR
 	}
-	if resHandler != nil{
+	if resHandler != nil {
 		err = resHandler(file)
 		if err != nil {
 			return err

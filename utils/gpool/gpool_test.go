@@ -25,12 +25,10 @@ func TestNewPool(t *testing.T) {
 	wg.Add(iterations)
 	for i := 0; i < iterations; i++ {
 		arg := uint64(1)
-		job := func() {
+		pool.AddJobParallel(func(args ...interface{}) {
 			defer wg.Done()
 			atomic.AddUint64(&counter, arg)
-		}
-
-		pool.JobQueue <- job
+		}, nil, -1, nil)
 	}
 	wg.Wait()
 

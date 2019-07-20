@@ -42,10 +42,10 @@ func BenchmarkGpool(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		wg.Add(runTimes)
 		for j := 0; j < runTimes; j++ {
-			pool.JobQueue <- func() {
+			pool.AddJobParallel(func(args ...interface{}) {
 				defer wg.Done()
 				demoTask()
-			}
+			}, nil, -1, nil)
 		}
 	}
 }

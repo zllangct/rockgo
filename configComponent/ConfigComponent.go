@@ -80,7 +80,7 @@ func (this *ConfigComponent) ReloadConfig() {
 	if err != nil {
 		panic(err)
 	}
-	if this.customConfigPath!="" {
+	if this.customConfigPath != "" {
 		err = this.loadConfig(this.customConfigPath, this.CustomConfig)
 		if err != nil {
 			panic(err)
@@ -96,7 +96,7 @@ func (this *ConfigComponent) LoadCustomConfig(path string, structure interface{}
 		return
 	}
 	err = this.loadConfig(path, structure)
-	this.CustomConfig = structure 
+	this.CustomConfig = structure
 	this.customConfigPath = path
 	return err
 }
@@ -135,7 +135,7 @@ func (this *ConfigComponent) SetDefault() {
 			"node_room":  {LocalAddress: "0.0.0.0:6605", Role: []string{"room"}},
 
 			//dubug 或 单服
-			"node_single": {LocalAddress: "0.0.0.0:6666", Role: []string{"master","gate", "login", "room"}},
+			"node_single": {LocalAddress: "0.0.0.0:6666", Role: []string{"master", "gate", "login", "room"}},
 		},
 
 		ReportInterval:       3000,
@@ -173,7 +173,7 @@ type Node struct {
 
 type ClusterConfig struct {
 	MasterAddress string   //Master 地址,例如:127.0.0.1:8888
-	LocalAddress     string   //本节点IP,注意配置文件时，填写正确的局域网地址或者外网地址，不可为0.0.0.0
+	LocalAddress  string   //本节点IP,注意配置文件时，填写正确的局域网地址或者外网地址，不可为0.0.0.0
 	AppName       string   //本节点拥有的app
 	Role          []string //本节点拥有角色
 	NodeDefine    map[string]Node
@@ -183,7 +183,7 @@ type ClusterConfig struct {
 	RpcCallTimeout       int  //rpc调用超时
 	RpcHeartBeatInterval int  //tcp心跳间隔
 	IsLocationMode       bool //是否启用位置服务器
-	LocationSyncInterval       int  //位置服务同步间隔，单位秒
+	LocationSyncInterval int  //位置服务同步间隔，单位秒
 
 	//外网
 	NetConnTimeout   int    //外网链接超时

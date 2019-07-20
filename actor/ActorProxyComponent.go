@@ -25,7 +25,7 @@ type ActorProxyComponent struct {
 	nodeComponent *Cluster.NodeComponent
 	location      *rpc.TcpClient
 	//isActorMode   bool
-	isOnline      bool
+	isOnline bool
 }
 
 func (this *ActorProxyComponent) GetRequire() map[*Component.Object][]reflect.Type {
@@ -66,12 +66,12 @@ func (this *ActorProxyComponent) IsOnline() bool {
 	return this.isOnline
 }
 
-func (this *ActorProxyComponent) Destroy(ctx *Component.Context)  {
+func (this *ActorProxyComponent) Destroy(ctx *Component.Context) {
 
 }
 
 //获取本地actor服务
-func (this *ActorProxyComponent)GetLocalActorService(serviceName string) (*ActorService,error){
+func (this *ActorProxyComponent) GetLocalActorService(serviceName string) (*ActorService, error) {
 	var service *ActorService
 	var err error
 	s, ok := this.service.Load(serviceName)
@@ -79,20 +79,20 @@ func (this *ActorProxyComponent)GetLocalActorService(serviceName string) (*Actor
 		return nil, ErrNoThisService
 	}
 	service = s.(*ActorService)
-	if err!=nil{
+	if err != nil {
 		return nil, err
 	}
-	return service,nil
+	return service, nil
 }
 
 //获取actor服务
-func (this *ActorProxyComponent)GetActorService(role string,serviceName string) (*ActorService,error) {
+func (this *ActorProxyComponent) GetActorService(role string, serviceName string) (*ActorService, error) {
 	var service *ActorService
 	var err error
 	//优先尝试本地服务
-	service ,err = this.GetLocalActorService(serviceName)
-	if err==nil{
-		return service,nil
+	service, err = this.GetLocalActorService(serviceName)
+	if err == nil {
+		return service, nil
 	}
 
 	//获取远程服务
@@ -101,28 +101,28 @@ func (this *ActorProxyComponent)GetActorService(role string,serviceName string) 
 	}
 	client, err := this.nodeComponent.GetNodeClientByRole(role)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	var reply ActorID
 	err = client.Call("ActorProxyService.ServiceInquiry", service, &reply)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
-	return NewActorService(NewActor(reply,this),serviceName), nil
+	return NewActorService(NewActor(reply, this), serviceName), nil
 }
 
 //注册服务
 func (this *ActorProxyComponent) RegisterService(actor IActor, service string) error {
-	_,ok := this.service.Load(service)
+	_, ok := this.service.Load(service)
 	if ok {
 		return errors.New("this service is repeated")
 	}
-	this.service.Store(service,NewActorService(actor,service))
+	this.service.Store(service, NewActorService(actor, service))
 	return nil
 }
 
 //取消注册服务
-func (this *ActorProxyComponent) UnregisterService(service string){
+func (this *ActorProxyComponent) UnregisterService(service string) {
 	this.service.Delete(service)
 }
 

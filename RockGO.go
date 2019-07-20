@@ -14,11 +14,11 @@ type Server = launcher.LauncherComponent
 //新建一个服务节点
 func NewServerNode() *Server {
 	//构造运行时
-	runtime:=Component.NewRuntime(Component.Config{ThreadPoolSize: runtime.NumCPU()})
-	runtime.UpdateFrameByInterval(time.Millisecond*100)
+	runtime := Component.NewRuntime(Component.Config{ThreadPoolSize: runtime.NumCPU()})
+	runtime.UpdateFrameByInterval(time.Millisecond * 100)
 
 	//构造启动器
-	launcher:=&launcher.LauncherComponent{}
+	launcher := &launcher.LauncherComponent{}
 	runtime.Root().AddComponent(launcher)
 	return launcher
 }

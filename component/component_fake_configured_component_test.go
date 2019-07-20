@@ -1,8 +1,8 @@
 package Component_test
 
 import (
-	"reflect"
 	"github.com/zllangct/RockGO/component"
+	"reflect"
 )
 
 type FakeConfiguredComponentData struct {

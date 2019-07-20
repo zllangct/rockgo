@@ -5,9 +5,9 @@ type ActorMessage struct {
 	Data    []interface{}
 }
 
-func NewActorMessage(service string,args ...interface{}) *ActorMessage {
+func NewActorMessage(service string, args ...interface{}) *ActorMessage {
 	return &ActorMessage{
-		Service:service,
-		Data:args,
+		Service: service,
+		Data:    args,
 	}
 }

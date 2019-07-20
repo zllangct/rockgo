@@ -6,14 +6,13 @@ import (
 	"fmt"
 	"github.com/zllangct/RockGO/network"
 	"time"
-
 )
 
 //MyServer testing tars udp server
 type MyServer struct{}
 
 //ParseMessage recv package and make response.
-func (s *MyServer) ParseMessage(ctx context.Context,req []byte)([]uint32,[]byte) {
+func (s *MyServer) ParseMessage(ctx context.Context, req []byte) ([]uint32, []byte) {
 	println(string(req))
 	return []uint32{0}, nil
 }
@@ -40,6 +39,7 @@ func main() {
 		PackageProtocol: &s,
 		Address:         "127.0.0.1:3333",
 		//MaxAccept:     500,
+		PoolMode:      true,
 		MaxInvoke:     20,
 		AcceptTimeout: time.Millisecond * 500,
 		ReadTimeout:   time.Millisecond * 100,

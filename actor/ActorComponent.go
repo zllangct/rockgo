@@ -18,8 +18,8 @@ import (
 	默认状态下actor type 为 ACTOR_TYPE_ASYNC，在actor内是非线程安全的，需要有保证线程安全的措施
 	可设置type为 ACTOR_TYPE_SYNC 此时所有消息穿行化，actor内线程安全
 */
-const(
-	ACTOR_TYPE_DEFAULT ActorType =iota
+const (
+	ACTOR_TYPE_DEFAULT ActorType = iota
 	ACTOR_TYPE_SYNC
 	ACTOR_TYPE_ASYNC
 )
@@ -40,8 +40,8 @@ func NewActorComponent(actorType ActorType) *ActorComponent {
 	return &ActorComponent{ActorType: actorType}
 }
 
-func (this *ActorComponent) GetRequire() (map[*Component.Object][]reflect.Type) {
-	requires:=make(map[*Component.Object][]reflect.Type)
+func (this *ActorComponent) GetRequire() map[*Component.Object][]reflect.Type {
+	requires := make(map[*Component.Object][]reflect.Type)
 	//添加该组件需要根节点拥有ActorProxyComponent,ConfigComponent组件
 	requires[this.Runtime().Root()] = []reflect.Type{
 		reflect.TypeOf(&Config.ConfigComponent{}),
@@ -55,8 +55,8 @@ func (this *ActorComponent) IsUnique() int {
 }
 
 func (this *ActorComponent) Initialize() error {
-	this.queueReceive= make(chan *ActorMessageInfo, 20)
-	this.close =       make(chan bool)
+	this.queueReceive = make(chan *ActorMessageInfo, 20)
+	this.close = make(chan bool)
 	//初始化actor类型
 	if this.ActorType == ACTOR_TYPE_DEFAULT {
 		this.ActorType = ACTOR_TYPE_ASYNC
@@ -68,10 +68,10 @@ func (this *ActorComponent) Initialize() error {
 		return err
 	}
 	//初始化ID
-	this.ActorID= EmptyActorID()
+	this.ActorID = EmptyActorID()
 	//注册Actor到ActorProxy
 	err = this.Proxy.Register(this)
-	if err!=nil {
+	if err != nil {
 		logger.Error(err)
 		return err
 	}
@@ -82,10 +82,10 @@ func (this *ActorComponent) Initialize() error {
 	return nil
 }
 
-func (this *ActorComponent)RegisterService(service string) error {
-	return this.Proxy.RegisterService(this,service)
+func (this *ActorComponent) RegisterService(service string) error {
+	return this.Proxy.RegisterService(this, service)
 }
-func (this *ActorComponent)UnregisterService(service string) {
+func (this *ActorComponent) UnregisterService(service string) {
 	this.Proxy.UnregisterService(service)
 }
 
@@ -95,20 +95,20 @@ func (this *ActorComponent) Destroy(ctx *Component.Context) {
 	this.Proxy.Unregister(this)
 }
 
-func (this *ActorComponent) Tell(sender IActor,message *ActorMessage,reply ...**ActorMessage) error {
+func (this *ActorComponent) Tell(sender IActor, message *ActorMessage, reply ...**ActorMessage) error {
 	if atomic.LoadInt32(&this.active) == 0 {
 		return errors.New("this actor is inactive or destroyed")
 	}
 
-	messageInfo:=&ActorMessageInfo{
-		Sender:sender,
-		Message:message,
+	messageInfo := &ActorMessageInfo{
+		Sender:  sender,
+		Message: message,
 	}
 
-	if len(reply)>0 {
+	if len(reply) > 0 {
 		messageInfo.NeedReply(true)
-		messageInfo.reply=reply[0]
-	}else{
+		messageInfo.reply = reply[0]
+	} else {
 		messageInfo.NeedReply(false)
 	}
 
@@ -116,7 +116,7 @@ func (this *ActorComponent) Tell(sender IActor,message *ActorMessage,reply ...**
 
 	if messageInfo.IsNeedReply() {
 		select {
-		case <-timer.After(time.Duration(Config.Config.ClusterConfig.RpcCallTimeout)* time.Millisecond):
+		case <-timer.After(time.Duration(Config.Config.ClusterConfig.RpcCallTimeout) * time.Millisecond):
 			messageInfo.err = ErrTimeout
 		case <-messageInfo.done:
 		}
@@ -124,11 +124,11 @@ func (this *ActorComponent) Tell(sender IActor,message *ActorMessage,reply ...**
 	return messageInfo.err
 }
 
-func (this *ActorComponent)Emit()  {
+func (this *ActorComponent) Emit() {
 
 }
 
-func (this *ActorComponent) ID() ActorID{
+func (this *ActorComponent) ID() ActorID {
 	return this.ActorID
 }
 
@@ -157,38 +157,38 @@ func (this *ActorComponent) dispatch() {
 	}
 }
 
-func (this *ActorComponent)handle(messageInfo *ActorMessageInfo) {
+func (this *ActorComponent) handle(messageInfo *ActorMessageInfo) {
 	cps := this.Parent().AllComponents()
 	var err error = nil
 	var val interface{}
 	for val, err = cps.Next(); err == nil; val, err = cps.Next() {
 		if messageHandler, ok := val.(IActorMessageHandler); ok {
 			if handler, ok := messageHandler.MessageHandlers()[messageInfo.Message.Service]; ok {
-				this.Catch(handler,messageInfo)
+				this.Catch(handler, messageInfo)
 			}
 		}
 	}
 }
 
-func (this *ActorComponent) Catch(handler func(message *ActorMessageInfo)error,m *ActorMessageInfo) {
+func (this *ActorComponent) Catch(handler func(message *ActorMessageInfo) error, m *ActorMessageInfo) {
 	defer (func() {
 		if r := recover(); r != nil {
 			var str string
 			switch r.(type) {
 			case error:
-				str =r.(error).Error()
+				str = r.(error).Error()
 			case string:
 				str = r.(string)
 			}
-			err := errors.New(str+ string(debug.Stack()))
+			err := errors.New(str + string(debug.Stack()))
 			logger.Error(err)
 			m.replyError(err)
 		}
 	})()
-	err:=handler(m)
-	if err!=nil {
+	err := handler(m)
+	if err != nil {
 		m.replyError(err)
-	}else{
+	} else {
 		m.replySuccess()
 	}
 }

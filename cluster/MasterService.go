@@ -13,15 +13,15 @@ type NodeInfo struct {
 }
 
 type InquiryReply struct {
-	Node	string
-	Info    map[string]float32
+	Node string
+	Info map[string]float32
 }
 
-type MasterService struct{
+type MasterService struct {
 	master *MasterComponent
 }
 
-func (this *MasterService)init(master *MasterComponent) {
+func (this *MasterService) init(master *MasterComponent) {
 	this.master = master
 }
 
@@ -41,14 +41,14 @@ func (this *MasterService) ReportNodeInfo(args *NodeInfo, reply *bool) error {
 
 func (this *MasterService) NodeInquiry(args []string, reply *[]*InquiryReply) error {
 	//logger.Debug("Inquiry :",args)
-	res,err:= this.master.NodeInquiry(args,false)
-	*reply =res
+	res, err := this.master.NodeInquiry(args, false)
+	*reply = res
 	return err
 }
 
 func (this *MasterService) NodeInquiryDetail(args []string, reply *[]*InquiryReply) error {
-	res,err:= this.master.NodeInquiry(args,true)
-	*reply =res
+	res, err := this.master.NodeInquiry(args, true)
+	*reply = res
 	return err
 }
 
@@ -61,7 +61,7 @@ func (this *MasterService) NodeInfoSync(args string, reply *NodeInfoSyncReply) e
 	if args != "sync" {
 		return errors.New("call service [ NodeInfoSynchronous ],has wrong argument")
 	}
-	*reply=NodeInfoSyncReply{
+	*reply = NodeInfoSyncReply{
 		Nodes:   this.master.NodesCopy(),
 		NodeLog: this.master.NodesLogsCopy(),
 	}
@@ -70,20 +70,20 @@ func (this *MasterService) NodeInfoSync(args string, reply *NodeInfoSyncReply) e
 
 type NodeLog struct {
 	Time int64
-	Log string
+	Log  string
 	Type int
 }
 
 type NodeLogs struct {
 	BufferSize int
-	Logs []*NodeLog
+	Logs       []*NodeLog
 }
 
-func (this *NodeLogs)Add(log *NodeLog)  {
-	if len(this.Logs)< this.BufferSize{
-		this.Logs= append(this.Logs, log)
-	}else{
-		this.Logs= append(this.Logs[1:],log)
+func (this *NodeLogs) Add(log *NodeLog) {
+	if len(this.Logs) < this.BufferSize {
+		this.Logs = append(this.Logs, log)
+	} else {
+		this.Logs = append(this.Logs[1:], log)
 	}
 }
 
@@ -95,4 +95,3 @@ func (this *NodeLogs) Get(time int64) []*NodeLog {
 	}
 	return []*NodeLog{}
 }
-

@@ -11,9 +11,9 @@ type NodeID struct {
 	nodeComponent *NodeComponent
 }
 
-func (this *NodeID) GetClient() (*rpc.TcpClient,error)  {
+func (this *NodeID) GetClient() (*rpc.TcpClient, error) {
 	if this.Addr == "" {
-		return nil,errors.New("this node id is empty")
+		return nil, errors.New("this node id is empty")
 	}
 	return this.nodeComponent.GetNodeClient(this.Addr)
 }
@@ -21,18 +21,18 @@ func (this *NodeID) GetClient() (*rpc.TcpClient,error)  {
 //无需加锁，只读
 type NodeIDGroup struct {
 	nodeComponent *NodeComponent
-	nodes []*InquiryReply
+	nodes         []*InquiryReply
 }
 
-func NewNodeIDGrop()*NodeIDGroup  {
-	return &NodeIDGroup{nodes:[]*InquiryReply{}}
+func NewNodeIDGrop() *NodeIDGroup {
+	return &NodeIDGroup{nodes: []*InquiryReply{}}
 }
 
 //所有节点，仅地址
 func (this *NodeIDGroup) Nodes() []string {
-	nodes:=make([]string,len(this.nodes))
+	nodes := make([]string, len(this.nodes))
 	for _, v := range this.nodes {
-		nodes= append(nodes, v.Node)
+		nodes = append(nodes, v.Node)
 	}
 	return nodes
 }
@@ -43,55 +43,55 @@ func (this *NodeIDGroup) NodesDetail() []*InquiryReply {
 }
 
 //随机选择一个
-func (this *NodeIDGroup)RandOne() (string,error) {
-	if this.nodes ==nil{
-		return "",errors.New("this node id group is empty")
+func (this *NodeIDGroup) RandOne() (string, error) {
+	if this.nodes == nil {
+		return "", errors.New("this node id group is empty")
 	}
-	length:=len(this.nodes)
+	length := len(this.nodes)
 	if length == 0 {
-		return "",errors.New("this node id group is empty")
+		return "", errors.New("this node id group is empty")
 	}
-	index:=rand.Intn(length)
-	return this.nodes[index].Node,nil
+	index := rand.Intn(length)
+	return this.nodes[index].Node, nil
 }
 
 //随机选择一个
-func (this *NodeIDGroup)RandClient() (*rpc.TcpClient,error) {
-	length:=len(this.nodes)
+func (this *NodeIDGroup) RandClient() (*rpc.TcpClient, error) {
+	length := len(this.nodes)
 	if length == 0 {
-		return nil,errors.New("this node id group is empty")
+		return nil, errors.New("this node id group is empty")
 	}
-	index:=rand.Intn(length)
+	index := rand.Intn(length)
 
 	return this.nodeComponent.GetNodeClient(this.nodes[index].Node)
 }
 
 //所有客户端
-func (this *NodeIDGroup)Clients() ([]*rpc.TcpClient,error) {
-	length:=len(this.nodes)
+func (this *NodeIDGroup) Clients() ([]*rpc.TcpClient, error) {
+	length := len(this.nodes)
 	if length == 0 {
-		return nil,errors.New("this node id group is empty")
-	}
-	clients:=[]*rpc.TcpClient{}
-	for _, nodeID := range this.nodes {
-		client,err:=this.nodeComponent.GetNodeClient(nodeID.Node)
-		if err!=nil {
-			continue
-		}
-		clients= append(clients,client)
-
-	}
-	if len(clients)<=0{
 		return nil, errors.New("this node id group is empty")
 	}
-	return clients,nil
+	clients := []*rpc.TcpClient{}
+	for _, nodeID := range this.nodes {
+		client, err := this.nodeComponent.GetNodeClient(nodeID.Node)
+		if err != nil {
+			continue
+		}
+		clients = append(clients, client)
+
+	}
+	if len(clients) <= 0 {
+		return nil, errors.New("this node id group is empty")
+	}
+	return clients, nil
 }
 
 //选择一个负载最低的节点
-func (this *NodeIDGroup)MinLoadClient() (*rpc.TcpClient,error) {
+func (this *NodeIDGroup) MinLoadClient() (*rpc.TcpClient, error) {
 	if len(this.nodes) == 0 {
-		return nil,errors.New("this node id group is empty")
+		return nil, errors.New("this node id group is empty")
 	}
-	index:=SourceGroup(this.nodes).SelectMinLoad()
+	index := SourceGroup(this.nodes).SelectMinLoad()
 	return this.nodeComponent.GetNodeClient(this.nodes[index].Node)
 }

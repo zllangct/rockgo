@@ -1,9 +1,9 @@
 package assert
 
 import (
-	"testing"
-	"runtime/debug"
 	"fmt"
+	"runtime/debug"
+	"testing"
 )
 
 // T is a light weight testing helper
@@ -20,7 +20,7 @@ func Test(t *testing.T, testcase func(*T)) {
 		if r != nil {
 			fmt.Printf("Panic running test: %s\n", r)
 			debug.PrintStack()
-      fmt.Printf("\n")
+			fmt.Printf("\n")
 			t.Fail()
 		}
 	}()
@@ -61,7 +61,7 @@ func (T *T) Assert(truth bool) {
 // Unreachable fails the test if it gets hit.
 func (T *T) Unreachable() {
 	T.failed = true
-  fmt.Printf("Unreachable bound hit:\n")
-  debug.PrintStack()
-  fmt.Printf("\n")
+	fmt.Printf("Unreachable bound hit:\n")
+	debug.PrintStack()
+	fmt.Printf("\n")
 }

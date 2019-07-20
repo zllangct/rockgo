@@ -1,10 +1,9 @@
 package Component
 
 import (
-
 	"container/list"
-	"reflect"
 	"github.com/zllangct/RockGO/3rd/iter"
+	"reflect"
 )
 
 // FilterComponentArrayIter implements Iterator for components with a type filter.
@@ -50,13 +49,13 @@ func (iterator *FilterComponentArrayIter) Next() (interface{}, error) {
 			}
 		}
 		value := (*iterator.current)[iterator.offset]
-		if iterator.target==nil {
+		if iterator.target == nil {
 			cmp = value
 			break
 		}
 		//支持通过实现过的接口类型查询,接口查询效率低下，慎重使用。
-		cmpTye:=value.Type()
-		if  cmpTye == iterator.target || ( cmpTye.Kind()==reflect.Interface && cmpTye.Implements(iterator.target.Elem())){
+		cmpTye := value.Type()
+		if cmpTye == iterator.target || (cmpTye.Kind() == reflect.Interface && cmpTye.Implements(iterator.target.Elem())) {
 			cmp = value
 			break
 		}

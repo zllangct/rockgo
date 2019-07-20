@@ -1,7 +1,5 @@
 package iter
 
-
-
 // ValueIter implements Iterator for an arbitrary single value
 type ValueIter struct {
 	value interface{}

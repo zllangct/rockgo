@@ -56,8 +56,8 @@ type Call struct {
 type TcpClient struct {
 	codec ClientCodec
 
-	network    string
-	conn       net.Conn
+	network string
+	conn    net.Conn
 
 	reqMutex sync.Mutex // protects following
 	request  Request
@@ -87,7 +87,7 @@ type ClientCodec interface {
 	Close() error
 }
 
-func (client *TcpClient) IsClosed()bool{
+func (client *TcpClient) IsClosed() bool {
 	client.mutex.Lock()
 	defer client.mutex.Unlock()
 	return client.closing || client.shutdown
@@ -241,20 +241,20 @@ func (call *Call) done() {
 }
 
 func (client *TcpClient) StartHeartBeat() {
-	if !DebugMode{
+	if !DebugMode {
 		pingCount := 0
 		res := &HeartBeatReuslt{}
-		c:=time.NewTicker(HeartInterval)
+		c := time.NewTicker(HeartInterval)
 		for {
 			res.Result = 0
 			<-c.C
 			if client.closing || client.shutdown {
 				return
 			}
-			err := client.Call("InnerResponse.HeartBeat", struct {}{}, res)
+			err := client.Call("InnerResponse.HeartBeat", struct{}{}, res)
 			if err != nil || res.Result != 1 {
 				pingCount++
-				if pingCount > 3 && !DebugMode{
+				if pingCount > 3 && !DebugMode {
 					logger.Error("tcp client timeout")
 					c.Stop()
 					client.Close()
@@ -284,6 +284,7 @@ func (client *TcpClient) Reconnect() error {
 	*client = *NewClientWithConn(conn)
 	return nil
 }
+
 // NewClient returns a new TcpClient to handle requests to the
 // set of services at the other end of the connection.
 // It adds a buffer to the write side of the connection so
@@ -302,16 +303,16 @@ func NewTcpClient(network string, remoteAddr string, callback ...func(event stri
 	if err != nil {
 		return nil, err
 	}
-	return NewClientWithConn(conn,callback...),nil
+	return NewClientWithConn(conn, callback...), nil
 }
 
 func NewClientWithConn(conn net.Conn, callback ...func(event string, data ...interface{})) *TcpClient {
 	encBuf := bufio.NewWriter(conn)
 	codec := &gobClientCodec{conn, gob.NewDecoder(conn), gob.NewEncoder(encBuf), encBuf}
 	client := &TcpClient{
-		conn:conn,
-		codec:         codec,
-		pending:       make(map[uint64]*Call),
+		conn:    conn,
+		codec:   codec,
+		pending: make(map[uint64]*Call),
 	}
 	go client.input()
 	go client.StartHeartBeat()

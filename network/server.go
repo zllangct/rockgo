@@ -14,13 +14,12 @@ const (
 	//PACKAGE_ERROR shows is a error package.
 	PACKAGE_ERROR
 )
+
 //PackageProtocol is interface for handling the server side tars package.
 type Protocol interface {
-	ParseMessage( context.Context,  []byte)([]uint32,[]byte)
-	ParsePackage( []byte) (int, int)
+	ParseMessage(context.Context, []byte) ([]uint32, []byte)
+	ParsePackage([]byte) (int, int)
 }
-
-
 
 //ServerHandler  is interface with listen and handler method
 type ServerHandler interface {
@@ -30,22 +29,22 @@ type ServerHandler interface {
 
 //ServerConf server config for tars server side.
 type ServerConf struct {
-	Proto           string
-	PackageProtocol Protocol
-	NetAPI          NetAPI
-	Handler         func(sess *Session,data []byte)
-	Address         string
-	PoolMode        bool
-	MaxInvoke       int32
-	AcceptTimeout   time.Duration
-	ReadTimeout     time.Duration
-	WriteTimeout    time.Duration
-	IdleTimeout     time.Duration
-	QueueCap        int
-	TCPReadBuffer   int
-	TCPWriteBuffer  int
-	TCPNoDelay      bool
-	OnClientConnected func(sess *Session)
+	Proto                string
+	PackageProtocol      Protocol
+	NetAPI               NetAPI
+	Handler              func(sess *Session, data []byte)
+	Address              string
+	PoolMode             bool
+	MaxInvoke            int32
+	AcceptTimeout        time.Duration
+	ReadTimeout          time.Duration
+	WriteTimeout         time.Duration
+	IdleTimeout          time.Duration
+	QueueCap             int
+	TCPReadBuffer        int
+	TCPWriteBuffer       int
+	TCPNoDelay           bool
+	OnClientConnected    func(sess *Session)
 	OnClientDisconnected func(sess *Session)
 }
 
@@ -71,7 +70,7 @@ func (ts *Server) getHandler() (sh ServerHandler) {
 		sh = &tcpHandler{conf: ts.conf, ts: ts}
 	} else if ts.conf.Proto == "udp" {
 		sh = &udpHandler{conf: ts.conf, ts: ts}
-	}else if ts.conf.Proto == "ws" {
+	} else if ts.conf.Proto == "ws" {
 		sh = &websocketHandler{conf: ts.conf, ts: ts}
 	} else {
 		panic("unsupport protocol: " + ts.conf.Proto)
@@ -105,10 +104,10 @@ func (ts *Server) IsZombie(timeout time.Duration) bool {
 }
 
 //消息分发
-func (ts *Server) invoke(ctx context.Context,mid uint32,data []byte) {
+func (ts *Server) invoke(ctx context.Context, mid uint32, data []byte) {
 	atomic.AddInt32(&ts.numInvoke, 1)
-	if sess,ok:=ctx.Value("sess").(*Session);ok{
-		ts.conf.NetAPI.Route(sess,mid,data)
+	if sess, ok := ctx.Value("sess").(*Session); ok {
+		ts.conf.NetAPI.Route(sess, mid, data)
 	}
 	atomic.AddInt32(&ts.numInvoke, -1)
 }

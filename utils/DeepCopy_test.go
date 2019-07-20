@@ -52,7 +52,7 @@ func NewPlayer() *Player {
 	return &Player{
 		Id:     1,
 		Level:  1,
-		Heroes:   map[int]*Hero{1: NewHero(), 2: NewHero(), 3: NewHero()},
+		Heroes: map[int]*Hero{1: NewHero(), 2: NewHero(), 3: NewHero()},
 		Equips: append([]*Equip{NewEquip()}, NewEquip(), NewEquip()),
 	}
 }
@@ -74,7 +74,6 @@ func (self *Player) Print() {
 		fmt.Printf("%+v\n", *v)
 	}
 }
-
 
 func TestCopy(T *testing.T) {
 	p1 := NewPlayer()

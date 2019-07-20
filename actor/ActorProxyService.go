@@ -9,7 +9,7 @@ func (this *ActorProxyService) init(proxy *ActorProxyComponent) {
 }
 func (this *ActorProxyService) Tell(args *ActorRpcMessageInfo, reply *ActorMessage) error {
 	minfo := &ActorMessageInfo{
-		Sender: NewActor(args.Sender,this.proxy),
+		Sender:  NewActor(args.Sender, this.proxy),
 		Message: args.Message,
 		reply:   &reply,
 	}
@@ -17,8 +17,8 @@ func (this *ActorProxyService) Tell(args *ActorRpcMessageInfo, reply *ActorMessa
 }
 
 func (this *ActorProxyService) ServiceInquiry(service string, reply *ActorID) error {
-	r,err:= this.proxy.GetLocalActorService(service)
-	if err!=nil {
+	r, err := this.proxy.GetLocalActorService(service)
+	if err != nil {
 		return err
 	}
 	*reply = r.actor.ID()

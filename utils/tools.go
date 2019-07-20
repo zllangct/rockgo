@@ -10,7 +10,6 @@ import (
 	"unicode/utf8"
 )
 
-
 func StrToBytes(strData string) []byte {
 	buffer := &bytes.Buffer{}
 	buffer.WriteString(strData)
@@ -20,7 +19,7 @@ func StrToBytes(strData string) []byte {
 func BytesToStr(b []byte) string {
 	buffer := &bytes.Buffer{}
 	buffer.Write(b)
-	return buffer.String()  
+	return buffer.String()
 }
 
 func IsExported(name string) bool {
@@ -35,20 +34,20 @@ func IsExportedOrBuiltinType(t reflect.Type) bool {
 	return IsExported(t.Name()) || t.PkgPath() == ""
 }
 
-func Try(task func(),catch ...func(error))  {
+func Try(task func(), catch ...func(error)) {
 	defer (func() {
 		if r := recover(); r != nil {
 			var str string
 			switch r.(type) {
 			case error:
-				str =r.(error).Error()
+				str = r.(error).Error()
 			case string:
 				str = r.(string)
 			}
-			err:=errors.New(str+"\n"+ string(debug.Stack()))
-			if len(catch) >0 {
+			err := errors.New(str + "\n" + string(debug.Stack()))
+			if len(catch) > 0 {
 				catch[0](err)
-			}else{
+			} else {
 				logger.Error(err)
 			}
 		}

@@ -15,23 +15,24 @@ import (
 	"time"
 )
 
-var ErrUdpConnClosed =errors.New("this udp conn is closed")
+var ErrUdpConnClosed = errors.New("this udp conn is closed")
 
 type UdpConn struct {
-	udpConn   *net.UDPConn
-	remoteAddr *net.UDPAddr
-	sess       uint32
-	lock	   sync.Mutex
-	timeout    <-chan struct{}
+	udpConn       *net.UDPConn
+	remoteAddr    *net.UDPAddr
+	sess          uint32
+	lock          sync.Mutex
+	timeout       <-chan struct{}
 	closeCallback func()
-	m			*sync.Map
-	once        *sync.Once
+	m             *sync.Map
+	once          *sync.Once
 }
-func (this *UdpConn)Addr()string  {
+
+func (this *UdpConn) Addr() string {
 	return this.remoteAddr.String()
 }
 
-func (this *UdpConn)Init(){
+func (this *UdpConn) Init() {
 	go func() {
 		<-this.timeout
 		this.Close()
@@ -39,12 +40,12 @@ func (this *UdpConn)Init(){
 	}()
 }
 
-func (this *UdpConn)SetReadDeadline(duration time.Duration)  {
+func (this *UdpConn) SetReadDeadline(duration time.Duration) {
 	this.once.Do(this.Init)
-	this.timeout=timer.After(duration)
+	this.timeout = timer.After(duration)
 }
 
-func (this *UdpConn) WriteMessage(messageType uint32, data []byte) error  {
+func (this *UdpConn) WriteMessage(messageType uint32, data []byte) error {
 	msg := make([]byte, 12)
 	msg = append(msg, data...)
 	binary.BigEndian.PutUint32(msg[:4], uint32(len(msg)))
@@ -56,25 +57,25 @@ func (this *UdpConn) WriteMessage(messageType uint32, data []byte) error  {
 	return nil
 }
 
-func (this *UdpConn)Close() error {
-	this.remoteAddr=nil
+func (this *UdpConn) Close() error {
+	this.remoteAddr = nil
 	return nil
 }
 
 type udpHandler struct {
-	conf *ServerConf
-	ts   *Server
+	conf      *ServerConf
+	ts        *Server
 	conn      *net.UDPConn
-	conns      *sync.Map
+	conns     *sync.Map
 	numInvoke int32
-	cid        uint32
-	gpool      *gpool.Pool
+	cid       uint32
+	gpool     *gpool.Pool
 }
 
 func (h *udpHandler) Listen() error {
 	conf := h.conf
 	//对象池模式下，初始pool大小为20
-	if conf.PoolMode && conf.MaxInvoke == 0{
+	if conf.PoolMode && conf.MaxInvoke == 0 {
 		conf.MaxInvoke = 20
 	}
 	h.gpool = gpool.GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
@@ -87,13 +88,13 @@ func (h *udpHandler) Listen() error {
 	if err != nil {
 		return err
 	}
-	logger.Info(fmt.Sprintf("TCP server listening and serving TCP on: [ %s ]", h.conn.LocalAddr()))
+	logger.Info(fmt.Sprintf("UDP server listening and serving UDP on: [ %s ]", h.conn.LocalAddr()))
 	return nil
 }
 
 func (h *udpHandler) Handle() error {
 
-	wg:=sync.WaitGroup{}
+	wg := sync.WaitGroup{}
 	buffer := make([]byte, 65535)
 	for {
 		wg.Wait()
@@ -121,52 +122,52 @@ func (h *udpHandler) Handle() error {
 			var new bool
 			cfg := h.conf
 			ctx := context.Background()
-			mid,pkg:= h.conf.PackageProtocol.ParseMessage(ctx, data)
+			mid, pkg := h.conf.PackageProtocol.ParseMessage(ctx, data)
 
-			if len(mid)!=2 {
+			if len(mid) != 2 {
 				logger.Warn("udp data fmt incorrect")
 				return
 			}
 
-			cid :=mid[0]
-			if cid ==0 {
-				cid = atomic.AddUint32(&h.cid,1)
-				new =true
+			cid := mid[0]
+			if cid == 0 {
+				cid = atomic.AddUint32(&h.cid, 1)
+				new = true
 			}
 
-			s,_:=h.conns.LoadOrStore(cid,&Session{
-				ID:UUID.Next(),
-				properties:make( map[string]interface{}),
-				conn:&UdpConn{remoteAddr:udpAddr,udpConn:h.conn},
+			s, _ := h.conns.LoadOrStore(cid, &Session{
+				ID:         UUID.Next(),
+				properties: make(map[string]interface{}),
+				conn:       &UdpConn{remoteAddr: udpAddr, udpConn: h.conn},
 			})
-			sess:=s.(*Session)
+			sess := s.(*Session)
 			sess.conn.(*UdpConn).SetReadDeadline(cfg.ReadTimeout)
 
 			wid := int32(-1)
-			item,ok:=sess.GetProperty("workerID")
+			item, ok := sess.GetProperty("workerID")
 			if ok {
-				wid=item.(int32)
-				sess.SetProperty("workerID",int32(-1))
+				wid = item.(int32)
+				sess.SetProperty("workerID", int32(-1))
 			}
 
 			if new {
 				//异常处理
 				h.ts.conf.OnClientConnected(sess)
-				sess.conn.(*UdpConn).closeCallback= func() {
+				sess.conn.(*UdpConn).closeCallback = func() {
 					h.ts.conf.OnClientDisconnected(sess)
 				}
 			}
 
-			if h.conf.NetAPI !=nil && mid != nil{
+			if h.conf.NetAPI != nil && mid != nil {
 				// use goroutine pool
 				if h.conf.PoolMode {
-					h.gpool.AddJob(h.handler,[]interface{}{sess, pkg},wid,func(workerID int32) {
-						wid=workerID
+					h.gpool.AddJobSerial(h.handler, []interface{}{sess, pkg}, wid, func(workerID int32) {
+						wid = workerID
 					})
-				}else{
+				} else {
 					go h.handler(sess, pkg)
 				}
-			}else{
+			} else {
 				logger.Error("no message handler")
 				return
 			}
@@ -175,16 +176,16 @@ func (h *udpHandler) Handle() error {
 	}
 }
 
-func (h *udpHandler)handler(args ...interface{}) {
+func (h *udpHandler) handler(args ...interface{}) {
 	ctx := context.Background()
-	ctx =context.WithValue(ctx,"sess",args[0])
+	ctx = context.WithValue(ctx, "sess", args[0])
 	if h.conf.Handler != nil {
 		h.conf.Handler(args[1].(*Session), args[1].([]byte))
-	}else{
-		mid, mes := h.conf.PackageProtocol.ParseMessage(ctx,args[1].([]byte))
-		if h.conf.NetAPI !=nil && mid != nil{
+	} else {
+		mid, mes := h.conf.PackageProtocol.ParseMessage(ctx, args[1].([]byte))
+		if h.conf.NetAPI != nil && mid != nil {
 			h.ts.invoke(ctx, mid[0], mes)
-		}else{
+		} else {
 			logger.Error("no message handler")
 			return
 		}

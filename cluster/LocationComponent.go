@@ -21,11 +21,11 @@ type LocationQuery struct {
 
 type LocationComponent struct {
 	Component.Base
-	locker *sync.RWMutex
-	nodeComponent  *NodeComponent
+	locker        *sync.RWMutex
+	nodeComponent *NodeComponent
 	Nodes         map[string]*NodeInfo
-	NodeLog	*NodeLogs
-	master   *rpc.TcpClient
+	NodeLog       *NodeLogs
+	master        *rpc.TcpClient
 }
 
 func (this *LocationComponent) GetRequire() map[*Component.Object][]reflect.Type {
@@ -38,16 +38,16 @@ func (this *LocationComponent) GetRequire() map[*Component.Object][]reflect.Type
 }
 
 func (this *LocationComponent) Awake(ctx *Component.Context) {
-	this.locker=&sync.RWMutex{}
+	this.locker = &sync.RWMutex{}
 	err := this.Parent().Root().Find(&this.nodeComponent)
 	if err != nil {
 		panic(err)
 	}
 
 	//注册位置服务节点RPC服务
-	service:=new(LocationService)
+	service := new(LocationService)
 	service.init(this)
-	err= this.nodeComponent.Register(service)
+	err = this.nodeComponent.Register(service)
 	if err != nil {
 		panic(err)
 	}
@@ -55,37 +55,37 @@ func (this *LocationComponent) Awake(ctx *Component.Context) {
 }
 
 //同步节点信息到位置服务组件
-func (this *LocationComponent)DoLocationSync()  {
+func (this *LocationComponent) DoLocationSync() {
 	var reply *NodeInfoSyncReply
 	var interval = time.Duration(Config.Config.ClusterConfig.LocationSyncInterval)
 	for {
 		if this.master == nil {
 			var err error
-			this.master,err=this.nodeComponent.GetNodeClient(Config.Config.ClusterConfig.MasterAddress)
+			this.master, err = this.nodeComponent.GetNodeClient(Config.Config.ClusterConfig.MasterAddress)
 			if err != nil {
 				time.Sleep(time.Second * interval)
 				continue
 			}
 		}
-		err:=this.master.Call("MasterService.NodeInfoSync","sync",&reply)
-		if err!=nil {
+		err := this.master.Call("MasterService.NodeInfoSync", "sync", &reply)
+		if err != nil {
 			this.master = nil
 			continue
 		}
 		this.locker.Lock()
-		this.Nodes=reply.Nodes
-		this.NodeLog=reply.NodeLog
+		this.Nodes = reply.Nodes
+		this.NodeLog = reply.NodeLog
 		this.locker.Unlock()
 		time.Sleep(time.Millisecond * interval)
 	}
 }
 
 //查询节点信息 args : "AppID:Role:SelectorType"
-func (this *LocationComponent) NodeInquiry(args []string,detail bool) ([]*InquiryReply, error) {
-	if this.Nodes==nil {
+func (this *LocationComponent) NodeInquiry(args []string, detail bool) ([]*InquiryReply, error) {
+	if this.Nodes == nil {
 		return nil, errors.New("this location node is waiting to sync")
 	}
-	return Selector(this.Nodes).DoQuery(args,detail,this.locker)
+	return Selector(this.Nodes).DoQuery(args, detail, this.locker)
 }
 
 //日志获取
@@ -93,8 +93,8 @@ func (this *LocationComponent) NodeLogInquiry(args int64) ([]*NodeLog, error) {
 	this.locker.RLock()
 	defer this.locker.RUnlock()
 
-	if this.NodeLog==nil {
+	if this.NodeLog == nil {
 		return nil, errors.New("this location node is waiting to sync")
 	}
-	return this.NodeLog.Get(args),nil
+	return this.NodeLog.Get(args), nil
 }

@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"sync"
 	"gopkg.in/eapache/queue.v1"
+	"sync"
 )
 
 // Synchronous FIFO queue
@@ -69,6 +69,7 @@ func (q *SyncQueue) Remove() (ok bool) {
 	q.lock.Unlock()
 	return
 }
+
 // Try to pop an item from SyncQueue, will return immediately with bool=false if SyncQueue is empty
 func (q *SyncQueue) TryPop() (v interface{}, ok bool) {
 	buffer := q.buffer

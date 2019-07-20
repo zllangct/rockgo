@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"testing"
 	"time"
-
 )
 
 func _log(i int) {
@@ -63,8 +62,8 @@ func Test(t *testing.T) {
 func Test1(t *testing.T) {
 	for i := 0; i < 1000; i++ {
 		go func() {
-			for j := 0; j<100;j++  {
-				logger.Debug(fmt.Sprintf("%s","sssssssss"))
+			for j := 0; j < 100; j++ {
+				logger.Debug(fmt.Sprintf("%s", "sssssssss"))
 			}
 		}()
 	}

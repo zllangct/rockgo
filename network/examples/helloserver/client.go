@@ -8,23 +8,22 @@ import (
 	"strconv"
 	"sync"
 	"time"
-	
 )
 
 //MyClient is a example client for tars client testing.
 type MyClient struct {
-	lock sync.Mutex
+	lock      sync.Mutex
 	recvCount int
 }
 
-func (c *MyClient)Recv(ctx context.Context,mid uint32,data []byte)  {
-	fmt.Println("recv", string(data))
+func (c *MyClient) Recv(ctx context.Context, mid uint32, data []byte) {
 	c.lock.Lock()
 	c.recvCount++
 	c.lock.Unlock()
+	fmt.Println("recv", string(data))
 }
 
-func (s *MyClient) ParseMessage(ctx context.Context,req []byte)([]uint32,[]byte){
+func (s *MyClient) ParseMessage(ctx context.Context, req []byte) ([]uint32, []byte) {
 	return []uint32{0}, req
 }
 
@@ -56,33 +55,30 @@ func main() {
 	cp := &MyClient{}
 	conf := &network.ClientConf{
 		Proto:        "tcp",
-		ClientProto:cp,
+		ClientProto:  cp,
 		QueueLen:     10000,
 		IdleTimeout:  time.Second * 5,
 		ReadTimeout:  time.Millisecond * 100,
 		WriteTimeout: time.Millisecond * 1000,
-		Handler:cp.Recv,
-
+		Handler:      cp.Recv,
 	}
 	client := network.NewClient("localhost:3333", cp, conf)
 
-	name := "Bob"
 	count := 500
-	for i := 0; i < count; i++ {
-		msg := getMsg(name + strconv.Itoa(i))
-		println("send:",name + strconv.Itoa(i))
-		client.Send(msg)
-	}
+	go func() {
+		name := "Bob"
+		for i := 0; i < count; i++ {
+			msg := getMsg(name + strconv.Itoa(i))
+			println("send:", name+strconv.Itoa(i))
+			client.Send(msg)
+		}
+	}()
 
-	time.Sleep(time.Second * 10)
+	time.Sleep(time.Second * 3)
 
 	cp.lock.Lock()
-	if count != cp.recvCount {
-		fmt.Println("bad")
-	} else {
-		fmt.Println("good")
-	}
+	println("send count:", count, "recv count:", cp.recvCount)
 	cp.lock.Unlock()
-	println("send:",count," recv:",cp.recvCount)
+
 	client.Close()
 }

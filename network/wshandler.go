@@ -17,7 +17,7 @@ import (
 )
 
 var upGrader = websocket.Upgrader{
-	CheckOrigin: func (r *http.Request) bool {
+	CheckOrigin: func(r *http.Request) bool {
 		return true
 	},
 }
@@ -27,69 +27,69 @@ type WsConn struct {
 	wsConn *websocket.Conn
 }
 
-func (this *WsConn)Addr()string  {
+func (this *WsConn) Addr() string {
 	return this.wsConn.RemoteAddr().String()
 }
 
-func (this *WsConn)WriteMessage(messageType uint32, data []byte) error{
+func (this *WsConn) WriteMessage(messageType uint32, data []byte) error {
 	msg := make([]byte, 4)
 	msg = append(msg, data...)
 	binary.BigEndian.PutUint32(msg[:4], messageType)
 	this.locker.Lock()
 	defer this.locker.Unlock()
 
-	return this.wsConn.WriteMessage(2,msg)
+	return this.wsConn.WriteMessage(2, msg)
 }
 
-func (this *WsConn)Close() error {
+func (this *WsConn) Close() error {
 	return this.wsConn.Close()
 }
 
 type websocketHandler struct {
-	conf *ServerConf
-	ts   *Server
-	numInvoke 	int32
-	acceptNum   int32
-	invokeNum   int32
-	idleTime    time.Time
-	gpool       *gpool.Pool
+	conf      *ServerConf
+	ts        *Server
+	numInvoke int32
+	acceptNum int32
+	invokeNum int32
+	idleTime  time.Time
+	gpool     *gpool.Pool
 }
 
 func (h *websocketHandler) Listen() error {
 	conf := h.conf
 	//对象池模式下，初始pool大小为20
-	if conf.PoolMode && conf.MaxInvoke == 0{
+	if conf.PoolMode && conf.MaxInvoke == 0 {
 		conf.MaxInvoke = 20
 	}
 	h.gpool = gpool.GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
 
 	gin.SetMode(gin.ReleaseMode)
 	//router:=gin.Default()
-	router:=gin.New()
+	router := gin.New()
 	router.Use(gin.Recovery())
 	router.GET("/", serveHome)
 	router.GET("/ws", func(ctx *gin.Context) {
-		conn,err:=upGrader.Upgrade(ctx.Writer,ctx.Request,nil)
-		if err!=nil {
-			_,_=ctx.Writer.WriteString("server internal error")
+		conn, err := upGrader.Upgrade(ctx.Writer, ctx.Request, nil)
+		if err != nil {
+			_, _ = ctx.Writer.WriteString("server internal error")
 			return
 		}
 		logger.Debug("TCP accept:", conn.RemoteAddr())
 		atomic.AddInt32(&h.acceptNum, 1)
-		sess:=&Session{
-			ID:UUID.Next(),
-			properties:make( map[string]interface{}),
-			conn:&WsConn{wsConn:conn},
+		sess := &Session{
+			ID:         UUID.Next(),
+			properties: make(map[string]interface{}),
+			conn:       &WsConn{wsConn: conn},
 		}
-		if h.conf.OnClientConnected!=nil {
+		if h.conf.OnClientConnected != nil {
 			//TODO 异常处理
 			h.conf.OnClientConnected(sess)
 		}
 		h.recv(sess, conn)
 		sess.locker.Lock()
-		sess.conn=nil
+		sess.conn = nil
 		sess.locker.Unlock()
-		if h.conf.OnClientDisconnected!=nil{
+		if h.conf.OnClientDisconnected != nil {
 			h.conf.OnClientDisconnected(sess)
 		}
 		atomic.AddInt32(&h.acceptNum, -1)
@@ -112,47 +112,47 @@ func (h *websocketHandler) Handle() error {
 	return nil
 }
 
-func (h *websocketHandler) recv(sess *Session,conn *websocket.Conn) {
+func (h *websocketHandler) recv(sess *Session, conn *websocket.Conn) {
 	defer conn.Close()
 
-	sess.SetProperty("workerID",int32(-1))
+	sess.SetProperty("workerID", int32(-1))
 
 	handler := func(args ...interface{}) {
 		ctx := context.Background()
-		ctx =context.WithValue(ctx,"sess",args[0])
+		ctx = context.WithValue(ctx, "sess", args[0])
 		if h.conf.Handler != nil {
 			h.conf.Handler(args[0].(*Session), args[1].([]byte))
-		}else{
-			mid, mes := h.conf.PackageProtocol.ParseMessage(ctx,args[1].([]byte))
-			if h.conf.NetAPI !=nil && mid != nil{
+		} else {
+			mid, mes := h.conf.PackageProtocol.ParseMessage(ctx, args[1].([]byte))
+			if h.conf.NetAPI != nil && mid != nil {
 				h.ts.invoke(ctx, mid[0], mes)
-			}else{
+			} else {
 				logger.Error("no message handler")
 				return
 			}
 		}
 	}
-	wid :=int32(-1)
+	wid := int32(-1)
 	for !h.ts.isClosed {
 		_, pkg, err := conn.ReadMessage()
-		if err != nil || pkg ==nil{
+		if err != nil || pkg == nil {
 			logger.Error(fmt.Sprintf("Close connection %s: %v", h.conf.Address, err))
 			return
 		}
 		// use goroutine pool
 		if h.conf.PoolMode {
-			h.gpool.AddJob(handler,[]interface{}{sess, pkg},wid,func(workerID int32) {
-				wid=workerID
+			h.gpool.AddJobSerial(handler, []interface{}{sess, pkg}, wid, func(workerID int32) {
+				wid = workerID
 			})
-		}else{
+		} else {
 			go handler(sess, pkg)
 		}
 	}
 }
 
 func serveHome(ctx *gin.Context) {
-	r:=ctx.Request
-	w:=ctx.Writer
+	r := ctx.Request
+	w := ctx.Writer
 	log.Println(r.URL)
 	if r.URL.Path != "/" {
 		http.Error(w, "Api not found", http.StatusNotFound)

@@ -16,11 +16,11 @@ import (
 type ChildComponent struct {
 	Component.Base
 	locker          sync.RWMutex
-	localAddr		string
+	localAddr       string
 	rpcMaster       *rpc.TcpClient //master节点
 	nodeComponent   *NodeComponent
 	reportCollecter []func() (string, float32)
-	close   bool
+	close           bool
 }
 
 func (this *ChildComponent) GetRequire() map[*Component.Object][]reflect.Type {
@@ -46,24 +46,24 @@ func (this *ChildComponent) Destroy(ctx *Component.Context) {
 	this.locker.Lock()
 	defer this.locker.Unlock()
 
-	this.close =true
+	this.close = true
 	this.ReportClose(this.localAddr)
 }
 
 //上报节点信息
 func (this *ChildComponent) DoReport() {
 	utils.When(time.Millisecond*50,
-	func() bool {
-		this.locker.RLock()
-		defer this.locker.RUnlock()
+		func() bool {
+			this.locker.RLock()
+			defer this.locker.RUnlock()
 
-		return this.rpcMaster!=nil
-	},
-	func() bool {
-		this.locker.RLock()
-		defer this.locker.RUnlock()
-		return this.localAddr!=""
-	})
+			return this.rpcMaster != nil
+		},
+		func() bool {
+			this.locker.RLock()
+			defer this.locker.RUnlock()
+			return this.localAddr != ""
+		})
 	args := &NodeInfo{
 		Address: this.localAddr,
 		Role:    Config.Config.ClusterConfig.Role,
@@ -87,7 +87,7 @@ func (this *ChildComponent) DoReport() {
 		this.locker.RUnlock()
 		if this.rpcMaster != nil {
 			err := this.rpcMaster.Call("MasterService.ReportNodeInfo", args, &reply)
-			if err!=nil {
+			if err != nil {
 
 			}
 		}
@@ -125,9 +125,9 @@ func (this *ChildComponent) ConnectToMaster() {
 		this.locker.Lock()
 		this.rpcMaster, err = this.nodeComponent.ConnectToNode(addr, callback)
 		if err == nil {
-			ip:=strings.Split(this.rpcMaster.LocalAddr(),":")[0]
-			port:=strings.Split(Config.Config.ClusterConfig.LocalAddress,":")[1]
-			this.localAddr =fmt.Sprintf("%s:%s",ip,port)
+			ip := strings.Split(this.rpcMaster.LocalAddr(), ":")[0]
+			port := strings.Split(Config.Config.ClusterConfig.LocalAddress, ":")[1]
+			this.localAddr = fmt.Sprintf("%s:%s", ip, port)
 			this.locker.Unlock()
 			break
 		}

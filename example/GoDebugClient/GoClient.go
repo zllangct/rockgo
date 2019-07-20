@@ -48,9 +48,9 @@ func main() {
 	defer ticker.Stop()
 
 	var message = "{\"Account\":\"zllang1\"}"
-	messageType:=uint32(2)
+	messageType := uint32(2)
 	msg := make([]byte, 4)
-	msg = append(msg,[]byte(message)...)
+	msg = append(msg, []byte(message)...)
 	binary.BigEndian.PutUint32(msg[:4], messageType)
 
 	for {

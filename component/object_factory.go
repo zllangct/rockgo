@@ -1,10 +1,11 @@
 package Component
 
 import (
-	"reflect"
 	"fmt"
+	"reflect"
 	"strings"
 )
+
 // ComponentProvider maps between component instances and component templates
 type ComponentProvider interface {
 	Type() reflect.Type
@@ -97,7 +98,7 @@ func (factory *ObjectFactory) deserializeComponent(template *ComponentTemplate) 
 func (factory *ObjectFactory) serializeComponent(component IComponent) (*ComponentTemplate, error) {
 	template := &ComponentTemplate{
 		Type: typeName(component.Type())}
-	if persist,ok:=component.(IPersist);ok{
+	if persist, ok := component.(IPersist); ok {
 		data, err := persist.Serialize()
 		if err != nil {
 			return nil, err

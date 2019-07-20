@@ -34,7 +34,7 @@ func (this *DefaultGateComponent) GetRequire() map[*Component.Object][]reflect.T
 	return requires
 }
 
-func (this *DefaultGateComponent) Awake(ctx *Component.Context)  {
+func (this *DefaultGateComponent) Awake(ctx *Component.Context) {
 	err := this.Parent().Root().Find(&this.nodeComponent)
 	if err != nil {
 		panic(err)
@@ -51,7 +51,7 @@ func (this *DefaultGateComponent) Awake(ctx *Component.Context)  {
 		OnClientDisconnected: this.OnDropped,
 		OnClientConnected:    this.OnConnected,
 		NetAPI:               this.NetAPI,
-		MaxInvoke:20,
+		MaxInvoke:            20,
 	}
 
 	this.server = network.NewServer(conf)

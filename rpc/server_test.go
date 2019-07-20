@@ -40,14 +40,15 @@ type Reply struct {
 
 type Arith int
 
-func (t *Arith)TTT(args Args) error {
+func (t *Arith) TTT(args Args) error {
 	println("call TTT success")
 	return nil
 }
+
 // Some of Arith's methods have value args, some have pointer args. That's deliberate.
 
 func (t *Arith) Add(args Args, reply *Reply) error {
-	println("call Add method success,args:",args.A," ",args.B)
+	println("call Add method success,args:", args.A, " ", args.B)
 	reply.C = args.A + args.B
 	return nil
 }
@@ -157,31 +158,32 @@ func startHttpServer() {
 	httpServerAddr = server.Listener.Addr().String()
 	log.Println("Test HTTP RPC server listening on", httpServerAddr)
 }
-type CustomTest struct {
 
+type CustomTest struct {
 }
 type R struct {
 	Result bool
-	N *[]*I
-	C []interface{}
+	N      *[]*I
+	C      []interface{}
 }
 
-func (this *R)String() string {
-	return fmt.Sprintf("%v",*this)
+func (this *R) String() string {
+	return fmt.Sprintf("%v", *this)
 }
 
 type I struct {
 	Name string
 }
-func (this *CustomTest)T1(args string,reply *R) error {
+
+func (this *CustomTest) T1(args string, reply *R) error {
 	println(args)
-	reply.Result=true
-	r:=[]*I{
-		&I{Name:"zhao"},
-		&I{Name:"lei"},
+	reply.Result = true
+	r := []*I{
+		&I{Name: "zhao"},
+		&I{Name: "lei"},
 	}
-	reply.N=&r
-	reply.C=[]interface{}{1,2}
+	reply.N = &r
+	reply.C = []interface{}{1, 2}
 
 	return nil
 }
@@ -193,7 +195,6 @@ func TestRPCC(t *testing.T) {
 func startServer1() {
 	Register(new(CustomTest))
 
-
 	var l net.Listener
 	l, serverAddr = listenTCP()
 	log.Println("Test RPC server listening on", serverAddr)
@@ -203,10 +204,10 @@ func startServer1() {
 	httpOnce.Do(startHttpServer)
 }
 func testRPC1(t *testing.T, addr string) {
-	callback:= func(event string, data ...interface{}){
-		println(event,data[0])
+	callback := func(event string, data ...interface{}) {
+		println(event, data[0])
 	}
-	client, err := Dial("tcp", addr,callback)
+	client, err := Dial("tcp", addr, callback)
 	if err != nil {
 		t.Fatal("dialing", err)
 	}
@@ -218,11 +219,9 @@ func testRPC1(t *testing.T, addr string) {
 	if err != nil {
 		t.Errorf("Add: expected no error but got string %q", err.Error())
 	}
-	println("Arith.Add reuslt:"+reply.String())
-	time.Sleep(time.Second* 20)
+	println("Arith.Add reuslt:" + reply.String())
+	time.Sleep(time.Second * 20)
 }
-
-
 
 func TestRPC(t *testing.T) {
 	once.Do(startServer)
@@ -249,7 +248,7 @@ func testRPC(t *testing.T, addr string) {
 	if reply.C != args.A+args.B {
 		t.Errorf("Add: expected %d got %d", reply.C, args.A+args.B)
 	}
-	println("Arith.Add reuslt:",reply.C)
+	println("Arith.Add reuslt:", reply.C)
 
 	// Methods exported from unexported embedded structs
 	args = &Args{7, 0}
@@ -261,7 +260,7 @@ func testRPC(t *testing.T, addr string) {
 	if reply.C != args.A+args.B {
 		t.Errorf("Add: expected %d got %d", reply.C, args.A+args.B)
 	}
-	println("Embed.Exported reuslt:",reply.C)
+	println("Embed.Exported reuslt:", reply.C)
 	// Nonexistent method
 	args = &Args{7, 0}
 	reply = new(Reply)
@@ -272,7 +271,7 @@ func testRPC(t *testing.T, addr string) {
 	} else if !strings.HasPrefix(err.Error(), "rpc: can't find method ") {
 		t.Errorf("BadOperation: expected can't find method error; got %q", err)
 	}
-	println("Arith.BadOperation reuslt:",err.Error())
+	println("Arith.BadOperation reuslt:", err.Error())
 
 	// Unknown service
 	args = &Args{7, 8}
@@ -283,7 +282,7 @@ func testRPC(t *testing.T, addr string) {
 	} else if !strings.Contains(err.Error(), "method") {
 		t.Error("expected error about method; got", err)
 	}
-	println("Arith.Unknown reuslt:",err.Error())
+	println("Arith.Unknown reuslt:", err.Error())
 
 	// call no reply
 	args = &Args{7, 8}
@@ -474,7 +473,6 @@ func TestBuiltinTypes(t *testing.T) {
 	}
 }
 
-
 type ReplyNotPointer int
 type ArgNotPublic int
 type ReplyNotPublic int
@@ -529,8 +527,8 @@ func testSendDeadlock(client *TcpClient) {
 }
 
 func dialDirect() (*TcpClient, error) {
-	client,err:=Dial("tcp", serverAddr)
-	return client,err
+	client, err := Dial("tcp", serverAddr)
+	return client, err
 }
 
 func dialHTTP() (*TcpClient, error) {

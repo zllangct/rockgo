@@ -6,14 +6,13 @@ import (
 	"fmt"
 	"github.com/zllangct/RockGO/network"
 	"time"
-	
 )
 
 //MyServer struct for testing tars tcp server
 type MyServer struct{}
 
 //ParseMessage recv request and make response.
-func (s *MyServer) ParseMessage(ctx context.Context,req []byte)([]uint32,[]byte){
+func (s *MyServer) ParseMessage(ctx context.Context, req []byte) ([]uint32, []byte) {
 	return []uint32{0}, req
 }
 
@@ -33,9 +32,9 @@ func (s *MyServer) ParsePackage(buff []byte) (pkgLen, status int) {
 	return int(length), network.PACKAGE_FULL
 }
 
-func (s *MyServer)Recv(sess *network.Session,data []byte)  {
+func (s *MyServer) Recv(sess *network.Session, data []byte) {
 	fmt.Println("recv", string(data))
-	sess.Emit(0,[]byte("yep"))
+	sess.Emit(0, []byte("yep  "+string(data)))
 }
 func main() {
 	s := MyServer{}
@@ -44,13 +43,13 @@ func main() {
 		PackageProtocol: &s,
 		Address:         "localhost:3333",
 		//MaxAccept:     500,
-		PoolMode:true,
+		PoolMode:      true,
 		MaxInvoke:     20,
 		AcceptTimeout: time.Millisecond * 500,
 		ReadTimeout:   time.Millisecond * 100,
 		WriteTimeout:  time.Millisecond * 100,
 		IdleTimeout:   time.Millisecond * 600000,
-		Handler:s.Recv,
+		Handler:       s.Recv,
 	}
 
 	svr := network.NewServer(conf)

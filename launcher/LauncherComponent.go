@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-var ErrServerNotInit =errors.New("server is not initialize")
+var ErrServerNotInit = errors.New("server is not initialize")
 
 /* 服务端启动组件 */
 type LauncherComponent struct {
@@ -31,16 +31,16 @@ func (this *LauncherComponent) IsUnique() int {
 	return Component.UNIQUE_TYPE_GLOBAL
 }
 
-func (this *LauncherComponent) Initialize()error {
+func (this *LauncherComponent) Initialize() error {
 	//新建server
-	this.Close=make(chan struct{})
-	this.componentGroup=&Cluster.ComponentGroups{}
+	this.Close = make(chan struct{})
+	this.componentGroup = &Cluster.ComponentGroups{}
 
 	//读取配置文件，初始化配置
 	this.Root().AddComponent(&Config.ConfigComponent{})
 
 	//缓存配置文件
-	this.Config=Config.Config
+	this.Config = Config.Config
 
 	//设置runtime工作线程
 	this.Runtime().SetMaxThread(Config.Config.CommonConfig.RuntimeMaxWorker)
@@ -63,35 +63,34 @@ func (this *LauncherComponent) Initialize()error {
 	return nil
 }
 
-func (this *LauncherComponent) Serve(){
+func (this *LauncherComponent) Serve() {
 	//添加NodeComponent组件，使对象成为分布式节点
 	this.Root().AddComponent(&Cluster.NodeComponent{})
 
 	//添加ActorProxy组件，组织节点间的通信
 	this.Root().AddComponent(&Actor.ActorProxyComponent{})
 
-
 	//添加组件到待选组件列表，默认添加master,child组件
-	this.AddComponentGroup("master",[]Component.IComponent{&Cluster.MasterComponent{}})
-	this.AddComponentGroup("child",[]Component.IComponent{&Cluster.ChildComponent{}})
+	this.AddComponentGroup("master", []Component.IComponent{&Cluster.MasterComponent{}})
+	this.AddComponentGroup("child", []Component.IComponent{&Cluster.ChildComponent{}})
 	if Config.Config.ClusterConfig.IsLocationMode && Config.Config.ClusterConfig.Role[0] != "single" {
-		this.AddComponentGroup("location",[]Component.IComponent{&Cluster.LocationComponent{}})
+		this.AddComponentGroup("location", []Component.IComponent{&Cluster.LocationComponent{}})
 	}
 
 	//处理single模式
-	if len(Config.Config.ClusterConfig.Role)==0 || Config.Config.ClusterConfig.Role[0] == "single" {
-		Config.Config.ClusterConfig.Role=this.componentGroup.AllGroupsName()
+	if len(Config.Config.ClusterConfig.Role) == 0 || Config.Config.ClusterConfig.Role[0] == "single" {
+		Config.Config.ClusterConfig.Role = this.componentGroup.AllGroupsName()
 	}
 
 	//添加基础组件组,一般通过组建组的定义决定服务器节点的服务角色
-	err:= this.componentGroup.AttachGroupsTo(Config.Config.ClusterConfig.Role, this.Root())
-	if err!=nil {
+	err := this.componentGroup.AttachGroupsTo(Config.Config.ClusterConfig.Role, this.Root())
+	if err != nil {
 		logger.Fatal(err)
 		panic(err)
 	}
 
 	c := make(chan os.Signal)
-	signal.Notify(c,syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	signal.Notify(c, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 
 	/* 清理测试代码,ide关闭信号无法命中断点 */
 	//go func() {
@@ -107,8 +106,8 @@ func (this *LauncherComponent) Serve(){
 
 	logger.Info("====== Start to close this server, do some cleaning now ...... ======")
 	//do something else
-	err=this.Root().Destroy()
-	if err!=nil{
+	err = this.Root().Destroy()
+	if err != nil {
 		logger.Error(err)
 	}
 	<-timer.After(time.Second)
@@ -116,38 +115,38 @@ func (this *LauncherComponent) Serve(){
 }
 
 //覆盖节点信息
-func (this *LauncherComponent) OverrideNodeDefine(nodeConfName string){
-	if this.Config==nil {
+func (this *LauncherComponent) OverrideNodeDefine(nodeConfName string) {
+	if this.Config == nil {
 		panic(ErrServerNotInit)
 	}
-	if s,ok:= this.Config.ClusterConfig.NodeDefine[nodeConfName];ok{
+	if s, ok := this.Config.ClusterConfig.NodeDefine[nodeConfName]; ok {
 		this.Config.ClusterConfig.LocalAddress = s.LocalAddress
-		this.Config.ClusterConfig.Role =s.Role
-	}else{
-		panic(errors.New(fmt.Sprintf("this config name [ %s ] not defined",nodeConfName)))
+		this.Config.ClusterConfig.Role = s.Role
+	} else {
+		panic(errors.New(fmt.Sprintf("this config name [ %s ] not defined", nodeConfName)))
 	}
 }
 
 //覆盖节点端口
-func (this *LauncherComponent) OverrideNodePort(port string){
-	if this.Config==nil {
+func (this *LauncherComponent) OverrideNodePort(port string) {
+	if this.Config == nil {
 		panic(ErrServerNotInit)
 	}
-	ip:=strings.Split(this.Config.ClusterConfig.LocalAddress,":")[0]
-	this.Config.ClusterConfig.LocalAddress=fmt.Sprintf("%s:%s",ip,port)
+	ip := strings.Split(this.Config.ClusterConfig.LocalAddress, ":")[0]
+	this.Config.ClusterConfig.LocalAddress = fmt.Sprintf("%s:%s", ip, port)
 }
 
 //覆盖节点角色
-func (this *LauncherComponent) OverrideNodeRoles(roles []string){
-	if this.Config==nil {
+func (this *LauncherComponent) OverrideNodeRoles(roles []string) {
+	if this.Config == nil {
 		panic(ErrServerNotInit)
 	}
-	this.Config.ClusterConfig.Role =roles
+	this.Config.ClusterConfig.Role = roles
 }
 
 //添加一个组件组到组建组列表，不会立即添加到对象
 func (this *LauncherComponent) AddComponentGroup(groupName string, group []Component.IComponent) {
-	if this.Config==nil {
+	if this.Config == nil {
 		panic(ErrServerNotInit)
 	}
 	this.componentGroup.AddGroup(groupName, group)
@@ -155,7 +154,7 @@ func (this *LauncherComponent) AddComponentGroup(groupName string, group []Compo
 
 //添加多个组件组到组建组列表，不会立即添加到对象
 func (this *LauncherComponent) AddComponentGroups(groups map[string][]Component.IComponent) error {
-	if this.Config==nil {
+	if this.Config == nil {
 		panic(ErrServerNotInit)
 	}
 	for groupName, group := range groups {
@@ -163,7 +162,3 @@ func (this *LauncherComponent) AddComponentGroups(groups map[string][]Component.
 	}
 	return nil
 }
-
-
-
-

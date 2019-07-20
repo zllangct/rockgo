@@ -47,8 +47,8 @@ type service struct {
 // but documented here as an aid to debugging, such as when analyzing
 // network traffic.
 type Request struct {
-	ServiceMethod string   // format: "Service.Method"
-	Seq           uint64   // sequence number chosen by client
+	ServiceMethod string // format: "Service.Method"
+	Seq           uint64 // sequence number chosen by client
 	Type          int
 	next          *Request // for free list in ServerNode
 }
@@ -78,13 +78,13 @@ type HeartBeatReuslt struct {
 type InnerResponse struct {
 }
 
-func (this *InnerResponse)HeartBeat(args struct{}, result *HeartBeatReuslt) error {
-	result.Result= InnerResponseContent
+func (this *InnerResponse) HeartBeat(args struct{}, result *HeartBeatReuslt) error {
+	result.Result = InnerResponseContent
 	return nil
 }
 
 // NewServer returns a new ServerNode.
-func NewServer(callback ...func(event string,data ...interface{})) *Server {
+func NewServer(callback ...func(event string, data ...interface{})) *Server {
 	s := defaultServer()
 	//if len(callback)>0 {
 	//	s.Callback =callback[0]
@@ -115,6 +115,7 @@ func isExportedOrBuiltinType(t reflect.Type) bool {
 func defaultServer() *Server {
 	return &Server{}
 }
+
 // Register publishes in the server the set of methods of the
 // receiver value that satisfy the following conditions:
 //	- exported method of exported type
@@ -188,7 +189,7 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 			continue
 		}
 		// Method needs three ins: receiver, *args, *reply.
-		if mtype.NumIn() < 2  {
+		if mtype.NumIn() < 2 {
 			continue
 		}
 		// First arg need not be a pointer.
@@ -199,10 +200,10 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 			//}
 			continue
 		}
-		numin:=mtype.NumIn()
+		numin := mtype.NumIn()
 
 		var replyType reflect.Type
-		if numin > 2{
+		if numin > 2 {
 			// Second arg must be a pointer.
 			replyType = mtype.In(2)
 			if replyType.Kind() != reflect.Ptr {
@@ -218,7 +219,7 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 				//}
 				continue
 			}
-		}else{
+		} else {
 			replyType = nil
 		}
 
@@ -237,7 +238,7 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 			continue
 		}
 		methods[mname] = &methodType{method: method, ArgType: argType, ReplyType: replyType}
-		logger.Info(fmt.Sprintf("rpc.Register: service: [ %s ], method [ %s ] is registed",typ.Elem().Name(), mname))
+		logger.Info(fmt.Sprintf("rpc.Register: service: [ %s ], method [ %s ] is registed", typ.Elem().Name(), mname))
 	}
 	return methods
 }
@@ -258,7 +259,7 @@ func (server *Server) sendResponse(sending *sync.Mutex, req *Request, reply inte
 	resp.Seq = req.Seq
 	sending.Lock()
 
-	if reply == nil{
+	if reply == nil {
 		reply = invalidRequest
 	}
 	err := codec.WriteResponse(resp, reply)
@@ -286,9 +287,9 @@ func (s *service) call(server *Server, sending *sync.Mutex, wg *sync.WaitGroup, 
 	mtype.Unlock()
 	function := mtype.method.Func
 	// ParseMessage the method, providing a new value for the reply.
-	args:=[]reflect.Value{s.rcvr, argv}
+	args := []reflect.Value{s.rcvr, argv}
 	if mtype.ReplyType != nil {
-		args= append(args, replyv)
+		args = append(args, replyv)
 	}
 	returnValues := function.Call(args)
 	// The return value for the method is an error.
@@ -298,9 +299,9 @@ func (s *service) call(server *Server, sending *sync.Mutex, wg *sync.WaitGroup, 
 		errmsg = errInter.(error).Error()
 	}
 	var reqi interface{}
-	if mtype.ReplyType== nil{
+	if mtype.ReplyType == nil {
 		reqi = nil
-	}else{
+	} else {
 		reqi = replyv.Interface()
 	}
 	if req.Type == RPC_CALL_TYPE_NORMAL {
@@ -325,7 +326,7 @@ func (c *gobServerCodec) ReadRequestHeader(r *Request) error {
 func (c *gobServerCodec) ReadRequestBody(body interface{}) error {
 	return c.dec.Decode(body)
 }
-func (c *gobServerCodec) IOCallback(){
+func (c *gobServerCodec) IOCallback() {
 	c.iocallback()
 }
 func (c *gobServerCodec) WriteResponse(r *Response, body interface{}) (err error) {
@@ -372,7 +373,7 @@ func (server *Server) ServeConn(conn net.Conn) {
 		dec:    gob.NewDecoder(conn),
 		enc:    gob.NewEncoder(buf),
 		encBuf: buf,
-		iocallback:func() {
+		iocallback: func() {
 			server.UpdateConnTimeout(conn)
 		},
 	}
@@ -499,7 +500,7 @@ func (server *Server) readRequest(codec ServerCodec) (service *service, mtype *m
 		argv = argv.Elem()
 	}
 
-	if mtype.ReplyType!=nil{
+	if mtype.ReplyType != nil {
 		replyv = reflect.New(mtype.ReplyType.Elem())
 
 		switch mtype.ReplyType.Elem().Kind() {

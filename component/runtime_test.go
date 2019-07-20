@@ -38,7 +38,7 @@ func TestUpdate(T *testing.T) {
 
 		runtime.Root().AddObject(obj)
 
-		runtime.UpdateFrameByInterval(time.Second*1)
+		runtime.UpdateFrameByInterval(time.Second * 1)
 
 		components = obj.GetComponents(reflect.TypeOf((*FakeComponent)(nil)))
 		for val, err := components.Next(); err == nil; val, err = components.Next() {
@@ -53,12 +53,12 @@ func TestComponentsAreUpdated(T *testing.T) {
 			ThreadPoolSize: 50})
 
 		obj := Component.NewObject()
-		obj.AddComponent(&FakeComponent{Id:"1"})
-		obj.AddComponent(&FakeComponent{Id:"2"})
-		obj.AddComponent(&FakeComponent{Id:"3"})
+		obj.AddComponent(&FakeComponent{Id: "1"})
+		obj.AddComponent(&FakeComponent{Id: "2"})
+		obj.AddComponent(&FakeComponent{Id: "3"})
 
 		root := Component.NewObject()
-		root.AddComponent(&FakeComponent{Id:"4"})
+		root.AddComponent(&FakeComponent{Id: "4"})
 
 		root.AddObject(obj)
 
@@ -74,7 +74,7 @@ func TestComponentsAreUpdated(T *testing.T) {
 		T.Assert(err == nil)
 		T.Assert(count == 3)
 
-		runtime.UpdateFrameByInterval(time.Second*1)
+		runtime.UpdateFrameByInterval(time.Second * 1)
 
 		components := root.GetComponentsInChildren(reflect.TypeOf((*FakeComponent)(nil)).Elem())
 		for val, err := components.Next(); err == nil; val, err = components.Next() {

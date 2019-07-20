@@ -18,13 +18,13 @@ type ComponentGroup struct {
 
 func (this *ComponentGroup) attachGroupTo(target *Component.Object) {
 	o := Component.NewObject(this.Name)
-	err:=target.AddObject(o)
-	if err!=nil {
+	err := target.AddObject(o)
+	if err != nil {
 		logger.Error(err)
 	}
 	for _, component := range this.content {
 		o.AddComponent(component)
-		logger.Info(fmt.Sprintf("Attach component [ %s.%s ] to [ %s ]",this.Name,component.Type().String(),o.Name()))
+		logger.Info(fmt.Sprintf("Attach component [ %s.%s ] to [ %s ]", this.Name, component.Type().String(), o.Name()))
 	}
 }
 
@@ -35,26 +35,26 @@ type ComponentGroups struct {
 	group map[string]*ComponentGroup //key:group name , value:component group
 }
 
-func (this *ComponentGroups) AllGroups()map[string]*ComponentGroup {
-	if this.group ==nil{
+func (this *ComponentGroups) AllGroups() map[string]*ComponentGroup {
+	if this.group == nil {
 		this.group = make(map[string]*ComponentGroup)
 	}
 	return this.group
 }
 
-func (this *ComponentGroups) AllGroupsName()[]string {
-	if this.group ==nil{
+func (this *ComponentGroups) AllGroupsName() []string {
+	if this.group == nil {
 		this.group = make(map[string]*ComponentGroup)
 	}
-	arr:=make([]string,0)
-	for role, _:= range this.group {
-		arr= append(arr, role)
+	arr := make([]string, 0)
+	for role, _ := range this.group {
+		arr = append(arr, role)
 	}
 	return arr
 }
 
 func (this *ComponentGroups) AddGroup(groupName string, group []Component.IComponent) {
-	if this.group ==nil{
+	if this.group == nil {
 		this.group = make(map[string]*ComponentGroup)
 	}
 	this.group[groupName] = &ComponentGroup{
@@ -64,30 +64,30 @@ func (this *ComponentGroups) AddGroup(groupName string, group []Component.ICompo
 }
 
 func (this *ComponentGroups) AttachGroupsTo(groupName []string, target *Component.Object) error {
-	child,master,other := false,false,false
+	child, master, other := false, false, false
 	for _, name := range groupName {
 		switch name {
-		case"master"  :
-			master=true
-		case"child"  :
-			child=true
+		case "master":
+			master = true
+		case "child":
+			child = true
 		default:
-			other=true
+			other = true
 		}
 	}
 	//为空时，默认为master
-	if !other && !master && !child{
-		groupName= append(groupName, "master")
+	if !other && !master && !child {
+		groupName = append(groupName, "master")
 	}
 	//有其他角色是，需要child
-	if other && !child{
-		groupName= append(groupName, "child")
+	if other && !child {
+		groupName = append(groupName, "child")
 	}
 	//有master，没有其他的时候，不需要child
-	if !other && master && child{
+	if !other && master && child {
 		for i, v := range groupName {
 			if v == "child" {
-				groupName = append(groupName[:i],groupName[i+1:]...)
+				groupName = append(groupName[:i], groupName[i+1:]...)
 				break
 			}
 		}

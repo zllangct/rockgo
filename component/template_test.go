@@ -1,9 +1,9 @@
 package Component_test
 
 import (
-	"testing"
-	c "github.com/zllangct/RockGO/component"
 	"github.com/zllangct/RockGO/3rd/assert"
+	c "github.com/zllangct/RockGO/component"
+	"testing"
 )
 
 func TestBasicTemplateToObject(T *testing.T) {
@@ -118,7 +118,6 @@ func TestTemplateToObjectViaFactory(T *testing.T) {
 		T.Assert(cmp.Data.Items[2].Count == 3)
 	})
 }
-
 
 func TestNestedTemplateToObjectViaFactory(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {

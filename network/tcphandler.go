@@ -12,19 +12,17 @@ import (
 	"reflect"
 	"sync/atomic"
 	"time"
-
-
 )
 
 type TcpConn struct {
-	tcpConn   *net.TCPConn
+	tcpConn *net.TCPConn
 }
 
-func (this *TcpConn)Addr()string  {
+func (this *TcpConn) Addr() string {
 	return this.tcpConn.RemoteAddr().String()
 }
 
-func (this *TcpConn) WriteMessage(messageType uint32, data []byte) error  {
+func (this *TcpConn) WriteMessage(messageType uint32, data []byte) error {
 	msg := make([]byte, 8)
 	msg = append(msg, data...)
 	binary.BigEndian.PutUint32(msg[:4], uint32(len(msg)))
@@ -35,15 +33,15 @@ func (this *TcpConn) WriteMessage(messageType uint32, data []byte) error  {
 	return nil
 }
 
-func (this *TcpConn)Close() error {
+func (this *TcpConn) Close() error {
 	return this.tcpConn.Close()
 }
 
 type tcpHandler struct {
 	conf *ServerConf
 
-	lis *net.TCPListener
-	ts  *Server
+	lis         *net.TCPListener
+	ts          *Server
 	acceptNum   int32
 	invokeNum   int32
 	readBuffer  int
@@ -64,18 +62,16 @@ func (h *tcpHandler) Listen() (err error) {
 	return
 }
 
-
-
 func (h *tcpHandler) Handle() error {
 	conf := h.conf
 	//对象池模式下，初始pool大小为20
-	if conf.PoolMode && conf.MaxInvoke == 0{
+	if conf.PoolMode && conf.MaxInvoke == 0 {
 		conf.MaxInvoke = 20
 	}
 	h.gpool = gpool.GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
 
 	for !h.ts.isClosed {
-		if conf.AcceptTimeout !=0 {
+		if conf.AcceptTimeout != 0 {
 			h.lis.SetDeadline(time.Now().Add(conf.AcceptTimeout)) // set accept timeout
 		}
 		conn, err := h.lis.AcceptTCP()
@@ -90,23 +86,23 @@ func (h *tcpHandler) Handle() error {
 		go func(conn *net.TCPConn) {
 			logger.Debug("TCP accept:", conn.RemoteAddr())
 			atomic.AddInt32(&h.acceptNum, 1)
-			_=conn.SetReadBuffer(conf.TCPReadBuffer)
-			_=conn.SetWriteBuffer(conf.TCPWriteBuffer)
-			_=conn.SetNoDelay(conf.TCPNoDelay)
-			sess:=&Session{
-				ID:UUID.Next(),
-				properties:make( map[string]interface{}),
-				conn:&TcpConn{tcpConn:conn},
+			_ = conn.SetReadBuffer(conf.TCPReadBuffer)
+			_ = conn.SetWriteBuffer(conf.TCPWriteBuffer)
+			_ = conn.SetNoDelay(conf.TCPNoDelay)
+			sess := &Session{
+				ID:         UUID.Next(),
+				properties: make(map[string]interface{}),
+				conn:       &TcpConn{tcpConn: conn},
 			}
-			if h.conf.OnClientConnected!=nil {
+			if h.conf.OnClientConnected != nil {
 				//TODO 异常处理
 				h.conf.OnClientConnected(sess)
 			}
 			h.recv(sess, conn)
 			sess.locker.Lock()
-			sess.conn=nil
+			sess.conn = nil
 			sess.locker.Unlock()
-			if h.conf.OnClientDisconnected!=nil{
+			if h.conf.OnClientDisconnected != nil {
 				h.conf.OnClientDisconnected(sess)
 			}
 			atomic.AddInt32(&h.acceptNum, -1)
@@ -121,7 +117,7 @@ func (h *tcpHandler) Handle() error {
 func (h *tcpHandler) recv(sess *Session, conn *net.TCPConn) {
 	defer conn.Close()
 
-	sess.SetProperty("workerID",int32(-1))
+	sess.SetProperty("workerID", int32(-1))
 
 	cfg := h.conf
 	buffer := make([]byte, 1024*4)
@@ -129,7 +125,7 @@ func (h *tcpHandler) recv(sess *Session, conn *net.TCPConn) {
 	h.idleTime = time.Now()
 	var n int
 	var err error
-	wid:=int32(-1)
+	wid := int32(-1)
 	//TODO 添加TCP频率控制
 	for !h.ts.isClosed {
 		if cfg.ReadTimeout != 0 {
@@ -164,10 +160,10 @@ func (h *tcpHandler) recv(sess *Session, conn *net.TCPConn) {
 				currBuffer = currBuffer[pkgLen:]
 				// use goroutine pool
 				if h.conf.PoolMode {
-					h.gpool.AddJob(h.handler,[]interface{}{sess, pkg},wid, func(workerID int32) {
-						wid=workerID
+					h.gpool.AddJobSerial(h.handler, []interface{}{sess, pkg, sess.ID}, wid, func(workerID int32) {
+						wid = workerID
 					})
-				}else{
+				} else {
 					go h.handler(sess, pkg)
 				}
 				if len(currBuffer) > 0 {
@@ -182,16 +178,16 @@ func (h *tcpHandler) recv(sess *Session, conn *net.TCPConn) {
 	}
 }
 
-func (h *tcpHandler)handler(args ...interface{}) {
+func (h *tcpHandler) handler(args ...interface{}) {
 	ctx := context.Background()
-	ctx =context.WithValue(ctx,"sess",args[0])
+	ctx = context.WithValue(ctx, "sess", args[0])
 	if h.conf.Handler != nil {
 		h.conf.Handler(args[0].(*Session), args[1].([]byte))
-	}else{
-		mid, mes := h.conf.PackageProtocol.ParseMessage(ctx,args[1].([]byte))
-		if h.conf.NetAPI !=nil && mid != nil{
+	} else {
+		mid, mes := h.conf.PackageProtocol.ParseMessage(ctx, args[1].([]byte))
+		if h.conf.NetAPI != nil && mid != nil {
 			h.ts.invoke(ctx, mid[0], mes)
-		}else{
+		} else {
 			logger.Error("no message handler")
 			return
 		}

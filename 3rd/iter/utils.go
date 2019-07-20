@@ -7,7 +7,7 @@ func Count(iterator Iter) (int, error) {
 	for _, err = iterator.Next(); err == nil; _, err = iterator.Next() {
 		count++
 	}
-	if err==ErrEndIteration {
+	if err == ErrEndIteration {
 		return 0, err
 	}
 	return count, nil
@@ -21,7 +21,7 @@ func Collect(iterator Iter) ([]interface{}, error) {
 	for value, err = iterator.Next(); err == nil; value, err = iterator.Next() {
 		values = append(values, value)
 	}
-	if err== ErrEndIteration {
+	if err == ErrEndIteration {
 		return nil, err
 	}
 	return values, nil
