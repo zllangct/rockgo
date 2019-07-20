@@ -4,7 +4,7 @@ import (
 	"github.com/zllangct/RockGO/actor"
 	"github.com/zllangct/RockGO/cluster"
 	"github.com/zllangct/RockGO/component"
-	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"reflect"
 	"sync"
@@ -30,7 +30,7 @@ func (this *TemplateComponent) IsUnique() int {
 func (this *TemplateComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
 	requires[this.Root()] = []reflect.Type{
-		reflect.TypeOf(&Config.ConfigComponent{}), //依赖根对象拥有ConfigComponent组件
+		reflect.TypeOf(&config.ConfigComponent{}), //依赖根对象拥有ConfigComponent组件
 		reflect.TypeOf(&Cluster.NodeComponent{}),  //依赖根对象拥有NodeComponent组件
 	}
 	/*

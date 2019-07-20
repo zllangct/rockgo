@@ -3,7 +3,7 @@ package Cluster
 import (
 	"fmt"
 	"github.com/zllangct/RockGO/component"
-	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
 	"github.com/zllangct/RockGO/utils"
@@ -26,7 +26,7 @@ type ChildComponent struct {
 func (this *ChildComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
 	requires[this.Parent().Root()] = []reflect.Type{
-		reflect.TypeOf(&Config.ConfigComponent{}),
+		reflect.TypeOf(&config.ConfigComponent{}),
 		reflect.TypeOf(&NodeComponent{}),
 	}
 	return requires
@@ -66,11 +66,11 @@ func (this *ChildComponent) DoReport() {
 		})
 	args := &NodeInfo{
 		Address: this.localAddr,
-		Role:    Config.Config.ClusterConfig.Role,
-		AppName: Config.Config.ClusterConfig.AppName,
+		Role:    config.Config.ClusterConfig.Role,
+		AppName: config.Config.ClusterConfig.AppName,
 	}
 	var reply bool
-	var interval = time.Duration(Config.Config.ClusterConfig.ReportInterval)
+	var interval = time.Duration(config.Config.ClusterConfig.ReportInterval)
 	for {
 		reply = false
 		this.locker.RLock()
@@ -112,7 +112,7 @@ func (this *ChildComponent) ReportClose(addr string) {
 
 //连接到master
 func (this *ChildComponent) ConnectToMaster() {
-	addr := Config.Config.ClusterConfig.MasterAddress
+	addr := config.Config.ClusterConfig.MasterAddress
 	callback := func(event string, data ...interface{}) {
 		switch event {
 		case "close":
@@ -126,7 +126,7 @@ func (this *ChildComponent) ConnectToMaster() {
 		this.rpcMaster, err = this.nodeComponent.ConnectToNode(addr, callback)
 		if err == nil {
 			ip := strings.Split(this.rpcMaster.LocalAddr(), ":")[0]
-			port := strings.Split(Config.Config.ClusterConfig.LocalAddress, ":")[1]
+			port := strings.Split(config.Config.ClusterConfig.LocalAddress, ":")[1]
 			this.localAddr = fmt.Sprintf("%s:%s", ip, port)
 			this.locker.Unlock()
 			break

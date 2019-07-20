@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/zllangct/RockGO/cluster"
 	"github.com/zllangct/RockGO/component"
-	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/config"
 	"reflect"
 	"sync"
 	"time"
@@ -20,7 +20,7 @@ type LoginComponent struct {
 func (this *LoginComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
 	requires[this.Root()] = []reflect.Type{
-		reflect.TypeOf(&Config.ConfigComponent{}),
+		reflect.TypeOf(&config.ConfigComponent{}),
 	}
 	return requires
 }

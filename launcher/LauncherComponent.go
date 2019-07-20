@@ -6,7 +6,7 @@ import (
 	"github.com/zllangct/RockGO/actor"
 	"github.com/zllangct/RockGO/cluster"
 	"github.com/zllangct/RockGO/component"
-	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
 	"github.com/zllangct/RockGO/timer"
@@ -23,7 +23,7 @@ var ErrServerNotInit = errors.New("server is not initialize")
 type LauncherComponent struct {
 	Component.Base
 	componentGroup *Cluster.ComponentGroups
-	Config         *Config.ConfigComponent
+	Config         *config.ConfigComponent
 	Close          chan struct{}
 }
 
@@ -37,29 +37,29 @@ func (this *LauncherComponent) Initialize() error {
 	this.componentGroup = &Cluster.ComponentGroups{}
 
 	//读取配置文件，初始化配置
-	this.Root().AddComponent(&Config.ConfigComponent{})
+	this.Root().AddComponent(&config.ConfigComponent{})
 
 	//缓存配置文件
-	this.Config = Config.Config
+	this.Config = config.Config
 
 	//设置runtime工作线程
-	this.Runtime().SetMaxThread(Config.Config.CommonConfig.RuntimeMaxWorker)
+	this.Runtime().SetMaxThread(config.Config.CommonConfig.RuntimeMaxWorker)
 
 	//rpc设置
-	rpc.CallTimeout = time.Millisecond * time.Duration(Config.Config.ClusterConfig.RpcCallTimeout)
-	rpc.Timeout = time.Millisecond * time.Duration(Config.Config.ClusterConfig.RpcTimeout)
-	rpc.HeartInterval = time.Millisecond * time.Duration(Config.Config.ClusterConfig.RpcHeartBeatInterval)
-	rpc.DebugMode = Config.Config.CommonConfig.Debug
+	rpc.CallTimeout = time.Millisecond * time.Duration(config.Config.ClusterConfig.RpcCallTimeout)
+	rpc.Timeout = time.Millisecond * time.Duration(config.Config.ClusterConfig.RpcTimeout)
+	rpc.HeartInterval = time.Millisecond * time.Duration(config.Config.ClusterConfig.RpcHeartBeatInterval)
+	rpc.DebugMode = config.Config.CommonConfig.Debug
 
 	//log设置
-	switch Config.Config.CommonConfig.LogMode {
+	switch config.Config.CommonConfig.LogMode {
 	case logger.DAILY:
-		logger.SetRollingDaily(Config.Config.CommonConfig.LogPath, Config.Config.ClusterConfig.AppName+".log")
+		logger.SetRollingDaily(config.Config.CommonConfig.LogPath, config.Config.ClusterConfig.AppName+".log")
 	case logger.ROLLFILE:
-		logger.SetRollingFile(Config.Config.CommonConfig.LogPath, Config.Config.ClusterConfig.AppName+".log",
-			1000, Config.Config.CommonConfig.LogFileMax, Config.Config.CommonConfig.LogFileUnit)
+		logger.SetRollingFile(config.Config.CommonConfig.LogPath, config.Config.ClusterConfig.AppName+".log",
+			1000, config.Config.CommonConfig.LogFileMax, config.Config.CommonConfig.LogFileUnit)
 	}
-	logger.SetLevel(Config.Config.CommonConfig.LogLevel)
+	logger.SetLevel(config.Config.CommonConfig.LogLevel)
 	return nil
 }
 
@@ -73,17 +73,17 @@ func (this *LauncherComponent) Serve() {
 	//添加组件到待选组件列表，默认添加master,child组件
 	this.AddComponentGroup("master", []Component.IComponent{&Cluster.MasterComponent{}})
 	this.AddComponentGroup("child", []Component.IComponent{&Cluster.ChildComponent{}})
-	if Config.Config.ClusterConfig.IsLocationMode && Config.Config.ClusterConfig.Role[0] != "single" {
+	if config.Config.ClusterConfig.IsLocationMode && config.Config.ClusterConfig.Role[0] != "single" {
 		this.AddComponentGroup("location", []Component.IComponent{&Cluster.LocationComponent{}})
 	}
 
 	//处理single模式
-	if len(Config.Config.ClusterConfig.Role) == 0 || Config.Config.ClusterConfig.Role[0] == "single" {
-		Config.Config.ClusterConfig.Role = this.componentGroup.AllGroupsName()
+	if len(config.Config.ClusterConfig.Role) == 0 || config.Config.ClusterConfig.Role[0] == "single" {
+		config.Config.ClusterConfig.Role = this.componentGroup.AllGroupsName()
 	}
 
 	//添加基础组件组,一般通过组建组的定义决定服务器节点的服务角色
-	err := this.componentGroup.AttachGroupsTo(Config.Config.ClusterConfig.Role, this.Root())
+	err := this.componentGroup.AttachGroupsTo(config.Config.ClusterConfig.Role, this.Root())
 	if err != nil {
 		logger.Fatal(err)
 		panic(err)

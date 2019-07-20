@@ -3,7 +3,7 @@ package Cluster
 import (
 	"errors"
 	"github.com/zllangct/RockGO/component"
-	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/rpc"
 	"reflect"
 	"sync"
@@ -31,7 +31,7 @@ type LocationComponent struct {
 func (this *LocationComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
 	requires[this.Runtime().Root()] = []reflect.Type{
-		reflect.TypeOf(&Config.ConfigComponent{}),
+		reflect.TypeOf(&config.ConfigComponent{}),
 		reflect.TypeOf(&NodeComponent{}),
 	}
 	return requires
@@ -57,11 +57,11 @@ func (this *LocationComponent) Awake(ctx *Component.Context) {
 //同步节点信息到位置服务组件
 func (this *LocationComponent) DoLocationSync() {
 	var reply *NodeInfoSyncReply
-	var interval = time.Duration(Config.Config.ClusterConfig.LocationSyncInterval)
+	var interval = time.Duration(config.Config.ClusterConfig.LocationSyncInterval)
 	for {
 		if this.master == nil {
 			var err error
-			this.master, err = this.nodeComponent.GetNodeClient(Config.Config.ClusterConfig.MasterAddress)
+			this.master, err = this.nodeComponent.GetNodeClient(config.Config.ClusterConfig.MasterAddress)
 			if err != nil {
 				time.Sleep(time.Second * interval)
 				continue

@@ -3,7 +3,7 @@ package Actor
 import (
 	"errors"
 	"github.com/zllangct/RockGO/component"
-	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/timer"
 	"reflect"
@@ -44,7 +44,7 @@ func (this *ActorComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
 	//添加该组件需要根节点拥有ActorProxyComponent,ConfigComponent组件
 	requires[this.Runtime().Root()] = []reflect.Type{
-		reflect.TypeOf(&Config.ConfigComponent{}),
+		reflect.TypeOf(&config.ConfigComponent{}),
 		reflect.TypeOf(&ActorProxyComponent{}),
 	}
 	return requires
@@ -116,7 +116,7 @@ func (this *ActorComponent) Tell(sender IActor, message *ActorMessage, reply ...
 
 	if messageInfo.IsNeedReply() {
 		select {
-		case <-timer.After(time.Duration(Config.Config.ClusterConfig.RpcCallTimeout) * time.Millisecond):
+		case <-timer.After(time.Duration(config.Config.ClusterConfig.RpcCallTimeout) * time.Millisecond):
 			messageInfo.err = ErrTimeout
 		case <-messageInfo.done:
 		}

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/zllangct/RockGO/cluster"
 	"github.com/zllangct/RockGO/component"
-	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/network"
 	"reflect"
@@ -29,7 +29,7 @@ func (this *DefaultGateComponent) IsUnique() int {
 func (this *DefaultGateComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
 	requires[this.Parent().Root()] = []reflect.Type{
-		reflect.TypeOf(&Config.ConfigComponent{}),
+		reflect.TypeOf(&config.ConfigComponent{}),
 	}
 	return requires
 }
@@ -46,8 +46,8 @@ func (this *DefaultGateComponent) Awake(ctx *Component.Context) {
 	conf := &network.ServerConf{
 		Proto:                "ws",
 		PackageProtocol:      &network.TdProtocol{},
-		Address:              Config.Config.ClusterConfig.NetListenAddress,
-		ReadTimeout:          time.Millisecond * time.Duration(Config.Config.ClusterConfig.NetConnTimeout),
+		Address:              config.Config.ClusterConfig.NetListenAddress,
+		ReadTimeout:          time.Millisecond * time.Duration(config.Config.ClusterConfig.NetConnTimeout),
 		OnClientDisconnected: this.OnDropped,
 		OnClientConnected:    this.OnConnected,
 		NetAPI:               this.NetAPI,

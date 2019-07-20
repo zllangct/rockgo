@@ -1,4 +1,4 @@
-package Config
+package config
 
 import (
 	"encoding/json"
@@ -29,8 +29,8 @@ func (this *ConfigComponent) IsUnique() int {
 }
 
 func (this *ConfigComponent) Initialize() error {
-	this.commonConfigPath = "./config/CommonConfig.json"
-	this.clusterConfigPath = "./config/ClusterConfig.json"
+	this.commonConfigPath = "./conf/CommonConfig.json"
+	this.clusterConfigPath = "./conf/ClusterConfig.json"
 	//初始化默认配置
 	this.SetDefault()
 	//读取配置文件
@@ -88,7 +88,7 @@ func (this *ConfigComponent) ReloadConfig() {
 	}
 }
 
-// configComponent.CustomConfig[name] = structure
+// config.CustomConfig[name] = structure
 func (this *ConfigComponent) LoadCustomConfig(path string, structure interface{}) (err error) {
 	kind := reflect.TypeOf(structure).Kind()
 	if kind != reflect.Ptr && kind != reflect.Map {

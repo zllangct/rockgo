@@ -3,7 +3,7 @@ package Cluster
 import (
 	"fmt"
 	"github.com/zllangct/RockGO/component"
-	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils"
 	"reflect"
@@ -28,7 +28,7 @@ type MasterComponent struct {
 func (this *MasterComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
 	requires[this.Parent().Root()] = []reflect.Type{
-		reflect.TypeOf(&Config.ConfigComponent{}),
+		reflect.TypeOf(&config.ConfigComponent{}),
 		reflect.TypeOf(&NodeComponent{}),
 	}
 	return requires
@@ -52,7 +52,7 @@ func (this *MasterComponent) Awake(ctx *Component.Context) {
 	if err != nil {
 		panic(err)
 	}
-	if !Config.Config.CommonConfig.Debug || false {
+	if !config.Config.CommonConfig.Debug || false {
 		go this.TimeoutCheck()
 	}
 }
@@ -102,7 +102,7 @@ func (this *MasterComponent) NodeInquiry(args []string, detail bool) ([]*Inquiry
 
 //检查超时节点
 func (this *MasterComponent) TimeoutCheck() map[string]*NodeInfo {
-	var interval = time.Duration(Config.Config.ClusterConfig.ReportInterval)
+	var interval = time.Duration(config.Config.ClusterConfig.ReportInterval)
 	for {
 		time.Sleep(time.Millisecond * interval)
 		this.locker.Lock()

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/zllangct/RockGO/component"
-	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
 	"math/rand"
@@ -36,15 +36,15 @@ type NodeComponent struct {
 func (this *NodeComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	requires := make(map[*Component.Object][]reflect.Type)
 	requires[this.Parent().Root()] = []reflect.Type{
-		reflect.TypeOf(&Config.ConfigComponent{}),
+		reflect.TypeOf(&config.ConfigComponent{}),
 	}
 	return requires
 }
 
 func (this *NodeComponent) Initialize() error {
 	logger.Info("NodeComponent init .....")
-	this.AppName = Config.Config.ClusterConfig.AppName
-	this.islocationMode = Config.Config.ClusterConfig.IsLocationMode
+	this.AppName = config.Config.ClusterConfig.AppName
+	this.islocationMode = config.Config.ClusterConfig.IsLocationMode
 	this.clientGetting = make(map[string]int)
 	//开始本节点RPC服务
 	err := this.StartRpcServer()
@@ -72,7 +72,7 @@ func (this *NodeComponent) IsOnline() bool {
 
 //获取位置服务器
 func (this *NodeComponent) InitLocationServerGetter() {
-	if !Config.Config.ClusterConfig.IsLocationMode {
+	if !config.Config.ClusterConfig.IsLocationMode {
 		return
 	}
 	locker := sync.RWMutex{}
@@ -135,7 +135,7 @@ func (this *NodeComponent) locationBroken() {
 
 //RPC服务
 func (this *NodeComponent) StartRpcServer() error {
-	addr, err := net.ResolveTCPAddr("tcp", Config.Config.ClusterConfig.LocalAddress)
+	addr, err := net.ResolveTCPAddr("tcp", config.Config.ClusterConfig.LocalAddress)
 	if err != nil {
 		return err
 	}
@@ -274,7 +274,7 @@ func (this *NodeComponent) GetNodeFromLocation(role string, selectorType ...Sele
 
 	var reply *[]*InquiryReply
 	args := []string{
-		SELECTOR_TYPE_DEFAULT, Config.Config.ClusterConfig.AppName, role,
+		SELECTOR_TYPE_DEFAULT, config.Config.ClusterConfig.AppName, role,
 	}
 	if len(selectorType) > 0 {
 		args[0] = selectorType[0]
@@ -313,7 +313,7 @@ func (this *NodeComponent) GetNodeGroupFromLocation(role string) (*NodeIDGroup, 
 
 	var reply *[]*InquiryReply
 	args := []string{
-		SELECTOR_TYPE_GROUP, Config.Config.ClusterConfig.AppName, role,
+		SELECTOR_TYPE_GROUP, config.Config.ClusterConfig.AppName, role,
 	}
 	err = client.Call("LocationService.NodeInquiry", args, &reply)
 	if err != nil {
@@ -332,13 +332,13 @@ func (this *NodeComponent) GetNodeFromMaster(role string, selectorType ...Select
 	if !this.IsOnline() {
 		return nil, ErrNodeOffline
 	}
-	client, err := this.GetNodeClient(Config.Config.ClusterConfig.MasterAddress)
+	client, err := this.GetNodeClient(config.Config.ClusterConfig.MasterAddress)
 	if err != nil {
 		return nil, err
 	}
 	var reply *[]*InquiryReply
 	args := []string{
-		SELECTOR_TYPE_DEFAULT, Config.Config.ClusterConfig.AppName, role,
+		SELECTOR_TYPE_DEFAULT, config.Config.ClusterConfig.AppName, role,
 	}
 	if len(selectorType) > 0 {
 		args[0] = selectorType[0]
@@ -363,13 +363,13 @@ func (this *NodeComponent) GetNodeGroupFromMaster(role string) (*NodeIDGroup, er
 	if !this.IsOnline() {
 		return nil, ErrNodeOffline
 	}
-	client, err := this.GetNodeClient(Config.Config.ClusterConfig.MasterAddress)
+	client, err := this.GetNodeClient(config.Config.ClusterConfig.MasterAddress)
 	if err != nil {
 		return nil, err
 	}
 	var reply *[]*InquiryReply
 	args := []string{
-		SELECTOR_TYPE_GROUP, Config.Config.ClusterConfig.AppName, role,
+		SELECTOR_TYPE_GROUP, config.Config.ClusterConfig.AppName, role,
 	}
 	err = client.Call("MasterService.NodeInquiry", args, &reply)
 	if err != nil {

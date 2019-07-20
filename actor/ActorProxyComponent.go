@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/zllangct/RockGO/cluster"
 	"github.com/zllangct/RockGO/component"
-	"github.com/zllangct/RockGO/configComponent"
+	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
 	"github.com/zllangct/RockGO/utils/UUID"
@@ -32,7 +32,7 @@ func (this *ActorProxyComponent) GetRequire() map[*Component.Object][]reflect.Ty
 	requires := make(map[*Component.Object][]reflect.Type)
 	//添加该组件需要根节点拥有ActorProxyComponent,ConfigComponent组件
 	requires[this.Runtime().Root()] = []reflect.Type{
-		reflect.TypeOf(&Config.ConfigComponent{}),
+		reflect.TypeOf(&config.ConfigComponent{}),
 	}
 	return requires
 }
@@ -43,7 +43,7 @@ func (this *ActorProxyComponent) IsUnique() int {
 
 func (this *ActorProxyComponent) Initialize() error {
 	logger.Info("ActorProxyComponent init .....")
-	this.nodeID = Config.Config.ClusterConfig.LocalAddress
+	this.nodeID = config.Config.ClusterConfig.LocalAddress
 	//this.isActorMode = Config.Config.ClusterConfig.IsActorModel
 	err := this.Runtime().Root().Find(&this.nodeComponent)
 	if err != nil {
