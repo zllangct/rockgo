@@ -1,4 +1,4 @@
-package Component
+package ecs
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// ComponentProvider maps between component instances and component templates
+// ComponentProvider maps between ecs instances and ecs templates
 type ComponentProvider interface {
 	Type() reflect.Type
 	New() IComponent
@@ -31,7 +31,7 @@ func (factory *ObjectFactory) Register(provider ComponentProvider) {
 func (factory *ObjectFactory) Serialize(object *Object) (*ObjectTemplate, error) {
 	obj := &ObjectTemplate{Name: object.name}
 
-	// Assign each component
+	// Assign each ecs
 	for i := 0; i < len(object.components); i++ {
 		c, err := factory.serializeComponent(object.components[i])
 		if err != nil {
@@ -77,7 +77,7 @@ func (factory *ObjectFactory) Deserialize(template *ObjectTemplate) (*Object, er
 	return obj, nil
 }
 
-// deserializeComponent turns a component template into a component
+// deserializeComponent turns a ecs template into a ecs
 func (factory *ObjectFactory) deserializeComponent(template *ComponentTemplate) (IComponent, error) {
 	for k, v := range factory.handlers {
 		if k == template.Type {
@@ -94,7 +94,7 @@ func (factory *ObjectFactory) deserializeComponent(template *ComponentTemplate) 
 	return nil, ErrUnknownComponent
 }
 
-// serializeComponent converts a component into a template
+// serializeComponent converts a ecs into a template
 func (factory *ObjectFactory) serializeComponent(component IComponent) (*ComponentTemplate, error) {
 	template := &ComponentTemplate{
 		Type: typeName(component.Type())}

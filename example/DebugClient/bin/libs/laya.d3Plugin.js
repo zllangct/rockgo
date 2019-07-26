@@ -6,7 +6,7 @@
 /**
 *<code>PathFinding</code> 类用于创建寻路。
 */
-//class laya.d3.component.PathFind extends laya.components.Component
+//class laya.d3.ecs.PathFind extends laya.components.Component
 var PathFind=(function(_super){
 	function PathFind(){
 		/**@private */

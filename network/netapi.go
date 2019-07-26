@@ -3,7 +3,7 @@ package network
 import (
 	"errors"
 	"fmt"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils"
 	"reflect"
@@ -16,10 +16,10 @@ type MessageProtocol interface {
 }
 
 type NetAPI interface {
-	Init(interface{}, *Component.Object, map[reflect.Type]uint32, MessageProtocol) //初始化
-	Route(*Session, uint32, []byte)                                                //反序列化并路由到api处理函数
+	Init(interface{}, *ecs.Object, map[reflect.Type]uint32, MessageProtocol) //初始化
+	Route(*Session, uint32, []byte)                                          //反序列化并路由到api处理函数
 	//MessageEncode(interface{})(uint32,[]byte,error) //消息序列化
-	SetParent(object *Component.Object) //设置
+	SetParent(object *ecs.Object) //设置
 	Reply(session *Session, message interface{}) error
 }
 
@@ -33,7 +33,7 @@ type ApiBase struct {
 	route  map[uint32]*methodType
 	mt2id  map[reflect.Type]uint32
 	protoc MessageProtocol
-	parent *Component.Object
+	parent *ecs.Object
 	resv   reflect.Value
 	isInit bool
 }
@@ -48,12 +48,12 @@ func (this *ApiBase) checkInit() {
 	}
 }
 
-func (this *ApiBase) SetParent(parent *Component.Object) {
+func (this *ApiBase) SetParent(parent *ecs.Object) {
 	this.checkInit()
 	this.parent = parent
 }
 
-func (this *ApiBase) GetParent() (*Component.Object, error) {
+func (this *ApiBase) GetParent() (*ecs.Object, error) {
 	this.checkInit()
 	var err error
 	if this.parent == nil {
@@ -89,7 +89,7 @@ func (this *ApiBase) MessageEncode(message interface{}) (uint32, []byte, error) 
 	}
 }
 
-func (this *ApiBase) Init(subStruct interface{}, parent *Component.Object, id2mt map[reflect.Type]uint32, protocol MessageProtocol) {
+func (this *ApiBase) Init(subStruct interface{}, parent *ecs.Object, id2mt map[reflect.Type]uint32, protocol MessageProtocol) {
 	this.route = map[uint32]*methodType{}
 	this.mt2id = id2mt
 	this.protoc = protocol

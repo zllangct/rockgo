@@ -2,7 +2,7 @@ package Actor
 
 import (
 	"errors"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/timer"
@@ -13,7 +13,7 @@ import (
 )
 
 /*
-	actor component
+	actor ecs
 	添加了ActorConponent组件的object可视为actor，该object上挂载的所有其他Component都可以响应actor消息
 	默认状态下actor type 为 ACTOR_TYPE_ASYNC，在actor内是非线程安全的，需要有保证线程安全的措施
 	可设置type为 ACTOR_TYPE_SYNC 此时所有消息穿行化，actor内线程安全
@@ -27,7 +27,7 @@ const (
 type ActorType int
 
 type ActorComponent struct {
-	Component.Base
+	ecs.Base
 	ActorType    ActorType
 	ActorID      ActorID                //Actor地址
 	Proxy        *ActorProxyComponent   //Actor代理
@@ -40,8 +40,8 @@ func NewActorComponent(actorType ActorType) *ActorComponent {
 	return &ActorComponent{ActorType: actorType}
 }
 
-func (this *ActorComponent) GetRequire() map[*Component.Object][]reflect.Type {
-	requires := make(map[*Component.Object][]reflect.Type)
+func (this *ActorComponent) GetRequire() map[*ecs.Object][]reflect.Type {
+	requires := make(map[*ecs.Object][]reflect.Type)
 	//添加该组件需要根节点拥有ActorProxyComponent,ConfigComponent组件
 	requires[this.Runtime().Root()] = []reflect.Type{
 		reflect.TypeOf(&config.ConfigComponent{}),
@@ -51,7 +51,7 @@ func (this *ActorComponent) GetRequire() map[*Component.Object][]reflect.Type {
 }
 
 func (this *ActorComponent) IsUnique() int {
-	return Component.UNIQUE_TYPE_LOCAL
+	return ecs.UNIQUE_TYPE_LOCAL
 }
 
 func (this *ActorComponent) Initialize() error {
@@ -89,7 +89,7 @@ func (this *ActorComponent) UnregisterService(service string) {
 	this.Proxy.UnregisterService(service)
 }
 
-func (this *ActorComponent) Destroy(ctx *Component.Context) {
+func (this *ActorComponent) Destroy(ctx *ecs.Context) {
 	this.close <- true
 	//在ActorProxy取消注册
 	this.Proxy.Unregister(this)

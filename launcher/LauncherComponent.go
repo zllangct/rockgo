@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/zllangct/RockGO/actor"
 	"github.com/zllangct/RockGO/cluster"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
@@ -21,14 +21,14 @@ var ErrServerNotInit = errors.New("server is not initialize")
 
 /* 服务端启动组件 */
 type LauncherComponent struct {
-	Component.Base
+	ecs.Base
 	componentGroup *Cluster.ComponentGroups
 	Config         *config.ConfigComponent
 	Close          chan struct{}
 }
 
 func (this *LauncherComponent) IsUnique() int {
-	return Component.UNIQUE_TYPE_GLOBAL
+	return ecs.UNIQUE_TYPE_GLOBAL
 }
 
 func (this *LauncherComponent) Initialize() error {
@@ -71,10 +71,10 @@ func (this *LauncherComponent) Serve() {
 	this.Root().AddComponent(&Actor.ActorProxyComponent{})
 
 	//添加组件到待选组件列表，默认添加master,child组件
-	this.AddComponentGroup("master", []Component.IComponent{&Cluster.MasterComponent{}})
-	this.AddComponentGroup("child", []Component.IComponent{&Cluster.ChildComponent{}})
+	this.AddComponentGroup("master", []ecs.IComponent{&Cluster.MasterComponent{}})
+	this.AddComponentGroup("child", []ecs.IComponent{&Cluster.ChildComponent{}})
 	if config.Config.ClusterConfig.IsLocationMode && config.Config.ClusterConfig.Role[0] != "single" {
-		this.AddComponentGroup("location", []Component.IComponent{&Cluster.LocationComponent{}})
+		this.AddComponentGroup("location", []ecs.IComponent{&Cluster.LocationComponent{}})
 	}
 
 	//处理single模式
@@ -145,7 +145,7 @@ func (this *LauncherComponent) OverrideNodeRoles(roles []string) {
 }
 
 //添加一个组件组到组建组列表，不会立即添加到对象
-func (this *LauncherComponent) AddComponentGroup(groupName string, group []Component.IComponent) {
+func (this *LauncherComponent) AddComponentGroup(groupName string, group []ecs.IComponent) {
 	if this.Config == nil {
 		panic(ErrServerNotInit)
 	}
@@ -153,7 +153,7 @@ func (this *LauncherComponent) AddComponentGroup(groupName string, group []Compo
 }
 
 //添加多个组件组到组建组列表，不会立即添加到对象
-func (this *LauncherComponent) AddComponentGroups(groups map[string][]Component.IComponent) error {
+func (this *LauncherComponent) AddComponentGroups(groups map[string][]ecs.IComponent) error {
 	if this.Config == nil {
 		panic(ErrServerNotInit)
 	}

@@ -1,4 +1,4 @@
-package Component
+package ecs
 
 import (
 	"encoding/json"
@@ -13,7 +13,7 @@ type ObjectTemplate struct {
 	Objects    []ObjectTemplate
 }
 
-// ComponentTemplate is a serializable representation of a component
+// ComponentTemplate is a serializable representation of a ecs
 type ComponentTemplate struct {
 	Type string
 	Data interface{}

@@ -1,17 +1,17 @@
-package Component_test
+package ecs_test
 
 import (
 	"reflect"
 
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 )
 
 type ComponentTemplate struct {
-	Component.Base
-	parent *Component.Object
+	ecs.Base
+	parent *ecs.Object
 }
 
-func (c *ComponentTemplate) New() Component.IComponent {
+func (c *ComponentTemplate) New() ecs.IComponent {
 	return &ComponentTemplate{}
 }
 
@@ -19,11 +19,11 @@ func (c *ComponentTemplate) Type() reflect.Type {
 	return reflect.TypeOf(c)
 }
 
-func (c *ComponentTemplate) Awake(parent *Component.Object) {
+func (c *ComponentTemplate) Awake(parent *ecs.Object) {
 	c.parent = parent
 }
 
-func (c *ComponentTemplate) Update(context *Component.Context) {
+func (c *ComponentTemplate) Update(context *ecs.Context) {
 }
 
 func (c *ComponentTemplate) Serialize() (interface{}, error) {

@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/zllangct/RockGO"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/gate"
 	"github.com/zllangct/RockGO/logger"
 	"net/http"
@@ -36,7 +36,7 @@ func main() {
 	g := &gate.DefaultGateComponent{}
 	g.NetAPI = NewTestApi() //非默认网关不必要这样初始化，在组件内初始化即可，此处是为了对默认网关注入
 
-	Server.AddComponentGroup("gate", []Component.IComponent{g})
-	Server.AddComponentGroup("room", []Component.IComponent{&RoomManagerComponent{}})
+	Server.AddComponentGroup("gate", []ecs.IComponent{g})
+	Server.AddComponentGroup("room", []ecs.IComponent{&RoomManagerComponent{}})
 	Server.Serve()
 }

@@ -1,4 +1,4 @@
-package Component
+package ecs
 
 import "errors"
 
@@ -6,8 +6,8 @@ var (
 	// ErrNullValue is raised when a null value is passed in as a pointer
 	ErrNullValue = errors.New("a null value is passed in as a pointer")
 
-	// ErrUnknownComponent is raised when trying to deserialize an unknown component
-	ErrUnknownComponent = errors.New("trying to deserialize an unknown component")
+	// ErrUnknownComponent is raised when trying to deserialize an unknown ecs
+	ErrUnknownComponent = errors.New("trying to deserialize an unknown ecs")
 
 	// ErrBadValue is raised when an invalid value is used, eg. for serialization
 	ErrBadValue = errors.New("an invalid value is used, eg. for serialization")
@@ -21,14 +21,14 @@ var (
 	// ErrNotSupported is raised when trying to perform an invalid operation that is not supported.
 	ErrNotSupported = errors.New("rying to perform an invalid operation that is not supported")
 
-	// ErrNotSupported is raised when add a existed component.
-	ErrUniqueComponent = errors.New("add a existed component")
+	// ErrNotSupported is raised when add a existed ecs.
+	ErrUniqueComponent = errors.New("add a existed ecs")
 
-	// ErrNotSupported is raised when add a component witch require component is missing.
-	ErrMissingComponent = errors.New("add a component witch require component is missing")
+	// ErrNotSupported is raised when add a ecs witch require ecs is missing.
+	ErrMissingComponent = errors.New("add a ecs witch require ecs is missing")
 
-	// ErrNotSupported is raised when attach a missing component group.
-	ErrMissingGroup = errors.New("attach a missing component group")
+	// ErrNotSupported is raised when attach a missing ecs group.
+	ErrMissingGroup = errors.New("attach a missing ecs group")
 
 	ErrNoThisChild = errors.New("this object has not the child")
 )

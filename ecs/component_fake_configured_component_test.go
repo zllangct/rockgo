@@ -1,7 +1,7 @@
-package Component_test
+package ecs_test
 
 import (
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"reflect"
 )
 
@@ -15,7 +15,7 @@ type FakeConfiguredComponentItem struct {
 }
 
 type FakeConfiguredComponent struct {
-	Component.Base
+	ecs.Base
 	Data FakeConfiguredComponentData
 }
 
@@ -23,17 +23,17 @@ func (fake *FakeConfiguredComponent) Type() reflect.Type {
 	return reflect.TypeOf(fake)
 }
 
-func (fake *FakeConfiguredComponent) New() Component.IComponent {
+func (fake *FakeConfiguredComponent) New() ecs.IComponent {
 	return &FakeConfiguredComponent{}
 }
 
 func (fake *FakeConfiguredComponent) Serialize() (interface{}, error) {
-	return Component.SerializeState(&fake.Data)
+	return ecs.SerializeState(&fake.Data)
 }
 
 func (fake *FakeConfiguredComponent) Deserialize(raw interface{}) error {
 	var data FakeConfiguredComponentData
-	if err := Component.DeserializeState(&data, raw); err != nil {
+	if err := ecs.DeserializeState(&data, raw); err != nil {
 		return err
 	}
 	fake.Data = data

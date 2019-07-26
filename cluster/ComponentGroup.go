@@ -2,7 +2,7 @@ package Cluster
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/logger"
 )
 
@@ -13,18 +13,18 @@ import (
 */
 type ComponentGroup struct {
 	Name    string
-	content []Component.IComponent
+	content []ecs.IComponent
 }
 
-func (this *ComponentGroup) attachGroupTo(target *Component.Object) {
-	o := Component.NewObject(this.Name)
+func (this *ComponentGroup) attachGroupTo(target *ecs.Object) {
+	o := ecs.NewObject(this.Name)
 	err := target.AddObject(o)
 	if err != nil {
 		logger.Error(err)
 	}
 	for _, component := range this.content {
 		o.AddComponent(component)
-		logger.Info(fmt.Sprintf("Attach component [ %s.%s ] to [ %s ]", this.Name, component.Type().String(), o.Name()))
+		logger.Info(fmt.Sprintf("Attach ecs [ %s.%s ] to [ %s ]", this.Name, component.Type().String(), o.Name()))
 	}
 }
 
@@ -32,7 +32,7 @@ func (this *ComponentGroup) attachGroupTo(target *Component.Object) {
 	所有可用Component组
 */
 type ComponentGroups struct {
-	group map[string]*ComponentGroup //key:group name , value:component group
+	group map[string]*ComponentGroup //key:group name , value:ecs group
 }
 
 func (this *ComponentGroups) AllGroups() map[string]*ComponentGroup {
@@ -53,7 +53,7 @@ func (this *ComponentGroups) AllGroupsName() []string {
 	return arr
 }
 
-func (this *ComponentGroups) AddGroup(groupName string, group []Component.IComponent) {
+func (this *ComponentGroups) AddGroup(groupName string, group []ecs.IComponent) {
 	if this.group == nil {
 		this.group = make(map[string]*ComponentGroup)
 	}
@@ -63,7 +63,7 @@ func (this *ComponentGroups) AddGroup(groupName string, group []Component.ICompo
 	}
 }
 
-func (this *ComponentGroups) AttachGroupsTo(groupName []string, target *Component.Object) error {
+func (this *ComponentGroups) AttachGroupsTo(groupName []string, target *ecs.Object) error {
 	child, master, other := false, false, false
 	for _, name := range groupName {
 		switch name {

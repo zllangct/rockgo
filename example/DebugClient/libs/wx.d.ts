@@ -4148,7 +4148,7 @@ interface _canvasToTempFilePathObject {
   destHeight: number;
 
   /**
-   * 画布标识，传入 [`<canvas/>`](../../component/canvas.md) 的 canvas-id
+   * 画布标识，传入 [`<canvas/>`](../../ecs/canvas.md) 的 canvas-id
    */
   canvasId: string;
 
@@ -4179,7 +4179,7 @@ interface _canvasToTempFilePathObject {
 }
 interface _canvasPutImageDataObject {
   /**
-   * 画布标识，传入 [`<canvas />`](../../component/canvas.md) 的 canvas-id
+   * 画布标识，传入 [`<canvas />`](../../ecs/canvas.md) 的 canvas-id
    */
   canvasId: string;
 
@@ -4225,7 +4225,7 @@ interface _canvasPutImageDataObject {
 }
 interface _canvasGetImageDataObject {
   /**
-   * 画布标识，传入 [`<canvas />`](../../component/canvas.md) 的 canvas-id
+   * 画布标识，传入 [`<canvas />`](../../ecs/canvas.md) 的 canvas-id
    */
   canvasId: string;
 

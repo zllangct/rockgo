@@ -1,7 +1,7 @@
 package Actor
 
 import (
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/logger"
 )
 
@@ -9,10 +9,10 @@ type ActorBase struct {
 	MessageHandler map[string]func(message *ActorMessageInfo) error
 	actor          *ActorComponent
 	actorType      ActorType
-	parent         *Component.Object
+	parent         *ecs.Object
 }
 
-func (this *ActorBase) ActorInit(parent *Component.Object, actorType ...ActorType) {
+func (this *ActorBase) ActorInit(parent *ecs.Object, actorType ...ActorType) {
 	this.parent = parent
 	if len(actorType) == 0 {
 		this.actorType = ACTOR_TYPE_DEFAULT

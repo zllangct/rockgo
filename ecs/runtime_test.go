@@ -1,4 +1,4 @@
-package Component_test
+package ecs_test
 
 import (
 	"reflect"
@@ -7,22 +7,22 @@ import (
 
 	"github.com/zllangct/RockGO/3rd/assert"
 	"github.com/zllangct/RockGO/3rd/iter"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 )
 
 func TestNew(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
-		Component.NewRuntime(Component.Config{
+		ecs.NewRuntime(ecs.Config{
 			ThreadPoolSize: 3})
 	})
 }
 
 func TestUpdate(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
-		runtime := Component.NewRuntime(Component.Config{
+		runtime := ecs.NewRuntime(ecs.Config{
 			ThreadPoolSize: 50})
 
-		obj := Component.NewObject()
+		obj := ecs.NewObject()
 		obj.AddComponent(&FakeComponent{})
 		obj.AddComponent(&FakeComponent{})
 		obj.AddComponent(&FakeComponent{})
@@ -49,15 +49,15 @@ func TestUpdate(T *testing.T) {
 
 func TestComponentsAreUpdated(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
-		runtime := Component.NewRuntime(Component.Config{
+		runtime := ecs.NewRuntime(ecs.Config{
 			ThreadPoolSize: 50})
 
-		obj := Component.NewObject()
+		obj := ecs.NewObject()
 		obj.AddComponent(&FakeComponent{Id: "1"})
 		obj.AddComponent(&FakeComponent{Id: "2"})
 		obj.AddComponent(&FakeComponent{Id: "3"})
 
-		root := Component.NewObject()
+		root := ecs.NewObject()
 		root.AddComponent(&FakeComponent{Id: "4"})
 
 		root.AddObject(obj)

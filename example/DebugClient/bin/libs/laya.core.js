@@ -13839,9 +13839,9 @@ var Node=(function(_super){
 	*/
 	__proto.addComponentIntance=function(comp){
 		if (comp.owner)
-			throw "Node:the component has belong to other node.";
+			throw "Node:the ecs has belong to other node.";
 		if (comp.isSingleton && this.getComponent((comp).constructor))
-			throw "Node:the component is singleton,can't add the second one.";
+			throw "Node:the ecs is singleton,can't add the second one.";
 		this._addComponentInstance(comp);
 		return comp;
 	}

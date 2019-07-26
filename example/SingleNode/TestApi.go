@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/zllangct/RockGO/cluster"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/network"
 	"github.com/zllangct/RockGO/network/messageProtocol"
 )
@@ -22,7 +22,7 @@ type TestApi struct {
 
 //使用协议接口时，需先初始化，初始化时需传入定义的消息号对应字典
 //以及所需的消息序列化组件，可轻易切换为protobuf，msgpack等其他序列化工具
-func NewTestApi(parent *Component.Object) *TestApi {
+func NewTestApi(parent *ecs.Object) *TestApi {
 	r := &TestApi{}
 	r.Init(r, parent, Testid2mt, &MessageProtocol.JsonProtocol{})
 	return r

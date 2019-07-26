@@ -2,7 +2,7 @@ package Cluster
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils"
@@ -17,7 +17,7 @@ const (
 )
 
 type MasterComponent struct {
-	Component.Base
+	ecs.Base
 	locker          *sync.RWMutex
 	nodeComponent   *NodeComponent
 	Nodes           map[string]*NodeInfo
@@ -25,8 +25,8 @@ type MasterComponent struct {
 	timeoutChecking map[string]int
 }
 
-func (this *MasterComponent) GetRequire() map[*Component.Object][]reflect.Type {
-	requires := make(map[*Component.Object][]reflect.Type)
+func (this *MasterComponent) GetRequire() map[*ecs.Object][]reflect.Type {
+	requires := make(map[*ecs.Object][]reflect.Type)
 	requires[this.Parent().Root()] = []reflect.Type{
 		reflect.TypeOf(&config.ConfigComponent{}),
 		reflect.TypeOf(&NodeComponent{}),
@@ -34,7 +34,7 @@ func (this *MasterComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	return requires
 }
 
-func (this *MasterComponent) Awake(ctx *Component.Context) {
+func (this *MasterComponent) Awake(ctx *ecs.Context) {
 	this.locker = &sync.RWMutex{}
 	this.Nodes = make(map[string]*NodeInfo)
 	this.NodeLog = &NodeLogs{BufferSize: 20}

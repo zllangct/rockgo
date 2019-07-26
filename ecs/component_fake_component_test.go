@@ -1,27 +1,27 @@
-package Component_test
+package ecs_test
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"strconv"
 	"strings"
 )
 
 type FakeComponent struct {
-	Component.Base
+	ecs.Base
 	Id    string
 	Count int
 }
 
-func (fake *FakeComponent) Update(context *Component.Context) {
+func (fake *FakeComponent) Update(context *ecs.Context) {
 	fake.Count += 1
 }
 
-func (fake *FakeComponent) Destroy(context *Component.Context) {
+func (fake *FakeComponent) Destroy(context *ecs.Context) {
 	println(fake.Id)
 }
 
-func (fake *FakeComponent) New() Component.IComponent {
+func (fake *FakeComponent) New() ecs.IComponent {
 	return &FakeComponent{}
 }
 
@@ -37,7 +37,7 @@ func (fake *FakeComponent) Deserialize(raw interface{}) error {
 	if len(data) > 0 {
 		parts := strings.Split(data, ",")
 		if len(parts) != 2 {
-			return Component.ErrBadValue
+			return ecs.ErrBadValue
 		}
 		fake.Id = parts[0]
 		count, err := strconv.Atoi(parts[1])

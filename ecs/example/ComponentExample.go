@@ -1,44 +1,44 @@
 package main
 
 import (
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/logger"
 	"time"
 )
 
 type TS struct {
-	Component.Base
+	ecs.Base
 	name int
 }
 
-func (this *TS) Start(ctx *Component.Context) {
+func (this *TS) Start(ctx *ecs.Context) {
 	println("start: ", this.name)
 }
 
-func (this *TS) Update(ctx *Component.Context) {
+func (this *TS) Update(ctx *ecs.Context) {
 	println("update: ", this.name)
 }
 
-func (this *TS) Awake(ctx *Component.Context) {
+func (this *TS) Awake(ctx *ecs.Context) {
 	println("awake: ", this.name)
 }
 
-func (this *TS) Destroy(ctx *Component.Context) {
+func (this *TS) Destroy(ctx *ecs.Context) {
 	println("destroy: ", this.name)
 }
 
 func main() {
-	runtime := Component.NewRuntime(Component.Config{
+	runtime := ecs.NewRuntime(ecs.Config{
 		ThreadPoolSize: 20,
 	})
 
 	go runtime.UpdateFrameByInterval(time.Millisecond * 500)
 
-	o := Component.NewObject("o")
+	o := ecs.NewObject("o")
 	_ = runtime.Root().AddObject(o)
 
-	o1 := Component.NewObject("o1")
-	o2 := Component.NewObject()
+	o1 := ecs.NewObject("o1")
+	o2 := ecs.NewObject()
 
 	_ = o.AddObject(o1)
 	_ = o.AddObject(o2)

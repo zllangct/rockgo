@@ -1,16 +1,16 @@
-package Component_test
+package ecs_test
 
 import (
 	"github.com/zllangct/RockGO"
 	"github.com/zllangct/RockGO/3rd/assert"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"testing"
 )
 
 func TestCannotMakeRecursiveObjects(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
-		o1 := Component.NewObject("A")
-		o2 := Component.NewObject("B")
+		o1 := ecs.NewObject("A")
+		o2 := ecs.NewObject("B")
 
 		o1.AddObject(o2)
 	})
@@ -18,20 +18,20 @@ func TestCannotMakeRecursiveObjects(T *testing.T) {
 
 func TestFindObject(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
-		o1 := Component.NewObject("A")
-		o2 := Component.NewObject("B")
-		o3 := Component.NewObject("C")
-		o4 := Component.NewObject("D1")
-		o5 := Component.NewObject("D2")
+		o1 := ecs.NewObject("A")
+		o2 := ecs.NewObject("B")
+		o3 := ecs.NewObject("C")
+		o4 := ecs.NewObject("D1")
+		o5 := ecs.NewObject("D2")
 
-		o1.AddObject(Component.NewObject())
+		o1.AddObject(ecs.NewObject())
 		o1.AddObject(o2)
-		o1.AddObject(Component.NewObject())
+		o1.AddObject(ecs.NewObject())
 
 		o2.AddObject(o3)
 
 		o3.AddObject(o4)
-		o3.AddObject(Component.NewObject())
+		o3.AddObject(ecs.NewObject())
 		o3.AddObject(o5)
 
 		r, err := o1.FindObject("B")
@@ -53,10 +53,10 @@ func TestFindObject(T *testing.T) {
 }
 
 func TestFindComponent(T *testing.T) {
-	o1 := Component.NewObject("A")
-	o2 := Component.NewObject("B")
-	o3 := Component.NewObject("C")
-	o4 := Component.NewObject("D")
+	o1 := ecs.NewObject("A")
+	o2 := ecs.NewObject("B")
+	o3 := ecs.NewObject("C")
+	o4 := ecs.NewObject("D")
 	c1 := &FakeComponent{Id: "IComponent"}
 
 	o1.AddObject(o2)
@@ -71,10 +71,10 @@ func TestFindComponent(T *testing.T) {
 
 func TestFindComponentOnRoot(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
-		o1 := Component.NewObject("A")
-		o2 := Component.NewObject("B")
-		o3 := Component.NewObject("C")
-		o4 := Component.NewObject("D")
+		o1 := ecs.NewObject("A")
+		o2 := ecs.NewObject("B")
+		o3 := ecs.NewObject("C")
+		o4 := ecs.NewObject("D")
 		c1 := &FakeComponent{Id: "IComponent"}
 
 		o1.AddObject(o2)
@@ -92,10 +92,10 @@ func TestFindComponentOnRoot(T *testing.T) {
 
 func TestModifyComponent(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
-		o1 := Component.NewObject("A")
-		o2 := Component.NewObject("B")
-		o3 := Component.NewObject("C")
-		o4 := Component.NewObject("D")
+		o1 := ecs.NewObject("A")
+		o2 := ecs.NewObject("B")
+		o3 := ecs.NewObject("C")
+		o4 := ecs.NewObject("D")
 		c1 := &FakeComponent{Id: "IComponent"}
 
 		o1.AddObject(o2)
@@ -122,10 +122,10 @@ func TestModifyComponent(T *testing.T) {
 
 func TestRemoveChild(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
-		o1 := Component.NewObject("A")
-		o2 := Component.NewObject("B")
-		o3 := Component.NewObject("C")
-		o4 := Component.NewObject("D")
+		o1 := ecs.NewObject("A")
+		o2 := ecs.NewObject("B")
+		o3 := ecs.NewObject("C")
+		o4 := ecs.NewObject("D")
 
 		o1.AddObject(o2)
 		o2.AddObject(o3)
@@ -139,10 +139,10 @@ func TestRemoveChild(T *testing.T) {
 
 func TestRemoveChildWithChildren(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
-		o1 := Component.NewObject("A")
-		o2 := Component.NewObject("B")
-		o3 := Component.NewObject("C")
-		o4 := Component.NewObject("D")
+		o1 := ecs.NewObject("A")
+		o2 := ecs.NewObject("B")
+		o3 := ecs.NewObject("C")
+		o4 := ecs.NewObject("D")
 
 		o1.AddObject(o2)
 		o2.AddObject(o3)

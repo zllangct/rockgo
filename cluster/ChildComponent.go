@@ -2,7 +2,7 @@ package Cluster
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
@@ -14,7 +14,7 @@ import (
 )
 
 type ChildComponent struct {
-	Component.Base
+	ecs.Base
 	locker          sync.RWMutex
 	localAddr       string
 	rpcMaster       *rpc.TcpClient //master节点
@@ -23,8 +23,8 @@ type ChildComponent struct {
 	close           bool
 }
 
-func (this *ChildComponent) GetRequire() map[*Component.Object][]reflect.Type {
-	requires := make(map[*Component.Object][]reflect.Type)
+func (this *ChildComponent) GetRequire() map[*ecs.Object][]reflect.Type {
+	requires := make(map[*ecs.Object][]reflect.Type)
 	requires[this.Parent().Root()] = []reflect.Type{
 		reflect.TypeOf(&config.ConfigComponent{}),
 		reflect.TypeOf(&NodeComponent{}),
@@ -32,7 +32,7 @@ func (this *ChildComponent) GetRequire() map[*Component.Object][]reflect.Type {
 	return requires
 }
 
-func (this *ChildComponent) Awake(ctx *Component.Context) {
+func (this *ChildComponent) Awake(ctx *ecs.Context) {
 	err := this.Parent().Root().Find(&this.nodeComponent)
 	if err != nil {
 		panic(err)
@@ -42,7 +42,7 @@ func (this *ChildComponent) Awake(ctx *Component.Context) {
 	go this.DoReport()
 }
 
-func (this *ChildComponent) Destroy(ctx *Component.Context) {
+func (this *ChildComponent) Destroy(ctx *ecs.Context) {
 	this.locker.Lock()
 	defer this.locker.Unlock()
 

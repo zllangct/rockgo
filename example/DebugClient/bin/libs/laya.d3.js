@@ -1716,7 +1716,7 @@ var Keyframe=(function(){
 /**
 *<code>AnimatorState</code> 类用于创建动作状态。
 */
-//class laya.d3.component.AnimatorState
+//class laya.d3.ecs.AnimatorState
 var AnimatorState=(function(){
 	function AnimatorState(){
 		/**@private */
@@ -4083,7 +4083,7 @@ var Collision=(function(){
 *@private
 *<code>KeyframeNodeOwner</code> 类用于保存帧节点的拥有者信息。
 */
-//class laya.d3.component.KeyframeNodeOwner
+//class laya.d3.ecs.KeyframeNodeOwner
 var KeyframeNodeOwner=(function(){
 	function KeyframeNodeOwner(){
 		/**@private */
@@ -4286,7 +4286,7 @@ var VertexElement=(function(){
 /**
 *<code>AnimatorControllerLayer</code> 类用于创建动画控制器层。
 */
-//class laya.d3.component.AnimatorControllerLayer
+//class laya.d3.ecs.AnimatorControllerLayer
 var AnimatorControllerLayer=(function(){
 	function AnimatorControllerLayer(name){
 		/**@private 0:常规播放、1:动态融合播放、2:固定融合播放*/
@@ -7771,7 +7771,7 @@ var Utils3D=(function(){
 						console.log(data.compId);
 					}
 					}else {
-					console.warn("Unkown component type.");
+					console.warn("Unkown ecs type.");
 				}
 			}
 		}
@@ -7797,7 +7797,7 @@ var Utils3D=(function(){
 					node.addComponentIntance(component);
 					component._parse(data);
 					}else {
-					console.warn("Unkown component type.");
+					console.warn("Unkown ecs type.");
 				}
 			}
 		}
@@ -7859,7 +7859,7 @@ var Utils3D=(function(){
 					var component=node.addComponent(clas);
 					component._parse(data);
 					}else {
-					console.warn("Unkown component type.");
+					console.warn("Unkown ecs type.");
 				}
 			}
 		}
@@ -8986,7 +8986,7 @@ var ShaderUniforms=(function(){
 /**
 *<code>AnimatorPlayState</code> 类用于创建动画播放状态信息。
 */
-//class laya.d3.component.AnimatorPlayState
+//class laya.d3.ecs.AnimatorPlayState
 var AnimatorPlayState=(function(){
 	function AnimatorPlayState(){
 		/**@private */
@@ -9171,7 +9171,7 @@ var Shader3D=(function(){
 /**
 *<code>SingletonList</code> 类用于实现单例队列。
 */
-//class laya.d3.component.SingletonList
+//class laya.d3.ecs.SingletonList
 var SingletonList=(function(){
 	function SingletonList(){
 		/**@private [只读]*/
@@ -17233,7 +17233,7 @@ var AnimationTransform3D=(function(_super){
 /**
 *<code>Script3D</code> 类用于创建脚本的父类,该类为抽象类,不允许实例。
 */
-//class laya.d3.component.Script3D extends laya.components.Component
+//class laya.d3.ecs.Script3D extends laya.components.Component
 var Script3D=(function(_super){
 	function Script3D(){
 		Script3D.__super.call(this);;
@@ -18023,7 +18023,7 @@ var PhysicsComponent=(function(_super){
 /**
 *<code>Animator</code> 类用于创建动画组件。
 */
-//class laya.d3.component.Animator extends laya.components.Component
+//class laya.d3.ecs.Animator extends laya.components.Component
 var Animator=(function(_super){
 	function Animator(){
 		/**@private */
@@ -27510,7 +27510,7 @@ var VertexShurikenParticleBillboard=(function(_super){
 /**
 *<code>CastShadowList</code> 类用于实现产生阴影者队列。
 */
-//class laya.d3.CastShadowList extends laya.d3.component.SingletonList
+//class laya.d3.CastShadowList extends laya.d3.ecs.SingletonList
 var CastShadowList=(function(_super){
 	/**
 	*创建一个新的 <code>CastShadowList</code> 实例。
@@ -27547,7 +27547,7 @@ var CastShadowList=(function(_super){
 /**
 *<code>SimpleSingletonList</code> 类用于实现单例队列。
 */
-//class laya.d3.component.SimpleSingletonList extends laya.d3.component.SingletonList
+//class laya.d3.ecs.SimpleSingletonList extends laya.d3.ecs.SingletonList
 var SimpleSingletonList=(function(_super){
 	/**
 	*创建一个新的 <code>SimpleSingletonList</code> 实例。

@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/zllangct/RockGO/actor"
 	"github.com/zllangct/RockGO/cluster"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"reflect"
@@ -11,7 +11,7 @@ import (
 )
 
 type TemplateComponent struct {
-	Component.Base               //Component 基类 必须继承
+	ecs.Base                     //Component 基类 必须继承
 	Actor.ActorBase              //继承Actor基类，不使用actor模式时，不必继承
 	locker          sync.RWMutex //锁
 	member1         int          //成员变量1
@@ -23,12 +23,12 @@ type TemplateComponent struct {
 //UNIQUE_TYPE_LOCAL ：在parent object上面唯一
 //UNIQUE_TYPE_GLOBAL ：在整个节点上面唯一
 func (this *TemplateComponent) IsUnique() int {
-	return Component.UNIQUE_TYPE_GLOBAL
+	return ecs.UNIQUE_TYPE_GLOBAL
 }
 
 //指定该组件的依赖组件
-func (this *TemplateComponent) GetRequire() map[*Component.Object][]reflect.Type {
-	requires := make(map[*Component.Object][]reflect.Type)
+func (this *TemplateComponent) GetRequire() map[*ecs.Object][]reflect.Type {
+	requires := make(map[*ecs.Object][]reflect.Type)
 	requires[this.Root()] = []reflect.Type{
 		reflect.TypeOf(&config.ConfigComponent{}), //依赖根对象拥有ConfigComponent组件
 		reflect.TypeOf(&Cluster.NodeComponent{}),  //依赖根对象拥有NodeComponent组件
@@ -46,23 +46,23 @@ func (this *TemplateComponent) GetRequire() map[*Component.Object][]reflect.Type
 */
 
 //Awake 事件
-func (this *TemplateComponent) Awake(context *Component.Context) {
+func (this *TemplateComponent) Awake(context *ecs.Context) {
 	//注册actor 消息处理函数
 	this.AddHandler("HelloMessage", this.onHello)
 }
 
 //Start 事件
-func (this *TemplateComponent) Start(ctx *Component.Context) {
+func (this *TemplateComponent) Start(ctx *ecs.Context) {
 
 }
 
 //Update 事件
-func (this *TemplateComponent) Update(ctx *Component.Context) {
+func (this *TemplateComponent) Update(ctx *ecs.Context) {
 
 }
 
 //Destroy 事件
-func (this *TemplateComponent) Destroy(ctx *Component.Context) {
+func (this *TemplateComponent) Destroy(ctx *ecs.Context) {
 
 }
 

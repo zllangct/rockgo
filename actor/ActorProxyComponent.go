@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/zllangct/RockGO/cluster"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
@@ -17,7 +17,7 @@ var ErrNoThisService = errors.New("no this service")
 var ErrNoThisActor = errors.New("no this actor")
 
 type ActorProxyComponent struct {
-	Component.Base
+	ecs.Base
 	locker        sync.RWMutex
 	nodeID        string
 	localActors   sync.Map //本地actor [Target,actor]
@@ -28,8 +28,8 @@ type ActorProxyComponent struct {
 	isOnline bool
 }
 
-func (this *ActorProxyComponent) GetRequire() map[*Component.Object][]reflect.Type {
-	requires := make(map[*Component.Object][]reflect.Type)
+func (this *ActorProxyComponent) GetRequire() map[*ecs.Object][]reflect.Type {
+	requires := make(map[*ecs.Object][]reflect.Type)
 	//添加该组件需要根节点拥有ActorProxyComponent,ConfigComponent组件
 	requires[this.Runtime().Root()] = []reflect.Type{
 		reflect.TypeOf(&config.ConfigComponent{}),
@@ -38,7 +38,7 @@ func (this *ActorProxyComponent) GetRequire() map[*Component.Object][]reflect.Ty
 }
 
 func (this *ActorProxyComponent) IsUnique() int {
-	return Component.UNIQUE_TYPE_GLOBAL
+	return ecs.UNIQUE_TYPE_GLOBAL
 }
 
 func (this *ActorProxyComponent) Initialize() error {
@@ -66,7 +66,7 @@ func (this *ActorProxyComponent) IsOnline() bool {
 	return this.isOnline
 }
 
-func (this *ActorProxyComponent) Destroy(ctx *Component.Context) {
+func (this *ActorProxyComponent) Destroy(ctx *ecs.Context) {
 
 }
 

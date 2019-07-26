@@ -2,7 +2,7 @@ package Cluster
 
 import (
 	"errors"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/rpc"
 	"reflect"
@@ -20,7 +20,7 @@ type LocationQuery struct {
 }
 
 type LocationComponent struct {
-	Component.Base
+	ecs.Base
 	locker        *sync.RWMutex
 	nodeComponent *NodeComponent
 	Nodes         map[string]*NodeInfo
@@ -28,8 +28,8 @@ type LocationComponent struct {
 	master        *rpc.TcpClient
 }
 
-func (this *LocationComponent) GetRequire() map[*Component.Object][]reflect.Type {
-	requires := make(map[*Component.Object][]reflect.Type)
+func (this *LocationComponent) GetRequire() map[*ecs.Object][]reflect.Type {
+	requires := make(map[*ecs.Object][]reflect.Type)
 	requires[this.Runtime().Root()] = []reflect.Type{
 		reflect.TypeOf(&config.ConfigComponent{}),
 		reflect.TypeOf(&NodeComponent{}),
@@ -37,7 +37,7 @@ func (this *LocationComponent) GetRequire() map[*Component.Object][]reflect.Type
 	return requires
 }
 
-func (this *LocationComponent) Awake(ctx *Component.Context) {
+func (this *LocationComponent) Awake(ctx *ecs.Context) {
 	this.locker = &sync.RWMutex{}
 	err := this.Parent().Root().Find(&this.nodeComponent)
 	if err != nil {

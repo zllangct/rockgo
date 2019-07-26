@@ -1,4 +1,4 @@
-package Component_test
+package ecs_test
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 
 	"github.com/zllangct/RockGO/3rd/assert"
 	"github.com/zllangct/RockGO/3rd/iter"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"io/ioutil"
 	"strings"
 )
@@ -19,21 +19,21 @@ import (
 // Add remove child adds a new child every second.
 // When it has 10 children, it removes itself.
 type AddRemoveChild struct {
-	Component.Base
-	parent  *Component.Object
+	ecs.Base
+	parent  *ecs.Object
 	count   int
 	elapsed float32
 }
 
-func (c *AddRemoveChild) New() Component.IComponent {
+func (c *AddRemoveChild) New() ecs.IComponent {
 	return &AddRemoveChild{}
 }
 
-func (c *AddRemoveChild) Attach(parent *Component.Object) {
+func (c *AddRemoveChild) Attach(parent *ecs.Object) {
 	c.parent = parent
 }
 
-func (c *AddRemoveChild) Update(context *Component.Context) {
+func (c *AddRemoveChild) Update(context *ecs.Context) {
 	c.elapsed += context.DeltaTime
 	if c.elapsed > 1.0 {
 		c.count += 1
@@ -43,7 +43,7 @@ func (c *AddRemoveChild) Update(context *Component.Context) {
 				parent.RemoveObject(c.parent)
 			}
 		} else {
-			child := Component.NewObject(fmt.Sprintf("Child: %d", c.count))
+			child := ecs.NewObject(fmt.Sprintf("Child: %d", c.count))
 			c.parent.AddObject(child)
 		}
 		c.elapsed = 0
@@ -52,15 +52,15 @@ func (c *AddRemoveChild) Update(context *Component.Context) {
 
 // DumpState dumps an object tree of the runtime every 1/2 seconds
 type DumpState struct {
-	Component.Base
+	ecs.Base
 	elapsed float32
 }
 
-func (c *DumpState) New() Component.IComponent {
+func (c *DumpState) New() ecs.IComponent {
 	return &DumpState{}
 }
 
-func (c *DumpState) Update(context *Component.Context) {
+func (c *DumpState) Update(context *ecs.Context) {
 	c.elapsed += context.DeltaTime
 
 	if c.elapsed >= 0.5 {
@@ -70,10 +70,10 @@ func (c *DumpState) Update(context *Component.Context) {
 }
 
 type Hello struct {
-	Component.Base
+	ecs.Base
 }
 
-func (this *Hello) Start(context *Component.Context) {
+func (this *Hello) Start(context *ecs.Context) {
 	this.Hello("my name is zhaolei.")
 
 }
@@ -86,19 +86,19 @@ func (this *Hello) Hello(str string) {
 	//println("sum:",sum,str)
 }
 
-func (this *Hello) Update(context *Component.Context) {
+func (this *Hello) Update(context *ecs.Context) {
 	this.Hello(strconv.Itoa(1))
 }
 func TestLargeObjects(T *testing.T) {
 	//====================== IComponent
-	runtime := Component.NewRuntime(Component.Config{
+	runtime := ecs.NewRuntime(ecs.Config{
 		ThreadPoolSize: 50,
 	})
 
-	root := Component.NewObject("root")
+	root := ecs.NewObject("root")
 	runtime.Root().AddObject(root)
 	for i := 0; i < 1000; i++ {
-		o1 := Component.NewObject(strconv.Itoa(i))
+		o1 := ecs.NewObject(strconv.Itoa(i))
 		o1.AddComponent(&Hello{})
 		root.AddObject(o1)
 	}
@@ -108,7 +108,7 @@ func TestLargeObjects(T *testing.T) {
 		runtime.UpdateFrame()
 	}
 	elapsed1 := time.Since(t1)
-	println("component:", elapsed1)
+	println("ecs:", elapsed1)
 
 	//========================== traditional
 	tasklist := make([]*Hello, 1000)
@@ -137,22 +137,22 @@ func TestComplexSerialization(T *testing.T) {
 		logger := log.New(os.Stdout, "Runtime: ", log.Ldate|log.Ltime|log.Lshortfile)
 		logger.SetOutput(ioutil.Discard) // No output thanks
 
-		runtime := Component.NewRuntime(Component.Config{
+		runtime := ecs.NewRuntime(ecs.Config{
 			ThreadPoolSize: 10})
 
 		runtime.Factory().Register(&AddRemoveChild{})
 
 		runtime.Root().AddComponent(&DumpState{elapsed: 11})
 
-		o1 := Component.NewObject("Container One")
-		w1 := Component.NewObject("Worker 1")
-		w2 := Component.NewObject("Worker 2")
+		o1 := ecs.NewObject("Container One")
+		w1 := ecs.NewObject("Worker 1")
+		w2 := ecs.NewObject("Worker 2")
 
-		o2 := Component.NewObject("Container Two")
-		w3 := Component.NewObject("Worker 3")
-		w4 := Component.NewObject("Worker 4")
+		o2 := ecs.NewObject("Container Two")
+		w3 := ecs.NewObject("Worker 3")
+		w4 := ecs.NewObject("Worker 4")
 
-		o3 := Component.NewObject("Container Tree")
+		o3 := ecs.NewObject("Container Tree")
 		//o4 := IComponent.NewObject("Container Four")
 
 		o1.AddObject(w1)
@@ -208,22 +208,22 @@ func TestComplexRuntime(T *testing.T) {
 		logger := log.New(os.Stdout, "Runtime: ", log.Ldate|log.Ltime|log.Lshortfile)
 		logger.SetOutput(ioutil.Discard) // No output thanks
 
-		runtime := Component.NewRuntime(Component.Config{
+		runtime := ecs.NewRuntime(ecs.Config{
 			ThreadPoolSize: 10})
 
 		runtime.Root().AddComponent(&DumpState{})
 
-		o1 := Component.NewObject("Container One")
-		w1 := Component.NewObject("Worker 1")
-		w2 := Component.NewObject("Worker 2")
+		o1 := ecs.NewObject("Container One")
+		w1 := ecs.NewObject("Worker 1")
+		w2 := ecs.NewObject("Worker 2")
 
-		o2 := Component.NewObject("Container Two")
-		w3 := Component.NewObject("Worker 3")
-		w4 := Component.NewObject("Worker 4")
+		o2 := ecs.NewObject("Container Two")
+		w3 := ecs.NewObject("Worker 3")
+		w4 := ecs.NewObject("Worker 4")
 
-		o3 := Component.NewObject("Container Three")
-		w5 := Component.NewObject("Worker 5")
-		w6 := Component.NewObject("Worker 6")
+		o3 := ecs.NewObject("Container Three")
+		w5 := ecs.NewObject("Worker 5")
+		w6 := ecs.NewObject("Worker 6")
 
 		o1.AddObject(w1)
 		o1.AddObject(w2)

@@ -3,7 +3,7 @@ package Cluster
 import (
 	"errors"
 	"fmt"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
@@ -17,7 +17,7 @@ import (
 var ErrNodeOffline = errors.New("this node is offline")
 
 type NodeComponent struct {
-	Component.Base
+	ecs.Base
 	locker          sync.RWMutex
 	AppName         string
 	localIP         string
@@ -33,8 +33,8 @@ type NodeComponent struct {
 	clientGetting   map[string]int
 }
 
-func (this *NodeComponent) GetRequire() map[*Component.Object][]reflect.Type {
-	requires := make(map[*Component.Object][]reflect.Type)
+func (this *NodeComponent) GetRequire() map[*ecs.Object][]reflect.Type {
+	requires := make(map[*ecs.Object][]reflect.Type)
 	requires[this.Parent().Root()] = []reflect.Type{
 		reflect.TypeOf(&config.ConfigComponent{}),
 	}

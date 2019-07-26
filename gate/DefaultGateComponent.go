@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/zllangct/RockGO/cluster"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/network"
@@ -14,7 +14,7 @@ import (
 )
 
 type DefaultGateComponent struct {
-	Component.Base
+	ecs.Base
 	locker        sync.RWMutex
 	nodeComponent *Cluster.NodeComponent
 	clients       sync.Map // [sessionID,*session]
@@ -23,18 +23,18 @@ type DefaultGateComponent struct {
 }
 
 func (this *DefaultGateComponent) IsUnique() int {
-	return Component.UNIQUE_TYPE_GLOBAL
+	return ecs.UNIQUE_TYPE_GLOBAL
 }
 
-func (this *DefaultGateComponent) GetRequire() map[*Component.Object][]reflect.Type {
-	requires := make(map[*Component.Object][]reflect.Type)
+func (this *DefaultGateComponent) GetRequire() map[*ecs.Object][]reflect.Type {
+	requires := make(map[*ecs.Object][]reflect.Type)
 	requires[this.Parent().Root()] = []reflect.Type{
 		reflect.TypeOf(&config.ConfigComponent{}),
 	}
 	return requires
 }
 
-func (this *DefaultGateComponent) Awake(ctx *Component.Context) {
+func (this *DefaultGateComponent) Awake(ctx *ecs.Context) {
 	err := this.Parent().Root().Find(&this.nodeComponent)
 	if err != nil {
 		panic(err)

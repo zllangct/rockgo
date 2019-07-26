@@ -1,17 +1,17 @@
-package Component_test
+package ecs_test
 
 import (
 	"testing"
 
 	"github.com/zllangct/RockGO/3rd/assert"
 	"github.com/zllangct/RockGO/3rd/iter"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 )
 
 func TestSingleChildIterator(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
-		obj := Component.NewObject("Object 1")
-		obj2 := Component.NewObject("Object 2")
+		obj := ecs.NewObject("Object 1")
+		obj2 := ecs.NewObject("Object 2")
 		obj.AddObject(obj2)
 
 		results, err := iter.Collect(obj.ObjectsInChildren())
@@ -23,9 +23,9 @@ func TestSingleChildIterator(T *testing.T) {
 
 func TestDepth3ChildIterator(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
-		obj := Component.NewObject()
-		obj2 := Component.NewObject()
-		obj3 := Component.NewObject()
+		obj := ecs.NewObject()
+		obj2 := ecs.NewObject()
+		obj3 := ecs.NewObject()
 		obj.AddObject(obj2)
 		obj2.AddObject(obj3)
 

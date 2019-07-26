@@ -1,4 +1,4 @@
-package Component
+package ecs
 
 import (
 	"container/list"

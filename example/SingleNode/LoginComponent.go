@@ -3,7 +3,7 @@ package main
 import (
 	"errors"
 	"github.com/zllangct/RockGO/cluster"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
 	"reflect"
 	"sync"
@@ -11,21 +11,21 @@ import (
 )
 
 type LoginComponent struct {
-	Component.Base
+	ecs.Base
 	locker        sync.RWMutex
 	nodeComponent *Cluster.NodeComponent
 	players       sync.Map // [account,*PlayerInfo]
 }
 
-func (this *LoginComponent) GetRequire() map[*Component.Object][]reflect.Type {
-	requires := make(map[*Component.Object][]reflect.Type)
+func (this *LoginComponent) GetRequire() map[*ecs.Object][]reflect.Type {
+	requires := make(map[*ecs.Object][]reflect.Type)
 	requires[this.Root()] = []reflect.Type{
 		reflect.TypeOf(&config.ConfigComponent{}),
 	}
 	return requires
 }
 
-func (this *LoginComponent) Awake(ctx *Component.Context) {
+func (this *LoginComponent) Awake(ctx *ecs.Context) {
 	err := this.Root().Find(&this.nodeComponent)
 	if err != nil {
 		panic(err)

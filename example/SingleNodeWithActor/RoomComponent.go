@@ -3,11 +3,11 @@ package main
 import (
 	"errors"
 	"github.com/zllangct/RockGO/actor"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 )
 
 type RoomComponent struct {
-	Component.Base
+	ecs.Base
 	Actor.ActorBase
 	players map[int]*Player
 	RoomID  int
@@ -18,7 +18,7 @@ func (this *RoomComponent) Initialize() error {
 	return nil
 }
 
-func (this *RoomComponent) Awake(ctx *Component.Context) {
+func (this *RoomComponent) Awake(ctx *ecs.Context) {
 
 }
 

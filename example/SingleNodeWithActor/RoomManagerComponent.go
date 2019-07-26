@@ -2,12 +2,12 @@ package main
 
 import (
 	"github.com/zllangct/RockGO/actor"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"sync"
 )
 
 type RoomManagerComponent struct {
-	Component.Base
+	ecs.Base
 	Actor.ActorBase
 	locker     sync.RWMutex
 	rooms      map[int]*RoomComponent
@@ -20,7 +20,7 @@ func (this *RoomManagerComponent) Initialize() error {
 	return nil
 }
 
-func (this *RoomManagerComponent) Awake(ctx *Component.Context) {
+func (this *RoomManagerComponent) Awake(ctx *ecs.Context) {
 	//初始化房间
 	this.rooms = make(map[int]*RoomComponent)
 	//注册actor消息
@@ -31,7 +31,7 @@ var Service_RoomMgr_NewRoom = "NewRoom"
 
 func (this *RoomManagerComponent) NewRoom(message *Actor.ActorMessageInfo) error {
 	r := &RoomComponent{}
-	_, err := this.Parent().AddNewbjectWithComponents([]Component.IComponent{r})
+	_, err := this.Parent().AddNewbjectWithComponents([]ecs.IComponent{r})
 	if err != nil {
 		return err
 	}

@@ -1,36 +1,36 @@
-package Component
+package ecs
 
 import (
 	"container/list"
 	"sync"
 )
 
-type IAwake interface {
-	Awake(context *Context)
+type IStart interface {
+	Start(context *Context)
 }
 
-type AwakeSystem struct {
+type StartSystem struct {
 	SystemBase
 	wg         *sync.WaitGroup
 	components *list.List
 	temp       *list.List
 }
 
-func (this *AwakeSystem) Init(runtime *Runtime) {
-	this.name = "awake"
+func (this *StartSystem) Init(runtime *Runtime) {
+	this.name = "start"
 	this.components = list.New()
 	this.temp = list.New()
 	this.wg = &sync.WaitGroup{}
 	this.runtime = runtime
 }
 
-func (this *AwakeSystem) Name() string {
+func (this *StartSystem) Name() string {
 	this.locker.RLock()
 	defer this.locker.RUnlock()
 	return this.name
 }
 
-func (this *AwakeSystem) UpdateFrame() {
+func (this *StartSystem) UpdateFrame() {
 	this.locker.Lock()
 	this.components, this.temp = this.temp, this.components
 	this.locker.Unlock()
@@ -41,11 +41,9 @@ func (this *AwakeSystem) UpdateFrame() {
 			Runtime: this.runtime,
 		}
 
-		v := c.Value.(IAwake)
-		//name:=c.Value.(IComponent).Type().String()
+		v := c.Value.(IStart)
 		this.runtime.workers.Run(func() {
-			//logger.Debug("awake: "+name)
-			v.Awake(ctx)
+			v.Start(ctx)
 		}, func() {
 			this.wg.Done()
 		})
@@ -54,16 +52,15 @@ func (this *AwakeSystem) UpdateFrame() {
 	this.wg.Wait()
 }
 
-func (this *AwakeSystem) Filter(component IComponent) {
+func (this *StartSystem) Filter(component IComponent) {
 	this.locker.Lock()
 	defer this.locker.Unlock()
 
-	s, ok := component.(IAwake)
+	s, ok := component.(IStart)
 	if ok {
 		this.components.PushBack(s)
 	}
 }
-
-func (this *AwakeSystem) IndependentFilter(op int, component IComponent) {
+func (this *StartSystem) IndependentFilter(op int, component IComponent) {
 	this.Filter(component)
 }

@@ -3,7 +3,7 @@ package config
 import (
 	"encoding/json"
 	"errors"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/logger"
 	"io/ioutil"
 	"os"
@@ -15,7 +15,7 @@ import (
 var Config *ConfigComponent
 
 type ConfigComponent struct {
-	Component.Base
+	ecs.Base
 	commonConfigPath  string
 	clusterConfigPath string
 	customConfigPath  string
@@ -25,7 +25,7 @@ type ConfigComponent struct {
 }
 
 func (this *ConfigComponent) IsUnique() int {
-	return Component.UNIQUE_TYPE_GLOBAL
+	return ecs.UNIQUE_TYPE_GLOBAL
 }
 
 func (this *ConfigComponent) Initialize() error {

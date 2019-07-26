@@ -1,4 +1,4 @@
-package Component_test
+package ecs_test
 
 var objectTemplateSimple = `
 {

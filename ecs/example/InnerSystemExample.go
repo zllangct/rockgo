@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/logger"
 	"strconv"
 	"sync"
@@ -9,29 +9,29 @@ import (
 )
 
 type TS struct {
-	Component.Base
+	ecs.Base
 	name int
 }
 
-func (this *TS) Start(ctx *Component.Context) {
+func (this *TS) Start(ctx *ecs.Context) {
 	println("start: ", this.name)
 }
 
-func (this *TS) Update(ctx *Component.Context) {
+func (this *TS) Update(ctx *ecs.Context) {
 	println("update: ", this.name)
 }
 
-func (this *TS) Awake(ctx *Component.Context) {
+func (this *TS) Awake(ctx *ecs.Context) {
 	println("awake: ", this.name)
 }
 
-func (this *TS) Destroy(ctx *Component.Context) {
+func (this *TS) Destroy(ctx *ecs.Context) {
 	println("destroy: ", this.name)
 }
 
 func main() {
 	//新建一个运行时
-	runtime := Component.NewRuntime(Component.Config{
+	runtime := ecs.NewRuntime(ecs.Config{
 		ThreadPoolSize: 20, //工作线程数量
 	})
 
@@ -39,7 +39,7 @@ func main() {
 	go runtime.UpdateFrameByInterval(time.Millisecond * 500)
 
 	//新建一个对象实体
-	o := Component.NewObject("o")
+	o := ecs.NewObject("o")
 	err := runtime.Root().AddObject(o)
 	if err != nil {
 		logger.Error(err)

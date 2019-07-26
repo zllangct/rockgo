@@ -1,20 +1,20 @@
-package Component_test
+package ecs_test
 
 import (
 	"testing"
 
 	"github.com/zllangct/RockGO/3rd/assert"
 	"github.com/zllangct/RockGO/3rd/iter"
-	"github.com/zllangct/RockGO/component"
+	"github.com/zllangct/RockGO/ecs"
 	"reflect"
 )
 
 func TestGetComponents(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
-		obj := Component.NewObject("Object 1")
+		obj := ecs.NewObject("Object 1")
 		obj.AddComponent(&FakeComponent{Id: "1"})
 		obj.AddComponent(&FakeComponent{Id: "1"})
-		os := obj.GetComponents(reflect.TypeOf((Component.IComponent)(nil)))
+		os := obj.GetComponents(reflect.TypeOf((ecs.IComponent)(nil)))
 		ci, err := iter.Collect(os)
 		t2 := reflect.TypeOf((*FakeComponent)(nil))
 		_ = t2
@@ -27,9 +27,9 @@ func TestGetComponents(T *testing.T) {
 
 func TestGetComponentsInChildren(T *testing.T) {
 	assert.Test(T, func(T *assert.T) {
-		obj := Component.NewObject()
-		obj2 := Component.NewObject()
-		obj3 := Component.NewObject()
+		obj := ecs.NewObject()
+		obj2 := ecs.NewObject()
+		obj3 := ecs.NewObject()
 		obj.AddObject(obj2)
 		obj2.AddObject(obj3)
 
