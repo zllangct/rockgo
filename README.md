@@ -30,24 +30,27 @@ Config：
                     "gate"                        //节点服务内容可自由搭配，单服或者分布式的选择只
                 ]                                 //需要修改配置文件，不需要修改任何一行代码，做到
             },                                    //单站式开发，随心部署
-            "node_login": {
+            "node_login": {                        
                 "LocalAddress": "0.0.0.0:6602",
-                "Role": [
-                    "login"
-                ]
-            },
+                "Role": [                         //分布式部署：
+                    "login"                       //物理机一：go run main.go -node node_master
+                ]                                 //物理机二：go run main.go -node node_gate
+            },                                    //物理机三：go run main.go -node node_room
             "node_login_gate": {
-                "LocalAddress": "0.0.0.0:6602",   //go run main.go -node node_gate_gate 这样启动的
+                "LocalAddress": "0.0.0.0:6603",   //go run main.go -node node_gate_gate 这样启动的
                 "Role": [                         //便是一个节点同时具备 login 和 gate 两个角色的节点
                     "login",
                     "gate" 
                 ]
             }
             "node_single": {
-                "LocalAddress": "0.0.0.0:6602",   //go run main.go -node single 这样启动的
+                "LocalAddress": "0.0.0.0:6604",   //go run main.go -node single 这样启动的
                 "Role": [                         //便是所有服务在同一节点，即单服模式，小负载
                     "login",                      //或者开发阶段使用，方便调试
                     "gate" 
+                    "master",
+                    "room",
+                    "location"
                 ]
             }
         },        
