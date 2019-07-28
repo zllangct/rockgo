@@ -116,7 +116,7 @@ func defaultServer() *Server {
 	return &Server{}
 }
 
-// Register publishes in the server the set of methods of the
+// RegisterGroup publishes in the server the set of methods of the
 // receiver value that satisfy the following conditions:
 //	- exported method of exported type
 //	- two arguments, both of exported type
@@ -130,7 +130,7 @@ func (server *Server) Register(rcvr interface{}) error {
 	return server.register(rcvr, "", false)
 }
 
-// RegisterName is like Register but uses the provided name for the type
+// RegisterName is like RegisterGroup but uses the provided name for the type
 // instead of the receiver's concrete type.
 func (server *Server) RegisterName(name string, rcvr interface{}) error {
 	return server.register(rcvr, name, true)
@@ -145,11 +145,11 @@ func (server *Server) register(rcvr interface{}, name string, useName bool) erro
 		sname = name
 	}
 	if sname == "" {
-		s := "rpc.Register: no service name for type " + s.typ.String()
+		s := "rpc.RegisterGroup: no service name for type " + s.typ.String()
 		return errors.New(s)
 	}
 	if !isExported(sname) && !useName {
-		s := "rpc.Register: type " + sname + " is not exported"
+		s := "rpc.RegisterGroup: type " + sname + " is not exported"
 		return errors.New(s)
 	}
 	s.name = sname
@@ -163,9 +163,9 @@ func (server *Server) register(rcvr interface{}, name string, useName bool) erro
 		// To help the user, see if a pointer receiver would work.
 		method := suitableMethods(reflect.PtrTo(s.typ), false)
 		if len(method) != 0 {
-			str = "rpc.Register: type " + sname + " has no exported methods of suitable type (hint: pass a pointer to value of that type)"
+			str = "rpc.RegisterGroup: type " + sname + " has no exported methods of suitable type (hint: pass a pointer to value of that type)"
 		} else {
-			str = "rpc.Register: type " + sname + " has no exported methods of suitable type"
+			str = "rpc.RegisterGroup: type " + sname + " has no exported methods of suitable type"
 		}
 		return errors.New(str)
 	}
@@ -196,7 +196,7 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 		argType := mtype.In(1)
 		if !isExportedOrBuiltinType(argType) {
 			//if reportErr {
-			//	logger.Info(fmt.Sprintf("rpc.Register: argument type of method %q is not exported: %q\n", mname, argType))
+			//	logger.Info(fmt.Sprintf("rpc.RegisterGroup: argument type of method %q is not exported: %q\n", mname, argType))
 			//}
 			continue
 		}
@@ -208,14 +208,14 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 			replyType = mtype.In(2)
 			if replyType.Kind() != reflect.Ptr {
 				//if reportErr {
-				//	logger.Info(fmt.Sprintf("rpc.Register: reply type of method %q is not a pointer: %q\n", mname, replyType))
+				//	logger.Info(fmt.Sprintf("rpc.RegisterGroup: reply type of method %q is not a pointer: %q\n", mname, replyType))
 				//}
 				continue
 			}
 			// reply type must be exported.
 			if !isExportedOrBuiltinType(replyType) {
 				//if reportErr {
-				//	logger.Info(fmt.Sprintf("rpc.Register: reply type of method %q is not exported: %q\n", mname, replyType))
+				//	logger.Info(fmt.Sprintf("rpc.RegisterGroup: reply type of method %q is not exported: %q\n", mname, replyType))
 				//}
 				continue
 			}
@@ -226,19 +226,19 @@ func suitableMethods(typ reflect.Type, reportErr bool) map[string]*methodType {
 		// Method needs one out.
 		if mtype.NumOut() != 1 {
 			//if reportErr {
-			//	logger.Info(fmt.Sprintf("rpc.Register: method %q has %d output parameters; needs exactly one\n", mname, mtype.NumOut()))
+			//	logger.Info(fmt.Sprintf("rpc.RegisterGroup: method %q has %d output parameters; needs exactly one\n", mname, mtype.NumOut()))
 			//}
 			continue
 		}
 		// The return type of the method must be error.
 		if returnType := mtype.Out(0); returnType != typeOfError {
 			//if reportErr {
-			//	logger.Info(fmt.Sprintf("rpc.Register: return type of method %q is %q, must be error\n", mname, returnType))
+			//	logger.Info(fmt.Sprintf("rpc.RegisterGroup: return type of method %q is %q, must be error\n", mname, returnType))
 			//}
 			continue
 		}
 		methods[mname] = &methodType{method: method, ArgType: argType, ReplyType: replyType}
-		logger.Info(fmt.Sprintf("rpc.Register: service: [ %s ], method [ %s ] is registed", typ.Elem().Name(), mname))
+		logger.Info(fmt.Sprintf("rpc.RegisterGroup: service: [ %s ], method [ %s ] is registed", typ.Elem().Name(), mname))
 	}
 	return methods
 }
@@ -574,10 +574,10 @@ func (server *Server) UpdateConnTimeout(conn net.Conn) {
 	}
 }
 
-// Register publishes the receiver's methods in the DefaultServer.
+// RegisterGroup publishes the receiver's methods in the DefaultServer.
 func Register(rcvr interface{}) error { return DefaultServer.Register(rcvr) }
 
-// RegisterName is like Register but uses the provided name for the type
+// RegisterName is like RegisterGroup but uses the provided name for the type
 // instead of the receiver's concrete type.
 func RegisterName(name string, rcvr interface{}) error {
 	return DefaultServer.RegisterName(name, rcvr)

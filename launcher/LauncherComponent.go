@@ -21,7 +21,7 @@ var ErrServerNotInit = errors.New("server is not initialize")
 
 /* 服务端启动组件 */
 type LauncherComponent struct {
-	ecs.Base
+	ecs.ComponentBase
 	componentGroup *Cluster.ComponentGroups
 	Config         *config.ConfigComponent
 	Close          chan struct{}

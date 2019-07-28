@@ -9,7 +9,7 @@ import (
 )
 
 type TS struct {
-	ecs.Base
+	ecs.ComponentBase
 	name int
 }
 

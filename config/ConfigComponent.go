@@ -15,7 +15,7 @@ import (
 var Config *ConfigComponent
 
 type ConfigComponent struct {
-	ecs.Base
+	ecs.ComponentBase
 	commonConfigPath  string
 	clusterConfigPath string
 	customConfigPath  string

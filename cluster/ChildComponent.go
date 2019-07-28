@@ -14,7 +14,7 @@ import (
 )
 
 type ChildComponent struct {
-	ecs.Base
+	ecs.ComponentBase
 	locker          sync.RWMutex
 	localAddr       string
 	rpcMaster       *rpc.TcpClient //master节点

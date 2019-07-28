@@ -17,7 +17,7 @@ var ErrNoThisService = errors.New("no this service")
 var ErrNoThisActor = errors.New("no this actor")
 
 type ActorProxyComponent struct {
-	ecs.Base
+	ecs.ComponentBase
 	locker        sync.RWMutex
 	nodeID        string
 	localActors   sync.Map //本地actor [Target,actor]

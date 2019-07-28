@@ -17,7 +17,7 @@ import (
 var ErrNodeOffline = errors.New("this node is offline")
 
 type NodeComponent struct {
-	ecs.Base
+	ecs.ComponentBase
 	locker          sync.RWMutex
 	AppName         string
 	localIP         string

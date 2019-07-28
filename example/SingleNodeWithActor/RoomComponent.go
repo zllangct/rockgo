@@ -7,7 +7,7 @@ import (
 )
 
 type RoomComponent struct {
-	ecs.Base
+	ecs.ComponentBase
 	Actor.ActorBase
 	players map[int]*Player
 	RoomID  int

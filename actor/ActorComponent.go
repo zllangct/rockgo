@@ -27,7 +27,7 @@ const (
 type ActorType int
 
 type ActorComponent struct {
-	ecs.Base
+	ecs.ComponentBase
 	ActorType    ActorType
 	ActorID      ActorID                //Actor地址
 	Proxy        *ActorProxyComponent   //Actor代理

@@ -5,7 +5,7 @@ import (
 	"github.com/zllangct/RockGO/actor"
 	"github.com/zllangct/RockGO/cluster"
 	"github.com/zllangct/RockGO/network"
-	"github.com/zllangct/RockGO/network/messageProtocol"
+	MessageProtocol "github.com/zllangct/RockGO/network/messageProtocol"
 )
 
 /*
@@ -25,58 +25,49 @@ type TestApi struct {
 //以及所需的消息序列化组件，可轻易切换为protobuf，msgpack等其他序列化工具
 func NewTestApi() *TestApi {
 	r := &TestApi{}
-	r.Init(r, nil, Testid2mt, &MessageProtocol.JsonProtocol{})
+	r.Instance(r).SetMT2ID(Testid2mt).SetProtocol(&MessageProtocol.JsonProtocol{})
 	return r
 }
 
 //协议接口 1  Hello
-func (this *TestApi) Hello(sess *network.Session, message *TestMessage) error {
+func (this *TestApi) Hello(sess *network.Session, message *TestMessage){
 	println(fmt.Sprintf("Hello,%s", message.Name))
 	p, err := this.GetParent()
 	if err == nil {
 		println(fmt.Sprintf("this api parent:%s", p.Name()))
 	}
 
-	//reply
-	err = sess.Emit(1, []byte(fmt.Sprintf("hello client %s", message.Name)))
-	if err != nil {
-		return err
-	}
-	return nil
+	//回复方式一
+	sess.Emit(1, []byte(fmt.Sprintf("hello client %s", message.Name)))
 }
 
 //协议接口 2 创建房间
-func (this *TestApi) CreateRoom(sess *network.Session, message *TestCreateRoom) error {
-	errReply := func() error {
+func (this *TestApi) CreateRoom(sess *network.Session, message *TestCreateRoom)  {
+	errReply := func() {
 		r := &CreateResult{
 			Result: false,
 		}
-		err := this.Reply(sess, r)
-		if err != nil {
-			return err
-		}
-		return nil
+		this.Reply(sess, r)
 	}
 	//升级session为actor服务调用器
 	serviceCaller, err := this.Upgrade(sess)
 	if err != nil {
-		return errReply()
+		errReply()
+		return
 	}
 	//调用创建房间服务
 	reply, err := serviceCaller.Call("room", Service_RoomMgr_NewRoom, sess.ID)
 	if err != nil {
-		return errReply()
+		errReply()
+		return
 	}
 	//reply 创建房间结果反馈到客户端
 	r := &CreateResult{
 		Result: true,
 		RoomID: reply[0].(int),
 	}
-	err = this.Reply(sess, r)
-	if err != nil {
-		return err
-	}
-	return nil
+	//回复方式二
+	this.Reply(sess, r)
 }
 
 //获取actor proxy组件

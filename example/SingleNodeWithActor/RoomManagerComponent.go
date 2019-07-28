@@ -7,7 +7,7 @@ import (
 )
 
 type RoomManagerComponent struct {
-	ecs.Base
+	ecs.ComponentBase
 	Actor.ActorBase
 	locker     sync.RWMutex
 	rooms      map[int]*RoomComponent

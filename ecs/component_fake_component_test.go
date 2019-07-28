@@ -8,7 +8,7 @@ import (
 )
 
 type FakeComponent struct {
-	ecs.Base
+	ecs.ComponentBase
 	Id    string
 	Count int
 }

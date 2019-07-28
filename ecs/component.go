@@ -47,38 +47,38 @@ type Context struct {
 }
 
 //组件基类
-type Base struct {
+type ComponentBase struct {
 	parent  *Object
 	runtime *Runtime
 	typ     reflect.Type
 }
 
-func (this *Base) Init(typ reflect.Type, runtime *Runtime, parent *Object) {
+func (this *ComponentBase) Init(typ reflect.Type, runtime *Runtime, parent *Object) {
 	this.typ = typ
 	this.runtime = runtime
 	this.parent = parent
 }
 
-func (this *Base) Type() reflect.Type {
+func (this *ComponentBase) Type() reflect.Type {
 	return this.typ
 }
 
-func (this *Base) Runtime() *Runtime {
+func (this *ComponentBase) Runtime() *Runtime {
 	return this.runtime
 }
 
-func (this *Base) Parent() *Object {
+func (this *ComponentBase) Parent() *Object {
 	return this.parent
 }
 
-func (this *Base) Root() *Object {
+func (this *ComponentBase) Root() *Object {
 	return this.runtime.Root()
 }
 
-func (this *Base) GetComponent(cpt interface{}) error {
+func (this *ComponentBase) GetComponent(cpt interface{}) error {
 	return this.Parent().Find(cpt)
 }
 
-func (this *Base) AddComponent(cpt IComponent) *Object {
+func (this *ComponentBase) AddComponent(cpt IComponent) *Object {
 	return this.Parent().AddComponent(cpt)
 }

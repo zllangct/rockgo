@@ -34,7 +34,9 @@ func main() {
 	}
 
 	g := &gate.DefaultGateComponent{}
-	g.NetAPI = NewTestApi() //非默认网关不必要这样初始化，在组件内初始化即可，此处是为了对默认网关注入
+
+	//非默认网关不必要这样初始化，在组件内初始化即可，此处是为了对默认网关注入
+	g.AddNetAPI(NewTestApi())
 
 	Server.AddComponentGroup("gate", []ecs.IComponent{g})
 	Server.AddComponentGroup("room", []ecs.IComponent{&RoomManagerComponent{}})

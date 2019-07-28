@@ -6,12 +6,6 @@
         "single"
     ],
     "NodeDefine": {
-        "node_actor_service": {
-            "LocalAddress": "0.0.0.0:6604",
-            "Role": [
-                "actor_service"
-            ]
-        },
         "node_gate": {
             "LocalAddress": "0.0.0.0:6601",
             "Role": [
@@ -22,12 +16,6 @@
             "LocalAddress": "0.0.0.0:6603",
             "Role": [
                 "location"
-            ]
-        },
-        "node_login": {
-            "LocalAddress": "0.0.0.0:6602",
-            "Role": [
-                "login"
             ]
         },
         "node_master": {

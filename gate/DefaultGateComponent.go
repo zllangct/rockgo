@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/zllangct/RockGO/cluster"
-	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/network"
 	"reflect"
@@ -14,7 +14,7 @@ import (
 )
 
 type DefaultGateComponent struct {
-	ecs.Base
+	ecs.ComponentBase
 	locker        sync.RWMutex
 	nodeComponent *Cluster.NodeComponent
 	clients       sync.Map // [sessionID,*session]
@@ -42,7 +42,9 @@ func (this *DefaultGateComponent) Awake(ctx *ecs.Context) {
 	if this.NetAPI == nil {
 		panic(errors.New("NetAPI is necessity of defaultGateComponent"))
 	}
-	this.NetAPI.SetParent(this.Parent())
+
+	this.NetAPI.Init(this.Parent())
+
 	conf := &network.ServerConf{
 		Proto:                "ws",
 		PackageProtocol:      &network.TdProtocol{},
@@ -61,6 +63,10 @@ func (this *DefaultGateComponent) Awake(ctx *ecs.Context) {
 	}
 }
 
+func (this *DefaultGateComponent)AddNetAPI(api network.NetAPI)  {
+	this.NetAPI = api
+}
+
 func (this *DefaultGateComponent) OnConnected(sess *network.Session) {
 	this.clients.Store(sess.ID, sess)
 	logger.Debug(fmt.Sprintf("client [ %s ] connected,session id :[ %s ]", sess.RemoteAddr(), sess.ID))
@@ -77,14 +83,11 @@ func (this *DefaultGateComponent) Destroy() error {
 
 func (this *DefaultGateComponent) SendMessage(sid string, message interface{}) error {
 	if s, ok := this.clients.Load(sid); ok {
-		err := this.NetAPI.Reply(s.(*network.Session), message)
-		if err != nil {
-			return err
-		}
+		this.NetAPI.Reply(s.(*network.Session), message)
 	}
 	return errors.New(fmt.Sprintf("this session id: [ %s ] not exist", sid))
 }
 
-func (this *DefaultGateComponent) Emit(sess *network.Session, message interface{}) error {
-	return this.NetAPI.Reply(sess, message)
+func (this *DefaultGateComponent) Emit(sess *network.Session, message interface{}) {
+	this.NetAPI.Reply(sess, message)
 }

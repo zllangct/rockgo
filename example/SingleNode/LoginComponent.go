@@ -11,7 +11,7 @@ import (
 )
 
 type LoginComponent struct {
-	ecs.Base
+	ecs.ComponentBase
 	locker        sync.RWMutex
 	nodeComponent *Cluster.NodeComponent
 	players       sync.Map // [account,*PlayerInfo]

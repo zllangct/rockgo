@@ -7,7 +7,7 @@ import (
 )
 
 type ComponentTemplate struct {
-	ecs.Base
+	ecs.ComponentBase
 	parent *ecs.Object
 }
 

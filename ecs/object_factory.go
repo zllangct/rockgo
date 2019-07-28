@@ -22,7 +22,7 @@ func NewObjectFactory() *ObjectFactory {
 	return &ObjectFactory{handlers: make(map[string]ComponentProvider)}
 }
 
-// Register a ComponentProvider that can be used to serialize and deserialize objects
+// RegisterGroup a ComponentProvider that can be used to serialize and deserialize objects
 func (factory *ObjectFactory) Register(provider ComponentProvider) {
 	factory.handlers[typeName(provider.Type())] = provider
 }

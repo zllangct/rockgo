@@ -7,40 +7,88 @@ import (
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils"
 	"reflect"
-	"runtime/debug"
 )
+
+
+
+type NetAPI interface {
+	//注入实例
+	Instance(instance interface{})*ApiBase
+
+	//初始化API
+	Init(parent ...*ecs.Object)
+
+	//注册API
+	RegisterGroup(api interface{})
+	Register(handler interface{})
+
+	//反序列化并路由到api处理函数
+	Route(sess *Session, messageID uint32, data []byte)
+	//序列化消息并回复
+	Reply(session *Session, message interface{})
+
+	//设置消息对应字典
+	SetMT2ID(mt2id  map[reflect.Type]uint32)*ApiBase
+	GetMT2ID()(mt2id map[reflect.Type]uint32)
+
+	//设置挂载对象
+	SetParent(object *ecs.Object)*ApiBase
+	GetParent()(parent *ecs.Object,err error)
+
+	//设置序列化协议
+	SetProtocol(protocol MessageProtocol)*ApiBase
+	GetProtocol()(protocol MessageProtocol)
+}
 
 type MessageProtocol interface {
 	Marshal(interface{}) ([]byte, error)
 	Unmarshal([]byte, interface{}) error
 }
 
-type NetAPI interface {
-	Init(interface{}, *ecs.Object, map[reflect.Type]uint32, MessageProtocol) //初始化
-	Route(*Session, uint32, []byte)                                          //反序列化并路由到api处理函数
-	//MessageEncode(interface{})(uint32,[]byte,error) //消息序列化
-	SetParent(object *ecs.Object) //设置
-	Reply(session *Session, message interface{}) error
-}
-
 type methodType struct {
+	resv     reflect.Value
 	method   reflect.Value
-	ArgsType reflect.Type
-}
-
-/*  仅初始化route mt2id 会写入，运行过程中并无竞态 */
-type ApiBase struct {
-	route  map[uint32]*methodType
-	mt2id  map[reflect.Type]uint32
-	protoc MessageProtocol
-	parent *ecs.Object
-	resv   reflect.Value
-	isInit bool
+	argsType reflect.Type
 }
 
 var ErrNotInit = errors.New("this api is not initialized")
 var ErrApiHandlerParamWrong = errors.New("this handler param wrong")
 var ErrApiRepeated = errors.New("this ApiBase is  repeated")
+
+// route mt2id 仅在初始化阶段写入，所以并发状态并无竞态
+var route = map[uint32]*methodType{}
+var mt2id = map[reflect.Type]uint32{}
+
+type ApiBase struct {
+	//注入子类
+	instance interface{}
+	protoc MessageProtocol
+	parent *ecs.Object
+	isInit bool
+}
+
+func (this *ApiBase)Instance(instance interface{})*ApiBase  {
+	this.instance = instance
+	return this
+}
+
+func (this *ApiBase) Init(parent ...*ecs.Object) {
+	if route == nil{
+		route = map[uint32]*methodType{}
+	}
+
+	if len(parent)>0 {
+		this.parent = parent[0]
+	}
+
+	if  this.protoc == nil || this.parent ==nil || this.instance == nil{
+		panic(ErrNotInit)
+	}
+
+	this.isInit = true
+
+	this.RegisterGroup(this.instance)
+}
 
 func (this *ApiBase) checkInit() {
 	if !this.isInit {
@@ -48,13 +96,37 @@ func (this *ApiBase) checkInit() {
 	}
 }
 
-func (this *ApiBase) SetParent(parent *ecs.Object) {
-	this.checkInit()
+func (this *ApiBase)SetProtocol(protocol MessageProtocol) *ApiBase {
+	this.protoc = protocol
+	return this
+}
+
+func (this *ApiBase)GetProtocol()(protocol MessageProtocol)  {
+	return this.protoc
+}
+
+func (this *ApiBase) SetMT2ID(mtToId  map[reflect.Type]uint32)*ApiBase {
+	for key, value := range mtToId {
+		if v,ok:=mt2id[key];ok {
+			logger.Error(fmt.Sprintf("this message [ %s ] id is repeated between [ %d ] and [ %d ]",
+				key.Name(),v,value))
+		}else{
+			mt2id[key] = value
+		}
+	}
+	return this
+}
+
+func (this *ApiBase) GetMT2ID()map[reflect.Type]uint32 {
+	return mt2id
+}
+
+func (this *ApiBase) SetParent(parent *ecs.Object) *ApiBase{
 	this.parent = parent
+	return this
 }
 
 func (this *ApiBase) GetParent() (*ecs.Object, error) {
-	this.checkInit()
 	var err error
 	if this.parent == nil {
 		err = errors.New("this api has not parent")
@@ -62,80 +134,62 @@ func (this *ApiBase) GetParent() (*ecs.Object, error) {
 	return this.parent, err
 }
 
-func (this *ApiBase) Reply(sess *Session, message interface{}) error {
-	t, m, err := this.MessageEncode(message)
-	if err != nil {
-		return err
-	}
-	return sess.Emit(t, m)
-}
-
-func (this *ApiBase) MessageEncode(message interface{}) (uint32, []byte, error) {
-	this.checkInit()
-	b, err := this.protoc.Marshal(message)
-	if err != nil {
-		return 0, nil, err
-	}
-	t := reflect.TypeOf(message)
-	if id, ok := this.mt2id[t]; ok {
-		return id, b, nil
-	} else {
-		switch t.Kind() {
-		case reflect.Interface:
-		case reflect.Struct:
-			return 0, nil, errors.New(fmt.Sprintf("this message %s must be pointer,stead of &%s.", t.Name(), t.Name()))
-		}
-		return 0, nil, errors.New(fmt.Sprintf("this message type: %s not be registered", t.Name()))
-	}
-}
-
-func (this *ApiBase) Init(subStruct interface{}, parent *ecs.Object, id2mt map[reflect.Type]uint32, protocol MessageProtocol) {
-	this.route = map[uint32]*methodType{}
-	this.mt2id = id2mt
-	this.protoc = protocol
-	this.isInit = true
-	this.parent = parent
-	this.Register(subStruct)
-}
-
 func (this *ApiBase) Route(sess *Session, messageID uint32, data []byte) {
 	this.checkInit()
-	defer (func() {
-		if r := recover(); r != nil {
-			var str string
-			switch r.(type) {
-			case error:
-				str = r.(error).Error()
-			case string:
-				str = r.(string)
-			}
-			err := errors.New(str + "\n" + string(debug.Stack()))
-			logger.Error(err)
-		}
-	})()
-	if mt, ok := this.route[messageID]; ok {
-		v := reflect.New(mt.ArgsType.Elem())
+	defer utils.CheckError()
+
+	if mt, ok := route[messageID]; ok {
+		v := reflect.New(mt.argsType.Elem())
 		err := this.protoc.Unmarshal(data, v.Interface())
 		if err != nil {
-			logger.Debug(fmt.Sprintf("unmarshal message failed :%s ,%s", mt.ArgsType.Elem().Name(), err))
+			logger.Debug(fmt.Sprintf("unmarshal message failed :%s ,%s", mt.argsType.Elem().Name(), err))
 			return
 		}
-		args := []reflect.Value{
-			this.resv,
-			reflect.ValueOf(sess),
-			v,
+		var args []reflect.Value
+		if mt.resv.IsNil() {
+			args = []reflect.Value{
+				mt.resv,
+				reflect.ValueOf(sess),
+				v,
+			}
+		}else{
+			args = []reflect.Value{
+				mt.resv,
+				reflect.ValueOf(sess),
+				v,
+			}
 		}
-		re := mt.method.Call(args)
-		errinterface := re[0].Interface()
-		if errinterface != nil && errinterface.(error) != nil {
-			logger.Error(errinterface)
-		}
+		mt.method.Call(args)
 		return
 	}
 	logger.Debug(fmt.Sprintf("this ApiBase:%d not found", messageID))
 }
 
-func (this *ApiBase) On(handler interface{}) {
+func (this *ApiBase) Reply(sess *Session, message interface{})  {
+	this.checkInit()
+	defer utils.CheckError()
+
+	t := reflect.TypeOf(message)
+	if id, ok := mt2id[t]; !ok {
+		switch t.Kind() {
+		case reflect.Struct:
+			 panic(errors.New(fmt.Sprintf("this message %s must be pointer,stead of &%s.", t.Name(), t.Name())))
+		default:
+			 panic(errors.New(fmt.Sprintf("this message type: %s not be registered", t.Name())))
+		}
+	}else{
+		m, err := this.protoc.Marshal(message)
+		if err != nil {
+			panic(err)
+		}
+		panic(sess.Emit(id, m))
+	}
+}
+
+var typeOfError = reflect.TypeOf((*error)(nil)).Elem()
+var st = reflect.TypeOf(&Session{})
+
+func (this *ApiBase) Register(handler interface{}) {
 	this.checkInit()
 	mValue := reflect.ValueOf(handler)
 	mType := reflect.TypeOf(handler)
@@ -143,28 +197,41 @@ func (this *ApiBase) On(handler interface{}) {
 	if paramsCount != 2 {
 		panic(ErrApiHandlerParamWrong)
 	}
-	argsType := mType.In(2)
-	if index, ok := this.mt2id[argsType]; ok {
-		if _, exist := this.route[index]; exist {
+	sessType := mType.In(0)
+	if sessType != st {
+		return
+	}
+
+	argsType := mType.In(1)
+	if !utils.IsExportedOrBuiltinType(argsType) {
+		return
+	}
+
+	if index, ok := mt2id[argsType]; ok {
+		if _, exist := route[index]; exist {
 			panic(ErrApiRepeated)
 		} else {
-			this.route[index] = &methodType{
+			route[index] = &methodType{
 				method:   mValue,
-				ArgsType: argsType,
+				argsType: argsType,
 			}
 		}
 	}
 }
 
-var typeOfError = reflect.TypeOf((*error)(nil)).Elem()
-
-func (this *ApiBase) Register(api interface{}) {
+func (this *ApiBase) RegisterGroup(api interface{}) {
 	this.checkInit()
-	this.resv = reflect.ValueOf(api)
-	typ := reflect.TypeOf(api)
-	logger.Info(fmt.Sprintf("====== start to register API group: [ %s ] ======", typ.Elem().Name()))
 
-	st := reflect.TypeOf(&Session{})
+	typ := reflect.TypeOf(api)
+
+	//检查类型，如果是处理函数，改用 Register
+	switch typ.Kind() {
+	case reflect.Func:
+		this.Register(api)
+		return
+	}
+
+	logger.Info(fmt.Sprintf("====== start to register API group: [ %s ] ======", typ.Elem().Name()))
 	for m := 0; m < typ.NumMethod(); m++ {
 		method := typ.Method(m)
 		mtype := method.Type
@@ -188,21 +255,23 @@ func (this *ApiBase) Register(api interface{}) {
 			continue
 		}
 		// Method needs one out.
-		if mtype.NumOut() != 1 {
-			continue
-		}
-		// The return type of the method must be error.
-		if returnType := mtype.Out(0); returnType != typeOfError {
-			continue
-		}
+		//if mtype.NumOut() != 1 {
+		//	continue
+		//}
 
-		if index, ok := this.mt2id[argsType]; ok {
-			if _, exist := this.route[index]; exist {
+		// The return type of the method must be error.
+		//if returnType := mtype.Out(0); returnType != typeOfError {
+		//	continue
+		//}
+
+		if index, ok := mt2id[argsType]; ok {
+			if _, exist := route[index]; exist {
 				panic(ErrApiRepeated)
 			} else {
-				this.route[index] = &methodType{
+				route[index] = &methodType{
+					resv : reflect.ValueOf(api),
 					method:   method.Func,
-					ArgsType: argsType,
+					argsType: argsType,
 				}
 			}
 			logger.Info(fmt.Sprintf("Add api: [ %s ], handler: [ %s.%s(*network.Session,*%s) ]", argsType.Elem().Name(), typ.Elem().Name(), mname, argsType.Elem().Name()))
@@ -212,6 +281,7 @@ func (this *ApiBase) Register(api interface{}) {
 }
 
 func (this *ApiBase) GetMessageType(message interface{}) (uint32, bool) {
-	id, ok := this.mt2id[reflect.TypeOf(message)]
+	this.checkInit()
+	id, ok := mt2id[reflect.TypeOf(message)]
 	return id, ok
 }

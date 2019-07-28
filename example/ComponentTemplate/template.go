@@ -11,7 +11,7 @@ import (
 )
 
 type TemplateComponent struct {
-	ecs.Base                     //Component 基类 必须继承
+	ecs.ComponentBase            //Component 基类 必须继承
 	Actor.ActorBase              //继承Actor基类，不使用actor模式时，不必继承
 	locker          sync.RWMutex //锁
 	member1         int          //成员变量1

@@ -19,7 +19,7 @@ import (
 // Add remove child adds a new child every second.
 // When it has 10 children, it removes itself.
 type AddRemoveChild struct {
-	ecs.Base
+	ecs.ComponentBase
 	parent  *ecs.Object
 	count   int
 	elapsed float32
@@ -52,7 +52,7 @@ func (c *AddRemoveChild) Update(context *ecs.Context) {
 
 // DumpState dumps an object tree of the runtime every 1/2 seconds
 type DumpState struct {
-	ecs.Base
+	ecs.ComponentBase
 	elapsed float32
 }
 
@@ -70,7 +70,7 @@ func (c *DumpState) Update(context *ecs.Context) {
 }
 
 type Hello struct {
-	ecs.Base
+	ecs.ComponentBase
 }
 
 func (this *Hello) Start(context *ecs.Context) {

@@ -17,7 +17,7 @@ const (
 )
 
 type MasterComponent struct {
-	ecs.Base
+	ecs.ComponentBase
 	locker          *sync.RWMutex
 	nodeComponent   *NodeComponent
 	Nodes           map[string]*NodeInfo

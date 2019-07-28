@@ -97,7 +97,7 @@ func (client *TcpClient) send(call *Call) {
 	client.reqMutex.Lock()
 	defer client.reqMutex.Unlock()
 
-	// Register this call.
+	// RegisterGroup this call.
 	client.mutex.Lock()
 	if client.shutdown || client.closing {
 		client.mutex.Unlock()
@@ -130,7 +130,7 @@ func (client *TcpClient) sendWithoutReply(call *Call) {
 	client.reqMutex.Lock()
 	defer client.reqMutex.Unlock()
 
-	// Register this call.
+	// RegisterGroup this call.
 	if client.shutdown || client.closing {
 		call.Error = ErrShutdown
 		call.done()
