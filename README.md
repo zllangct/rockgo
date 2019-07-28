@@ -12,7 +12,7 @@ tcp、websocket常用网络协议，同时提供优雅的协议接口，可让�
 ### Quick start：
 
 当然用最简单的hello world告诉你一切都是如此的简单，
-详细代码参见example： [SingleNode](https://github.com/zllangct/RockGO/tree/master/example/SingleNode)  ，更多的用法，参见example目录。
+完整代码参见example： [SingleNode](https://github.com/zllangct/RockGO/tree/master/example/SingleNode)  ，更多的用法，参见example目录。
 
 Config：
 ```
@@ -34,6 +34,20 @@ Config：
                 "LocalAddress": "0.0.0.0:6602",
                 "Role": [
                     "login"
+                ]
+            },
+            "node_login_gate": {
+                "LocalAddress": "0.0.0.0:6602",   //go run main.go -node node_gate_gate 这样启动的
+                "Role": [                         //便是一个节点同时具备 login 和 gate 两个角色的节点
+                    "login",
+                    "gate" 
+                ]
+            }
+            "node_single": {
+                "LocalAddress": "0.0.0.0:6602",   //go run main.go -node single 这样启动的
+                "Role": [                         //便是所有服务在同一节点，即单服模式，小负载
+                    "login",                      //或者开发阶段使用，方便调试
+                    "gate" 
                 ]
             }
         },        
@@ -167,24 +181,24 @@ type LtdProtocol struct{}
 
 //完整包中解析出消息ID和数据部分
 func (s *LtdProtocol) ParseMessage(ctx context.Context,data []byte)([]uint32,[]byte){
-	mt := binary.BigEndian.Uint32(data[:4])
-	return []uint32{mt}, data[4:]
+    mt := binary.BigEndian.Uint32(data[:4])
+    return []uint32{mt}, data[4:]
 }
 
 //检查包是否接受完整
 func (s *LtdProtocol) ParsePackage(buff []byte) (pkgLen, status int) {
-	if len(buff) < 4 {
-		return 0, PACKAGE_LESS
-	}
-	length := binary.BigEndian.Uint32(buff[:4])
-
-	if length > 1048576000 || len(buff) > 1048576000 { // 1000MB
-		return 0, PACKAGE_ERROR
-	}
-	if len(buff) < int(length) {
-		return 0, PACKAGE_LESS
-	}
-	return int(length), PACKAGE_FULL
+    if len(buff) < 4 {
+        return 0, PACKAGE_LESS
+    }
+    length := binary.BigEndian.Uint32(buff[:4])
+    
+    if length > 1048576000 || len(buff) > 1048576000 { // 1000MB
+        return 0, PACKAGE_ERROR
+    }
+    if len(buff) < int(length) {
+        return 0, PACKAGE_LESS
+    }
+    return int(length), PACKAGE_FULL
 }
 
 
@@ -195,13 +209,13 @@ type TdProtocol struct{}
 
 //解析消息ID和消息数据
 func (s *TdProtocol) ParseMessage(ctx context.Context,data []byte)([]uint32,[]byte){
-	mt := binary.BigEndian.Uint32(data[:4])
-	return []uint32{mt}, data[4:]
+    mt := binary.BigEndian.Uint32(data[:4])
+    return []uint32{mt}, data[4:]
 }
 
 //websocket 自带粘包处理，此处无需手动处理
 func (s *TdProtocol) ParsePackage(buff []byte) (pkgLen, status int) {
-	return 0,0
+    return 0,0
 }
 ```
 #### 5. 消息序列化协议
@@ -212,8 +226,8 @@ func (s *TdProtocol) ParsePackage(buff []byte) (pkgLen, status int) {
 ```go
 //消息解析协议
 type MessageProtocol interface {
-	Marshal( interface{})([]byte,error)         //序列化
-	Unmarshal( []byte, interface{})error        //反序列化
+    Marshal( interface{})([]byte,error)         //序列化
+    Unmarshal( []byte, interface{})error        //反序列化
 }
 ```
 #### 7. 业务接口
@@ -223,26 +237,31 @@ type MessageProtocol interface {
 ###### &emsp;&emsp;(1). 结构体继承 ApiBase 
 ###### &emsp;&emsp;(2). 函数必须为结构体导出函数
 ###### &emsp;&emsp;(3). 函数必须为以下结构：func (this *XXX) FunctionName(sess *network.Session,message *MessageStruct)
-###### &emsp;&emsp; 第一参数为 会话Session，第二参数为消息对应的结构体，框架会更加第二参数去判断处理哪里一条消息。
+###### &emsp;&emsp; 第一参数为 会话Session，第二参数为消息对应的结构体，框架会更加第二参数去判断处理对应的消息。
 &emsp;&emsp;参见:
 ```go
-//协议对应字典
+//协议对应字典，推荐使用工具生成该文件，以便前后端对应准确
+//稍后会提供相应工具，目前完成了protobuf 导出c# 和 golang 的协议对应
+//完善之后会更新至本仓库，由于过于简单，客官可自行完成
+// 原理：1）读取proto文件 2）提取消息名 3）按照同一序号生成c#、golang或者其他语言文件（字符串拼接）
+
 var Testid2mt = map[reflect.Type]uint32{
-	reflect.TypeOf(&TestMessage{}):1,
-	reflect.TypeOf(&TestLogin{}):2,
-	reflect.TypeOf(&PlayerInfo{}):3,
+    reflect.TypeOf(&TestMessage{}):1,
+    reflect.TypeOf(&TestLogin{}):2,
+    reflect.TypeOf(&PlayerInfo{}):3,
 }
+
 //消息定义
 type TestMessage struct {
-	Name string
+    Name string
 }
 type TestReply struct {
-	Result bool
+    Result bool
 }
 
 //接口组定义
 type TestApi struct {
-	network.ApiBase         //继承ApiBase
+    network.ApiBase         //继承ApiBase
 }
 
 /*
@@ -250,28 +269,25 @@ type TestApi struct {
     以及所需的消息序列化组件，可轻易切换为protobuf，msgpack等其他序列化工具
 */
 func NewTestApi() *TestApi  {
-	r:=&TestApi{}
-	r.Init(r,nil,Testid2mt,&MessageProtocol.JsonProtocol{})
-	return r
+    r:=&TestApi{}
+    r.Instance(r).SetMT2ID(Testid2mt).SetProtocol(&MessageProtocol.JsonProtocol{})
+    return r
 }
 
-//协议接口1  Hello
-func (this *TestApi)Hello(sess *network.Session,message *TestMessage) error {
-	//打印消息
-	println(fmt.Sprintf("this api parent:%s",p.Name()))
+//协议接口1  Hello,框架会自动判断TestMessage类型消息，自动路由至此函数处理
+func (this *TestApi)Hello(sess *network.Session,message *TestMessage) {
+    //打印消息
+    println(fmt.Sprintf("this api parent:%s",p.Name()))
 
-	//回复消息
-	res:=&TestReply{
-    		Result:true,
+    //回复消息
+    res:=&TestReply{
+        Result:true,
     }
-    err=this.Reply(sess,res)
-    if err!=nil {
-        return err
-    }
+    this.Reply(sess,res)
 }
 
-//协议接口2  other
-func (this *TestApi) Other(sess *network.Session,message *Other) error {
+//协议接口2  other，同理，该函数处理 Other 类型消息
+func (this *TestApi) Other(sess *network.Session,message *Other) {
 	......
 }
 ```
@@ -279,9 +295,8 @@ func (this *TestApi) Other(sess *network.Session,message *Other) error {
 &emsp;&emsp;当然用户可以不用使用框架自带的消息路由方法，可以实现NetAPI接口自定义消息路由规则：
 ```go
 type NetAPI interface {
-	Init(interface{},*Component.Object, map[reflect.Type]uint32,MessageProtocol)  //初始化
+        Init()                                                                        //初始化
 	Route(*Session, uint32, []byte)	                                              //反序列化并路由到api处理函数
-        SetParent(object *Component.Object)		                              //设置父对象
 	Reply(session *Session,message interface{})error                              //序列化消息并发送至客户端
 }
 ```
@@ -304,8 +319,7 @@ type NetAPI interface {
 ###### &emsp;&emsp;(5). 增加KCP协议支持
 ###### &emsp;&emsp;(6). 后台管理页面、数据统计页面
 ###### &emsp;&emsp;(7). 节点平滑升级
-###### &emsp;&emsp;(8). 提供具有单点登录模型
-###### &emsp;&emsp;(9). 提供protobuf 前后端协议自动化对应工具
+###### &emsp;&emsp;(8). 提供protobuf 前后端协议自动化对应工具
 ###### &emsp;&emsp;。。。。。。
 #### 9. 写在后面
 &emsp;&emsp;  致谢：  [gin — gin-gonic](https://github.com/gin-gonic/gin)、[websocket—gorilla](https://github.com/gorilla/websocket)

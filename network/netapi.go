@@ -13,14 +13,14 @@ import (
 
 type NetAPI interface {
 	//注入实例
-	Instance(instance interface{})*ApiBase
+	//Instance(instance interface{})*ApiBase
 
 	//初始化API
 	Init(parent ...*ecs.Object)
 
 	//注册API
-	RegisterGroup(api interface{})
-	Register(handler interface{})
+	//RegisterGroup(api interface{})
+	//Register(handler interface{})
 
 	//反序列化并路由到api处理函数
 	Route(sess *Session, messageID uint32, data []byte)
@@ -28,16 +28,16 @@ type NetAPI interface {
 	Reply(session *Session, message interface{})
 
 	//设置消息对应字典
-	SetMT2ID(mt2id  map[reflect.Type]uint32)*ApiBase
-	GetMT2ID()(mt2id map[reflect.Type]uint32)
+	//SetMT2ID(mt2id  map[reflect.Type]uint32)*ApiBase
+	//GetMT2ID()(mt2id map[reflect.Type]uint32)
 
 	//设置挂载对象
-	SetParent(object *ecs.Object)*ApiBase
-	GetParent()(parent *ecs.Object,err error)
+	//SetParent(object *ecs.Object)*ApiBase
+	//GetParent()(parent *ecs.Object,err error)
 
 	//设置序列化协议
-	SetProtocol(protocol MessageProtocol)*ApiBase
-	GetProtocol()(protocol MessageProtocol)
+	//SetProtocol(protocol MessageProtocol)*ApiBase
+	//GetProtocol()(protocol MessageProtocol)
 }
 
 type MessageProtocol interface {
