@@ -167,7 +167,10 @@ func (this *NodeComponent) clientCallback(event string, data ...interface{}) {
 func (this *NodeComponent) GetNodeClient(addr string) (*rpc.TcpClient, error) {
 a:
 	if v, ok := this.rpcClient.Load(addr); ok {
-		return v.(*rpc.TcpClient), nil
+		client:=v.(*rpc.TcpClient)
+		if !client.IsClosed() {
+			return client, nil
+		}
 	}
 
 	this.locker.Lock()
@@ -388,18 +391,7 @@ func (this *NodeComponent) ConnectToNode(addr string, callback func(event string
 	if err != nil {
 		return nil, err
 	}
-	count := 0
-	for err != nil {
-		//time.Sleep(time.Millisecond * 500)
-		err = client.Reconnect()
 
-		if err != nil {
-			count++
-			if count > 3 {
-				return nil, err
-			}
-		}
-	}
 	this.rpcClient.Store(addr, client)
 
 	logger.Info(fmt.Sprintf("  connect to node: [ %s ] success", addr))

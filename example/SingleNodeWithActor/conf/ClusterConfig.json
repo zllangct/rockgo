@@ -3,7 +3,7 @@
     "LocalAddress": "0.0.0.0:6666",
     "AppName": "defaultApp",
     "Role": [
-        "single"
+        "master"
     ],
     "NodeDefine": {
         "node_gate": {
@@ -18,15 +18,30 @@
                 "location"
             ]
         },
+        "node_login": {
+            "LocalAddress": "0.0.0.0:6602",
+            "Role": [
+                "login"
+            ]
+        },
         "node_master": {
             "LocalAddress": "0.0.0.0:6666",
             "Role": [
-                "master"
+                "single"
             ]
         },
         "node_room": {
             "LocalAddress": "0.0.0.0:6605",
             "Role": [
+                "room"
+            ]
+        },
+        "node_single": {
+            "LocalAddress": "0.0.0.0:6666",
+            "Role": [
+                "master",
+                "gate",
+                "login",
                 "room"
             ]
         }
@@ -38,6 +53,5 @@
     "IsLocationMode": true,
     "LocationSyncInterval": 500,
     "NetConnTimeout": 9000,
-    "NetListenAddress": "0.0.0.0:5555",
-    "IsActorModel": true
+    "NetListenAddress": "0.0.0.0:5555"
 }

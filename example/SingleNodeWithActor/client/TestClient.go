@@ -40,7 +40,7 @@ func main() {
 				log.Println("read:", err)
 				return
 			}
-			log.Printf("创建房间成功: %s", message)
+			log.Printf("创建结果: %s", message)
 		}
 	}()
 

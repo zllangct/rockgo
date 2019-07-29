@@ -62,12 +62,13 @@ type TcpClient struct {
 	reqMutex sync.Mutex // protects following
 	request  Request
 
-	mutex         sync.Mutex // protects following
-	seq           uint64
-	pending       map[uint64]*Call
-	closing       bool // user has called Close
-	shutdown      bool // server has told us to stop
-	CloseCallback func(event string, data ...interface{})
+	mutex    sync.Mutex // protects following
+	seq      uint64
+	pending  map[uint64]*Call
+	closeHeartbeat chan struct{}
+	closing  bool // user has called Close
+	shutdown bool // server has told us to stop
+	Callback func(event string, data ...interface{})
 }
 
 // A ClientCodec implements writing of RPC requests and
@@ -219,7 +220,9 @@ func (client *TcpClient) input() {
 		call.Error = err
 		call.done()
 	}
-	client.CloseCallback("close", client.conn.RemoteAddr().String())
+	if client.Callback !=nil {
+		client.Callback("close", client.conn.RemoteAddr().String())
+	}
 	client.mutex.Unlock()
 	client.reqMutex.Unlock()
 	if debugLog && err != io.EOF && !closing {
@@ -240,16 +243,17 @@ func (call *Call) done() {
 	}
 }
 
-func (client *TcpClient) StartHeartBeat() {
+func (client *TcpClient) StartHeartBeat(close chan struct{}) {
 	if !DebugMode {
 		pingCount := 0
 		res := &HeartBeatReuslt{}
 		c := time.NewTicker(HeartInterval)
 		for {
 			res.Result = 0
-			<-c.C
-			if client.closing || client.shutdown {
+			select {
+			case <-close:
 				return
+			case <-c.C:
 			}
 			err := client.Call("InnerResponse.HeartBeat", struct{}{}, res)
 			if err != nil || res.Result != 1 {
@@ -258,6 +262,7 @@ func (client *TcpClient) StartHeartBeat() {
 					logger.Error("tcp client timeout")
 					c.Stop()
 					client.Close()
+					return
 				}
 			} else {
 				pingCount = 0
@@ -268,21 +273,6 @@ func (client *TcpClient) StartHeartBeat() {
 
 func (client *TcpClient) LocalAddr() string {
 	return client.conn.LocalAddr().String()
-}
-
-func (client *TcpClient) Reconnect() error {
-	if !client.closing && !client.shutdown {
-		return nil
-	}
-	if client.closing && !client.shutdown {
-		return ErrConnClosing
-	}
-	conn, err := net.Dial(client.conn.RemoteAddr().Network(), client.conn.RemoteAddr().String())
-	if err != nil {
-		return err
-	}
-	*client = *NewClientWithConn(conn)
-	return nil
 }
 
 // NewClient returns a new TcpClient to handle requests to the
@@ -314,12 +304,17 @@ func NewClientWithConn(conn net.Conn, callback ...func(event string, data ...int
 		codec:   codec,
 		pending: make(map[uint64]*Call),
 	}
-	go client.input()
-	go client.StartHeartBeat()
+
 	if len(callback) > 0 {
-		client.CloseCallback = callback[0]
-		client.CloseCallback("connected", client)
+		client.Callback = callback[0]
+		client.Callback("connected", client)
 	}
+
+	go client.input()
+
+	client.closeHeartbeat=make(chan struct{})
+	go client.StartHeartBeat(client.closeHeartbeat)
+
 	return client
 }
 
@@ -399,19 +394,15 @@ func Dial(network, address string, callback ...func(event string, data ...interf
 // Close calls the underlying codec's Close method. If the connection is already
 // shutting down, ErrShutdown is returned.
 func (client *TcpClient) Close() error {
+	err := client.codec.Close()
 	client.mutex.Lock()
 	if client.closing {
 		client.mutex.Unlock()
 		return ErrShutdown
 	}
 	client.closing = true
+	client.closeHeartbeat<- struct{}{}
 	client.mutex.Unlock()
-	err := client.codec.Close()
-	if err == nil {
-		//if client.CloseCallback!=nil && !client.shutdown{
-		//	go client.CloseCallback("close",client)
-		//}
-	}
 	return err
 }
 

@@ -1,6 +1,8 @@
 package Actor
 
-import "errors"
+import (
+	"errors"
+)
 
 /*
 	ActorMessage Information
@@ -28,13 +30,13 @@ func (this *ActorMessageInfo) IsNeedReply() bool {
 }
 
 func (this *ActorMessageInfo) Reply(args ...interface{}) error {
-	return this.ReplyWithTittle("", args...)
+	return this.ReplyWithService("", args...)
 }
 
-func (this *ActorMessageInfo) ReplyWithTittle(tittle string, args ...interface{}) error {
+func (this *ActorMessageInfo) ReplyWithService(service string, args ...interface{}) error {
 	if this.done != nil {
-		*this.reply = &ActorMessage{
-			Service: tittle,
+		**this.reply = ActorMessage{
+			Service: service,
 			Data:    args,
 		}
 		return nil

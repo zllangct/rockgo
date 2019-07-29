@@ -37,6 +37,9 @@ func (this ActorID) Equal(target ActorID) bool {
 }
 
 func (this ActorID) String() string {
+	if len(this) == 0 {
+		return "unknown"
+	}
 	buf := bytes.Buffer{}
 	for index, value := range this {
 		buf.WriteString(value)

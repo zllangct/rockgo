@@ -280,7 +280,7 @@ func NewTestApi() *TestApi  {
 //协议接口1  Hello,框架会自动判断TestMessage类型消息，自动路由至此函数处理
 func (this *TestApi)Hello(sess *network.Session,message *TestMessage) {
     //打印消息
-    println(fmt.Sprintf("this api parent:%s",p.Name()))
+    println(fmt.Sprintf("Hello,%s", message.Name))
 
     //回复消息
     res:=&TestReply{

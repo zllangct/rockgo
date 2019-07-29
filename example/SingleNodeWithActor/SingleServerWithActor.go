@@ -22,9 +22,11 @@ func main() {
 	flag.StringVar(&nodeConfName, "node", "", "node info")
 	flag.Parse()
 
+	/*  pprof */
 	go func() {
-		logger.Info(http.ListenAndServe("localhost:7070", nil))
+		logger.Info(http.ListenAndServe("localhost:7077", nil))
 	}()
+
 	Server = RockGO.DefaultServer()
 
 	//重选节点

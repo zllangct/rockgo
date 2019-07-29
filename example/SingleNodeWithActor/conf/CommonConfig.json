@@ -1,6 +1,6 @@
 {
-    "Debug":false,
-    "RuntimeMaxWorker": 12,
+    "Debug": true,
+    "RuntimeMaxWorker": 8,
     "LogLevel": 1,
     "LogPath": "./log",
     "LogMode": 1,

@@ -104,7 +104,7 @@ func (this *ActorProxyComponent) GetActorService(role string, serviceName string
 		return nil, err
 	}
 	var reply ActorID
-	err = client.Call("ActorProxyService.ServiceInquiry", service, &reply)
+	err = client.Call("ActorProxyService.ServiceInquiry", serviceName, &reply)
 	if err != nil {
 		return nil, err
 	}
@@ -161,8 +161,13 @@ func (this *ActorProxyComponent) LocalTell(actorID ActorID, messageInfo *ActorMe
 
 //通过actor id 发送消息
 func (this *ActorProxyComponent) Emit(actorID ActorID, messageInfo *ActorMessageInfo) error {
-	logger.Debug(fmt.Sprintf("actor: [ %s ] send message [ %s ] to actor [ %s ]", messageInfo.Sender.ID().String(), messageInfo.Message.Service, actorID.String()))
+	senderID:="unknown"
+	if messageInfo.Sender != nil {
+		senderID=messageInfo.Sender.ID().String()
+	}
+	logger.Debug(fmt.Sprintf("actor: [ %s ] send message [ %s ] to actor [ %s ]",senderID , messageInfo.Message.Service, actorID.String()))
 	nodeID := actorID.GetNodeID()
+
 	//本地消息不走网络
 	if nodeID == this.nodeID {
 		return this.LocalTell(actorID, messageInfo)
@@ -172,11 +177,14 @@ func (this *ActorProxyComponent) Emit(actorID ActorID, messageInfo *ActorMessage
 	if err != nil {
 		return err
 	}
+	var sender ActorID
+	if messageInfo.Sender != nil {
+		sender = messageInfo.Sender.ID()
+	}
 	err = client.Call("ActorProxyService.Tell", &ActorRpcMessageInfo{
 		Target:  actorID,
-		Sender:  messageInfo.Sender.ID(),
-		Message: messageInfo.Message,
-	}, messageInfo.reply)
+		Sender:  sender,
+		Message: messageInfo.Message}, messageInfo.reply)
 	if err != nil {
 		return err
 	}

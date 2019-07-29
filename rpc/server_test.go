@@ -183,7 +183,7 @@ func (this *CustomTest) T1(args string, reply *R) error {
 		&I{Name: "lei"},
 	}
 	reply.N = &r
-	reply.C = []interface{}{1, 2}
+	reply.C = []interface{}{1, "hello"}
 
 	return nil
 }

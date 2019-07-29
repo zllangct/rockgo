@@ -122,7 +122,7 @@ func (this *ConfigComponent) SetDefault() {
 		Role:          []string{"master"},
 		NodeDefine: map[string]Node{
 			/*
-				内置角色：master、child、location、actor_location
+				内置角色：master、child、location
 			*/
 			//master节点
 			"node_master": {LocalAddress: "0.0.0.0:6666", Role: []string{"single"}},
