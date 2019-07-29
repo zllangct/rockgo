@@ -2,8 +2,8 @@ package Actor
 
 import (
 	"errors"
-	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/timer"
 	"reflect"

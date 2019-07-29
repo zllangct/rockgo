@@ -2,8 +2,8 @@ package Cluster
 
 import (
 	"errors"
-	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/rpc"
 	"reflect"
 	"sync"

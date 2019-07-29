@@ -30,7 +30,7 @@ func NewTestApi() *TestApi {
 }
 
 //协议接口 1  Hello
-func (this *TestApi) Hello(sess *network.Session, message *TestMessage){
+func (this *TestApi) Hello(sess *network.Session, message *TestMessage) {
 	println(fmt.Sprintf("Hello,%s", message.Name))
 	p, err := this.GetParent()
 	if err == nil {
@@ -42,7 +42,7 @@ func (this *TestApi) Hello(sess *network.Session, message *TestMessage){
 }
 
 //协议接口 2 创建房间
-func (this *TestApi) CreateRoom(sess *network.Session, message *TestCreateRoom)  {
+func (this *TestApi) CreateRoom(sess *network.Session, message *TestCreateRoom) {
 	errReply := func() {
 		r := &CreateResult{
 			Result: false,

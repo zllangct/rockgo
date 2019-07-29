@@ -115,8 +115,8 @@ func (h *udpHandler) Handle() error {
 			wg.Done()
 
 			if h.conf.Handler != nil {
-				h.conf.Handler( &Session{
-					conn:       &UdpConn{remoteAddr: udpAddr, udpConn: h.conn,m:h.conns},
+				h.conf.Handler(&Session{
+					conn: &UdpConn{remoteAddr: udpAddr, udpConn: h.conn, m: h.conns},
 				}, data)
 				return
 			}
@@ -140,7 +140,7 @@ func (h *udpHandler) Handle() error {
 			s, _ := h.conns.LoadOrStore(cid, &Session{
 				ID:         UUID.Next(),
 				properties: make(map[string]interface{}),
-				conn:       &UdpConn{remoteAddr: udpAddr, udpConn: h.conn,m:h.conns},
+				conn:       &UdpConn{remoteAddr: udpAddr, udpConn: h.conn, m: h.conns},
 			})
 			sess := s.(*Session)
 			sess.conn.(*UdpConn).SetReadDeadline(cfg.ReadTimeout)

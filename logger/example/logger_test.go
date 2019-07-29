@@ -19,7 +19,7 @@ func _log(i int) {
 func Test(t *testing.T) {
 	//runtime.GOMAXPROCS(runtime.NumCPU())
 
-	//指定是否控制台打印，默认为true
+	//指定是否控制台打印，默认为 true
 	//	logger.SetConsole(true)
 	//	logger.SetFormat("=====>%s##%s")
 	//指定日志文件备份方式为文件大小的方式

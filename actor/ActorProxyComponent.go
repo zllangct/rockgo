@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/zllangct/RockGO/cluster"
-	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
 	"github.com/zllangct/RockGO/utils/UUID"
@@ -161,11 +161,11 @@ func (this *ActorProxyComponent) LocalTell(actorID ActorID, messageInfo *ActorMe
 
 //通过actor id 发送消息
 func (this *ActorProxyComponent) Emit(actorID ActorID, messageInfo *ActorMessageInfo) error {
-	senderID:="unknown"
+	senderID := "unknown"
 	if messageInfo.Sender != nil {
-		senderID=messageInfo.Sender.ID().String()
+		senderID = messageInfo.Sender.ID().String()
 	}
-	logger.Debug(fmt.Sprintf("actor: [ %s ] send message [ %s ] to actor [ %s ]",senderID , messageInfo.Message.Service, actorID.String()))
+	logger.Debug(fmt.Sprintf("actor: [ %s ] send message [ %s ] to actor [ %s ]", senderID, messageInfo.Message.Service, actorID.String()))
 	nodeID := actorID.GetNodeID()
 
 	//本地消息不走网络

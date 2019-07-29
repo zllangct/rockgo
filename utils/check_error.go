@@ -15,7 +15,7 @@ func CheckError() {
 		case string:
 			str = r.(string)
 		}
-		err := errors.New("\n"+str + "\n" + string(debug.Stack()))
+		err := errors.New("\n" + str + "\n" + string(debug.Stack()))
 		logger.Error(err)
 	}
 }

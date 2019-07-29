@@ -62,13 +62,13 @@ type TcpClient struct {
 	reqMutex sync.Mutex // protects following
 	request  Request
 
-	mutex    sync.Mutex // protects following
-	seq      uint64
-	pending  map[uint64]*Call
+	mutex          sync.Mutex // protects following
+	seq            uint64
+	pending        map[uint64]*Call
 	closeHeartbeat chan struct{}
-	closing  bool // user has called Close
-	shutdown bool // server has told us to stop
-	Callback func(event string, data ...interface{})
+	closing        bool // user has called Close
+	shutdown       bool // server has told us to stop
+	Callback       func(event string, data ...interface{})
 }
 
 // A ClientCodec implements writing of RPC requests and
@@ -220,7 +220,7 @@ func (client *TcpClient) input() {
 		call.Error = err
 		call.done()
 	}
-	if client.Callback !=nil {
+	if client.Callback != nil {
 		client.Callback("close", client.conn.RemoteAddr().String())
 	}
 	client.mutex.Unlock()
@@ -312,7 +312,7 @@ func NewClientWithConn(conn net.Conn, callback ...func(event string, data ...int
 
 	go client.input()
 
-	client.closeHeartbeat=make(chan struct{})
+	client.closeHeartbeat = make(chan struct{})
 	go client.StartHeartBeat(client.closeHeartbeat)
 
 	return client
@@ -401,7 +401,7 @@ func (client *TcpClient) Close() error {
 		return ErrShutdown
 	}
 	client.closing = true
-	client.closeHeartbeat<- struct{}{}
+	client.closeHeartbeat <- struct{}{}
 	client.mutex.Unlock()
 	return err
 }

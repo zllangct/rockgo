@@ -52,7 +52,7 @@ func (this *TestApi) Hello(sess *network.Session, message *TestMessage) {
 }
 
 //协议接口 2 登录
-func (this *TestApi) Login(sess *network.Session, message *TestLogin){
+func (this *TestApi) Login(sess *network.Session, message *TestLogin) {
 	println(fmt.Sprintf("received a client login request,%s ", message.Account))
 	errReply := func() {
 		r := &PlayerInfo{}

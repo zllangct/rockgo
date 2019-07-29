@@ -9,8 +9,6 @@ import (
 	"reflect"
 )
 
-
-
 type NetAPI interface {
 	//注入实例
 	//Instance(instance interface{})*ApiBase
@@ -62,26 +60,26 @@ var mt2id = map[reflect.Type]uint32{}
 type ApiBase struct {
 	//注入子类
 	instance interface{}
-	protoc MessageProtocol
-	parent *ecs.Object
-	isInit bool
+	protoc   MessageProtocol
+	parent   *ecs.Object
+	isInit   bool
 }
 
-func (this *ApiBase)Instance(instance interface{})*ApiBase  {
+func (this *ApiBase) Instance(instance interface{}) *ApiBase {
 	this.instance = instance
 	return this
 }
 
 func (this *ApiBase) Init(parent ...*ecs.Object) {
-	if route == nil{
+	if route == nil {
 		route = map[uint32]*methodType{}
 	}
 
-	if len(parent)>0 {
+	if len(parent) > 0 {
 		this.parent = parent[0]
 	}
 
-	if  this.protoc == nil || this.parent ==nil || this.instance == nil{
+	if this.protoc == nil || this.parent == nil || this.instance == nil {
 		panic(ErrNotInit)
 	}
 
@@ -96,32 +94,32 @@ func (this *ApiBase) checkInit() {
 	}
 }
 
-func (this *ApiBase)SetProtocol(protocol MessageProtocol) *ApiBase {
+func (this *ApiBase) SetProtocol(protocol MessageProtocol) *ApiBase {
 	this.protoc = protocol
 	return this
 }
 
-func (this *ApiBase)GetProtocol()(protocol MessageProtocol)  {
+func (this *ApiBase) GetProtocol() (protocol MessageProtocol) {
 	return this.protoc
 }
 
-func (this *ApiBase) SetMT2ID(mtToId  map[reflect.Type]uint32)*ApiBase {
+func (this *ApiBase) SetMT2ID(mtToId map[reflect.Type]uint32) *ApiBase {
 	for key, value := range mtToId {
-		if v,ok:=mt2id[key];ok {
+		if v, ok := mt2id[key]; ok {
 			logger.Error(fmt.Sprintf("this message [ %s ] id is repeated between [ %d ] and [ %d ]",
-				key.Name(),v,value))
-		}else{
+				key.Name(), v, value))
+		} else {
 			mt2id[key] = value
 		}
 	}
 	return this
 }
 
-func (this *ApiBase) GetMT2ID()map[reflect.Type]uint32 {
+func (this *ApiBase) GetMT2ID() map[reflect.Type]uint32 {
 	return mt2id
 }
 
-func (this *ApiBase) SetParent(parent *ecs.Object) *ApiBase{
+func (this *ApiBase) SetParent(parent *ecs.Object) *ApiBase {
 	this.parent = parent
 	return this
 }
@@ -152,7 +150,7 @@ func (this *ApiBase) Route(sess *Session, messageID uint32, data []byte) {
 				reflect.ValueOf(sess),
 				v,
 			}
-		}else{
+		} else {
 			args = []reflect.Value{
 				mt.resv,
 				reflect.ValueOf(sess),
@@ -165,7 +163,7 @@ func (this *ApiBase) Route(sess *Session, messageID uint32, data []byte) {
 	logger.Debug(fmt.Sprintf("this ApiBase:%d not found", messageID))
 }
 
-func (this *ApiBase) Reply(sess *Session, message interface{})  {
+func (this *ApiBase) Reply(sess *Session, message interface{}) {
 	this.checkInit()
 	defer utils.CheckError()
 
@@ -173,11 +171,11 @@ func (this *ApiBase) Reply(sess *Session, message interface{})  {
 	if id, ok := mt2id[t]; !ok {
 		switch t.Kind() {
 		case reflect.Struct:
-			 panic(errors.New(fmt.Sprintf("this message %s must be pointer,stead of &%s.", t.Name(), t.Name())))
+			panic(errors.New(fmt.Sprintf("this message %s must be pointer,stead of &%s.", t.Name(), t.Name())))
 		default:
-			 panic(errors.New(fmt.Sprintf("this message type: %s not be registered", t.Name())))
+			panic(errors.New(fmt.Sprintf("this message type: %s not be registered", t.Name())))
 		}
-	}else{
+	} else {
 		m, err := this.protoc.Marshal(message)
 		if err != nil {
 			panic(err)
@@ -269,7 +267,7 @@ func (this *ApiBase) RegisterGroup(api interface{}) {
 				panic(ErrApiRepeated)
 			} else {
 				route[index] = &methodType{
-					resv : reflect.ValueOf(api),
+					resv:     reflect.ValueOf(api),
 					method:   method.Func,
 					argsType: argsType,
 				}

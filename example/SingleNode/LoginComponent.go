@@ -3,8 +3,8 @@ package main
 import (
 	"errors"
 	"github.com/zllangct/RockGO/cluster"
-	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
+	"github.com/zllangct/RockGO/ecs"
 	"reflect"
 	"sync"
 	"time"

@@ -36,6 +36,7 @@ func TestJoin(T *testing.T) {
 
 		T.Assert(total == (321 + 642))
 
+
 		_, err := i1.Next()
 		T.Assert(err != nil)
 		T.Assert(errors.Is(err, iter.ErrEndIteration{}))

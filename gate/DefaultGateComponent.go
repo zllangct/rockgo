@@ -63,7 +63,7 @@ func (this *DefaultGateComponent) Awake(ctx *ecs.Context) {
 	}
 }
 
-func (this *DefaultGateComponent)AddNetAPI(api network.NetAPI)  {
+func (this *DefaultGateComponent) AddNetAPI(api network.NetAPI) {
 	this.NetAPI = api
 }
 

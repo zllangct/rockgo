@@ -3,8 +3,8 @@ package Cluster
 import (
 	"errors"
 	"fmt"
-	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/rpc"
 	"math/rand"
@@ -167,7 +167,7 @@ func (this *NodeComponent) clientCallback(event string, data ...interface{}) {
 func (this *NodeComponent) GetNodeClient(addr string) (*rpc.TcpClient, error) {
 a:
 	if v, ok := this.rpcClient.Load(addr); ok {
-		client:=v.(*rpc.TcpClient)
+		client := v.(*rpc.TcpClient)
 		if !client.IsClosed() {
 			return client, nil
 		}

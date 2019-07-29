@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-//TestTimeWheel test timewheel.
+//TestTimeWheel test timewheel .
 func TestTimeWheel(t *testing.T) {
 	var deviation int64
 	var num int64 = 100

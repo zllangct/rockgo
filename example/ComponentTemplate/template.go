@@ -3,19 +3,19 @@ package main
 import (
 	"github.com/zllangct/RockGO/actor"
 	"github.com/zllangct/RockGO/cluster"
-	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/config"
+	"github.com/zllangct/RockGO/ecs"
 	"github.com/zllangct/RockGO/logger"
 	"reflect"
 	"sync"
 )
 
 type TemplateComponent struct {
-	ecs.ComponentBase            //Component 基类 必须继承
-	Actor.ActorBase              //继承Actor基类，不使用actor模式时，不必继承
-	locker          sync.RWMutex //锁
-	member1         int          //成员变量1
-	member2         string       //成员变量2
+	ecs.ComponentBase              //Component 基类 必须继承
+	Actor.ActorBase                //继承Actor基类，不使用actor模式时，不必继承
+	locker            sync.RWMutex //锁
+	member1           int          //成员变量1
+	member2           string       //成员变量2
 }
 
 //指定该component是否是唯一，或唯一类型

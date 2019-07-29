@@ -58,7 +58,7 @@ func NewTimeWheel(t time.Duration, size int) *TimeWheel {
 	return tw
 }
 
-//stop stops the timewheel
+//stop stops the timewheel.
 func (tw *TimeWheel) Stop() {
 	tw.ticker.Stop()
 }

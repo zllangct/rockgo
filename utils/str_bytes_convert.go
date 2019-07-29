@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"sync"
 )
- var pool  = sync.Pool{
- 	New: func() interface{} {
+
+var pool = sync.Pool{
+	New: func() interface{} {
 		return &bytes.Buffer{}
 	},
- }
+}
 
 func StrToBytes(strData string) []byte {
 	buffer := pool.Get().(*bytes.Buffer)

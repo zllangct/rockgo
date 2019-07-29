@@ -13,7 +13,7 @@ import (
 
 func Test_DailDB(t *testing.T) {
 	dbcfg := NewDbCfg("127.0.0.1", 27017, "xingodb", "", "")
-	//dbcfg := NewDbCfg("127.0.0.1", 27017, "xingodb", "admin", "admin")
+	//dbcfg := NewDbCfg("127.0.0.1", 27017, "xingodb", "admin", "admin" )
 	t.Log("url: ", dbcfg.String())
 	dbo := NewDbOperate(dbcfg, 5*time.Second)
 	dbo.OpenDB(nil)
