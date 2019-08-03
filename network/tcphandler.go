@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils/UUID"
-	"github.com/zllangct/RockGO/utils/gpool"
 	"io"
 	"net"
 	"reflect"
@@ -48,7 +47,7 @@ type tcpHandler struct {
 	writeBuffer int
 	tcpNoDelay  bool
 	idleTime    time.Time
-	gpool       *gpool.Pool
+	gpool       *Pool
 }
 
 func (h *tcpHandler) Listen() (err error) {
@@ -68,7 +67,7 @@ func (h *tcpHandler) Handle() error {
 	if conf.PoolMode && conf.MaxInvoke == 0 {
 		conf.MaxInvoke = 20
 	}
-	h.gpool = gpool.GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
+	h.gpool = GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
 
 	for !h.ts.isClosed {
 		if conf.AcceptTimeout != 0 {

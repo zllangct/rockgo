@@ -1,4 +1,4 @@
-package gpool
+package network
 
 import (
 	"sync"

@@ -8,7 +8,6 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/utils/UUID"
-	"github.com/zllangct/RockGO/utils/gpool"
 	"log"
 	"net/http"
 	"sync"
@@ -52,7 +51,7 @@ type websocketHandler struct {
 	acceptNum int32
 	invokeNum int32
 	idleTime  time.Time
-	gpool     *gpool.Pool
+	gpool     *Pool
 }
 
 func (h *websocketHandler) Listen() error {
@@ -61,7 +60,7 @@ func (h *websocketHandler) Listen() error {
 	if conf.PoolMode && conf.MaxInvoke == 0 {
 		conf.MaxInvoke = 20
 	}
-	h.gpool = gpool.GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
+	h.gpool = GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
 
 	gin.SetMode(gin.ReleaseMode)
 	//router:=gin.Default()

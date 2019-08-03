@@ -1,4 +1,4 @@
-package gpool
+package network
 
 import (
 	"runtime"
@@ -16,7 +16,7 @@ func init() {
 //TestNewPool test new goroutine pool
 func TestNewPool(t *testing.T) {
 	pool := NewPool(1000, 10000)
-	defer pool.Release()
+	defer Release()
 
 	iterations := 1000000
 	var counter uint64
@@ -25,7 +25,7 @@ func TestNewPool(t *testing.T) {
 	wg.Add(iterations)
 	for i := 0; i < iterations; i++ {
 		arg := uint64(1)
-		pool.AddJobParallel(func(args ...interface{}) {
+		AddJobParallel(func(args ...interface{}) {
 			defer wg.Done()
 			atomic.AddUint64(&counter, arg)
 		}, nil, -1, nil)

@@ -1,4 +1,4 @@
-package gpool
+package network
 
 import (
 	"sync"
@@ -36,13 +36,13 @@ func BenchmarkGoroutine(b *testing.B) {
 //BenchmarkGpool benchmarks the goroutine pool.
 func BenchmarkGpool(b *testing.B) {
 	pool := NewPool(poolSize, queueSize)
-	defer pool.Release()
+	defer Release()
 	var wg sync.WaitGroup
 
 	for i := 0; i < b.N; i++ {
 		wg.Add(runTimes)
 		for j := 0; j < runTimes; j++ {
-			pool.AddJobParallel(func(args ...interface{}) {
+			AddJobParallel(func(args ...interface{}) {
 				defer wg.Done()
 				demoTask()
 			}, nil, -1, nil)

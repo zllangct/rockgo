@@ -8,7 +8,6 @@ import (
 	"github.com/zllangct/RockGO/logger"
 	"github.com/zllangct/RockGO/timer"
 	"github.com/zllangct/RockGO/utils/UUID"
-	"github.com/zllangct/RockGO/utils/gpool"
 	"net"
 	"sync"
 	"sync/atomic"
@@ -68,7 +67,7 @@ type udpHandler struct {
 	conns     *sync.Map
 	numInvoke int32
 	cid       uint32
-	gpool     *gpool.Pool
+	gpool     *Pool
 }
 
 func (h *udpHandler) Listen() error {
@@ -77,7 +76,7 @@ func (h *udpHandler) Listen() error {
 	if conf.PoolMode && conf.MaxInvoke == 0 {
 		conf.MaxInvoke = 20
 	}
-	h.gpool = gpool.GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
+	h.gpool = GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
 
 	addr, err := net.ResolveUDPAddr("udp", conf.Address)
 	if err != nil {
