@@ -1,4 +1,4 @@
-# RockGO（Readme 可能过时、补文案中）
+# RockGO（下一波重要更新，正在测试中，现有版本不建议直接食用）
 
 &emsp;&emsp;基于ECS(Entity component System)构建的分布式游戏服务端框架，同时提供Actor模型，目标是致力于快速搭建轻量、高性能、高可用的
 分布式游戏后端，以及其他分布式后端应用。  
