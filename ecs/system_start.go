@@ -44,7 +44,6 @@ func (this *StartSystem) UpdateFrame() {
 		v := c.Value.(IStart)
 		this.runtime.workers.Run(func() {
 			v.Start(ctx)
-		}, func() {
 			this.wg.Done()
 		})
 		this.temp.Remove(c)

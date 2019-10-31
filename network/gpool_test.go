@@ -16,7 +16,7 @@ func init() {
 //TestNewPool test new goroutine pool
 func TestNewPool(t *testing.T) {
 	pool := NewPool(1000, 10000)
-	defer Release()
+	defer pool.Release()
 
 	iterations := 1000000
 	var counter uint64
@@ -25,10 +25,10 @@ func TestNewPool(t *testing.T) {
 	wg.Add(iterations)
 	for i := 0; i < iterations; i++ {
 		arg := uint64(1)
-		AddJobParallel(func(args ...interface{}) {
+		pool.AddJob(func(ctx []interface{},args ...interface{}) {
 			defer wg.Done()
 			atomic.AddUint64(&counter, arg)
-		}, nil, -1, nil)
+		}, nil)
 	}
 	wg.Wait()
 

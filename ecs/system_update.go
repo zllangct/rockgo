@@ -67,7 +67,6 @@ func (this *UpdateSystem) UpdateFrame() {
 		v := c.(IUpdate)
 		this.runtime.workers.Run(func() {
 			v.Update(ctx)
-		}, func() {
 			this.wg.Done()
 		})
 	}

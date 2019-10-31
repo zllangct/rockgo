@@ -49,7 +49,6 @@ func (this *DestroySystem) UpdateFrame() {
 		v := c.Value.(IDestroy)
 		this.runtime.workers.Run(func() {
 			v.Destroy(ctx)
-		}, func() {
 			this.wg.Done()
 		})
 		this.temp.Remove(c)

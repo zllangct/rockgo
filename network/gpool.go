@@ -1,8 +1,11 @@
 package network
 
 import (
+	"math/rand"
 	"sync"
 )
+
+const WORKER_ID_RANDOM int32 = -1
 
 //Worker goroutine struct.
 type Worker struct {
@@ -12,7 +15,7 @@ type Worker struct {
 	stop     chan struct{}
 }
 
-//Start start gotoutine pool.
+//Start start goroutine pool.
 func (w *Worker) Start() {
 	go func() {
 		var job *Job
@@ -20,8 +23,8 @@ func (w *Worker) Start() {
 			select {
 			case job = <-w.jobQueue:
 			case job = <-w.p.jobQueue:
-				//id为空时，是新连接，老链接，通过worker id 保证同一连接 由同一线程处理，减少竞态，保证顺序
-				if job.WorkerID != -1 {
+				//task which worker id not nil will push into the target goroutine to insure data safety
+				if job.WorkerID != WORKER_ID_RANDOM {
 					if job.WorkerID >= 0 && job.WorkerID < w.p.numWorkers {
 						w.p.workerQueue[job.WorkerID].jobQueue <- job
 						continue
@@ -30,19 +33,32 @@ func (w *Worker) Start() {
 			case <-w.stop:
 				return
 			}
-			//TODO 错误处理
-			job.Job(job.Args...)
-			w.p.jobPool.Put(job)
+			//TODO handle Error
+			job.Job([]interface{}{job.WorkerID},job.Args...)
+			w.p.jobPool.Put(job.Init())
 		}
 	}()
 }
+
+//job type: Parallel;Serial
+type JobType int
+const JOB_TYPE_PARALLEL JobType = 1
+const JOB_TYPE_SERIAL JobType = 2
+const JOB_TYPE_DEFAULT = JOB_TYPE_PARALLEL
 
 //Job is a function for doing jobs.
 type Job struct {
 	WorkerID int32
 	Args     []interface{}
-	Job      func(args ...interface{})
-	Callback func(id int32)
+	Job      func(ctx []interface{},args ...interface{})
+}
+
+//initialize the job
+func (p *Job)Init() *Job{
+	p.WorkerID = -1
+	p.Args = nil
+	p.Job = nil
+	return p
 }
 
 var globalPool *Pool
@@ -56,14 +72,15 @@ type Pool struct {
 	workerQueue []*Worker
 }
 
-func GetGloblePool(numWorkers int, jobQueueLen int) *Pool {
+//get the singleton pool
+func GetGlobalPool(numWorkers int, jobQueueLen int) *Pool {
 	if globalPool == nil {
 		globalPool = NewPool(numWorkers, jobQueueLen)
 	}
 	return globalPool
 }
 
-//NewPool news gotouine pool
+//NewPool news goroutine pool
 func NewPool(numWorkers int, jobQueueLen int) *Pool {
 	jobQueue := make(chan *Job, jobQueueLen)
 	workerQueue := make([]*Worker, numWorkers)
@@ -79,33 +96,33 @@ func NewPool(numWorkers int, jobQueueLen int) *Pool {
 	return pool
 }
 
-func (p *Pool) AddJobParallel(handler func(...interface{}), args []interface{}, wid int32, callback func(int32)) {
+//random worker, task will run in a random worker
+func (p *Pool) AddJob(handler func([]interface{},...interface{}), args []interface{},typ ... JobType){
 	job := p.jobPool.Get().(*Job)
 	job.Job = handler
 	job.Args = args
-	job.Callback = callback
+	job.WorkerID = WORKER_ID_RANDOM
 
-	p.jobQueue <- job
+	if len(typ)>0 && (typ[0] == JOB_TYPE_SERIAL){
+		job.WorkerID = rand.Int31() % p.numWorkers
+		p.workerQueue[job.WorkerID].jobQueue <- job
+	}else{
+		p.jobQueue <- job
+	}
 }
 
-func (p *Pool) AddJobSerial(handler func(...interface{}), args []interface{}, wid int32, callback func(int32)) {
+//fixed worker,task with the same worker id will push into the same goroutine
+func (p *Pool) AddJobFixed(handler func([]interface{}, ...interface{}), args []interface{}, wid int32) {
 	job := p.jobPool.Get().(*Job)
 	job.Job = handler
 	job.Args = args
-	job.Callback = callback
 
 	if wid <= -1 || wid >= p.numWorkers {
-		idStr := args[2].(string)
-		sum := int32(0)
-		for _, c := range idStr {
-			sum = sum + int32(c)
-		}
-		job.WorkerID = sum % p.numWorkers
-		job.Callback(job.WorkerID)
+		job.WorkerID = rand.Int31() % p.numWorkers
+		p.workerQueue[job.WorkerID].jobQueue <- job
 	} else {
 		job.WorkerID = wid
 	}
-
 	p.workerQueue[job.WorkerID].jobQueue <- job
 }
 
@@ -123,6 +140,7 @@ func (p *Pool) Start() {
 	}
 }
 
+//get the pool size
 func (p *Pool) Size() int32 {
 	return p.numWorkers
 }

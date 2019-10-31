@@ -76,6 +76,8 @@ func Next() string {
 	return nuid
 }
 
+
+
 // Generate the next UUID string.
 func (n *UUID) Next() string {
 	// Increment and capture.

@@ -3,7 +3,6 @@ package iter_test
 import (
 	"container/list"
 	"github.com/zllangct/RockGO/3rd/assert"
-	"github.com/zllangct/RockGO/3rd/errors"
 	"github.com/zllangct/RockGO/3rd/iter"
 	"testing"
 )
@@ -39,14 +38,11 @@ func TestJoin(T *testing.T) {
 
 		_, err := i1.Next()
 		T.Assert(err != nil)
-		T.Assert(errors.Is(err, iter.ErrEndIteration{}))
 
 		_, err = i2.Next()
 		T.Assert(err != nil)
-		T.Assert(errors.Is(err, iter.ErrEndIteration{}))
 
 		_, err = i3.Next()
 		T.Assert(err != nil)
-		T.Assert(errors.Is(err, iter.ErrEndIteration{}))
 	})
 }

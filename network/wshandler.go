@@ -60,7 +60,7 @@ func (h *websocketHandler) Listen() error {
 	if conf.PoolMode && conf.MaxInvoke == 0 {
 		conf.MaxInvoke = 20
 	}
-	h.gpool = GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
+	h.gpool = GetGlobalPool(int(conf.MaxInvoke), conf.QueueCap)
 
 	gin.SetMode(gin.ReleaseMode)
 	//router:=gin.Default()
@@ -114,9 +114,12 @@ func (h *websocketHandler) Handle() error {
 func (h *websocketHandler) recv(sess *Session, conn *websocket.Conn) {
 	defer conn.Close()
 
-	sess.SetProperty("workerID", int32(-1))
+	sess.SetProperty("workerID", WORKER_ID_RANDOM)
 
-	handler := func(args ...interface{}) {
+	handler := func(poolCtx []interface{},args ...interface{}) {
+		if poolCtx != nil && len(poolCtx)>0 {
+			args[0].(*Session).SetProperty("workerID", poolCtx[0].(int32))
+		}
 		ctx := context.Background()
 		ctx = context.WithValue(ctx, "cid", args[0])
 		if h.conf.Handler != nil {
@@ -131,7 +134,6 @@ func (h *websocketHandler) recv(sess *Session, conn *websocket.Conn) {
 			}
 		}
 	}
-	wid := int32(-1)
 	for !h.ts.isClosed {
 		_, pkg, err := conn.ReadMessage()
 		if err != nil || pkg == nil {
@@ -140,11 +142,15 @@ func (h *websocketHandler) recv(sess *Session, conn *websocket.Conn) {
 		}
 		// use goroutine pool
 		if h.conf.PoolMode {
-			h.gpool.AddJobSerial(handler, []interface{}{sess, pkg}, wid, func(workerID int32) {
-				wid = workerID
-			})
+			var wid int32
+			var ok bool
+			m,PropertyOk:=sess.GetProperty("workerID")
+			if wid,ok=m.(int32);!PropertyOk || !ok{
+				wid = WORKER_ID_RANDOM
+			}
+			h.gpool.AddJobFixed(handler, []interface{}{sess, pkg}, wid)
 		} else {
-			go handler(sess, pkg)
+			go handler(nil,sess, pkg)
 		}
 	}
 }

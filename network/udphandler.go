@@ -76,7 +76,7 @@ func (h *udpHandler) Listen() error {
 	if conf.PoolMode && conf.MaxInvoke == 0 {
 		conf.MaxInvoke = 20
 	}
-	h.gpool = GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
+	h.gpool = GetGlobalPool(int(conf.MaxInvoke), conf.QueueCap)
 
 	addr, err := net.ResolveUDPAddr("udp", conf.Address)
 	if err != nil {
@@ -144,11 +144,13 @@ func (h *udpHandler) Handle() error {
 			sess := s.(*Session)
 			sess.conn.(*UdpConn).SetReadDeadline(cfg.ReadTimeout)
 
-			wid := int32(-1)
+			wid := WORKER_ID_RANDOM
+			//TODO worker id 使用原子操作优化
 			item, ok := sess.GetProperty("workerID")
 			if ok {
 				wid = item.(int32)
-				sess.SetProperty("workerID", int32(-1))
+			}else{
+				sess.SetProperty("workerID", wid)
 			}
 
 			if new {
@@ -162,11 +164,9 @@ func (h *udpHandler) Handle() error {
 			if h.conf.NetAPI != nil && mid != nil {
 				// use goroutine pool
 				if h.conf.PoolMode {
-					h.gpool.AddJobSerial(h.handler, []interface{}{sess, pkg}, wid, func(workerID int32) {
-						wid = workerID
-					})
+					h.gpool.AddJobFixed(h.handler, []interface{}{sess, pkg}, wid)
 				} else {
-					go h.handler(sess, pkg)
+					go h.handler(nil,sess, pkg)
 				}
 			} else {
 				logger.Error("no message handler")
@@ -177,7 +177,10 @@ func (h *udpHandler) Handle() error {
 	}
 }
 
-func (h *udpHandler) handler(args ...interface{}) {
+func (h *udpHandler) handler(poolCtx []interface{},args ...interface{}) {
+	if poolCtx != nil && len(poolCtx)>0 {
+		args[0].(*Session).SetProperty("workerID", poolCtx[0].(int32))
+	}
 	ctx := context.Background()
 	ctx = context.WithValue(ctx, "cid", args[0])
 	if h.conf.Handler != nil {

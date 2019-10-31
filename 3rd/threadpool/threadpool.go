@@ -17,11 +17,6 @@ type ThreadPool struct {
 	pending    *list.List
 }
 
-type Task struct {
-	task           func()
-	postprocessing []func()
-}
-
 // New returns a new empty ThreadPool
 func New() *ThreadPool {
 	return &ThreadPool{
@@ -45,12 +40,12 @@ func (pool *ThreadPool) LockerWith(action func(interface{})) *Locker {
 }
 
 // Run starts a new task, or puts the task on the queue of tasks to run.
-func (pool *ThreadPool) Run(task func(), postprocessing ...func()) {
-	pool.run(task, true, postprocessing...)
+func (pool *ThreadPool) Run(task func()) {
+	pool.run(task, true)
 }
 
 // run starts a new task, or puts the task on the queue of tasks to run.
-func (pool *ThreadPool) run(task func(), requireLock bool, postprocessing ...func()) {
+func (pool *ThreadPool) run(task func(), requireLock bool) {
 	if requireLock {
 		pool.lock.Lock()
 	}
@@ -62,16 +57,13 @@ func (pool *ThreadPool) run(task func(), requireLock bool, postprocessing ...fun
 					logger.Error(fmt.Sprintf("%s\n%s", r, string(debug.Stack())))
 				}
 				pool.activeDown()
-				if len(postprocessing) > 0 {
-					postprocessing[0]()
-				}
 				pool.nextTask()
 				pool.lock.Unlock()
 			}()
 			task()
 		}()
 	} else {
-		pool.pending.PushBack(&Task{task: task, postprocessing: postprocessing})
+		pool.pending.PushBack(task)
 	}
 	if requireLock {
 		pool.lock.Unlock()
@@ -81,8 +73,8 @@ func (pool *ThreadPool) run(task func(), requireLock bool, postprocessing ...fun
 // nextTask runs a task if there is any pending task
 func (pool *ThreadPool) nextTask() {
 	if pool.pending.Len() > 0 {
-		task, _ := pool.pending.Remove(pool.pending.Front()).(*Task)
-		pool.run(task.task, false, task.postprocessing...)
+		task, _ := pool.pending.Remove(pool.pending.Front()).(func())
+		pool.run(task, false)
 	}
 }
 

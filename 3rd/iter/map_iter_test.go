@@ -1,9 +1,8 @@
 package iter_test
 
 import (
+	"errors"
 	"github.com/zllangct/RockGO/3rd/assert"
-	"github.com/zllangct/RockGO/3rd/errors"
-	"github.com/zllangct/RockGO/3rd/iter"
 	"testing"
 )
 
@@ -40,7 +39,7 @@ func (iterator *MapIter) Next() (interface{}, error) {
 
 	iterator.offset += 1
 	if iterator.offset >= len(iterator.keys) {
-		iterator.err = errors.Fail(iter.ErrEndIteration{}, nil, "No more values")
+		iterator.err = errors.New("no more values")
 		return nil, iterator.err
 	}
 
@@ -70,6 +69,5 @@ func TestMapIter(T *testing.T) {
 
 		_, err := i.Next()
 		T.Assert(err != nil)
-		T.Assert(errors.Is(err, iter.ErrEndIteration{}))
 	})
 }

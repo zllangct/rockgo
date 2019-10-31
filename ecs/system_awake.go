@@ -46,7 +46,6 @@ func (this *AwakeSystem) UpdateFrame() {
 		this.runtime.workers.Run(func() {
 			//logger.Debug("awake: "+name)
 			v.Awake(ctx)
-		}, func() {
 			this.wg.Done()
 		})
 		this.temp.Remove(c)

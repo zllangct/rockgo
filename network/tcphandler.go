@@ -67,7 +67,7 @@ func (h *tcpHandler) Handle() error {
 	if conf.PoolMode && conf.MaxInvoke == 0 {
 		conf.MaxInvoke = 20
 	}
-	h.gpool = GetGloblePool(int(conf.MaxInvoke), conf.QueueCap)
+	h.gpool = GetGlobalPool(int(conf.MaxInvoke), conf.QueueCap)
 
 	for !h.ts.isClosed {
 		if conf.AcceptTimeout != 0 {
@@ -116,7 +116,7 @@ func (h *tcpHandler) Handle() error {
 func (h *tcpHandler) recv(sess *Session, conn *net.TCPConn) {
 	defer conn.Close()
 
-	sess.SetProperty("workerID", int32(-1))
+	sess.SetProperty("workerID", WORKER_ID_RANDOM)
 
 	cfg := h.conf
 	buffer := make([]byte, 1024*4)
@@ -124,7 +124,6 @@ func (h *tcpHandler) recv(sess *Session, conn *net.TCPConn) {
 	h.idleTime = time.Now()
 	var n int
 	var err error
-	wid := int32(-1)
 	//TODO 添加TCP频率控制
 	for !h.ts.isClosed {
 		if cfg.ReadTimeout != 0 {
@@ -159,11 +158,15 @@ func (h *tcpHandler) recv(sess *Session, conn *net.TCPConn) {
 				currBuffer = currBuffer[pkgLen:]
 				// use goroutine pool
 				if h.conf.PoolMode {
-					h.gpool.AddJobSerial(h.handler, []interface{}{sess, pkg, sess.ID}, wid, func(workerID int32) {
-						wid = workerID
-					})
+					var wid int32
+					var ok bool
+					m,PropertyOk:=sess.GetProperty("workerID")
+					if wid,ok=m.(int32);!PropertyOk || !ok{
+						wid = WORKER_ID_RANDOM
+					}
+					h.gpool.AddJobFixed(h.handler, []interface{}{sess, pkg}, wid)
 				} else {
-					go h.handler(sess, pkg)
+					go h.handler(nil,sess, pkg)
 				}
 				if len(currBuffer) > 0 {
 					continue
@@ -177,7 +180,10 @@ func (h *tcpHandler) recv(sess *Session, conn *net.TCPConn) {
 	}
 }
 
-func (h *tcpHandler) handler(args ...interface{}) {
+func (h *tcpHandler) handler(poolCtx []interface{},args ...interface{}) {
+	if poolCtx != nil && len(poolCtx)>0 {
+		args[0].(*Session).SetProperty("workerID", poolCtx[0].(int32))
+	}
 	ctx := context.Background()
 	ctx = context.WithValue(ctx, "cid", args[0])
 	if h.conf.Handler != nil {

@@ -2,7 +2,6 @@ package iter_test
 
 import (
 	"github.com/zllangct/RockGO/3rd/assert"
-	"github.com/zllangct/RockGO/3rd/errors"
 	"github.com/zllangct/RockGO/3rd/iter"
 	"testing"
 )
@@ -20,6 +19,5 @@ func TestFromValue(T *testing.T) {
 
 		_, err := i.Next()
 		T.Assert(err != nil)
-		T.Assert(errors.Is(err, iter.ErrEndIteration{}))
 	})
 }
