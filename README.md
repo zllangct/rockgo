@@ -1,4 +1,4 @@
-# RockGO（下一波重要更新，正在测试中，现有版本不建议直接食用）
+# RockGO（go master分支泛型基本可以使用，本库使用泛型重构后发布）
 
 重构 RockGO ECS engine: https://github.com/zllangct/ecs
 
