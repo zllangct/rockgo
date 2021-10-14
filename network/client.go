@@ -2,7 +2,7 @@ package network
 
 import (
 	"context"
-	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/rockgo/logger"
 	"io"
 	"net"
 	"sync"

@@ -3,8 +3,8 @@ package config
 import (
 	"encoding/json"
 	"errors"
-	"github.com/zllangct/RockGO/ecs"
-	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/rockgo/ecs"
+	"github.com/zllangct/rockgo/logger"
 	"io/ioutil"
 	"os"
 	"path/filepath"

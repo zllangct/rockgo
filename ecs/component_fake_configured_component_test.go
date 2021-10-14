@@ -1,7 +1,7 @@
 package ecs_test
 
 import (
-	"github.com/zllangct/RockGO/ecs"
+	"github.com/zllangct/rockgo/ecs"
 	"reflect"
 )
 

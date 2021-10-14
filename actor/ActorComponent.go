@@ -2,10 +2,10 @@ package Actor
 
 import (
 	"errors"
-	"github.com/zllangct/RockGO/config"
-	"github.com/zllangct/RockGO/ecs"
-	"github.com/zllangct/RockGO/logger"
-	"github.com/zllangct/RockGO/timer"
+	"github.com/zllangct/rockgo/config"
+	"github.com/zllangct/rockgo/ecs"
+	"github.com/zllangct/rockgo/logger"
+	"github.com/zllangct/rockgo/timer"
 	"reflect"
 	"runtime/debug"
 	"sync/atomic"

@@ -2,7 +2,7 @@ package ecs_test
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO/ecs"
+	"github.com/zllangct/rockgo/ecs"
 	"strconv"
 	"strings"
 )

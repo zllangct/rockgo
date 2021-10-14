@@ -3,12 +3,12 @@ package ecs
 import (
 	"errors"
 	"fmt"
-	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/rockgo/logger"
 	"sync"
 	"time"
 
-	"github.com/zllangct/RockGO/3rd/iter"
-	"github.com/zllangct/RockGO/3rd/threadpool"
+	"github.com/zllangct/rockgo/3rd/iter"
+	"github.com/zllangct/rockgo/3rd/threadpool"
 )
 
 type Config struct {

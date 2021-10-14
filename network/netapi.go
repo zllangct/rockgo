@@ -3,9 +3,9 @@ package network
 import (
 	"errors"
 	"fmt"
-	"github.com/zllangct/RockGO/ecs"
-	"github.com/zllangct/RockGO/logger"
-	"github.com/zllangct/RockGO/utils"
+	"github.com/zllangct/rockgo/ecs"
+	"github.com/zllangct/rockgo/logger"
+	"github.com/zllangct/rockgo/utils"
 	"reflect"
 )
 
@@ -24,6 +24,8 @@ type NetAPI interface {
 	Route(sess *Session, messageID uint32, data []byte)
 	//序列化消息并回复
 	Reply(session *Session, message interface{})
+
+	//Invoke(session *Session, message interface{})
 
 	//设置消息对应字典
 	//SetMT2ID(mt2id  map[reflect.Type]uint32)*ApiBase

@@ -1,6 +1,6 @@
 package main
 
-import "github.com/zllangct/RockGO/actor"
+import "github.com/zllangct/rockgo/actor"
 
 type Player struct {
 	UID  int         //玩家ID

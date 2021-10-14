@@ -220,6 +220,11 @@ func testRPC1(t *testing.T, addr string) {
 		t.Errorf("Add: expected no error but got string %q", err.Error())
 	}
 	println("Arith.Add reuslt:" + reply.String())
+
+	err = client.CallWithoutReply("CustomTest.T1", "12345")
+	if err != nil {
+		t.Errorf("Add: expected no error but got string %q", err.Error())
+	}
 	time.Sleep(time.Second * 20)
 }
 

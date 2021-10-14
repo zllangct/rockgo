@@ -3,9 +3,9 @@ package ecs_test
 import (
 	"testing"
 
-	"github.com/zllangct/RockGO/3rd/assert"
-	"github.com/zllangct/RockGO/3rd/iter"
-	"github.com/zllangct/RockGO/ecs"
+	"github.com/zllangct/rockgo/3rd/assert"
+	"github.com/zllangct/rockgo/3rd/iter"
+	"github.com/zllangct/rockgo/ecs"
 )
 
 func TestSingleChildIterator(T *testing.T) {

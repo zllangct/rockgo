@@ -1,6 +1,6 @@
 package Cluster
 
-import "github.com/zllangct/RockGO/logger"
+import "github.com/zllangct/rockgo/logger"
 
 type LocationService struct {
 	location *LocationComponent

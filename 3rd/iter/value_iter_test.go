@@ -1,8 +1,8 @@
 package iter_test
 
 import (
-	"github.com/zllangct/RockGO/3rd/assert"
-	"github.com/zllangct/RockGO/3rd/iter"
+	"github.com/zllangct/rockgo/3rd/assert"
+	"github.com/zllangct/rockgo/3rd/iter"
 	"testing"
 )
 

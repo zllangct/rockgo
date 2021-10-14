@@ -2,7 +2,7 @@ package iter_test
 
 import (
 	"errors"
-	"github.com/zllangct/RockGO/3rd/assert"
+	"github.com/zllangct/rockgo/3rd/assert"
 	"testing"
 )
 

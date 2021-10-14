@@ -2,7 +2,7 @@ package Cluster
 
 import (
 	"errors"
-	"github.com/zllangct/RockGO/rpc"
+	"github.com/zllangct/rockgo/rpc"
 	"math/rand"
 )
 

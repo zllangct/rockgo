@@ -2,7 +2,7 @@ package ecs
 
 import (
 	"container/list"
-	"github.com/zllangct/RockGO/3rd/iter"
+	"github.com/zllangct/rockgo/3rd/iter"
 )
 
 // ObjectIter implements Iterator for []Object

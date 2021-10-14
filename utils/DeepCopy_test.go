@@ -2,7 +2,7 @@ package utils_test
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO/utils"
+	"github.com/zllangct/rockgo/utils"
 	"reflect"
 	"testing"
 )

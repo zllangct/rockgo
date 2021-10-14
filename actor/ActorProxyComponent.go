@@ -3,12 +3,12 @@ package Actor
 import (
 	"errors"
 	"fmt"
-	"github.com/zllangct/RockGO/cluster"
-	"github.com/zllangct/RockGO/config"
-	"github.com/zllangct/RockGO/ecs"
-	"github.com/zllangct/RockGO/logger"
-	"github.com/zllangct/RockGO/rpc"
-	"github.com/zllangct/RockGO/utils/UUID"
+	"github.com/zllangct/rockgo/cluster"
+	"github.com/zllangct/rockgo/config"
+	"github.com/zllangct/rockgo/ecs"
+	"github.com/zllangct/rockgo/logger"
+	"github.com/zllangct/rockgo/rpc"
+	"github.com/zllangct/rockgo/utils/UUID"
 	"reflect"
 	"sync"
 )

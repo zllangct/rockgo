@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/zllangct/RockGO/actor"
-	"github.com/zllangct/RockGO/ecs"
+	"github.com/zllangct/rockgo/actor"
+	"github.com/zllangct/rockgo/ecs"
 	"sync"
 )
 

@@ -3,9 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/zllangct/RockGO/logger"
-	"github.com/zllangct/RockGO/network"
-	"github.com/zllangct/RockGO/network/messageProtocol"
+	"github.com/zllangct/rockgo/logger"
+	"github.com/zllangct/rockgo/network"
+	"github.com/zllangct/rockgo/network/messageProtocol"
 	"reflect"
 	"time"
 )

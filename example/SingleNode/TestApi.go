@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO/cluster"
-	"github.com/zllangct/RockGO/network"
-	"github.com/zllangct/RockGO/network/messageProtocol"
+	"github.com/zllangct/rockgo/cluster"
+	"github.com/zllangct/rockgo/network"
+	"github.com/zllangct/rockgo/network/messageProtocol"
 )
 
 /*

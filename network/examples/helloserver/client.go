@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/binary"
 	"fmt"
-	"github.com/zllangct/RockGO/network"
+	"github.com/zllangct/rockgo/network"
 	"strconv"
 	"sync"
 	"time"

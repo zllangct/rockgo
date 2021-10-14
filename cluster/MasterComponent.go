@@ -2,10 +2,10 @@ package Cluster
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO/config"
-	"github.com/zllangct/RockGO/ecs"
-	"github.com/zllangct/RockGO/logger"
-	"github.com/zllangct/RockGO/utils"
+	"github.com/zllangct/rockgo/config"
+	"github.com/zllangct/rockgo/ecs"
+	"github.com/zllangct/rockgo/logger"
+	"github.com/zllangct/rockgo/utils"
 	"reflect"
 	"strings"
 	"sync"

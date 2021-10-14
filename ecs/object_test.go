@@ -1,9 +1,9 @@
 package ecs_test
 
 import (
-	"github.com/zllangct/RockGO"
-	"github.com/zllangct/RockGO/3rd/assert"
-	"github.com/zllangct/RockGO/ecs"
+	"github.com/zllangct/rockgo"
+	"github.com/zllangct/rockgo/3rd/assert"
+	"github.com/zllangct/rockgo/ecs"
 	"testing"
 )
 

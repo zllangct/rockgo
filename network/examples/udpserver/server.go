@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/zllangct/RockGO/network"
+	"github.com/zllangct/rockgo/network"
 	"time"
 )
 

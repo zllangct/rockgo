@@ -3,7 +3,7 @@ package threadpool
 import (
 	"container/list"
 	"fmt"
-	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/rockgo/logger"
 	"runtime/debug"
 	"sync"
 )

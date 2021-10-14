@@ -2,7 +2,7 @@ package threadpool
 
 import (
 	"errors"
-	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/rockgo/logger"
 	"runtime/debug"
 	"sync"
 )

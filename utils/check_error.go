@@ -2,7 +2,7 @@ package utils
 
 import (
 	"errors"
-	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/rockgo/logger"
 	"runtime/debug"
 )
 

@@ -1,4 +1,4 @@
-module github.com/zllangct/RockGO
+module github.com/zllangct/rockgo
 
 require (
 	github.com/TarsCloud/TarsGo v0.0.0-20181117101853-df0f3ee846b3 // indirect

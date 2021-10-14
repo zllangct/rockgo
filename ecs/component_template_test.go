@@ -3,7 +3,7 @@ package ecs_test
 import (
 	"reflect"
 
-	"github.com/zllangct/RockGO/ecs"
+	"github.com/zllangct/rockgo/ecs"
 )
 
 type ComponentTemplate struct {

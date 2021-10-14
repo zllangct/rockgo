@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/rockgo/logger"
 	"strconv"
 	"testing"
 	"time"

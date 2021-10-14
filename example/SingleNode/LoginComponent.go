@@ -2,9 +2,9 @@ package main
 
 import (
 	"errors"
-	"github.com/zllangct/RockGO/cluster"
-	"github.com/zllangct/RockGO/config"
-	"github.com/zllangct/RockGO/ecs"
+	"github.com/zllangct/rockgo/cluster"
+	"github.com/zllangct/rockgo/config"
+	"github.com/zllangct/rockgo/ecs"
 	"reflect"
 	"sync"
 	"time"

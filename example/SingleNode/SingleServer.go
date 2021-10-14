@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/zllangct/RockGO"
-	"github.com/zllangct/RockGO/ecs"
-	"github.com/zllangct/RockGO/gate"
-	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/rockgo"
+	"github.com/zllangct/rockgo/ecs"
+	"github.com/zllangct/rockgo/gate"
+	"github.com/zllangct/rockgo/logger"
 )
 
 /*

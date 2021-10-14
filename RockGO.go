@@ -1,8 +1,8 @@
 package RockGO
 
 import (
-	"github.com/zllangct/RockGO/ecs"
-	"github.com/zllangct/RockGO/launcher"
+	"github.com/zllangct/rockgo/ecs"
+	"github.com/zllangct/rockgo/launcher"
 	"runtime"
 	"time"
 )

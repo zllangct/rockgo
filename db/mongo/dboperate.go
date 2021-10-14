@@ -3,7 +3,7 @@ package mongo
 import (
 	"errors"
 	"fmt"
-	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/rockgo/logger"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"time"

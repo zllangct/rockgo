@@ -2,8 +2,8 @@ package main
 
 import (
 	"errors"
-	"github.com/zllangct/RockGO/actor"
-	"github.com/zllangct/RockGO/ecs"
+	"github.com/zllangct/rockgo/actor"
+	"github.com/zllangct/rockgo/ecs"
 )
 
 type RoomComponent struct {

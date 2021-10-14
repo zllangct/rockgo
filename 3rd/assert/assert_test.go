@@ -1,7 +1,7 @@
 package assert_test
 
 import "testing"
-import "github.com/zllangct/RockGO/3rd/assert"
+import "github.com/zllangct/rockgo/3rd/assert"
 
 func TestNew(T *testing.T) {
 	assert.New(T)

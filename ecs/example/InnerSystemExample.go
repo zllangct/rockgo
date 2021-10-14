@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/zllangct/RockGO/ecs"
-	"github.com/zllangct/RockGO/logger"
+	"github.com/zllangct/rockgo/ecs"
+	"github.com/zllangct/rockgo/logger"
 	"strconv"
 	"sync"
 	"time"

@@ -1,7 +1,7 @@
 package Actor
 
 import (
-	"github.com/zllangct/RockGO/network"
+	"github.com/zllangct/rockgo/network"
 	"sync"
 )
 
