@@ -145,6 +145,7 @@ func (this *NodeComponent) StartRpcServer() error {
 		return err
 	}
 	this.rpcServer = server
+	this.localIP = config.Config.ClusterConfig.LocalAddress
 	logger.Info(fmt.Sprintf("NodeComponent RPC server listening on: [ %s ]", addr.String()))
 	go server.Accept(this.serverListener)
 	return nil

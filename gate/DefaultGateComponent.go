@@ -50,8 +50,8 @@ func (this *DefaultGateComponent) Awake(ctx *ecs.Context) {
 		PackageProtocol:      &network.TdProtocol{},
 		Address:              config.Config.ClusterConfig.NetListenAddress,
 		ReadTimeout:          time.Millisecond * time.Duration(config.Config.ClusterConfig.NetConnTimeout),
-		OnClientDisconnected: this.OnDropped,
-		OnClientConnected:    this.OnConnected,
+		OnClientDisconnected: this.NetAPI.OnDisconneted,
+		OnClientConnected:    this.NetAPI.OnConnected,
 		NetAPI:               this.NetAPI,
 		MaxInvoke:            20,
 	}
@@ -90,4 +90,11 @@ func (this *DefaultGateComponent) SendMessage(sid string, message interface{}) e
 
 func (this *DefaultGateComponent) Emit(sess *network.Session, message interface{}) {
 	this.NetAPI.Reply(sess, message)
+}
+
+func (this *DefaultGateComponent) Broadcast(message interface{}) {
+	this.clients.Range(func(key, value interface{}) bool {
+		this.NetAPI.Reply(value.(*network.Session), message)
+		return true
+	})
 }
