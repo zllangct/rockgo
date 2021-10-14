@@ -1,6 +1,7 @@
 package Actor
 
 import (
+	"errors"
 	"github.com/zllangct/rockgo/network"
 	"sync"
 )
@@ -32,6 +33,9 @@ func (this *ActorWithSession) ID() ActorID {
 }
 
 func (this *ActorWithSession) Tell(sender IActor, message *ActorMessage, reply ...**ActorMessage) error{
-	this.api.Reply(this.session, message)
+	if len(message.Data) == 0 {
+		return errors.New("invalid message")
+	}
+	this.api.Reply(this.session, message.Data[0])
 	return nil
 }
