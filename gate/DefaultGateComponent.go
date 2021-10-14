@@ -50,8 +50,8 @@ func (this *DefaultGateComponent) Awake(ctx *ecs.Context) {
 		PackageProtocol:      &network.TdProtocol{},
 		Address:              config.Config.ClusterConfig.NetListenAddress,
 		ReadTimeout:          time.Millisecond * time.Duration(config.Config.ClusterConfig.NetConnTimeout),
-		OnClientDisconnected: this.NetAPI.OnDisconneted,
-		OnClientConnected:    this.NetAPI.OnConnected,
+		OnClientDisconnected: this.OnDropped,
+		OnClientConnected:    this.OnConnected,
 		NetAPI:               this.NetAPI,
 		MaxInvoke:            20,
 	}
@@ -74,6 +74,7 @@ func (this *DefaultGateComponent) OnConnected(sess *network.Session) {
 
 func (this *DefaultGateComponent) OnDropped(sess *network.Session) {
 	this.clients.Delete(sess.ID)
+	sess.PostProcessing()
 }
 
 func (this *DefaultGateComponent) Destroy() error {
