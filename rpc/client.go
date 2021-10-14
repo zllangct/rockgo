@@ -132,11 +132,14 @@ func (client *TcpClient) sendWithoutReply(call *Call) {
 	defer client.reqMutex.Unlock()
 
 	// RegisterGroup this call.
+	client.mutex.Lock()
 	if client.shutdown || client.closing {
+		client.mutex.Unlock()
 		call.Error = ErrShutdown
 		call.done()
 		return
 	}
+	client.mutex.Unlock()
 	// Encode and send the request.
 	client.request.ServiceMethod = call.ServiceMethod
 	client.request.Type = call.Type
@@ -189,17 +192,9 @@ func (client *TcpClient) input() {
 			}
 			call.done()
 		default:
-			if call.Reply == nil {
-				//TODO 待测试，call调用，但无返回值
-				err = client.codec.ReadResponseBody(&struct{}{})
-				if err != nil {
-					err = errors.New("reading error body: " + err.Error())
-				}
-			} else {
-				err = client.codec.ReadResponseBody(call.Reply)
-				if err != nil {
-					call.Error = errors.New("reading body " + err.Error())
-				}
+			err = client.codec.ReadResponseBody(call.Reply)
+			if err != nil {
+				call.Error = errors.New("reading body " + err.Error())
 			}
 			call.done()
 		}
