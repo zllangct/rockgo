@@ -298,13 +298,8 @@ func (s *service) call(server *Server, sending *sync.Mutex, wg *sync.WaitGroup, 
 	if errInter != nil {
 		errmsg = errInter.(error).Error()
 	}
-	var reqi interface{}
-	if mtype.ReplyType == nil {
-		reqi = nil
-	} else {
-		reqi = replyv.Interface()
-	}
 	if req.Type == RPC_CALL_TYPE_NORMAL {
+		reqi := replyv.Interface()
 		server.sendResponse(sending, req, reqi, codec, errmsg)
 	}
 	server.freeRequest(req)
